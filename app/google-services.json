@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "399719356715",
+    "firebase_url": "https://ways-to-wellbeing-5.firebaseio.com",
+    "project_id": "ways-to-wellbeing-5",
+    "storage_bucket": "ways-to-wellbeing-5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399719356715:android:4634ca9ecf3684a4c6cd6e",
+        "android_client_info": {
+          "package_name": "com.joshuarichardson.fivewaystowellbeing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399719356715-0ais9jt99bm2cd2dud81ghpovuu18v5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtFBGGt9QCEDRv0x2UJlSg08n3XU_V4ec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399719356715-0ais9jt99bm2cd2dud81ghpovuu18v5s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
