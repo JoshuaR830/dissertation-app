@@ -2,6 +2,11 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
 
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -12,7 +17,9 @@ public abstract class WellbeingDatabase extends RoomDatabase {
     public static final String WELLBEING_DATABASE_NAME = "wellbeing_database";
     private static WellbeingDatabase WELLBEING_DATABASE_INSTANCE;
 
-    public abstract ActivityRecordDao activityDao();
+    public abstract ActivityRecordDao activityRecordDao();
+    public abstract SurveyResponseActivityRecordDao surveyResponseActivityRecordDao();
+    public abstract SurveyResponseDao surveyResponseDao();
 
     public static WellbeingDatabase getWellbeingDatabase(Context context) {
         if(WELLBEING_DATABASE_INSTANCE == null) {
@@ -26,4 +33,5 @@ public abstract class WellbeingDatabase extends RoomDatabase {
 
         return WELLBEING_DATABASE_INSTANCE;
     }
+
 }

@@ -1,4 +1,6 @@
-package com.joshuarichardson.fivewaystowellbeing.storage;
+package com.joshuarichardson.fivewaystowellbeing.storage.dao;
+
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
 import java.util.List;
 

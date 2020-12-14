@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.storage;
+package com.joshuarichardson.fivewaystowellbeing.storage.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

@@ -1,9 +1,9 @@
-package com.joshuarichardson.fivewaystowellbeing;
+package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
 
-import com.joshuarichardson.fivewaystowellbeing.storage.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.storage.ActivityRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 
 import org.junit.Before;
@@ -43,7 +43,7 @@ public class ActivityRecordTests {
         // https://developer.android.com/training/data-storage/room/testing-db
         Context context = ApplicationProvider.getApplicationContext();
         this.wellbeingDb = Room.inMemoryDatabaseBuilder(context, WellbeingDatabase.class).build();
-        this.activityDao = this.wellbeingDb.activityDao();
+        this.activityDao = this.wellbeingDb.activityRecordDao();
     }
 
     @Test
@@ -64,5 +64,12 @@ public class ActivityRecordTests {
         assertThat(actualActivity.getActivityDuration()).isEqualTo(1200);
         assertThat(actualActivity.getActivityTimestamp()).isEqualTo(1607960240);
         assertThat(actualActivity.getActivitySurveyId()).isEqualTo(0);
+    }
+
+    @Test
+    public void addSurveyForActivityAndGetByIdShouldReturnTheUpdatedActivityInformation() {
+        // Activity is a thing
+        // Would complete a survey for an activity
+        // This survey would only be done once
     }
 }
