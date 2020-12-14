@@ -46,5 +46,6 @@
 
     <style name="ThemeOverlay.App.Slider" parent="">
         <item name="colorPrimary">@color/colorPrimary</item>
+
     </style>
 </resources>

@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.SettingsActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportActivity;
@@ -15,6 +16,12 @@ import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSu
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import dagger.hilt.android.AndroidEntryPoint;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
+
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_view_survey_responses, R.id.navigation_view_pass_times)
+                .build();
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(bottomNav, navController);
     }
 
     @Override
@@ -56,13 +72,46 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onButtonClick(View v) {
+    public void onAnswerSurveysButtonClicked(View v) {
         mFirebaseAnalytics.setUserId("Joshua");
         mFirebaseAnalytics.setUserProperty("custom", "somethingCustomJoshua");
         Log.d("joshua", "It worked");
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Test_Button_Click");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "Test");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Survey_Answer_Clicked");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "Answer_Survey");
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle);
+
+        Intent answerSurveyIntent = new Intent(MainActivity.this, AnswerSurveyActivity.class);
+        startActivity(answerSurveyIntent);
+    }
+
+    public void onCreatePassTimeButtonClicked(View v) {
+        Bundle viewCreatePassTime = new Bundle();
+        viewCreatePassTime.putString(FirebaseAnalytics.Param.ITEM_ID, "Create_PassTime_Clicked");
+        viewCreatePassTime.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "Create_PassTime");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, viewCreatePassTime);
+
+        Intent answerSurveyIntent = new Intent(MainActivity.this, CreatePassTimeActivity.class);
+        startActivity(answerSurveyIntent);
+    }
+
+    public void onViewSurveysButtonClicked(View v) {
+        Bundle viewSurveyBundle = new Bundle();
+        viewSurveyBundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Survey_View_Clicked");
+        viewSurveyBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "View_Survey");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, viewSurveyBundle);
+
+        Intent viewSurveyIntent = new Intent(MainActivity.this, ViewSurveysActivity.class);
+        startActivity(viewSurveyIntent);
+    }
+
+    public void onViewPassTimesButtonClicked(View v) {
+        Bundle viewPassTimeBundle = new Bundle();
+        viewPassTimeBundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Pass_Time_View_Clicked");
+        viewPassTimeBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "View_Pass_Time");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, viewPassTimeBundle);
+
+        Intent viewPassTimeIntent = new Intent(MainActivity.this, ViewPassTimesActivity.class);
+        startActivity(viewPassTimeIntent);
     }
 }
