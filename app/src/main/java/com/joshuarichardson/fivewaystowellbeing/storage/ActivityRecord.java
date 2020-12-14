@@ -50,15 +50,15 @@ public class ActivityRecord {
     }
 
     public void setActivityDuration(int duration) {
-        this.activityDuration = 0;
+        this.activityDuration = duration;
     }
 
     public void setActivitySurveyId(int surveyId) {
-        this.activitySurveyId = 0;
+        this.activitySurveyId = surveyId;
     }
 
     public void setActivityTimestamp(int timestamp) {
-        this.activityTimestamp = 0;
+        this.activityTimestamp = timestamp;
     }
 
     @NonNull
@@ -75,14 +75,14 @@ public class ActivityRecord {
     }
 
     public int getActivityDuration() {
-        return 0;
+        return this.activityDuration;
     }
 
     public int getActivitySurveyId() {
-        return 0;
+        return this.activitySurveyId;
     }
 
     public int getActivityTimestamp() {
-        return 0;
+        return this.activityTimestamp;
     }
 }

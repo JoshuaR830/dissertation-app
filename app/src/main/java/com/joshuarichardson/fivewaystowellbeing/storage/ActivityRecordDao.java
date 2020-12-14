@@ -15,6 +15,4 @@ public interface ActivityRecordDao {
 
     @Query("SELECT * FROM activity_records WHERE activity_record_id = :activityRecordId")
     List<ActivityRecord> getActivityRecordById(int activityRecordId);
-//    @Query("SELECT * FROM activity_records")
-//    ActivityRecord getActivityRecordById();
 }
