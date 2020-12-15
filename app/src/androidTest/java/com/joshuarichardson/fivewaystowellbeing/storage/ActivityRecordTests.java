@@ -46,7 +46,7 @@ public class ActivityRecordTests {
     }
 
     @Test
-    public void insertActivityAndGetByIdShouldReturnTheCorrectActivity() {
+    public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() {
         // ToDo should have an activity type enum
         ActivityRecord insertedActivity = new ActivityRecord("Running", 1200, 1607960240, "Sport");
         insertedActivity.setActivityType("Running");

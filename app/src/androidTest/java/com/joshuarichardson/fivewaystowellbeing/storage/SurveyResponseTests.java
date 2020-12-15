@@ -29,7 +29,7 @@ public class SurveyResponseTests {
     }
 
     @Test
-    public void InsertingASurveyThenGettingTheSurveyById_ShouldReturnTheCorrectSurveyResponse() {
+    public void InsertingASurvey_ThenGettingTheSurveyById_ShouldReturnTheCorrectSurveyResponse() {
 
         // ToDo make SurveyResponse take timeStamp and wayToWellbeing
         SurveyResponse surveyResponse = new SurveyResponse(1607960240, "Be active");
