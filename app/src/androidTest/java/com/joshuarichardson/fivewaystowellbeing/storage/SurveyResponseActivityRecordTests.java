@@ -19,6 +19,9 @@ import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
+import static org.junit.Assert.fail;
+//import static com.google.common.truth.ThrowableSubject.hasCauseThat;
 
 public class SurveyResponseActivityRecordTests {
 
@@ -61,10 +64,10 @@ public class SurveyResponseActivityRecordTests {
         assertThat(actualRecords.size()).isGreaterThan(0);
 
         assertThat(actualRecords.get(0).getSurveyResponseId())
-                .isEqualTo(record.getSurveyResponseId);
+                .isEqualTo(record.getSurveyResponseId());
 
         assertThat(actualRecords.get(0).getActivityRecordId())
-                .isEqualTo(record.getActivityRecordId);
+                .isEqualTo(record.getActivityRecordId());
     }
 
     @Test
@@ -88,23 +91,48 @@ public class SurveyResponseActivityRecordTests {
         assertThat(actualRecords.size()).isGreaterThan(0);
 
         assertThat(actualRecords.get(0).getSurveyResponseId())
-                .isEqualTo(record.getSurveyResponseId);
+                .isEqualTo(record.getSurveyResponseId());
 
         assertThat(actualRecords.get(0).getActivityRecordId())
-                .isEqualTo(record.getActivityRecordId);
+                .isEqualTo(record.getActivityRecordId());
     }
 
     @Test
     public void insertingASurveyIdWhichDoesNotExist_ShouldThrowAConstraintException() {
-        // ToDo may need a try/catch here to avoid issues
-        assertThat(new SurveyResponseActivityRecord(112233, 332211))
-                .hasCauseThat(new SQLIntegrityConstraintViolationException());
+        // ToDo activity should exist
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, 332211);
+
+        Exception exception = new Exception();
+
+        try {
+            this.surveyActivityDao.insert(record);
+            fail("Should have thrown an SQLIntegrityConstraintViolationException exception");
+        } catch(Exception e) {
+            exception = e;
+        }
+
+        assertWithMessage("Inserting a survey Id of a survey response that doesn't exist should violate constraints")
+                .that(exception)
+                .isInstanceOf(SQLIntegrityConstraintViolationException.class);
     }
 
     @Test
     public void insertingAnActionIdWhichDoesNotExist_ShouldThrowAConstraintException() {
-        // ToDo may need a try/catch here to avoid issues
-        assertThat(new SurveyResponseActivityRecord(112233, 332211))
-                .hasCauseThat(new SQLIntegrityConstraintViolationException());
+        // ToDo create a survey so that it does exist
+        // ToDo need to implement the survey tests first
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, 332211);
+
+        Exception exception = new Exception();
+
+        try {
+            this.surveyActivityDao.insert(record);
+            fail("Should have thrown an SQLIntegrityConstraintViolationException exception");
+        } catch(Exception e) {
+            exception = e;
+        }
+
+        assertWithMessage("Inserting an activity Id of a activity record that doesn't exist should violate constraints")
+                .that(exception)
+                .isInstanceOf(SQLIntegrityConstraintViolationException.class);
     }
 }
