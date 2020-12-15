@@ -39,13 +39,17 @@ public class SurveyResponseElementTests {
         String question = "What is the question?";
         String answer = "I don't know";
 
-        SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, "hello", "hi");
-        int elementId = (int) surveyResponseElementDao.insert(surveyResponseElement);
+        SurveyResponseElement surveyResponseElement1 = new SurveyResponseElement(surveyId, question, answer);
+        SurveyResponseElement surveyResponseElement2 = new SurveyResponseElement(surveyId + 1, "what is happening?", "I don't know");
 
-        List<SurveyResponseElement> surveyResponseElements = this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseElementId();
+        // Inserting in this order means that the first element is not the one that the test is interested in
+        surveyResponseElementDao.insert(surveyResponseElement2);
+        int elementId1 = (int) surveyResponseElementDao.insert(surveyResponseElement1);
+
+        List<SurveyResponseElement> surveyResponseElements = this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseElementId(surveyId);
         SurveyResponseElement actualSurveyElement = surveyResponseElements.get(0);
 
-        assertThat(actualSurveyElement.getId()).isEqualTo(elementId);
+        assertThat(actualSurveyElement.getId()).isEqualTo(elementId1);
         assertThat(actualSurveyElement.getSurveyId()).isEqualTo(surveyId);
         assertThat(actualSurveyElement.getQuestion()).isEqualTo(question);
         assertThat(actualSurveyElement.getAnswer()).isEqualTo(answer);

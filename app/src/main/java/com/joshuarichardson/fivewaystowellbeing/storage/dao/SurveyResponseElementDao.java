@@ -15,10 +15,9 @@ public interface SurveyResponseElementDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(SurveyResponseElement surveyResponseElements);
 
-    @Query("SELECT * FROM survey_response_element")
-    List<SurveyResponseElement> getSurveyResponseElementBySurveyResponseElementId();
+    @Query("SELECT * FROM survey_response_element WHERE survey_id = :surveyId")
+    List<SurveyResponseElement> getSurveyResponseElementBySurveyResponseElementId(int surveyId);
 
-    // ToDo make id = survey_id =
-    @Query("SELECT * FROM survey_response_element WHERE id = :surveyId")
+    @Query("SELECT * FROM survey_response_element WHERE survey_id = :surveyId")
     List<SurveyResponseElement> getBySurveyResponseElementBySurveyResponseId(int surveyId);
 }
