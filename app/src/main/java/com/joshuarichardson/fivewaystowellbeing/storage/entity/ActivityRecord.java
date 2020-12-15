@@ -5,37 +5,35 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-// ToDo define the contraints
 @Entity(tableName = "activity_records")
 public class ActivityRecord {
 
     // ToDo: define a contract somewhere
     @NonNull
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name="activity_record_id")
+    @ColumnInfo(name="id")
     private Integer activityRecordId;
 
-    @ColumnInfo(name = "activity_name")
+    @NonNull
+    @ColumnInfo(name = "name")
     private String activityName;
 
-    @ColumnInfo(name="activity_type")
+    @ColumnInfo(name="type")
     private String activityType;
 
-    @ColumnInfo(name = "activity_timestamp")
+    @NonNull
+    @ColumnInfo(name = "timestamp")
     private int activityTimestamp;
 
-    @ColumnInfo(name = "activity_duration")
+    @NonNull
+    @ColumnInfo(name = "duration")
     private int activityDuration;
 
-    @ColumnInfo(name = "activity_survey_id")
-    private int activitySurveyId;
-
-    public ActivityRecord(String activityName, int activityDuration, int activityTimestamp, String activityType, int activitySurveyId) {
+    public ActivityRecord(String activityName, int activityDuration, int activityTimestamp, String activityType) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
         this.setActivityType(activityType);
-        this.setActivitySurveyId(activitySurveyId);
     }
 
     public void setActivityRecordId(@NonNull Integer recordId) {
@@ -52,10 +50,6 @@ public class ActivityRecord {
 
     public void setActivityDuration(int duration) {
         this.activityDuration = duration;
-    }
-
-    public void setActivitySurveyId(int surveyId) {
-        this.activitySurveyId = surveyId;
     }
 
     public void setActivityTimestamp(int timestamp) {
@@ -77,10 +71,6 @@ public class ActivityRecord {
 
     public int getActivityDuration() {
         return this.activityDuration;
-    }
-
-    public int getActivitySurveyId() {
-        return this.activitySurveyId;
     }
 
     public int getActivityTimestamp() {

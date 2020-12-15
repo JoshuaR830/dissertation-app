@@ -9,13 +9,14 @@ import androidx.room.PrimaryKey;
 public class SurveyResponse {
     @NonNull
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "survey_response_id")
+    @ColumnInfo(name = "id")
     private int surveyResponseId;
 
-    @ColumnInfo(name = "survey_response_timestamp")
+    @NonNull
+    @ColumnInfo(name = "timestamp")
     private int surveyResponseTimestamp;
 
-    @ColumnInfo(name = "survey_response_way_to_wellbeing")
+    @ColumnInfo(name = "way_to_wellbeing")
     private String surveyResponseWayToWellbeing;
 
     public SurveyResponse(int surveyResponseTimestamp, String surveyResponseWayToWellbeing) {

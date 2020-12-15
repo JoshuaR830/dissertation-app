@@ -1,6 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteConstraintException;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
@@ -12,7 +13,6 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseAct
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import androidx.room.Room;
@@ -49,7 +49,7 @@ public class SurveyResponseActivityRecordTests {
         // ToDo Create a survey response - get id insert it
 
         SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active");
-        ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport", 0);
+        ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport");
 
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
         int activityId = (int) this.activityRecordDao.insert(activityRecord);
@@ -76,7 +76,7 @@ public class SurveyResponseActivityRecordTests {
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
         // Create and insert an activity record
-        ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport", 0);
+        ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport");
         int activityId = (int) this.activityRecordDao.insert(activityRecord);
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyId, activityId);
@@ -108,21 +108,21 @@ public class SurveyResponseActivityRecordTests {
         // If no exception is thrown then the test should fail because it is checking that an exception is thrown when no surveys/activities exist
         try {
             this.surveyActivityDao.insert(record);
-            fail("Should have thrown an SQLIntegrityConstraintViolationException exception");
+            fail("Should have thrown an SQLiteConstraintException exception");
         } catch(Exception e) {
             exception = e;
         }
 
         assertWithMessage("Inserting activity/survey that don't exist should violate constraints")
                 .that(exception)
-                .isInstanceOf(SQLIntegrityConstraintViolationException.class);
+                .isInstanceOf(SQLiteConstraintException.class);
     }
 
     @Test
     public void insertingASurveyIdWhichDoesNotExist_ShouldThrowAConstraintException() {
         // ToDo should have an activity type enum
         // Create and insert a real activity
-        ActivityRecord activityResult = new ActivityRecord("Running", 1200, 1607960240, "Sport", 0);
+        ActivityRecord activityResult = new ActivityRecord("Running", 1200, 1607960240, "Sport");
         int activityRecordId = (int) this.activityRecordDao.insert(activityResult);
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, activityRecordId);
@@ -131,14 +131,14 @@ public class SurveyResponseActivityRecordTests {
         Exception exception = new Exception();
         try {
             this.surveyActivityDao.insert(record);
-            fail("Should have thrown an SQLIntegrityConstraintViolationException exception");
+            fail("Should have thrown an SQLiteConstraintException exception");
         } catch(Exception e) {
             exception = e;
         }
 
         assertWithMessage("Inserting a survey Id of a survey response that doesn't exist should violate constraints")
                 .that(exception)
-                .isInstanceOf(SQLIntegrityConstraintViolationException.class);
+                .isInstanceOf(SQLiteConstraintException.class);
     }
 
     @Test
@@ -153,7 +153,7 @@ public class SurveyResponseActivityRecordTests {
         Exception exception = new Exception();
         try {
             this.surveyActivityDao.insert(record);
-            fail("Should have thrown an SQLIntegrityConstraintViolationException exception");
+            fail("Should have thrown an SQLiteConstraintException exception");
         } catch(Exception e) {
             exception = e;
         }
@@ -161,6 +161,6 @@ public class SurveyResponseActivityRecordTests {
         // If constraints not met, then should throw
         assertWithMessage("Inserting an activity Id of a activity record that doesn't exist should violate constraints")
                 .that(exception)
-                .isInstanceOf(SQLIntegrityConstraintViolationException.class);
+                .isInstanceOf(SQLiteConstraintException.class);
     }
 }

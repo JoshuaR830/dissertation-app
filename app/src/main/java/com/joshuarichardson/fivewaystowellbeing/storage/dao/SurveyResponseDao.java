@@ -15,7 +15,7 @@ public interface SurveyResponseDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(SurveyResponse surveyResponse);
 
-    @Query("SELECT * FROM survey_response WHERE survey_response_id = :surveyId")
+    @Query("SELECT * FROM survey_response WHERE id = :surveyId")
     List<SurveyResponse> getSurveyResponseById(int surveyId);
 
     // ToDo Will need to add a delete

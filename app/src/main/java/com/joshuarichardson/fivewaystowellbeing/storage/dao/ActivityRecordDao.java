@@ -15,6 +15,6 @@ public interface ActivityRecordDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(ActivityRecord activityRecord);
 
-    @Query("SELECT * FROM activity_records WHERE activity_record_id = :activityRecordId")
+    @Query("SELECT * FROM activity_records WHERE id = :activityRecordId")
     List<ActivityRecord> getActivityRecordById(int activityRecordId);
 }

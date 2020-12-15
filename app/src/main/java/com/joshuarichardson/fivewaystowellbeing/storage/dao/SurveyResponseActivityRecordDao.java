@@ -15,6 +15,8 @@ public interface SurveyResponseActivityRecordDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(SurveyResponseActivityRecord surveyResponseActivityRecord);
 
+    // ToDo should be a join to get all of them for an activity or a survey
+
     @Query("SELECT * FROM survey_activity")
     List<SurveyResponseActivityRecord> getActivitiesBySurveyId();
 

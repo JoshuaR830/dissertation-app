@@ -3,8 +3,17 @@ package com.joshuarichardson.fivewaystowellbeing.storage.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 
-@Entity(tableName = "survey_activity", primaryKeys = {"activity_record_id", "survey_response_id"})
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(
+        tableName = "survey_activity",
+        primaryKeys = {"activity_record_id", "survey_response_id"},
+        foreignKeys = {
+                @ForeignKey(entity = ActivityRecord.class, parentColumns = "id", childColumns = "activity_record_id", onDelete = CASCADE),
+                @ForeignKey(entity = SurveyResponse.class, parentColumns = "id", childColumns = "survey_response_id", onDelete = CASCADE)
+        })
 public class SurveyResponseActivityRecord {
 
     @NonNull
