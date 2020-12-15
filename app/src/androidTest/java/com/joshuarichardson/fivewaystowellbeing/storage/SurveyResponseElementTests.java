@@ -2,6 +2,7 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
 
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementHelper;
@@ -57,8 +58,7 @@ public class SurveyResponseElementTests {
 
     @Test
     public void insertingMultipleSurveyResponseElementsIndividually_ThenRetrievingBySurveyId_ShouldReturnTheCorrectNumberOfSurveys() {
-        // ToDo make ways to wellbeing an enum
-        SurveyResponse surveyResponse = new SurveyResponse(6378568, "Be active");
+        SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE);
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseElement surveyResponseElement1 = new SurveyResponseElement(surveyId, "", "");
@@ -77,8 +77,7 @@ public class SurveyResponseElementTests {
 
     @Test
     public void insertingMultipleSurveyResponseElementsFromAList_ThenRetrievingBySurveyId_ShouldReturnTheCorrectNumberOfSurveys() {
-        // ToDo make ways to wellbeing an enum
-        SurveyResponse surveyResponse = new SurveyResponse(6378568, "Be active");
+        SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE);
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseElement[] surveyResponseElements = new SurveyResponseElement[] {

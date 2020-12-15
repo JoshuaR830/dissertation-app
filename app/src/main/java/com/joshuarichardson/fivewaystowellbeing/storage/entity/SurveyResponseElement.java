@@ -6,22 +6,28 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ELEMENT_ANSWER;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ELEMENT_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ELEMENT_QUESTION;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ELEMENT_SURVEY_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ELEMENT_TABLE_NAME;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ID;
 
-@Entity(tableName = "survey_response_element")
+@Entity(tableName = SURVEY_RESPONSE_ELEMENT_TABLE_NAME)
 public class SurveyResponseElement {
 
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = SURVEY_RESPONSE_ELEMENT_ID)
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(name = "question")
+    @ColumnInfo(name = SURVEY_RESPONSE_ELEMENT_QUESTION)
     private String question;
 
-    @ColumnInfo(name = "answer")
+    @ColumnInfo(name = SURVEY_RESPONSE_ELEMENT_ANSWER)
     private String answer;
 
-    @ColumnInfo(name="survey_id")
-    @ForeignKey(entity = SurveyResponse.class, parentColumns = "id", childColumns = "survey_id", onDelete = CASCADE)
+    @ColumnInfo(name= SURVEY_RESPONSE_ELEMENT_SURVEY_ID)
+    @ForeignKey(entity = SurveyResponse.class, parentColumns = SURVEY_RESPONSE_ID, childColumns = SURVEY_RESPONSE_ELEMENT_SURVEY_ID, onDelete = CASCADE)
     private int surveyId;
 
     public SurveyResponseElement(int surveyId, String question, String answer) {

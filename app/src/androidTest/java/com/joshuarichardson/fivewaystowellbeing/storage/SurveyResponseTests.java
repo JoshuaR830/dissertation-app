@@ -2,6 +2,7 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
 
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
@@ -31,8 +32,7 @@ public class SurveyResponseTests {
     @Test
     public void InsertingASurvey_ThenGettingTheSurveyById_ShouldReturnTheCorrectSurveyResponse() {
 
-        // ToDo make SurveyResponse take timeStamp and wayToWellbeing
-        SurveyResponse surveyResponse = new SurveyResponse(1607960240, "Be active");
+        SurveyResponse surveyResponse = new SurveyResponse(1607960240, WaysToWellbeing.BE_ACTIVE);
 
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
@@ -51,8 +51,7 @@ public class SurveyResponseTests {
         assertThat(actualSurveyResponse.getSurveyResponseTimestamp())
                 .isEqualTo(1607960240);
 
-        // ToDo ways to wellbeing should definitely be an enum
         assertThat(actualSurveyResponse.getSurveyResponseWayToWellbeing())
-                .isEqualTo("Be active");
+                .isEqualTo(WaysToWellbeing.BE_ACTIVE.name());
     }
 }

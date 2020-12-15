@@ -3,6 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 import android.content.Context;
 import android.database.sqlite.SQLiteConstraintException;
 
+import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
@@ -44,10 +45,6 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetActivitiesForSurvey_ShouldReturnTheActivity() {
-
-        // ToDo Create an activity record - get the id insert it
-        // ToDo Create a survey response - get id insert it
-
         SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active");
         ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport");
 
@@ -120,9 +117,8 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void insertingASurveyIdWhichDoesNotExist_ShouldThrowAConstraintException() {
-        // ToDo should have an activity type enum
         // Create and insert a real activity
-        ActivityRecord activityResult = new ActivityRecord("Running", 1200, 1607960240, "Sport");
+        ActivityRecord activityResult = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT);
         int activityRecordId = (int) this.activityRecordDao.insert(activityResult);
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, activityRecordId);

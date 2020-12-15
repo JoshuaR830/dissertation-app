@@ -6,22 +6,27 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
 import static androidx.room.ForeignKey.CASCADE;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_TABLE_NAME;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ID;
 
 @Entity(
-        tableName = "survey_activity",
-        primaryKeys = {"activity_record_id", "survey_response_id"},
+        tableName = SURVEY_RESPONSE_ACTIVITY_RECORD_TABLE_NAME,
+        primaryKeys = {SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID, SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID},
         foreignKeys = {
-                @ForeignKey(entity = ActivityRecord.class, parentColumns = "id", childColumns = "activity_record_id", onDelete = CASCADE),
-                @ForeignKey(entity = SurveyResponse.class, parentColumns = "id", childColumns = "survey_response_id", onDelete = CASCADE)
+                @ForeignKey(entity = ActivityRecord.class, parentColumns = ACTIVITY_RECORD_ID, childColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID, onDelete = CASCADE),
+                @ForeignKey(entity = SurveyResponse.class, parentColumns = SURVEY_RESPONSE_ID, childColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID, onDelete = CASCADE)
         })
 public class SurveyResponseActivityRecord {
 
     @NonNull
-    @ColumnInfo(name = "activity_record_id")
+    @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID)
     private int activityRecordId;
 
     @NonNull
-    @ColumnInfo(name  = "survey_response_id")
+    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID)
     private int surveyResponseId;
 
     public SurveyResponseActivityRecord(int surveyResponseId, int activityRecordId) {
