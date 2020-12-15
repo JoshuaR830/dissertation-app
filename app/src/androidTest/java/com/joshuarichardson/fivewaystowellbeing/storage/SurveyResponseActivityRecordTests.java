@@ -31,7 +31,7 @@ public class SurveyResponseActivityRecordTests {
     private SurveyResponseDao surveyResponseDao;
 
     @Before
-    public void setUp() {
+    public void setup() {
         // Need to initialise an in memory room database
         Context context = ApplicationProvider.getApplicationContext();
         this.surveyActivityDb = Room

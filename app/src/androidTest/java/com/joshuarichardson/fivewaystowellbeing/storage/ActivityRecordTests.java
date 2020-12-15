@@ -2,9 +2,8 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
 
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -64,12 +63,5 @@ public class ActivityRecordTests {
         assertThat(actualActivity.getActivityDuration()).isEqualTo(1200);
         assertThat(actualActivity.getActivityTimestamp()).isEqualTo(1607960240);
         assertThat(actualActivity.getActivitySurveyId()).isEqualTo(0);
-    }
-
-    @Test
-    public void addSurveyForActivityAndGetByIdShouldReturnTheUpdatedActivityInformation() {
-        // Activity is a thing
-        // Would complete a survey for an activity
-        // This survey would only be done once
     }
 }
