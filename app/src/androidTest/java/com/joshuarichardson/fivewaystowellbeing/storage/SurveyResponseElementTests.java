@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
 
@@ -34,6 +35,20 @@ public class SurveyResponseElementTests {
     @Test
     public void insertingSurveyResponseElement_ThenGettingResponseElementById_ShouldReturnTheCorrectSurveyResponse() {
 
+        int surveyId = 12345678;
+        String question = "What is the question?";
+        String answer = "I don't know";
+
+        SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, "hello", "hi");
+        int elementId = (int) surveyResponseElementDao.insert(surveyResponseElement);
+
+        List<SurveyResponseElement> surveyResponseElements = this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseElementId();
+        SurveyResponseElement actualSurveyElement = surveyResponseElements.get(0);
+
+        assertThat(actualSurveyElement.getId()).isEqualTo(elementId);
+        assertThat(actualSurveyElement.getSurveyId()).isEqualTo(surveyId);
+        assertThat(actualSurveyElement.getQuestion()).isEqualTo(question);
+        assertThat(actualSurveyElement.getAnswer()).isEqualTo(answer);
     }
 
     @Test
@@ -42,13 +57,18 @@ public class SurveyResponseElementTests {
         SurveyResponse surveyResponse = new SurveyResponse(6378568, "Be active");
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
-        SurveyResponseElement surveyResponseElement1 = new SurveyResponseElement();
-        SurveyResponseElement surveyResponseElement2 = new SurveyResponseElement();
-        SurveyResponseElement surveyResponseElement3 = new SurveyResponseElement();
+        SurveyResponseElement surveyResponseElement1 = new SurveyResponseElement(surveyId, "", "");
+        SurveyResponseElement surveyResponseElement2 = new SurveyResponseElement(surveyId, "", "");
+        SurveyResponseElement surveyResponseElement3 = new SurveyResponseElement(surveyId, "", "");
+        SurveyResponseElement surveyResponseElement4 = new SurveyResponseElement(surveyId + 1, "", "");
 
         this.surveyResponseElementDao.insert(surveyResponseElement1);
         this.surveyResponseElementDao.insert(surveyResponseElement2);
         this.surveyResponseElementDao.insert(surveyResponseElement3);
+        this.surveyResponseElementDao.insert(surveyResponseElement4);
+
+        List<SurveyResponseElement> surveyResponseElementsResponse = this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId);
+        assertThat(surveyResponseElementsResponse.size()).isEqualTo(3);
     }
 
     @Test
@@ -58,17 +78,23 @@ public class SurveyResponseElementTests {
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseElement[] surveyResponseElements = new SurveyResponseElement[] {
-                new SurveyResponseElement(),
-                new SurveyResponseElement(),
-                new SurveyResponseElement()
+                new SurveyResponseElement(surveyId, "", ""),
+                new SurveyResponseElement(surveyId, "", ""),
+                new SurveyResponseElement(surveyId, "", ""),
+                new SurveyResponseElement(surveyId + 1, "", ""),
+                new SurveyResponseElement(surveyId + 2, "", ""),
         };
 
-        this.surveyResponseElementDao.insert(surveyResponseElements);
+        SurveyResponseElementHelper.insert(surveyResponseElements, this.surveyResponseElementDao);
+
+        List<SurveyResponseElement> surveyResponseElementsResponse = this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId);
+
+        assertThat(surveyResponseElementsResponse.size()).isEqualTo(3);
     }
 
     @Test
     public void whenRetrievingBySurveyIdThatDoesNotExist_ShouldReturnEmptyList() {
-        List<SurveyResponseElement> surveyResponseElements = this.surveyResponseElementDao.getBySurveyId();
+        List<SurveyResponseElement> surveyResponseElements = this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(346638267);
 
         assertThat(surveyResponseElements).isNotNull();
         assertThat(surveyResponseElements).isEmpty();
