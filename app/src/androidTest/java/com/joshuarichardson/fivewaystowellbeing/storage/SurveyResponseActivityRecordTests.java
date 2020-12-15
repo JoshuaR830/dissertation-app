@@ -21,7 +21,6 @@ import androidx.test.core.app.ApplicationProvider;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.fail;
-//import static com.google.common.truth.ThrowableSubject.hasCauseThat;
 
 public class SurveyResponseActivityRecordTests {
 
@@ -49,7 +48,7 @@ public class SurveyResponseActivityRecordTests {
         // ToDo Create an activity record - get the id insert it
         // ToDo Create a survey response - get id insert it
 
-        SurveyResponse surveyResponse = new SurveyResponse();
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active");
         ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport", 0);
 
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
@@ -57,7 +56,7 @@ public class SurveyResponseActivityRecordTests {
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyId, activityId);
 
-        int surveyActivityId = (int) this.surveyActivityDao.insert(record);
+        this.surveyActivityDao.insert(record);
 
         List<SurveyResponseActivityRecord> actualRecords = this.surveyActivityDao.getActivitiesBySurveyId();
 
@@ -72,19 +71,22 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetSurveyForActivity_ShouldReturnTheSurvey() {
-
-        // ToDo Create an activity record - get the id insert it
-        // ToDo Create a survey response - get id insert it
-
-        SurveyResponse surveyResponse = new SurveyResponse();
-        ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport", 0);
-
+        // Create an insert a survey response
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active");
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
+
+        // Create and insert an activity record
+        ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport", 0);
         int activityId = (int) this.activityRecordDao.insert(activityRecord);
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyId, activityId);
 
-        int surveyActivityId = (int) this.surveyActivityDao.insert(record);
+        // As both surveyResponse and activityRecord exist it should not throw an exception
+        try {
+            this.surveyActivityDao.insert(record);
+        } catch(Exception e) {
+            fail("No exception should be thrown");
+        }
 
         List<SurveyResponseActivityRecord> actualRecords = this.surveyActivityDao.getSurveyByActivityId();
 
@@ -98,12 +100,35 @@ public class SurveyResponseActivityRecordTests {
     }
 
     @Test
-    public void insertingASurveyIdWhichDoesNotExist_ShouldThrowAConstraintException() {
-        // ToDo activity should exist
-        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, 332211);
+    public void insertingASurveyIdAndActivityIdWhereNeitherExist_ShouldThrowAConstraintException() {
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, 33221);
 
         Exception exception = new Exception();
 
+        // If no exception is thrown then the test should fail because it is checking that an exception is thrown when no surveys/activities exist
+        try {
+            this.surveyActivityDao.insert(record);
+            fail("Should have thrown an SQLIntegrityConstraintViolationException exception");
+        } catch(Exception e) {
+            exception = e;
+        }
+
+        assertWithMessage("Inserting activity/survey that don't exist should violate constraints")
+                .that(exception)
+                .isInstanceOf(SQLIntegrityConstraintViolationException.class);
+    }
+
+    @Test
+    public void insertingASurveyIdWhichDoesNotExist_ShouldThrowAConstraintException() {
+        // ToDo should have an activity type enum
+        // Create and insert a real activity
+        ActivityRecord activityResult = new ActivityRecord("Running", 1200, 1607960240, "Sport", 0);
+        int activityRecordId = (int) this.activityRecordDao.insert(activityResult);
+
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, activityRecordId);
+
+        // Test that exception is thrown if no activity exists
+        Exception exception = new Exception();
         try {
             this.surveyActivityDao.insert(record);
             fail("Should have thrown an SQLIntegrityConstraintViolationException exception");
@@ -118,12 +143,14 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void insertingAnActionIdWhichDoesNotExist_ShouldThrowAConstraintException() {
-        // ToDo create a survey so that it does exist
-        // ToDo need to implement the survey tests first
-        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, 332211);
+        // Add a survey to the database
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active");
+        int surveyResponseId = (int) this.surveyResponseDao.insert(surveyResponse);
 
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyResponseId, 332211);
+
+        // Check that an exception is raised when inserting - constraints should be set
         Exception exception = new Exception();
-
         try {
             this.surveyActivityDao.insert(record);
             fail("Should have thrown an SQLIntegrityConstraintViolationException exception");
@@ -131,6 +158,7 @@ public class SurveyResponseActivityRecordTests {
             exception = e;
         }
 
+        // If constraints not met, then should throw
         assertWithMessage("Inserting an activity Id of a activity record that doesn't exist should violate constraints")
                 .that(exception)
                 .isInstanceOf(SQLIntegrityConstraintViolationException.class);

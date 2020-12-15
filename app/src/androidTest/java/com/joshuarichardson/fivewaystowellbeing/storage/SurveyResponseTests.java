@@ -8,10 +8,13 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
 
 public class SurveyResponseTests {
 
@@ -29,20 +32,27 @@ public class SurveyResponseTests {
     public void InsertingASurveyThenGettingTheSurveyById_ShouldReturnTheCorrectSurveyResponse() {
 
         // ToDo make SurveyResponse take timeStamp and wayToWellbeing
-        SurveyResponse surveyResponse = new SurveyResponse();
+        SurveyResponse surveyResponse = new SurveyResponse(1607960240, "Be active");
 
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
-        SurveyResponse actualSurveyResponse = this.surveyResponseDao.getSurveyResponseById(surveyId);
+        List<SurveyResponse> surveyResponses = this.surveyResponseDao.getSurveyResponseById(surveyId);
+
+        assertWithMessage("There should be at least 1 item in the list")
+                .that(surveyResponses.size())
+                .isGreaterThan(0);
+
+        SurveyResponse actualSurveyResponse = surveyResponses.get(0);
 
         // Need to confirm that the properties are correct
         assertThat(actualSurveyResponse.getSurveyResponseId())
                 .isEqualTo(surveyId);
 
-        assertThat(actualSurveyResponse.getTimestamp())
-                .isEqualTo(surveyId);
+        assertThat(actualSurveyResponse.getSurveyResponseTimestamp())
+                .isEqualTo(1607960240);
 
-        assertThat(actualSurveyResponse.getWayToWellbeing())
-                .isEqualTo();
+        // ToDo ways to wellbeing should definitely be an enum
+        assertThat(actualSurveyResponse.getSurveyResponseWayToWellbeing())
+                .isEqualTo("Be active");
     }
 }

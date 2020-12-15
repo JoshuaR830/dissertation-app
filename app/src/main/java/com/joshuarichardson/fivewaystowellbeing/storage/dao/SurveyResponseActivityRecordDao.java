@@ -21,5 +21,5 @@ public interface SurveyResponseActivityRecordDao {
     @Query("SELECT * FROM survey_activity")
     List<SurveyResponseActivityRecord> getSurveyByActivityId();
 
-    // Need a delete method
+    // ToDo Need a delete method
 }

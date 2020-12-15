@@ -9,13 +9,6 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "activity_records")
 public class ActivityRecord {
 
-    public ActivityRecord(String activityName, int activityDuration, int activityTimestamp, String activityType, int activitySurveyId) {
-        setActivityName(activityName);
-        setActivityDuration(activityDuration);
-        setActivityTimestamp(activityTimestamp);
-        setActivityType(activityType);
-        setActivitySurveyId(activitySurveyId);
-    }
     // ToDo: define a contract somewhere
     @NonNull
     @PrimaryKey(autoGenerate = true)
@@ -36,6 +29,14 @@ public class ActivityRecord {
 
     @ColumnInfo(name = "activity_survey_id")
     private int activitySurveyId;
+
+    public ActivityRecord(String activityName, int activityDuration, int activityTimestamp, String activityType, int activitySurveyId) {
+        this.setActivityName(activityName);
+        this.setActivityDuration(activityDuration);
+        this.setActivityTimestamp(activityTimestamp);
+        this.setActivityType(activityType);
+        this.setActivitySurveyId(activitySurveyId);
+    }
 
     public void setActivityRecordId(@NonNull Integer recordId) {
         this.activityRecordId = recordId;

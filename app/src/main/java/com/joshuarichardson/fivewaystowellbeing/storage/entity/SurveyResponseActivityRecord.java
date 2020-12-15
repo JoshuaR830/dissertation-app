@@ -16,8 +16,8 @@ public class SurveyResponseActivityRecord {
     private int surveyResponseId;
 
     public SurveyResponseActivityRecord(int surveyResponseId, int activityRecordId) {
-        setSurveyResponseId(surveyResponseId);
-        setActivityRecordId(activityRecordId);
+        this.setSurveyResponseId(surveyResponseId);
+        this.setActivityRecordId(activityRecordId);
     }
 
     public void setActivityRecordId(int activityRecordId) {

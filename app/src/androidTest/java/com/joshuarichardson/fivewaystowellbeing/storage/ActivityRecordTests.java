@@ -47,6 +47,7 @@ public class ActivityRecordTests {
 
     @Test
     public void insertActivityAndGetByIdShouldReturnTheCorrectActivity() {
+        // ToDo should have an activity type enum
         ActivityRecord insertedActivity = new ActivityRecord("Running", 1200, 1607960240, "Sport", 0);
         insertedActivity.setActivityType("Running");
         int activityRecordId = (int) this.activityDao.insert(insertedActivity);
@@ -58,6 +59,7 @@ public class ActivityRecordTests {
 
         ActivityRecord actualActivity = retrievedActivities.get(0);
 
+        // ToDo create an activity type enum
         assertThat(actualActivity.getActivityType()).isEqualTo("Running");
         assertThat(actualActivity.getActivityRecordId()).isEqualTo(activityRecordId);
         assertThat(actualActivity.getActivityDuration()).isEqualTo(1200);
