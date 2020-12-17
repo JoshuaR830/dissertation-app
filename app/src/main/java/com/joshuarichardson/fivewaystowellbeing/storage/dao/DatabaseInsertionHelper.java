@@ -3,6 +3,8 @@ package com.joshuarichardson.fivewaystowellbeing.storage.dao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
 
+import java.util.ArrayList;
+
 public class DatabaseInsertionHelper {
     public static int[] insert(SurveyResponseElement[] surveyResponseElements, SurveyResponseElementDao surveyElementDao) {
         int[] responseElementIdList = new int[]{};
@@ -14,13 +16,13 @@ public class DatabaseInsertionHelper {
         return responseElementIdList;
     }
 
-    public static int[] insert(ActivityRecord[] activityRecords, ActivityRecordDao activityRecordDao) {
-        int[] responseElementIdList = new int[]{};
+    public static ArrayList<Integer> insert(ActivityRecord[] activityRecords, ActivityRecordDao activityRecordDao) {
+        ArrayList<Integer> recordElementIdList = new ArrayList<Integer>();
 
-//        for (ActivityRecord responseElement : activityRecords) {
-//            activityRecordDao.insert(responseElement);
-//        }
+        for (ActivityRecord activityRecord : activityRecords) {
+            recordElementIdList.add((int) activityRecordDao.insert(activityRecord));
+        }
 
-        return responseElementIdList;
+        return recordElementIdList;
     }
 }
