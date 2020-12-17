@@ -22,11 +22,11 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 public class SurveyResponseActivityRecord {
 
     @NonNull
-    @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID)
+    @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID,  index = true)
     private int activityRecordId;
 
     @NonNull
-    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID)
+    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID,  index = true)
     private int surveyResponseId;
 
     public SurveyResponseActivityRecord(int surveyResponseId, int activityRecordId) {

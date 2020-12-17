@@ -5,7 +5,7 @@ import android.content.Context;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementHelper;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
 
@@ -88,7 +88,7 @@ public class SurveyResponseElementTests {
                 new SurveyResponseElement(surveyId + 2, "", ""),
         };
 
-        SurveyResponseElementHelper.insert(surveyResponseElements, this.surveyResponseElementDao);
+        DatabaseInsertionHelper.insert(surveyResponseElements, this.surveyResponseElementDao);
 
         List<SurveyResponseElement> surveyResponseElementsResponse = this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId);
 

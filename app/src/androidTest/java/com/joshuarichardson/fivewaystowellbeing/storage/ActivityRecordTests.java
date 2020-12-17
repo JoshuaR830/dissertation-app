@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
 import org.junit.Before;
@@ -12,6 +13,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -49,5 +51,45 @@ public class ActivityRecordTests {
         assertThat(actualActivity.getActivityRecordId()).isEqualTo(activityRecordId);
         assertThat(actualActivity.getActivityDuration()).isEqualTo(1200);
         assertThat(actualActivity.getActivityTimestamp()).isEqualTo(1607960240);
+    }
+
+    @Test
+    public void insertMultiple_ThenGetActivities_ShouldReturnAllActivities() {
+
+        // Test inserting multiple activity records
+        int[] insertedIds = DatabaseInsertionHelper.insert(new ActivityRecord[]{
+            new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT),
+            new ActivityRecord("Swimming", 1202, 1607960242, ActivityType.SPORT),
+            new ActivityRecord("Throwing", 1203, 1607960243, ActivityType.SPORT)
+        }, this.activityDao);
+
+        assertThat(insertedIds.length)
+                .isEqualTo(3);
+
+        LiveData<List<ActivityRecord>> activities = this.activityDao.getAllActivities();
+
+        // Check that multiple items are returned - should be 3 or more depending on order of test runs
+        assertThat(activities.getValue().size()).isGreaterThan(2);
+    }
+
+    @Test
+    public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() {
+        int[] insertIds = DatabaseInsertionHelper.insert(new ActivityRecord[]{
+                // 16/12/2020 12am = 1608076800
+                // 17/12/2020 12am = 1608163200
+                new ActivityRecord("Snapchat", 1201, 1608076799, ActivityType.APP), // Should not be included
+                new ActivityRecord("Google Photos", 1202, 1608076800, ActivityType.APP), // Should be included
+                new ActivityRecord("Phone", 1203, 1608076801, ActivityType.APP), // Should be included
+                new ActivityRecord("Facebook", 1204, 1608163199, ActivityType.APP), // Should be included
+                new ActivityRecord("Forest", 1204, 1608163200, ActivityType.APP), // Should be included
+                new ActivityRecord("Fishing", 1205, 1608163201, ActivityType.SPORT), // Should not be included
+                new ActivityRecord("Forest", 1204, 0, ActivityType.APP), // Should not be included (min)
+                new ActivityRecord("Play Store", 1204, 2147483647, ActivityType.APP), // Should not be included (max)
+        }, this.activityDao);
+
+        LiveData<List<ActivityRecord>> activities = this.activityDao.getActivitiesInTimeRange(1608076800, 1608163200);
+
+        assertThat(activities.getValue()).isNotNull();
+        assertThat(activities.getValue().size()).isEqualTo(4);
     }
 }
