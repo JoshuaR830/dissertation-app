@@ -2,7 +2,8 @@ package com.joshuarichardson.fivewaystowellbeing;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -14,4 +15,17 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+
+    // So this works here but not in an instrumented test
+    @Test
+    public void somethingToTestTest() {
+        SomethingToTest first = new SomethingToTest("Hello");
+        SomethingToTest second = new SomethingToTest("Hello");
+
+        assertThat(second)
+                .usingRecursiveComparison()
+                .isEqualTo(first);
+    }
 }
+
