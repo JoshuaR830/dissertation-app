@@ -26,7 +26,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 public class SurveyResponseElementTests {
 
-    WellbeingDatabase wellbeingDb;
+    private WellbeingDatabase wellbeingDb;
     private SurveyResponseDao surveyResponseDao;
     private SurveyResponseElementDao surveyResponseElementDao;
 
@@ -58,12 +58,15 @@ public class SurveyResponseElementTests {
 
         // Inserting in this order means that the first element is not the one that the test is interested in
         surveyResponseElementDao.insert(surveyResponseElement2);
-        int elementId1 = (int) surveyResponseElementDao.insert(surveyResponseElement1);
+        int surveyElementId = (int) surveyResponseElementDao.insert(surveyResponseElement1);
 
-        List<SurveyResponseElement> surveyResponseElements = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseElementId(surveyId));
+        List<SurveyResponseElement> surveyResponseElements = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseElementId(surveyElementId));
+
+        assertThat(surveyResponseElements).isNotNull();
+        assertThat(surveyResponseElements.size()).isEqualTo(1);
         SurveyResponseElement actualSurveyElement = surveyResponseElements.get(0);
 
-        assertThat(actualSurveyElement.getId()).isEqualTo(elementId1);
+        assertThat(actualSurveyElement.getId()).isEqualTo(surveyElementId);
         assertThat(actualSurveyElement.getSurveyId()).isEqualTo(surveyId);
         assertThat(actualSurveyElement.getQuestion()).isEqualTo(question);
         assertThat(actualSurveyElement.getAnswer()).isEqualTo(answer);
@@ -86,7 +89,7 @@ public class SurveyResponseElementTests {
 
         List<SurveyResponseElement> surveyResponseElementsResponse = null;
         try {
-            surveyResponseElementsResponse = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId));
+            surveyResponseElementsResponse = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseId(surveyId));
             assertThat(surveyResponseElementsResponse).isNotNull();
             assertThat(surveyResponseElementsResponse.size()).isEqualTo(3);
         } catch (TimeoutException | InterruptedException e) {
@@ -111,7 +114,7 @@ public class SurveyResponseElementTests {
 
         List<SurveyResponseElement> surveyResponseElementsResponse = null;
 
-        surveyResponseElementsResponse = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId));
+        surveyResponseElementsResponse = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseId(surveyId));
         assertThat(surveyResponseElementsResponse).isNotNull();
         assertThat(surveyResponseElementsResponse.size()).isEqualTo(3);
 
@@ -121,7 +124,7 @@ public class SurveyResponseElementTests {
     public void whenRetrievingBySurveyIdThatDoesNotExist_ShouldReturnEmptyList() throws TimeoutException, InterruptedException {
         List<SurveyResponseElement> surveyResponseElements;
 
-        surveyResponseElements = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(346638267));
+        surveyResponseElements = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseId(346638267));
         assertThat(surveyResponseElements).isNotNull();
         assertThat(surveyResponseElements).isEmpty();
     }

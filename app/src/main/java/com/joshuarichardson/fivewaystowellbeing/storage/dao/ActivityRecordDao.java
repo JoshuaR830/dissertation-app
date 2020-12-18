@@ -25,5 +25,5 @@ public interface ActivityRecordDao {
     @Query("SELECT * FROM activity_records")
     LiveData<List<ActivityRecord>> getAllActivities();
 
-    // Delete may be necessary later
+    // ToDo Delete may be necessary later
 }

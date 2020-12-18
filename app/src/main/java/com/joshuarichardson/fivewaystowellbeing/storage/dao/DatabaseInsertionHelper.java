@@ -9,32 +9,32 @@ import java.util.ArrayList;
 public class DatabaseInsertionHelper {
 
     public static ArrayList<Integer> insert(SurveyResponseElement[] surveyResponseElements, SurveyResponseElementDao surveyResponseElementDao) {
-        ArrayList<Integer> responseElementIdList = new ArrayList<>();
+        ArrayList<Integer> surveyResponseElementIdList = new ArrayList<>();
 
         for (SurveyResponseElement surveyResponseElement : surveyResponseElements) {
-            responseElementIdList.add((int) surveyResponseElementDao.insert(surveyResponseElement));
+            surveyResponseElementIdList.add((int) surveyResponseElementDao.insert(surveyResponseElement));
         }
 
-        return responseElementIdList;
+        return surveyResponseElementIdList;
     }
 
     public static ArrayList<Integer> insert(ActivityRecord[] activityRecords, ActivityRecordDao activityRecordDao) {
-        ArrayList<Integer> recordElementIdList = new ArrayList<>();
+        ArrayList<Integer> activityRecordIdList = new ArrayList<>();
 
         for (ActivityRecord activityRecord : activityRecords) {
-            recordElementIdList.add((int) activityRecordDao.insert(activityRecord));
+            activityRecordIdList.add((int) activityRecordDao.insert(activityRecord));
         }
 
-        return recordElementIdList;
+        return activityRecordIdList;
     }
 
     public static ArrayList<Integer> insert(SurveyResponse[] surveyResponses, SurveyResponseDao surveyResponseDao) {
-        ArrayList<Integer> recordElementIdList = new ArrayList<>();
+        ArrayList<Integer> surveyResponseIdList = new ArrayList<>();
 
         for (SurveyResponse surveyResponse : surveyResponses) {
-            recordElementIdList.add((int) surveyResponseDao.insert(surveyResponse));
+            surveyResponseIdList.add((int) surveyResponseDao.insert(surveyResponse));
         }
 
-        return recordElementIdList;
+        return surveyResponseIdList;
     }
 }

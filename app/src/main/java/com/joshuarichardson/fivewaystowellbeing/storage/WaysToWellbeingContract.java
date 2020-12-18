@@ -1,6 +1,9 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
 public class WaysToWellbeingContract {
+
+    public static final String WELLBEING_DATABASE_NAME = "wellbeing_database";
+
     // Activity record
     public static final String ACTIVITY_RECORD_TABLE_NAME = "activity_records";
 
