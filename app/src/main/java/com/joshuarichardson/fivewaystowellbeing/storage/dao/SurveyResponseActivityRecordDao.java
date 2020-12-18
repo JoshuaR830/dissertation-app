@@ -1,5 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.storage.dao;
 
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 
 import java.util.List;
@@ -16,13 +18,15 @@ public interface SurveyResponseActivityRecordDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(SurveyResponseActivityRecord surveyResponseActivityRecord);
 
-    // ToDo should be a join to get all of them for an activity or a survey
+    @Query("SELECT * FROM activity_records " +
+            "INNER JOIN survey_activity ON activity_records.id=survey_activity.activity_record_id " +
+            "WHERE survey_activity.survey_response_id = :surveyId")
+    LiveData<List<ActivityRecord>> getActivitiesBySurveyId(int surveyId);
 
-    @Query("SELECT * FROM survey_activity")
-    LiveData<List<SurveyResponseActivityRecord>> getActivitiesBySurveyId();
-
-    @Query("SELECT * FROM survey_activity")
-    LiveData<List<SurveyResponseActivityRecord>> getSurveyByActivityId();
+    @Query("SELECT * FROM survey_response " +
+            "INNER JOIN survey_activity ON survey_response.id = survey_activity.survey_response_id " +
+            "WHERE survey_activity.activity_record_id = :activityId")
+    LiveData<List<SurveyResponse>> getSurveyByActivityId(int activityId);
 
     // ToDo Need a delete method
 }

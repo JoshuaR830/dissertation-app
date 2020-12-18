@@ -15,10 +15,11 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_DATABASE_NAME;
+
 @Database(entities = {ActivityRecord.class, SurveyResponse.class, SurveyResponseActivityRecord.class, SurveyResponseElement.class}, exportSchema = false, version = 1)
 public abstract class WellbeingDatabase extends RoomDatabase {
 
-    public static final String WELLBEING_DATABASE_NAME = "wellbeing_database";
     private static WellbeingDatabase WELLBEING_DATABASE_INSTANCE;
 
     public abstract ActivityRecordDao activityRecordDao();

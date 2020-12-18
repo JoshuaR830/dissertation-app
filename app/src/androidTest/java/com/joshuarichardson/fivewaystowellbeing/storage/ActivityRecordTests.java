@@ -29,7 +29,6 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ActivityRecordTests {
 
-
     private WellbeingDatabase wellbeingDb;
     private ActivityRecordDao activityDao;
 
@@ -86,7 +85,7 @@ public class ActivityRecordTests {
         // Check that multiple items are returned - should be 3 or more depending on order of test runs
         LiveDataTestUtil.getOrAwaitValue(activities);
         assertThat(activities.getValue()).isNotNull();
-        assertThat(activities.getValue().size()).isGreaterThan(2);
+        assertThat(activities.getValue().size()).isEqualTo(3);
     }
 
     @Test
