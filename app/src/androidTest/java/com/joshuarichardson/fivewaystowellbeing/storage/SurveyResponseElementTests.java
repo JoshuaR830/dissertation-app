@@ -12,11 +12,13 @@ import com.joshuarichardson.fivewaystowellbeing.utilities.LiveDataTestUtil;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -27,6 +29,9 @@ public class SurveyResponseElementTests {
     WellbeingDatabase wellbeingDb;
     private SurveyResponseDao surveyResponseDao;
     private SurveyResponseElementDao surveyResponseElementDao;
+
+    @Rule
+    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
     @Before
     public void setup() {

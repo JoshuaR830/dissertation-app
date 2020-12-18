@@ -29,11 +29,12 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ActivityRecordTests {
 
-    @Rule
-    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
     private WellbeingDatabase wellbeingDb;
     private ActivityRecordDao activityDao;
+
+    @Rule
+    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
     @Before
     public void setup() {

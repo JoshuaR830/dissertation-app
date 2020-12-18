@@ -7,19 +7,19 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseEle
 import java.util.ArrayList;
 
 public class DatabaseInsertionHelper {
-    // ToDo: try to make this generic
-    public static int[] insert(SurveyResponseElement[] surveyResponseElements, SurveyResponseElementDao surveyElementDao) {
-        int[] responseElementIdList = new int[]{};
 
-        for (SurveyResponseElement responseElement : surveyResponseElements) {
-            surveyElementDao.insert(responseElement);
+    public static ArrayList<Integer> insert(SurveyResponseElement[] surveyResponseElements, SurveyResponseElementDao surveyResponseElementDao) {
+        ArrayList<Integer> responseElementIdList = new ArrayList<>();
+
+        for (SurveyResponseElement surveyResponseElement : surveyResponseElements) {
+            responseElementIdList.add((int) surveyResponseElementDao.insert(surveyResponseElement));
         }
 
         return responseElementIdList;
     }
 
     public static ArrayList<Integer> insert(ActivityRecord[] activityRecords, ActivityRecordDao activityRecordDao) {
-        ArrayList<Integer> recordElementIdList = new ArrayList<Integer>();
+        ArrayList<Integer> recordElementIdList = new ArrayList<>();
 
         for (ActivityRecord activityRecord : activityRecords) {
             recordElementIdList.add((int) activityRecordDao.insert(activityRecord));
@@ -29,7 +29,7 @@ public class DatabaseInsertionHelper {
     }
 
     public static ArrayList<Integer> insert(SurveyResponse[] surveyResponses, SurveyResponseDao surveyResponseDao) {
-        ArrayList<Integer> recordElementIdList = new ArrayList<Integer>();
+        ArrayList<Integer> recordElementIdList = new ArrayList<>();
 
         for (SurveyResponse surveyResponse : surveyResponses) {
             recordElementIdList.add((int) surveyResponseDao.insert(surveyResponse));
