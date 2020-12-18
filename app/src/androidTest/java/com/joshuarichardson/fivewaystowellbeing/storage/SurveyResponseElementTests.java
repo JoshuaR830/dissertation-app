@@ -3,16 +3,19 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
+import com.joshuarichardson.fivewaystowellbeing.utilities.LiveDataTestUtil;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -33,8 +36,13 @@ public class SurveyResponseElementTests {
         this.surveyResponseDao = this.wellbeingDb.surveyResponseDao();
     }
 
+    @After
+    public void teardown() {
+        this.wellbeingDb.close();
+    }
+
     @Test
-    public void insertingSurveyResponseElement_ThenGettingResponseElementById_ShouldReturnTheCorrectSurveyResponse() {
+    public void insertingSurveyResponseElement_ThenGettingResponseElementById_ShouldReturnTheCorrectSurveyResponse() throws TimeoutException, InterruptedException {
 
         int surveyId = 12345678;
         String question = "What is the question?";
@@ -47,7 +55,7 @@ public class SurveyResponseElementTests {
         surveyResponseElementDao.insert(surveyResponseElement2);
         int elementId1 = (int) surveyResponseElementDao.insert(surveyResponseElement1);
 
-        List<SurveyResponseElement> surveyResponseElements = this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseElementId(surveyId);
+        List<SurveyResponseElement> surveyResponseElements = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseElementId(surveyId));
         SurveyResponseElement actualSurveyElement = surveyResponseElements.get(0);
 
         assertThat(actualSurveyElement.getId()).isEqualTo(elementId1);
@@ -71,12 +79,18 @@ public class SurveyResponseElementTests {
         this.surveyResponseElementDao.insert(surveyResponseElement3);
         this.surveyResponseElementDao.insert(surveyResponseElement4);
 
-        List<SurveyResponseElement> surveyResponseElementsResponse = this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId);
-        assertThat(surveyResponseElementsResponse.size()).isEqualTo(3);
+        List<SurveyResponseElement> surveyResponseElementsResponse = null;
+        try {
+            surveyResponseElementsResponse = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId));
+            assertThat(surveyResponseElementsResponse).isNotNull();
+            assertThat(surveyResponseElementsResponse.size()).isEqualTo(3);
+        } catch (TimeoutException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void insertingMultipleSurveyResponseElementsFromAList_ThenRetrievingBySurveyId_ShouldReturnTheCorrectNumberOfSurveys() {
+    public void insertingMultipleSurveyResponseElementsFromAList_ThenRetrievingBySurveyId_ShouldReturnTheCorrectNumberOfSurveys() throws TimeoutException, InterruptedException {
         SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE);
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
@@ -90,15 +104,19 @@ public class SurveyResponseElementTests {
 
         DatabaseInsertionHelper.insert(surveyResponseElements, this.surveyResponseElementDao);
 
-        List<SurveyResponseElement> surveyResponseElementsResponse = this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId);
+        List<SurveyResponseElement> surveyResponseElementsResponse = null;
 
+        surveyResponseElementsResponse = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(surveyId));
+        assertThat(surveyResponseElementsResponse).isNotNull();
         assertThat(surveyResponseElementsResponse.size()).isEqualTo(3);
+
     }
 
     @Test
-    public void whenRetrievingBySurveyIdThatDoesNotExist_ShouldReturnEmptyList() {
-        List<SurveyResponseElement> surveyResponseElements = this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(346638267);
+    public void whenRetrievingBySurveyIdThatDoesNotExist_ShouldReturnEmptyList() throws TimeoutException, InterruptedException {
+        List<SurveyResponseElement> surveyResponseElements;
 
+        surveyResponseElements = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getBySurveyResponseElementBySurveyResponseId(346638267));
         assertThat(surveyResponseElements).isNotNull();
         assertThat(surveyResponseElements).isEmpty();
     }

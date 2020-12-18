@@ -10,11 +10,14 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.utilities.LiveDataTestUtil;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -25,7 +28,7 @@ import static org.junit.Assert.fail;
 
 public class SurveyResponseActivityRecordTests {
 
-    private WellbeingDatabase surveyActivityDb;
+    private WellbeingDatabase wellbeingDb;
     private SurveyResponseActivityRecordDao surveyActivityDao;
     private ActivityRecordDao activityRecordDao;
     private SurveyResponseDao surveyResponseDao;
@@ -34,17 +37,22 @@ public class SurveyResponseActivityRecordTests {
     public void setup() {
         // Need to initialise an in memory room database
         Context context = ApplicationProvider.getApplicationContext();
-        this.surveyActivityDb = Room
+        this.wellbeingDb = Room
                 .inMemoryDatabaseBuilder(context, WellbeingDatabase.class)
                 .build();
 
-        this.surveyActivityDao = this.surveyActivityDb.surveyResponseActivityRecordDao();
-        this.activityRecordDao = this.surveyActivityDb.activityRecordDao();
-        this.surveyResponseDao = this.surveyActivityDb.surveyResponseDao();
+        this.surveyActivityDao = this.wellbeingDb.surveyResponseActivityRecordDao();
+        this.activityRecordDao = this.wellbeingDb.activityRecordDao();
+        this.surveyResponseDao = this.wellbeingDb.surveyResponseDao();
+    }
+
+    @After
+    public void teardown() {
+        this.wellbeingDb.close();
     }
 
     @Test
-    public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetActivitiesForSurvey_ShouldReturnTheActivity() {
+    public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetActivitiesForSurvey_ShouldReturnTheActivity() throws TimeoutException, InterruptedException {
         SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active");
         ActivityRecord activityRecord = new ActivityRecord("Running", 1200, 1607960240, "Sport");
 
@@ -55,7 +63,7 @@ public class SurveyResponseActivityRecordTests {
 
         this.surveyActivityDao.insert(record);
 
-        List<SurveyResponseActivityRecord> actualRecords = this.surveyActivityDao.getActivitiesBySurveyId();
+        List<SurveyResponseActivityRecord> actualRecords = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getActivitiesBySurveyId());
 
         assertThat(actualRecords.size()).isGreaterThan(0);
 
@@ -67,7 +75,7 @@ public class SurveyResponseActivityRecordTests {
     }
 
     @Test
-    public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetSurveyForActivity_ShouldReturnTheSurvey() {
+    public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetSurveyForActivity_ShouldReturnTheSurvey() throws TimeoutException, InterruptedException {
         // Create an insert a survey response
         SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active");
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
@@ -85,7 +93,7 @@ public class SurveyResponseActivityRecordTests {
             fail("No exception should be thrown");
         }
 
-        List<SurveyResponseActivityRecord> actualRecords = this.surveyActivityDao.getSurveyByActivityId();
+        List<SurveyResponseActivityRecord> actualRecords = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getSurveyByActivityId());
 
         assertThat(actualRecords.size()).isGreaterThan(0);
 

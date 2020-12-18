@@ -4,6 +4,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseAct
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -18,10 +19,10 @@ public interface SurveyResponseActivityRecordDao {
     // ToDo should be a join to get all of them for an activity or a survey
 
     @Query("SELECT * FROM survey_activity")
-    List<SurveyResponseActivityRecord> getActivitiesBySurveyId();
+    LiveData<List<SurveyResponseActivityRecord>> getActivitiesBySurveyId();
 
     @Query("SELECT * FROM survey_activity")
-    List<SurveyResponseActivityRecord> getSurveyByActivityId();
+    LiveData<List<SurveyResponseActivityRecord>> getSurveyByActivityId();
 
     // ToDo Need a delete method
 }

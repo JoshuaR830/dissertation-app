@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.storage;
+package com.joshuarichardson.fivewaystowellbeing.utilities;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;

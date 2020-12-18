@@ -6,6 +6,7 @@ import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.utilities.LiveDataTestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,7 +25,6 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class ActivityRecordTests {
@@ -44,17 +44,17 @@ public class ActivityRecordTests {
     }
 
     @After
-    public void after() {
+    public void teardown() {
         this.wellbeingDb.close();
     }
 
     @Test
-    public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() {
+    public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() throws TimeoutException, InterruptedException {
         ActivityRecord insertedActivity = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT);
         int activityRecordId = (int) this.activityDao.insert(insertedActivity);
         insertedActivity.setActivityRecordId(activityRecordId);
 
-        List<ActivityRecord> retrievedActivities = this.activityDao.getActivityRecordById(activityRecordId);
+        List<ActivityRecord> retrievedActivities = LiveDataTestUtil.getOrAwaitValue(this.activityDao.getActivityRecordById(activityRecordId));
 
         assertThat(retrievedActivities.size()).isGreaterThan(0);
 
@@ -68,7 +68,7 @@ public class ActivityRecordTests {
     }
 
     @Test
-    public void insertMultiple_ThenGetActivities_ShouldReturnAllActivities() {
+    public void insertMultiple_ThenGetActivities_ShouldReturnAllActivities() throws TimeoutException, InterruptedException {
 
         // Test inserting multiple activity records
         ArrayList<Integer> insertedIds = DatabaseInsertionHelper.insert(new ActivityRecord[]{
@@ -83,20 +83,13 @@ public class ActivityRecordTests {
         LiveData<List<ActivityRecord>> activities = this.activityDao.getAllActivities();
 
         // Check that multiple items are returned - should be 3 or more depending on order of test runs
-
-        try {
-            LiveDataTestUtil.getOrAwaitValue(activities);
-            assertThat(activities.getValue()).isNotNull();
-            assertThat(activities.getValue().size()).isGreaterThan(2);
-        } catch (TimeoutException | InterruptedException e) {
-            fail("Live data not set");
-        }
-
-
+        LiveDataTestUtil.getOrAwaitValue(activities);
+        assertThat(activities.getValue()).isNotNull();
+        assertThat(activities.getValue().size()).isGreaterThan(2);
     }
 
     @Test
-    public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() {
+    public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() throws TimeoutException, InterruptedException {
         ArrayList<Integer> insertIds = DatabaseInsertionHelper.insert(new ActivityRecord[]{
                 // 16/12/2020 12am = 1608076800
                 // 17/12/2020 12am = 1608163200
@@ -112,13 +105,8 @@ public class ActivityRecordTests {
 
         LiveData<List<ActivityRecord>> activities = this.activityDao.getActivitiesInTimeRange(1608076800, 1608163200);
 
-
-        try {
-            List<ActivityRecord> value = LiveDataTestUtil.getOrAwaitValue(activities);
-            assertThat(value).isNotNull();
-            assertThat(value.size()).isEqualTo(4);
-        } catch (TimeoutException | InterruptedException e) {
-            fail("Live data not set");
-        }
+        List<ActivityRecord> value = LiveDataTestUtil.getOrAwaitValue(activities);
+        assertThat(value).isNotNull();
+        assertThat(value.size()).isEqualTo(4);
     }
 }

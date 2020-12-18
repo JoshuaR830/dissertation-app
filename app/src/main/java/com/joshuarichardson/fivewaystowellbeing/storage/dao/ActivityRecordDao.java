@@ -17,7 +17,7 @@ public interface ActivityRecordDao {
     long insert(ActivityRecord activityRecord);
 
     @Query("SELECT * FROM activity_records WHERE id = :activityRecordId")
-    List<ActivityRecord> getActivityRecordById(int activityRecordId);
+    LiveData<List<ActivityRecord>> getActivityRecordById(int activityRecordId);
 
     @Query("SELECT * FROM activity_records WHERE timestamp >= :startTime AND timestamp <= :endTime")
     LiveData<List<ActivityRecord>> getActivitiesInTimeRange(int startTime, int endTime);
