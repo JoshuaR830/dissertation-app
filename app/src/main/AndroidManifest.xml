@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.joshuarichardson.fivewaystowellbeing">
 
+    <permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.wellbeing_support.WellbeingSupportWebViewActivity"
+            android:label="@string/get_wellbeing_support"
+            android:parentActivityName=".ui.wellbeing_support.WellbeingSupportActivity"/>
+        <activity
+            android:name=".ui.wellbeing_support.SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ui.wellbeing_support.WellbeingSupportActivity"
+            android:label="@string/get_wellbeing_support"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

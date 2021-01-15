@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Five Ways to Wellbeing</string>
+    <string name="get_wellbeing_support">Wellbeing Support</string>
+    <string name="settings">Settings</string>
+
+    <string name="button_visit_site">Visit site</string>
 </resources>
