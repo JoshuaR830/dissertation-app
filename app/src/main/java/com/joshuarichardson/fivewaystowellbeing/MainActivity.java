@@ -1,5 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -8,21 +9,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.SettingsActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
-    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        this.fragmentManager = getSupportFragmentManager();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -43,19 +42,16 @@ public class MainActivity extends AppCompatActivity {
         SettingsFragment settingsFragment = new SettingsFragment();
 
         switch(item.getItemId()) {
+            // I want to launch activities - wouldn't expect that the bottom bar would still show and it isn't top level
             case R.id.menu_settings:
                 Log.d("Menu", "Settings");
-                this.fragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, supportFragment, null)
-                        .addToBackStack(null)
-                        .commit();
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 break;
             case R.id.menu_wellbeing_support:
                 Log.d("Menu", "Get wellbeing support");
-                this.fragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment, settingsFragment, null)
-                        .addToBackStack(null)
-                        .commit();
+                Intent wellbeingIntent = new Intent(MainActivity.this, WellbeingSupportActivity.class);
+                startActivity(wellbeingIntent);
                 break;
             default:
                 Log.d("Menu", "Menu");
