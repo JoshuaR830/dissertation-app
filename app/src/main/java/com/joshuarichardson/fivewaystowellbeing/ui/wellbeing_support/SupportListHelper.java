@@ -8,6 +8,7 @@ public class SupportListHelper {
 
     private static ArrayList<WellbeingSupportItem> supportList;
 
+    // Return a list of all support websites that are available
     public static ArrayList<WellbeingSupportItem> getList() {
         if(supportList == null) {
             supportList = new ArrayList<>();

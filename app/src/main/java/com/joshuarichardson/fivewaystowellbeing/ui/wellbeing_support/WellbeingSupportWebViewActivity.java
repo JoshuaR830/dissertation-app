@@ -18,17 +18,20 @@ public class WellbeingSupportWebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wellbeing_support_web_view);
 
+        // An intent should be passed through with a url string
         Intent webIntent = getIntent();
         if(webIntent == null || webIntent.getExtras() == null) {
             return;
         }
 
+        // Get the url string
         String url = webIntent.getExtras().getString("url");
 
         if (url == null) {
             return;
         }
 
+        // Navigate to the link selected
         this.webView = findViewById(R.id.wellbeing_support_web_view);
         this.webView.setWebViewClient(new WebViewClient());
         this.webView.loadUrl(url);

@@ -7,6 +7,7 @@ public class WellbeingSupportItem {
     private int imageResourceId;
     private String websiteUrl;
 
+    // This is used for details about wellbeing support
     public  WellbeingSupportItem(String title, String description, int imageResourceId, String websiteUrl) {
         this.title = title;
         this.description = description;

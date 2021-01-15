@@ -13,11 +13,13 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 // Need to be able to test values at a position in the recycler view https://stackoverflow.com/a/34795431/13496270
 public class RecyclerViewTestUtil {
     public static Matcher<View> atRecyclerPosition(int position, Matcher<View> matcher) {
-        if(matcher == null) {
+        if (matcher == null) {
             return null;
         }
+
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
+            // Create the message which can be used for reporting
             public void describeTo(Description description) {
                 description.appendText("has item at position: " + position + ": ");
                 matcher.describeTo(description);
@@ -27,10 +29,10 @@ public class RecyclerViewTestUtil {
             protected boolean matchesSafely(RecyclerView recyclerView) {
                 // Need to get the ViewHolder at the position
                 WellbeingSupportAdapter.WellbeingSupportViewHolder viewHolder = (WellbeingSupportAdapter.WellbeingSupportViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+
+                // Does the item match the expectation
                 return viewHolder != null && matcher.matches(viewHolder.itemView);
             }
         };
-
-
     }
 }

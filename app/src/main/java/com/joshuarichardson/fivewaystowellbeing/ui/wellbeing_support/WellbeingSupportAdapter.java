@@ -31,12 +31,14 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
 
     @NonNull
     @Override
+    // Set empty view holders
     public WellbeingSupportViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = this.inflater.inflate(R.layout.wellbeing_support_list_item, parent, false);
         return new WellbeingSupportViewHolder(view);
     }
 
     @Override
+    // Bind data to the view holders
     public void onBindViewHolder(@NonNull WellbeingSupportViewHolder holder, int position) {
         holder.onBind(this.supportItemList.get(position));
     }
@@ -55,6 +57,7 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
 
         public WellbeingSupportViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Get all of the views to set values for
             this.title = itemView.findViewById(R.id.wellbeing_support_list_item_title);
             this.description = itemView.findViewById(R.id.wellbeing_support_list_item_description);
             this.image = itemView.findViewById(R.id.wellbeing_support_list_item_image);
@@ -62,6 +65,7 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
         }
 
         public void onBind(WellbeingSupportItem supportItem) {
+            // Set the values for each of the views in the view holder
             this.title.setText(supportItem.getTitle());
             this.description.setText(supportItem.getDescription());
             this.image.setImageResource(supportItem.getImageResourceId());

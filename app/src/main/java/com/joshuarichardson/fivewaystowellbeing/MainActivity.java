@@ -37,19 +37,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        WellbeingSupportFragment supportFragment = new WellbeingSupportFragment();
-        SettingsFragment settingsFragment = new SettingsFragment();
-
         switch(item.getItemId()) {
             // I want to launch activities - wouldn't expect that the bottom bar would still show and it isn't top level
             case R.id.menu_settings:
-                Log.d("Menu", "Settings");
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
             case R.id.menu_wellbeing_support:
-                Log.d("Menu", "Get wellbeing support");
                 Intent wellbeingIntent = new Intent(MainActivity.this, WellbeingSupportActivity.class);
                 startActivity(wellbeingIntent);
                 break;

@@ -22,7 +22,8 @@ public class WellbeingSupportRecyclerViewTests {
 
     // How to test recycler views using espresso https://developer.android.com/training/testing/espresso/lists#recycler-view-list-items
 
-    @Test void theCardForMindShouldBeShown() {
+    @Test
+    public void theCardForMindShouldBeShown() {
         onView(withId(R.id.wellbeing_support_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(withText("Mind")))))
@@ -37,9 +38,10 @@ public class WellbeingSupportRecyclerViewTests {
             .check(matches(atRecyclerPosition(1, hasDescendant(withText("Information about NHS mental health services.")))));
     }
 
-    @Test void theCardForSelfHelpResourcesShouldBeShown() {
+    @Test
+    public void theCardForSelfHelpResourcesShouldBeShown() {
         onView(withId(R.id.wellbeing_support_recycler_view))
-            .perform(scrollToPosition(1))
+            .perform(scrollToPosition(2))
             .check(matches(atRecyclerPosition(2, hasDescendant(withText("Self-help resources")))))
             .check(matches(atRecyclerPosition(2, hasDescendant(withText("A selection of self-help resources.")))));
     }

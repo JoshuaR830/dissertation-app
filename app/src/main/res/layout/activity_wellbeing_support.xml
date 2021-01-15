@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.wellbeing_support.WellbeingSupportActivity">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/wellbeing_support_recycler_view"
         android:layout_width="0dp"
