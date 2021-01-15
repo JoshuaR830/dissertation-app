@@ -1,9 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -22,19 +20,14 @@ public class WellbeingSupportWebViewActivity extends AppCompatActivity {
 
         Intent webIntent = getIntent();
         if(webIntent == null || webIntent.getExtras() == null) {
-            Log.d("Null", "It was null");
             return;
         }
 
         String url = webIntent.getExtras().getString("url");
 
-        Log.d("URL", url);
         if (url == null) {
             return;
         }
-
-        Log.d("URL", url);
-        Uri websiteUrl = Uri.parse(url);
 
         this.webView = findViewById(R.id.wellbeing_support_web_view);
         this.webView.setWebViewClient(new WebViewClient());
@@ -45,7 +38,7 @@ public class WellbeingSupportWebViewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (this.webView.canGoBack()) {
-            // Navigate back in the webview
+            // Navigate back in the web-view
             this.webView.goBack();
         } else {
             // Navigate back to the previous page
