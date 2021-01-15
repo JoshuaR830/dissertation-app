@@ -1,6 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +24,6 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
     LayoutInflater inflater;
 
     public WellbeingSupportAdapter(Context context, List<WellbeingSupportItem> supportItemList) {
-        // Need to work out how to test this
-        // Need to check that the view contains all of the required items
-        // For given items does it display this, that...
         this.inflater = LayoutInflater.from(context);
         this.supportItemList = supportItemList;
         this.context = context;
@@ -64,6 +63,16 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
 
         public void onBind(WellbeingSupportItem supportItem) {
             this.title.setText(supportItem.getTitle());
+            this.description.setText(supportItem.getDescription());
+            this.image.setImageResource(supportItem.getImageResourceId());
+
+            this.button.setOnClickListener(v -> {
+                Intent webViewIntent = new Intent(WellbeingSupportAdapter.this.context, WellbeingSupportWebViewActivity.class);
+                Bundle webViewBundle = new Bundle();
+                webViewBundle.putString("url", supportItem.getWebsiteUrl());
+                webViewIntent.putExtras(webViewBundle);
+                WellbeingSupportAdapter.this.context.startActivity(webViewIntent);
+            });
         }
     }
 

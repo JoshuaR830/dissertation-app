@@ -21,19 +21,20 @@ public class WellbeingSupportRecyclerViewTests {
     public ActivityScenarioRule<WellbeingSupportActivity> wellbeingSupportActivity = new ActivityScenarioRule<>(WellbeingSupportActivity.class);
 
     // How to test recycler views using espresso https://developer.android.com/training/testing/espresso/lists#recycler-view-list-items
-    @Test
-    public void theCardForNHSShouldBeShown() {
-        onView(withId(R.id.wellbeing_support_recycler_view))
-            .perform(scrollToPosition(0))
-            .check(matches(atRecyclerPosition(0, hasDescendant(withText("NHS")))))
-            .check(matches(atRecyclerPosition(0, hasDescendant(withText("Information about NHS mental health services.")))));
-    }
 
     @Test void theCardForMindShouldBeShown() {
         onView(withId(R.id.wellbeing_support_recycler_view))
+            .perform(scrollToPosition(0))
+            .check(matches(atRecyclerPosition(0, hasDescendant(withText("Mind")))))
+            .check(matches(atRecyclerPosition(0, hasDescendant(withText("Tips and guides for managing with mental health problems.")))));
+    }
+
+    @Test
+    public void theCardForNHSShouldBeShown() {
+        onView(withId(R.id.wellbeing_support_recycler_view))
             .perform(scrollToPosition(1))
-            .check(matches(atRecyclerPosition(1, hasDescendant(withText("Mind")))))
-            .check(matches(atRecyclerPosition(1, hasDescendant(withText("Tips and guides for managing with mental health problems.")))));
+            .check(matches(atRecyclerPosition(1, hasDescendant(withText("NHS")))))
+            .check(matches(atRecyclerPosition(1, hasDescendant(withText("Information about NHS mental health services.")))));
     }
 
     @Test void theCardForSelfHelpResourcesShouldBeShown() {
