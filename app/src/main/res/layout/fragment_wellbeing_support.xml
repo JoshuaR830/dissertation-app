@@ -25,14 +25,14 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/wellbeing_support_list_item_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     android:textAppearance="?attr/textAppearanceHeadline6"/>
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/wellbeing_support_list_item_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
@@ -47,7 +47,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button3"
+                    android:id="@+id/wellbeing_support_list_item_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Button"
@@ -55,7 +55,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/wellbeing_support_list_item_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
