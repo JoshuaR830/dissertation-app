@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorSilver">#BEC2CB</color>
+    <color name="black12Percent">#1F000000</color>
 </resources>
