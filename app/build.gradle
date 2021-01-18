@@ -89,6 +89,7 @@ dependencies {
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
     androidTestAnnotationProcessor "com.google.dagger:hilt-android-compiler:$hilt_version"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
 }
 repositories {
     mavenCentral()
