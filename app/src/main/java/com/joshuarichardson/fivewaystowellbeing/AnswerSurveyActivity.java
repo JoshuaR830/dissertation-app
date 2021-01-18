@@ -24,9 +24,9 @@ public class AnswerSurveyActivity extends AppCompatActivity {
     }
 
     public void onSubmit(View v) {
-        EditText answerInputBox1 = findViewById(R.id.answerInput1);
-        EditText answerInputBox2 = findViewById(R.id.answerInput2);
-        EditText answerInputBox3 = findViewById(R.id.answerInput3);
+        EditText answerInputBox1 = findViewById(R.id.text_input);
+        EditText answerInputBox2 = findViewById(R.id.drop_down_input);
+        EditText answerInputBox3 = findViewById(R.id.slider_input);
 
         String answer1 = answerInputBox1.getText().toString();
         String answer2 = answerInputBox2.getText().toString();
