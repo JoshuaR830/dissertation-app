@@ -50,26 +50,26 @@ public class SurveyBuilder {
         for(SurveyQuestion question : this.questions) {
             switch (question.getQuestionType()) {
                 case DROP_DOWN_LIST:
-                    Log.d("Hello", "Drop down list");
                     LayoutInflater inflater = LayoutInflater.from(this.context);
-                    View cardView = inflater.inflate(R.layout.input_drop_down, null, false);
+                    View cardView = inflater.inflate(R.layout.input_drop_down, layout, false);
 
                     cardView.setId(counter);
+                    cardView.setTag(question.getQuestionType());
 
-                    AutoCompleteTextView dropDownInput = cardView.findViewById(R.id.drop_down_input);
+                    TextInputLayout container = cardView.findViewById(R.id.drop_down_container);
+                    AutoCompleteTextView dropDownInput = container.findViewById(R.id.drop_down_input);
+                    List<String> myQuestions = question.getOptionsList();
 
-                    List<String> questions = question.getOptionsList();
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.context, R.layout.item_list_text, questions);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.context, R.layout.item_list_text, myQuestions);
                     dropDownInput.setAdapter(adapter);
 
                     TextView questionText = cardView.findViewById(R.id.question_title);
                     questionText.setText(question.getQuestionText());
 
-                    TextInputLayout container = cardView.findViewById(R.id.drop_down_container);
                     container.setHint(question.getQuestionText());
 
                     layout.addView(cardView);
-                    Log.d("Added", "Added the view");
+
                     break;
                 default:
                     break;

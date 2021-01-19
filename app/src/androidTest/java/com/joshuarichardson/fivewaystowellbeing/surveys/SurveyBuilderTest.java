@@ -22,7 +22,8 @@ import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.D
 public class SurveyBuilderTest {
 
     private View surveyBuilder;
-    private SurveyQuestion question;
+    private SurveyQuestion firstQuestion;
+    private SurveyQuestion secondQuestion;
 
     Activity currentActivity = null;
 
@@ -34,10 +35,17 @@ public class SurveyBuilderTest {
     public void setUp() {
 //        Context context = getInstrumentation().getContext();
         String[] feelings = new String[]{"Happy", "Moderate", "Sad"};
+        String[] apps = new String[]{"Facebook", "Snapchat", "Whatsapp"};
 
-        this.question = new QuestionBuilder()
+        this.firstQuestion = new QuestionBuilder()
             .withQuestionText("How are you feeling?")
             .withOptionsList(Arrays.asList(feelings))
+            .withType(DROP_DOWN_LIST)
+            .build();
+
+        this.secondQuestion = new QuestionBuilder()
+            .withQuestionText("What activity have you been doing?")
+            .withOptionsList(Arrays.asList(apps))
             .withType(DROP_DOWN_LIST)
             .build();
 
@@ -64,7 +72,8 @@ public class SurveyBuilderTest {
         answerSurveyActivity.getScenario().onActivity(
                 (activity) -> {
                     this.surveyBuilder = new SurveyBuilder(activity)
-                    .withQuestion(this.question)
+                    .withQuestion(this.firstQuestion)
+                    .withQuestion(this.secondQuestion)
                     .build();
                 }
         );
@@ -72,12 +81,13 @@ public class SurveyBuilderTest {
 
     @After
     public void tearDown() {
-        this.question = null;
+        this.firstQuestion = null;
+        this.secondQuestion = null;
         this.surveyBuilder = null;
     }
 
     @Test
-    public void surveyBuilder_ShouldReturnViewWithItems() throws IllegalArgumentException {
+    public void surveyBuilder_ShouldReturnViewWithItem() throws IllegalArgumentException {
         // Check the view exists
         View view = this.surveyBuilder
 //            .requireViewById(R.layout.activity_answer_survey)
@@ -95,35 +105,55 @@ public class SurveyBuilderTest {
     }
 
     @Test
+    public void surveyBuilder_ShouldReturnAViewWithMultipleItems() {
+        View view1 = this.surveyBuilder.requireViewById(0).requireViewById(R.id.drop_down_container);
+        View view2 = this.surveyBuilder.requireViewById(1).requireViewById(R.id.drop_down_container);
+        assertThat(view1).isInstanceOf(com.google.android.material.textfield.TextInputLayout.class);
+        assertThat(view2).isInstanceOf(com.google.android.material.textfield.TextInputLayout.class);
+
+        View dropDown1 = view1.requireViewById(R.id.drop_down_input);
+        View dropDown2 = view2.requireViewById(R.id.drop_down_input);
+
+        assertThat(dropDown1).isInstanceOf(AutoCompleteTextView.class);
+        assertThat(dropDown2).isInstanceOf(AutoCompleteTextView.class);
+
+        assertThat(((com.google.android.material.textfield.TextInputLayout)view1).getHint()).isEqualTo("How are you feeling?");
+        assertThat(((com.google.android.material.textfield.TextInputLayout)view2).getHint()).isEqualTo("What activity have you been doing?");
+    }
+
+    @Test
     public void whenQuestionBuilderIsSuppliedWithAllValues_ACompleteQuestionShouldBeReturned() {
 
         // Check the question text matches
-        assertThat(this.question.getQuestionText()).isEqualTo("How are you feeling?");
+        assertThat(this.firstQuestion.getQuestionText()).isEqualTo("How are you feeling?");
 
         // Check the type matches
-        assertThat(this.question.getQuestionType()).isEqualTo(DROP_DOWN_LIST);
+        assertThat(this.firstQuestion.getQuestionType()).isEqualTo(DROP_DOWN_LIST);
 
         // Check the question list matches
-        assertThat(this.question.getOptionsList()).isNotNull();
-        assertThat(this.question.getOptionsList()).isNotEmpty();
-        assertThat(this.question.getOptionsList()).hasSize(3);
+        assertThat(this.firstQuestion.getOptionsList()).isNotNull();
+        assertThat(this.firstQuestion.getOptionsList()).isNotEmpty();
+        assertThat(this.firstQuestion.getOptionsList()).hasSize(3);
 
-        assertThat(this.question.getOptionsList().get(0)).isEqualTo("Happy");
-        assertThat(this.question.getOptionsList().get(1)).isEqualTo("Moderate");
-        assertThat(this.question.getOptionsList().get(2)).isEqualTo("Sad");
+        assertThat(this.secondQuestion.getOptionsList()).hasSize(3);
+
+        assertThat(this.firstQuestion.getOptionsList().get(0)).isEqualTo("Happy");
+        assertThat(this.firstQuestion.getOptionsList().get(1)).isEqualTo("Moderate");
+        assertThat(this.firstQuestion.getOptionsList().get(2)).isEqualTo("Sad");
     }
 
     @Test
     public void whenQuestionBuilderIsSuppliedWithoutValues_ThenDefaultValuesShouldBeReturned() {
 
+        SurveyQuestion questionBuilder = new QuestionBuilder().build();
         // Check the question text matches
-        assertThat(this.question.getQuestionText()).isEqualTo("");
+        assertThat(questionBuilder.getQuestionText()).isEqualTo("");
 
         // Check the type matches
-        assertThat(this.question.getQuestionType()).isEqualTo(null);
+        assertThat(questionBuilder.getQuestionType()).isEqualTo(null);
 
         // Check the question list matches
-        assertThat(this.question.getOptionsList()).isNotNull();
-        assertThat(this.question.getOptionsList()).isEmpty();
+        assertThat(questionBuilder.getOptionsList()).isNotNull();
+        assertThat(questionBuilder.getOptionsList()).isEmpty();
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.AnswerSurveyActivity;
-import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
@@ -60,7 +59,7 @@ public class SurveyViewBuiltCorrectly {
 
     @Test
     public void dropDownList_ShouldContainAllActivities () {
-        onView(withId(R.id.drop_down_input))
+        onView(withId(0))
             .perform(click());
 
         // Trying to get the drop down list https://stackoverflow.com/a/45368345/13496270
