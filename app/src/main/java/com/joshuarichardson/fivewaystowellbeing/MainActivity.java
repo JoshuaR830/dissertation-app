@@ -14,7 +14,9 @@ import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSu
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
