@@ -58,14 +58,15 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 }
             }
 
+
             SurveyQuestion firstQuestion = new QuestionBuilder()
-                .withQuestionText("How are you feeling?")
+                .withQuestionText("What activity have you been doing?")
                 .withOptionsList(apps)
                 .withType(DROP_DOWN_LIST)
                 .build();
 
             SurveyQuestion secondQuestion = new QuestionBuilder()
-                .withQuestionText("What activity have you been doing?")
+                .withQuestionText("How are you feeling?")
                 .withOptionsList(listItems)
                 .withType(DROP_DOWN_LIST)
                 .build();

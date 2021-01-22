@@ -15,10 +15,13 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.DROP_DOWN_LIST;
 
+@HiltAndroidTest
 public class SurveyBuilderTest {
 
     private View surveyBuilder;
@@ -27,6 +30,8 @@ public class SurveyBuilderTest {
 
     Activity currentActivity = null;
 
+    @Rule
+    public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
 
     @Rule
     public ActivityScenarioRule<AnswerSurveyActivity> answerSurveyActivity = new ActivityScenarioRule<>(AnswerSurveyActivity.class);

@@ -2,6 +2,8 @@ package com.joshuarichardson.fivewaystowellbeing;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
@@ -30,6 +32,10 @@ public class CreatePassTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_pass_time);
 
+        AutoCompleteTextView dropDownInput = findViewById(R.id.pass_time_type_input);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreatePassTimeActivity.this, R.layout.item_list_text, DropDownHelper.getEnumStrings(ActivityType.values()));
+        dropDownInput.setAdapter(adapter);
 
         this.passTimeDao = this.db.activityRecordDao();
     }

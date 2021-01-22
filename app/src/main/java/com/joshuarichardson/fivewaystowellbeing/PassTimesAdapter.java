@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
@@ -49,6 +50,7 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
     }
 
     public class PassTimeViewHolder extends RecyclerView.ViewHolder {
+        private ImageView image;
         TextView nameTextView;
         TextView timestampTextView;
         TextView durationTextView;
@@ -57,10 +59,11 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
         public PassTimeViewHolder(@NonNull View itemView) {
             super(itemView);
 ;
-            nameTextView = itemView.findViewById(R.id.nameTextView);
-            timestampTextView = itemView.findViewById(R.id.timestampTextView);
-            durationTextView = itemView.findViewById(R.id.durationTextView);
-            typeTextView = itemView.findViewById(R.id.typeTextView);
+            this.nameTextView = itemView.findViewById(R.id.nameTextView);
+            this.timestampTextView = itemView.findViewById(R.id.timestampTextView);
+            this.durationTextView = itemView.findViewById(R.id.durationTextView);
+            this.typeTextView = itemView.findViewById(R.id.typeTextView);
+            this.image = itemView.findViewById(R.id.passtime_list_item_image);
         }
 
         public void onBind(String name, int duration, long timestamp, String type) {
@@ -68,6 +71,8 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             durationTextView.setText(String.format(Locale.getDefault(), "%d", duration));
             timestampTextView.setText(String.format(Locale.getDefault(), "%d", timestamp));
             typeTextView.setText(type);
+
+            image.setImageResource(ActivityTypeImageHelper.getActivityImage(type));
         }
     }
 }

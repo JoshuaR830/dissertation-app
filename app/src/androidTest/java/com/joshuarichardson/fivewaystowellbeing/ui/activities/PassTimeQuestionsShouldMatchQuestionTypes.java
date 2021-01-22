@@ -1,7 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.activities;
 
-import android.widget.AutoCompleteTextView;
-
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
@@ -52,7 +51,7 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withClassName(equalTo(TextInputEditText.class.getName()))));
         onView(withId(R.id.pass_time_duration_input)).check(matches(withClassName(equalTo(TextInputEditText.class.getName()))));
-        onView(withId(R.id.pass_time_type_input)).check(matches(withClassName(equalTo(AutoCompleteTextView.class.getName()))));
+        onView(withId(R.id.pass_time_type_input)).check(matches(withClassName(equalTo(MaterialAutoCompleteTextView.class.getName()))));
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withText("")));
         onView(withId(R.id.pass_time_duration_input)).check(matches(withText("")));
@@ -60,7 +59,6 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withInputType(TYPE_CLASS_TEXT)));
         onView(withId(R.id.pass_time_duration_input)).check(matches(withInputType(TYPE_CLASS_NUMBER)));
-        onView(withId(R.id.pass_time_type_input)).check(matches(withInputType(TYPE_CLASS_TEXT)));
     }
 
     @Test
@@ -70,7 +68,7 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
         DataInteraction popup = onData(instanceOf(String.class))
                 .inRoot(RootMatchers.isPlatformPopup());
 
-        popup.atPosition(0).check(matches(withText("Sport")));
-        popup.atPosition(1).check(matches(withText("App")));
+        popup.atPosition(0).check(matches(withText("App")));
+        popup.atPosition(1).check(matches(withText("Sport")));
     }
 }

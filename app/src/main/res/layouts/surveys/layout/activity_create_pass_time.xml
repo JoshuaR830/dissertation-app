@@ -41,7 +41,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="@string/passtime_title"
                 android:layout_marginBottom="16dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -81,19 +81,18 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passtimeQuestion3"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="@string/passtime_type">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/pass_time_type_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="text"
-                    app:layout_constraintVertical_bias="0.75" />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

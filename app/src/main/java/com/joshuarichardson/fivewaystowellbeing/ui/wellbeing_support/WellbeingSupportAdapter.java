@@ -60,7 +60,7 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
             // Get all of the views to set values for
             this.title = itemView.findViewById(R.id.wellbeing_support_list_item_title);
             this.description = itemView.findViewById(R.id.wellbeing_support_list_item_description);
-            this.image = itemView.findViewById(R.id.wellbeing_support_list_item_image);
+            this.image = itemView.findViewById(R.id.passtime_list_item_image);
             this.button = itemView.findViewById(R.id.wellbeing_support_list_item_button);
         }
 

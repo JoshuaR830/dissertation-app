@@ -23,11 +23,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:orientation="vertical"
                 android:padding="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -64,17 +62,26 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="80dp"
+            <FrameLayout
+                android:id="@+id/passtime_image_frame"
+                android:layout_width="wrap_content"
                 android:layout_height="80dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
-                android:contentDescription="Sun and trees"
-                android:scaleType="centerCrop"
+                android:background="@drawable/frame_circle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/sun_and_trees" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/passtime_list_item_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginTop="0dp"
+                    android:padding="16dp"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
