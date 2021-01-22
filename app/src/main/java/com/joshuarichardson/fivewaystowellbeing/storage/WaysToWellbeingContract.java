@@ -19,6 +19,8 @@ public class WaysToWellbeingContract {
     public static final String SURVEY_RESPONSE_ID = "id";
     public static final String SURVEY_RESPONSE_TIMESTAMP = "timestamp";
     public static final String SURVEY_RESPONSE_WAY_TO_WELLBEING = "way_to_wellbeing";
+    public static final String SURVEY_RESPONSE_TITLE = "title";
+    public static final String SURVEY_RESPONSE_DESCRIPTION = "description";
 
     // Survey response element
     public static final String SURVEY_RESPONSE_ELEMENT_TABLE_NAME = "survey_response_element";

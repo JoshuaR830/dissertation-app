@@ -93,9 +93,6 @@ public class BasicSurveyViewBuiltCorrectly {
 
     @Test
     public void surveyTitle_ShouldAllowTextEntry() {
-         onView(withId(R.id.question_title))
-            .check(matches(withText("Add a title")));
-
         onView(withId(R.id.survey_title_input_container))
             .check(matches(withMaterialHint("Enter a title")));
 
@@ -110,9 +107,6 @@ public class BasicSurveyViewBuiltCorrectly {
 
     @Test
     public void surveyDescription_ShouldAllowTextEntry() {
-        onView(withId(R.id.question_title))
-            .check(matches(withText("Set a description")));
-
         onView(withId(R.id.survey_description_input_container))
             .check(matches(withMaterialHint("Enter a description")));
 

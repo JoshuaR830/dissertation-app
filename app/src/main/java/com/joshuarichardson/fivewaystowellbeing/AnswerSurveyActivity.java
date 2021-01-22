@@ -13,12 +13,12 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.surveys.QuestionBuilder;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyBuilder;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
-import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyQuestion;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,8 +26,7 @@ import javax.inject.Inject;
 import androidx.appcompat.app.AppCompatActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.DROP_DOWN_LIST;
-import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.TEXT;
+import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
 
 @AndroidEntryPoint
 public class AnswerSurveyActivity extends AppCompatActivity {
@@ -59,35 +58,38 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                     apps.add(activity.getActivityName());
                 }
             }
-
-            SurveyQuestion title = new QuestionBuilder()
-                .withQuestionText("Add a title")
-                .withType(TEXT)
-                .build();
-
-            SurveyQuestion description = new QuestionBuilder()
-                .withQuestionText("Set a description")
-                .withType(TEXT)
-                .build();
-
-            SurveyQuestion firstQuestion = new QuestionBuilder()
-                .withQuestionText("What activity have you been doing?")
-                .withOptionsList(apps)
-                .withType(DROP_DOWN_LIST)
-                .build();
-
-            SurveyQuestion secondQuestion = new QuestionBuilder()
-                .withQuestionText("How are you feeling?")
-                .withOptionsList(listItems)
-                .withType(DROP_DOWN_LIST)
-                .build();
+            // ToDo - need to implement the table to save this to
+            // ToDo - need a way to generate the questions to ask
+//            SurveyQuestion title = new QuestionBuilder()
+//                .withQuestionText("Add a title")
+//                .withType(TEXT)
+//                .build();
+//
+//            SurveyQuestion description = new QuestionBuilder()
+//                .withQuestionText("Set a description")
+//                .withType(TEXT)
+//                .build();
+//
+//            SurveyQuestion firstQuestion = new QuestionBuilder()
+//                .withQuestionText("What activity have you been doing?")
+//                .withOptionsList(apps)
+//                .withType(DROP_DOWN_LIST)
+//                .build();
+//
+//            SurveyQuestion secondQuestion = new QuestionBuilder()
+//                .withQuestionText("How are you feeling?")
+//                .withOptionsList(listItems)
+//                .withType(DROP_DOWN_LIST)
+//                .build();
 
             runOnUiThread(() -> {
                 LinearLayout surveyBuilder = new SurveyBuilder(AnswerSurveyActivity.this)
-                        .withQuestion(title)
-                        .withQuestion(description)
-                        .withQuestion(firstQuestion)
-                        .withQuestion(secondQuestion)
+                        .withBasicSurvey(apps)
+                        // ToDo - need to re-implement this when the database is ready
+//                        .withQuestion(title)
+//                        .withQuestion(description)
+//                        .withQuestion(firstQuestion)
+//                        .withQuestion(secondQuestion)
                         .build();
 
                 ScrollView view = findViewById(R.id.survey_items_scroll_view);
@@ -108,22 +110,53 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         Log.d("View", String.valueOf(findViewById(0)));
     }
 
+    Date now = new Date();
+    SurveyResponse surveyResponse = new SurveyResponse((int)now.getTime(), WaysToWellbeing.CONNECT, "", "");
+
     public void onSubmit(View v) {
         // Get the layout that contains all of the survey items
         ScrollView scrollView = findViewById(R.id.survey_items_scroll_view);
         LinearLayout layout = (LinearLayout) scrollView.getChildAt(0);
 
+        // ToDo - remember that there could be a basic view
+        // How many layout children
+        // Is the first tagged with basic
+
+        Log.d("Children", String.valueOf(layout.getChildCount()));
         // Process each item
         for(int i = 0; i < layout.getChildCount(); i++) {
             // Get the question item
             View child = layout.getChildAt(i);
 
+            Log.d("I1", String.valueOf(i));
+            Log.d("Type", String.valueOf(child.getId()));
+
+
+            // Get the question type
+            SurveyItemTypes questionType = (SurveyItemTypes) child.getTag();
+
+            Log.d("tag", String.valueOf(questionType));
+
+            if(questionType == BASIC_SURVEY) {
+                EditText titleView = child.findViewById(R.id.survey_title_input);
+                EditText descriptionView = child.findViewById(R.id.survey_description_input);
+
+                // ToDo - do something with the activity
+                AutoCompleteTextView activityView = child.findViewById(R.id.survey_activity_input);
+
+                surveyResponse.setTitle(titleView.getText().toString());
+                surveyResponse.setDescription(descriptionView.getText().toString());
+                Log.d("I2", String.valueOf(i));
+
+                break;
+            }
+
+            Log.d("I3", String.valueOf(i));
+
             // Get the question title
             TextView questionTitleView = child.findViewById(R.id.question_title);
             String questionTitle = questionTitleView.getText().toString();
 
-            // Get the question type
-            SurveyItemTypes questionType = (SurveyItemTypes) child.getTag();
 
             // ToDo add a way to set specific elements with ids - these should always be added first - all other questions are generated - makes sense
             // The first item in the survey creation could have 4 things
@@ -165,12 +198,12 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 //        String answer2 = answerInputBox2.getText().toString();
 //        String answer3 = answerInputBox3.getText().toString();
 ////
-//        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
 //            this.surveyResponseDao.insert(new SurveyResponse(478653, WaysToWellbeing.BE_ACTIVE));
 //            this.surveyResponseDao.insert(new SurveyResponse(478657, WaysToWellbeing.GIVE));
-//            this.surveyResponseDao.insert(new SurveyResponse(478656, WaysToWellbeing.CONNECT));
-//            finish();
-//        });
+            this.surveyResponseDao.insert(surveyResponse);
+            finish();
+        });
 
         // ToDo some database stuff here - but need the database first which is on another branch
     }

@@ -16,6 +16,8 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
+
 public class SurveyBuilder {
 
     Context context;
@@ -23,6 +25,7 @@ public class SurveyBuilder {
     List<SurveyQuestion> questions;
 
     boolean hasBasicSurvey;
+    private List<String> basicSurveyQuestions;
 
     public SurveyBuilder(Context context) {
         this.context = context;
@@ -34,7 +37,8 @@ public class SurveyBuilder {
         return this;
     }
 
-    public SurveyBuilder withBasicSurvey() {
+    public SurveyBuilder withBasicSurvey(List<String> activities) {
+        this.basicSurveyQuestions = activities;
         this.hasBasicSurvey = true;
         return this;
     }
@@ -55,7 +59,17 @@ public class SurveyBuilder {
         int counter = 0;
 
         if(hasBasicSurvey) {
-            Log.d("Basic Survey", "Yes");
+            LayoutInflater basicSurveyInflater = LayoutInflater.from(this.context);
+            View basicSurvey = basicSurveyInflater.inflate(R.layout.basic_survey_details, layout, false);
+            basicSurvey.setTag(BASIC_SURVEY);
+//            View container = basicSurvey.findViewById(R.id.basic_survey_container);
+            TextInputLayout dropDownContainer = basicSurvey.findViewById(R.id.survey_activity_input_container);
+            AutoCompleteTextView dropDownInput = dropDownContainer.findViewById(R.id.survey_activity_input);
+            List<String> myQuestions = this.basicSurveyQuestions;
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this.context, R.layout.item_list_text, myQuestions);
+            dropDownInput.setAdapter(adapter);
+            layout.addView(basicSurvey);
         }
 
         for(SurveyQuestion question : this.questions) {
