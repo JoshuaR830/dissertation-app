@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.AnswerSurveyActivity;
+import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
@@ -30,12 +31,20 @@ import dagger.hilt.android.testing.HiltAndroidRule;
 import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
+import static android.text.InputType.TYPE_CLASS_TEXT;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.joshuarichardson.fivewaystowellbeing.utilities.MaterialComponentTestUtil.withMaterialHint;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -85,9 +94,43 @@ public class SurveyViewBuiltCorrectly {
     }
 
     @Test
-    public void dropDownList_ShouldContainAllActivities () {
-        onView(withId(0))
-            .perform(click());
+    public void surveyTitle_ShouldAllowTextEntry() {
+         onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(0))))
+            .check(matches(withText("Add a title")));
+
+        onView(allOf(withId(R.id.text_input_container), isDescendantOfA(withId(0))))
+            .check(matches(withMaterialHint("Add a title")));
+
+        onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(0))))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .check(matches(withText("")))
+            .check(matches(withInputType(TYPE_CLASS_TEXT)))
+            .perform(typeText("Title"))
+            .check(matches(withText("Title")));
+    }
+
+    @Test
+    public void surveyDescription_ShouldAllowTextEntry() {
+        onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(1))))
+            .check(matches(withText("Set a description")));
+
+        onView(allOf(withId(R.id.text_input_container), isDescendantOfA(withId(1))))
+            .check(matches(withMaterialHint("Set a description")));
+
+        onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(1))))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .check(matches(withText("")))
+            .check(matches(withInputType(TYPE_CLASS_TEXT)))
+            .perform(typeText("Description"))
+            .check(matches(withText("Description")));
+    }
+
+    @Test
+    public void activityDropDownList_ShouldContainAllActivities() {
+        onView(withId(2))
+            .perform(scrollTo(), click());
 
         // Trying to get the drop down list https://stackoverflow.com/a/45368345/13496270
         // Get the adapter of Strings
@@ -104,5 +147,27 @@ public class SurveyViewBuiltCorrectly {
 
         popup.atPosition(2)
                 .check(matches(withText("Fishing")));
+    }
+
+    @Test
+    public void moodDropDownList_ShouldContainAllMoods() {
+        onView(withId(3))
+                .perform(scrollTo(), click());
+
+        // Trying to get the drop down list https://stackoverflow.com/a/45368345/13496270
+        // Get the adapter of Strings
+        // Search the popup
+        DataInteraction popup = onData(instanceOf(String.class))
+                .inRoot(RootMatchers.isPlatformPopup());
+
+        // Check the text matches
+        popup.atPosition(0)
+                .check(matches(withText("Happy")));
+
+        popup.atPosition(1)
+                .check(matches(withText("Moderate")));
+
+        popup.atPosition(2)
+                .check(matches(withText("Sad")));
     }
 }

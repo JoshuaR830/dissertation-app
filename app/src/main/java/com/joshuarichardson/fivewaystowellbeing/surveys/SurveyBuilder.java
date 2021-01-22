@@ -71,6 +71,21 @@ public class SurveyBuilder {
                     layout.addView(cardView);
 
                     break;
+                case TEXT:
+                    LayoutInflater textInflater = LayoutInflater.from(this.context);
+                    View textCard = textInflater.inflate(R.layout.input_text, layout, false);
+
+                    textCard.setId(counter);
+                    textCard.setTag(question.getQuestionType());
+
+                    TextInputLayout textContainer = textCard.findViewById(R.id.text_input_container);
+                    TextView title = textCard.findViewById(R.id.question_title);
+
+                    title.setText(question.getQuestionText());
+
+                    textContainer.setHint(question.getQuestionText());
+
+                    layout.addView(textCard);
                 default:
                     break;
             }

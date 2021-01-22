@@ -32,7 +32,12 @@ import dagger.hilt.android.testing.UninstallModules;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -77,21 +82,21 @@ public class SurveysShouldBeSavedToTheDatabase {
 
     @Test
     public void onSubmit_SurveysShouldBeSavedToDatabase() {
-        onView(withId(0))
-                .perform(click());
+        onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(0)))).perform(scrollTo(), typeText("Title"), closeSoftKeyboard());
+        onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(1)))).perform(scrollTo(), typeText("Description"), closeSoftKeyboard());
+        onView(withId(2)).perform(scrollTo(), click());
 
         onData(instanceOf(String.class))
                 .inRoot(RootMatchers.isPlatformPopup())
                 .atPosition(0)
-                .perform(click());
+                .perform(scrollTo(), click());
 
-        onView(withId(1))
-                .perform(click());
+        onView(withId(3)).perform(scrollTo(), click());
 
         onData(instanceOf(String.class))
                 .inRoot(RootMatchers.isPlatformPopup())
                 .atPosition(0)
-                .perform(click());
+                .perform(scrollTo(), click());
 
         onView(withId(R.id.submitButton))
                 .perform(click());
