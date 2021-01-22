@@ -2,8 +2,6 @@ package com.joshuarichardson.fivewaystowellbeing.utilities;
 
 import android.view.View;
 
-import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportAdapter;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
@@ -28,7 +26,7 @@ public class RecyclerViewTestUtil {
             @Override
             protected boolean matchesSafely(RecyclerView recyclerView) {
                 // Need to get the ViewHolder at the position
-                WellbeingSupportAdapter.WellbeingSupportViewHolder viewHolder = (WellbeingSupportAdapter.WellbeingSupportViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+                RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
 
                 // Does the item match the expectation
                 return viewHolder != null && matcher.matches(viewHolder.itemView);

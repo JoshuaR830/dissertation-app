@@ -6,6 +6,7 @@
     <string name="launch_create_activity">Create Activity</string>
     <string name="launch_answer_survey">Complete Survey</string>
 
+    <string name="expand_button">Expand</string>
 
     <string name="passtime_title">Add activity details</string>
     <string name="passtime_name">Activity name</string>

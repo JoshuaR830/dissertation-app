@@ -17,9 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.PassTimeViewHolder> {
 
-    // Need an inflater
-    // Need a constructor
-
     List<ActivityRecord> passTimeItems;
     LayoutInflater inflater;
 
@@ -27,7 +24,6 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
         this.inflater = LayoutInflater.from(context);
         this.passTimeItems = passTimeItems;
     }
-
 
     @NonNull
     @Override
@@ -60,7 +56,7 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             super(itemView);
 ;
             this.nameTextView = itemView.findViewById(R.id.nameTextView);
-            this.timestampTextView = itemView.findViewById(R.id.timestampTextView);
+            this.timestampTextView = itemView.findViewById(R.id.survey_list_title);
             this.durationTextView = itemView.findViewById(R.id.durationTextView);
             this.typeTextView = itemView.findViewById(R.id.typeTextView);
             this.image = itemView.findViewById(R.id.passtime_list_item_image);

@@ -41,6 +41,13 @@ public class SurveyResponse {
         this.setDescription(description);
     }
 
+    public SurveyResponse(int surveyResponseTimestamp, WaysToWellbeing surveyResponseWayToWellbeing, String title, String description) {
+        this.setSurveyResponseTimestamp(surveyResponseTimestamp);
+        this.setSurveyResponseWayToWellbeing(surveyResponseWayToWellbeing.name());
+        this.setTitle(title);
+        this.setDescription(description);
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -49,10 +56,6 @@ public class SurveyResponse {
         this.description = description;
     }
 
-    public SurveyResponse(int surveyResponseTimestamp, WaysToWellbeing surveyResponseWayToWellbeing, String title, String description) {
-        this.setSurveyResponseTimestamp(surveyResponseTimestamp);
-        this.setSurveyResponseWayToWellbeing(surveyResponseWayToWellbeing.name());
-    }
 
     public void setSurveyResponseId(int surveyResponseId) {
         this.surveyResponseId = surveyResponseId;

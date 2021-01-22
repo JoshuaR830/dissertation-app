@@ -73,16 +73,12 @@ public class TestActivityRecordingsGetSaved {
         onView(withId(R.id.pass_time_name_input)).perform(typeText("Activity Name"), closeSoftKeyboard());
         onView(withId(R.id.pass_time_duration_input)).perform(typeText("3000"), closeSoftKeyboard());
 
-        // ToDo - remove this
-//        onView(withId(R.id.pass_time_type_input)).perform(typeText(ActivityType.SPORT.name()), closeSoftKeyboard());
-
         // Select the first option from the drop down menu
         onView(withId(R.id.pass_time_type_input)).perform(click());
         onData(instanceOf(String.class))
                 .inRoot(RootMatchers.isPlatformPopup())
                 .atPosition(0)
                 .perform(click());
-
 
         onView(withId(R.id.passtime_submit_button)).perform(click());
 

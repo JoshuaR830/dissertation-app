@@ -1,6 +1,5 @@
 package com.joshuarichardson.fivewaystowellbeing.surveys;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 
@@ -27,8 +26,6 @@ public class SurveyBuilderTest {
     private View surveyBuilder;
     private SurveyQuestion firstQuestion;
     private SurveyQuestion secondQuestion;
-
-    Activity currentActivity = null;
 
     @Rule
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
@@ -76,7 +73,6 @@ public class SurveyBuilderTest {
     public void surveyBuilder_ShouldReturnViewWithItem() throws IllegalArgumentException {
         // Check the view exists
         View view = this.surveyBuilder
-//            .requireViewById(R.layout.activity_answer_survey)
             .requireViewById(0)
             .requireViewById(R.id.drop_down_container);
 
