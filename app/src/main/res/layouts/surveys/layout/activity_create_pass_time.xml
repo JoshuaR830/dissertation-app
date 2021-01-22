@@ -4,78 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".CreatePassTimeActivity">
 
-    <EditText
-        android:id="@+id/passTimeAnswerInput1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/passtimeQuestion2"
-        app:layout_constraintEnd_toEndOf="@+id/passTimeAnswerInput3"
-        app:layout_constraintStart_toStartOf="@+id/passTimeAnswerInput3" />
-
-    <EditText
-        android:id="@+id/passTimeAnswerInput2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:inputType="number"
-        android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/passtimeQuestion3"
-        app:layout_constraintEnd_toEndOf="@+id/passTimeAnswerInput3"
-        app:layout_constraintStart_toStartOf="@+id/passTimeAnswerInput3" />
-
-    <TextView
-        android:id="@+id/passtimeQuestion1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/question_one"
-        app:layout_constraintBottom_toTopOf="@+id/passTimeAnswerInput1"
-        app:layout_constraintEnd_toEndOf="@+id/passTimeAnswerInput3"
-        app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="@+id/passTimeAnswerInput3" />
-
-    <TextView
-        android:id="@+id/passtimeQuestion2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/question_two"
-        app:layout_constraintBottom_toTopOf="@+id/passTimeAnswerInput2"
-        app:layout_constraintEnd_toEndOf="@+id/passTimeAnswerInput3"
-        app:layout_constraintStart_toStartOf="@+id/passTimeAnswerInput3" />
-
-    <TextView
-        android:id="@+id/passtimeQuestion3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/question_three"
-        app:layout_constraintBottom_toTopOf="@+id/passTimeAnswerInput3"
-        app:layout_constraintEnd_toEndOf="@+id/passTimeAnswerInput3"
-        app:layout_constraintStart_toStartOf="@+id/passTimeAnswerInput3" />
-
-    <EditText
-        android:id="@+id/passTimeAnswerInput3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/passtimeSubmitButton"
-        app:layout_constraintEnd_toEndOf="@+id/passtimeSubmitButton"
-        app:layout_constraintStart_toStartOf="@+id/passtimeSubmitButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
-
     <Button
-        android:id="@+id/passtimeSubmitButton"
+        android:id="@+id/passtime_submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onSubmit"
@@ -85,5 +18,86 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.963" />
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginBottom="16dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passtimeQuestion1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/passtime_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pass_time_name_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    app:layout_constraintVertical_bias="0.75" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passtimeQuestion2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/passtime_duration">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pass_time_duration_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    app:layout_constraintVertical_bias="0.75" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passtimeQuestion3"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/passtime_type">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/pass_time_type_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    app:layout_constraintVertical_bias="0.75" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

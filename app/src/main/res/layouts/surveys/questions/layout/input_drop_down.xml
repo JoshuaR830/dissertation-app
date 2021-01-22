@@ -24,7 +24,6 @@
                 android:id="@+id/question_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/question_one"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="?android:attr/textColorPrimary" />
 
@@ -35,8 +34,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="@string/question_one">
+                android:layout_marginBottom="16dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/drop_down_input"

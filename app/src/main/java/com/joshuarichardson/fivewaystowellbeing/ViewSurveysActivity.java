@@ -8,12 +8,19 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class ViewSurveysActivity extends AppCompatActivity {
+
+    @Inject
+    WellbeingDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +30,7 @@ public class ViewSurveysActivity extends AppCompatActivity {
         RecyclerView recycler = findViewById(R.id.surveyRecyclerView);
         recycler.setLayoutManager(new LinearLayoutManager(ViewSurveysActivity.this));
 
-        WellbeingDatabase db = WellbeingDatabase.getWellbeingDatabase(ViewSurveysActivity.this);
-        SurveyResponseDao surveyResponseDao = db.surveyResponseDao();
+        SurveyResponseDao surveyResponseDao = this.db.surveyResponseDao();
 
         Observer<List<SurveyResponse>> responseObserver = surveyResponses -> {
             SurveyResponseAdapter adapter = new SurveyResponseAdapter(ViewSurveysActivity.this, surveyResponses);

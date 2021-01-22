@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
@@ -19,21 +20,27 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyQuestion;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.appcompat.app.AppCompatActivity;
+import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.DROP_DOWN_LIST;
 
+@AndroidEntryPoint
 public class AnswerSurveyActivity extends AppCompatActivity {
 
     private SurveyResponseDao dao;
+
+    @Inject
+    WellbeingDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer_survey);
 
-        WellbeingDatabase db = WellbeingDatabase.getWellbeingDatabase(getApplicationContext());
-        this.dao = db.surveyResponseDao();
+        this.dao = this.db.surveyResponseDao();
 
 
         ArrayList<String> listItems = new ArrayList<>();
@@ -41,8 +48,8 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         listItems.add("Moderate");
         listItems.add("Sad");
 
-        WellbeingDatabase.databaseWriteExecutor.execute(() -> {
-            List<ActivityRecord> activities = db.activityRecordDao().getAllActivitiesNotLive();
+        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            List<ActivityRecord> activities = this.db.activityRecordDao().getAllActivitiesNotLive();
 
             ArrayList<String> apps = new ArrayList<>();
             if (activities != null) {

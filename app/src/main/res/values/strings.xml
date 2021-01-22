@@ -5,9 +5,9 @@
     <string name="launch_view_pass_time">View Activities</string>
     <string name="launch_create_activity">Create Activity</string>
     <string name="launch_answer_survey">Complete Survey</string>
-    <string name="question_one">Question 1</string>
-    <string name="question_two">Question 2</string>
-    <string name="question_three">Question 3</string>
+    <string name="passtime_name">Activity name</string>
+    <string name="passtime_duration">Activity duration</string>
+    <string name="passtime_type">Activity type</string>
     <string name="submit_button">Submit</string>
     <string name="navigation_home">Home</string>
     <string name="navigation_surveys">Surveys</string>

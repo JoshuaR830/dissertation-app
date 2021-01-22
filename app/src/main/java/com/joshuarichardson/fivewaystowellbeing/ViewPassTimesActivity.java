@@ -10,13 +10,20 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class ViewPassTimesActivity extends AppCompatActivity {
+
+    @Inject
+    WellbeingDatabase db;
 
     private RecyclerView passTimeRecycler;
 
@@ -25,8 +32,7 @@ public class ViewPassTimesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pass_times);
 
-        WellbeingDatabase db = WellbeingDatabase.getWellbeingDatabase(ViewPassTimesActivity.this);
-        ActivityRecordDao passTimeDao = db.activityRecordDao();
+        ActivityRecordDao passTimeDao = this.db.activityRecordDao();
 
         LiveData<List<ActivityRecord>> passTimes = passTimeDao.getAllActivities();
 

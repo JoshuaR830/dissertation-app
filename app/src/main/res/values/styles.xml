@@ -11,6 +11,8 @@
         <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
         <item name="radioButtonStyle">@style/Widget.App.RadioButton</item>
         <item name="sliderStyle">@style/Widget.App.Slider</item>
+
+        <item name="android:windowBackground">@drawable/gradient_background</item>
     </style>
 
     <style name="Divider">

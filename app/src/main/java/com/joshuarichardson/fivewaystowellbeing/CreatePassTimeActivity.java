@@ -4,33 +4,40 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
 import java.util.Date;
 
-import androidx.appcompat.app.AppCompatActivity;
+import javax.inject.Inject;
 
+import androidx.appcompat.app.AppCompatActivity;
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class CreatePassTimeActivity extends AppCompatActivity {
 
 
     ActivityRecordDao passTimeDao;
 
+    @Inject
+    WellbeingDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_pass_time);
 
-        WellbeingDatabase db = WellbeingDatabase.getWellbeingDatabase(CreatePassTimeActivity.this);
-        this.passTimeDao = db.activityRecordDao();
+
+        this.passTimeDao = this.db.activityRecordDao();
     }
 
     public void onSubmit(View v) {
-        EditText passTimeName = findViewById(R.id.passTimeAnswerInput1);
-        EditText passTimeDuration = findViewById(R.id.passTimeAnswerInput2);
-        EditText passTimeType = findViewById(R.id.passTimeAnswerInput3);
+        EditText passTimeName = findViewById(R.id.pass_time_name_input);
+        EditText passTimeDuration = findViewById(R.id.pass_time_duration_input);
+        EditText passTimeType = findViewById(R.id.pass_time_type_input);
 
         String name = passTimeName.getText().toString();
         int duration = Integer.parseInt(passTimeDuration.getText().toString());
@@ -39,7 +46,7 @@ public class CreatePassTimeActivity extends AppCompatActivity {
         Date currentTime = new Date();
         long unixTime = currentTime.getTime();
 
-        WellbeingDatabase.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             this.passTimeDao.insert(new ActivityRecord(name, duration, unixTime, type));
             finish();
         });

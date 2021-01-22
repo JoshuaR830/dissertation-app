@@ -14,6 +14,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_DATABASE_NAME;
 
@@ -24,8 +25,8 @@ public class WellbeingDatabaseModule {
 
     @Provides
     @Singleton
-    public static WellbeingDatabase getWellbeingDatabase(Context context) {
-        return Room.databaseBuilder(context.getApplicationContext(), WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
+    public static WellbeingDatabase getWellbeingDatabase(@ApplicationContext Context context) {
+        return Room.databaseBuilder(context, WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
             .fallbackToDestructiveMigration()
             .build();
         }
