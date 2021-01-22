@@ -12,6 +12,11 @@
     <string name="passtime_duration">Activity duration</string>
     <string name="passtime_type">Activity type</string>
 
+    <string name="survey_details_title">Survey information</string>
+    <string name="survey_input_title">Enter a title</string>
+    <string name="survey_input_description">Enter a description</string>
+    <string name="survey_input_activity">Select an activity</string>
+
     <string name="submit_button">Submit</string>
     <string name="navigation_home">Home</string>
     <string name="navigation_surveys">Surveys</string>

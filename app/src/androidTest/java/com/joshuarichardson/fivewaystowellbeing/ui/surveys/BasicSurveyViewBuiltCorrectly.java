@@ -38,20 +38,18 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.MaterialComponentTestUtil.withMaterialHint;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class SurveyViewBuiltCorrectly {
+public class BasicSurveyViewBuiltCorrectly {
 
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
@@ -95,13 +93,13 @@ public class SurveyViewBuiltCorrectly {
 
     @Test
     public void surveyTitle_ShouldAllowTextEntry() {
-         onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(0))))
+         onView(withId(R.id.question_title))
             .check(matches(withText("Add a title")));
 
-        onView(allOf(withId(R.id.text_input_container), isDescendantOfA(withId(0))))
-            .check(matches(withMaterialHint("Add a title")));
+        onView(withId(R.id.survey_title_input_container))
+            .check(matches(withMaterialHint("Enter a title")));
 
-        onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(0))))
+        onView(withId(R.id.survey_title_input))
             .perform(scrollTo())
             .check(matches(isDisplayed()))
             .check(matches(withText("")))
@@ -112,13 +110,13 @@ public class SurveyViewBuiltCorrectly {
 
     @Test
     public void surveyDescription_ShouldAllowTextEntry() {
-        onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(1))))
+        onView(withId(R.id.question_title))
             .check(matches(withText("Set a description")));
 
-        onView(allOf(withId(R.id.text_input_container), isDescendantOfA(withId(1))))
-            .check(matches(withMaterialHint("Set a description")));
+        onView(withId(R.id.survey_description_input_container))
+            .check(matches(withMaterialHint("Enter a description")));
 
-        onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(1))))
+        onView(withId(R.id.survey_description_input))
             .perform(scrollTo())
             .check(matches(isDisplayed()))
             .check(matches(withText("")))
@@ -129,7 +127,10 @@ public class SurveyViewBuiltCorrectly {
 
     @Test
     public void activityDropDownList_ShouldContainAllActivities() {
-        onView(withId(2))
+        onView(withId(R.id.survey_activity_input_container))
+                .check(matches(withMaterialHint("Select an activity")));
+
+        onView(withId(R.id.survey_activity_input))
             .perform(scrollTo(), click());
 
         // Trying to get the drop down list https://stackoverflow.com/a/45368345/13496270
@@ -140,34 +141,12 @@ public class SurveyViewBuiltCorrectly {
 
         // Check the text matches
         popup.atPosition(0)
-                .check(matches(withText("Running")));
+            .check(matches(withText("Running")));
 
         popup.atPosition(1)
-                .check(matches(withText("Jumping")));
+            .check(matches(withText("Jumping")));
 
         popup.atPosition(2)
-                .check(matches(withText("Fishing")));
-    }
-
-    @Test
-    public void moodDropDownList_ShouldContainAllMoods() {
-        onView(withId(3))
-                .perform(scrollTo(), click());
-
-        // Trying to get the drop down list https://stackoverflow.com/a/45368345/13496270
-        // Get the adapter of Strings
-        // Search the popup
-        DataInteraction popup = onData(instanceOf(String.class))
-                .inRoot(RootMatchers.isPlatformPopup());
-
-        // Check the text matches
-        popup.atPosition(0)
-                .check(matches(withText("Happy")));
-
-        popup.atPosition(1)
-                .check(matches(withText("Moderate")));
-
-        popup.atPosition(2)
-                .check(matches(withText("Sad")));
+            .check(matches(withText("Fishing")));
     }
 }

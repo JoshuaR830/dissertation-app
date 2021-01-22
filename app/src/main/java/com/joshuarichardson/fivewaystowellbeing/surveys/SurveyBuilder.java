@@ -22,6 +22,8 @@ public class SurveyBuilder {
 
     List<SurveyQuestion> questions;
 
+    boolean hasBasicSurvey;
+
     public SurveyBuilder(Context context) {
         this.context = context;
         this.questions = new ArrayList<>();
@@ -29,6 +31,11 @@ public class SurveyBuilder {
 
     public SurveyBuilder withQuestion(SurveyQuestion question) {
         this.questions.add(question);
+        return this;
+    }
+
+    public SurveyBuilder withBasicSurvey() {
+        this.hasBasicSurvey = true;
         return this;
     }
 
@@ -46,6 +53,10 @@ public class SurveyBuilder {
         Log.d("Hello", "Let's see what happens");
 
         int counter = 0;
+
+        if(hasBasicSurvey) {
+            Log.d("Basic Survey", "Yes");
+        }
 
         for(SurveyQuestion question : this.questions) {
             switch (question.getQuestionType()) {
@@ -94,5 +105,4 @@ public class SurveyBuilder {
 
         return layout;
     }
-
 }

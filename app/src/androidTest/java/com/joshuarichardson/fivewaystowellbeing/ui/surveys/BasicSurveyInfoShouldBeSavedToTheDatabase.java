@@ -35,9 +35,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -45,9 +43,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+// Test that the survey information is entered correctly
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class SurveysShouldBeSavedToTheDatabase {
+public class BasicSurveyInfoShouldBeSavedToTheDatabase {
     SurveyResponseDao surveyDao;
 
     @Rule
@@ -71,9 +70,9 @@ public class SurveysShouldBeSavedToTheDatabase {
             activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP));
             when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
 
-            SurveysShouldBeSavedToTheDatabase.this.surveyDao = mock(SurveyResponseDao.class);
+            BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyDao = mock(SurveyResponseDao.class);
 
-            when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(SurveysShouldBeSavedToTheDatabase.this.surveyDao);
+            when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyDao);
             when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
 
             return mockWellbeingDatabase;
@@ -82,16 +81,9 @@ public class SurveysShouldBeSavedToTheDatabase {
 
     @Test
     public void onSubmit_SurveysShouldBeSavedToDatabase() {
-        onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(0)))).perform(scrollTo(), typeText("Title"), closeSoftKeyboard());
-        onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(1)))).perform(scrollTo(), typeText("Description"), closeSoftKeyboard());
-        onView(withId(2)).perform(scrollTo(), click());
-
-        onData(instanceOf(String.class))
-                .inRoot(RootMatchers.isPlatformPopup())
-                .atPosition(0)
-                .perform(scrollTo(), click());
-
-        onView(withId(3)).perform(scrollTo(), click());
+        onView(withId(R.id.survey_title_input)).perform(scrollTo(), typeText("Title"), closeSoftKeyboard());
+        onView(withId(R.id.survey_description_input)).perform(scrollTo(), typeText("Description"), closeSoftKeyboard());
+        onView(withId(R.id.survey_activity_input)).perform(scrollTo(), click());
 
         onData(instanceOf(String.class))
                 .inRoot(RootMatchers.isPlatformPopup())

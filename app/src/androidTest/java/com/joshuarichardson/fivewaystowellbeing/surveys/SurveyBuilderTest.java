@@ -38,7 +38,6 @@ public class SurveyBuilderTest {
 
     @Before
     public void setUp() {
-//        Context context = getInstrumentation().getContext();
         String[] feelings = new String[]{"Happy", "Moderate", "Sad"};
         String[] apps = new String[]{"Facebook", "Snapchat", "Whatsapp"};
 
@@ -54,33 +53,15 @@ public class SurveyBuilderTest {
             .withType(DROP_DOWN_LIST)
             .build();
 
-//        AnswerSurveyActivity activity = (AnswerSurveyActivity) getActivityInstance();
 
-//        if(activity == null) {
-//            throw new IllegalArgumentException();
-//        }
-
-//        View view = activity.findViewById(R.layout.activity_answer_survey);
-//
-//        this.surveyBuilder = new SurveyBuilder(context)
-//            .withQuestion(this.question)
-//            .build();
-
-
-//        answerSurveyActivity.getScenario().onActivity(
-//                (activity) -> {
-//                    LinearLayout layout = activity.findViewById(R.id.survey_items_layout);
-////                    activity.findViewById(R.id.survey_items_layout);
-//                }
-//        );
-//         https://stackoverflow.com/a/56356650/13496270
+//      https://stackoverflow.com/a/56356650/13496270
         answerSurveyActivity.getScenario().onActivity(
-                (activity) -> {
-                    this.surveyBuilder = new SurveyBuilder(activity)
-                    .withQuestion(this.firstQuestion)
-                    .withQuestion(this.secondQuestion)
-                    .build();
-                }
+            (activity) -> {
+                this.surveyBuilder = new SurveyBuilder(activity)
+                .withQuestion(this.firstQuestion)
+                .withQuestion(this.secondQuestion)
+                .build();
+            }
         );
     }
 
