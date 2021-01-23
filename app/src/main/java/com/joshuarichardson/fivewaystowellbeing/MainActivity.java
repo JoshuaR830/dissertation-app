@@ -15,13 +15,11 @@ import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSu
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import dagger.hilt.android.AndroidEntryPoint;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
@@ -93,25 +91,5 @@ public class MainActivity extends AppCompatActivity {
 
         Intent answerSurveyIntent = new Intent(MainActivity.this, CreatePassTimeActivity.class);
         startActivity(answerSurveyIntent);
-    }
-
-    public void onViewSurveysButtonClicked(View v) {
-        Bundle viewSurveyBundle = new Bundle();
-        viewSurveyBundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Survey_View_Clicked");
-        viewSurveyBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "View_Survey");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, viewSurveyBundle);
-
-        Intent viewSurveyIntent = new Intent(MainActivity.this, ViewSurveysActivity.class);
-        startActivity(viewSurveyIntent);
-    }
-
-    public void onViewPassTimesButtonClicked(View v) {
-        Bundle viewPassTimeBundle = new Bundle();
-        viewPassTimeBundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Pass_Time_View_Clicked");
-        viewPassTimeBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "View_Pass_Time");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, viewPassTimeBundle);
-
-        Intent viewPassTimeIntent = new Intent(MainActivity.this, ViewPassTimesActivity.class);
-        startActivity(viewPassTimeIntent);
     }
 }

@@ -99,15 +99,6 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
 
         });
-
-
-//        AutoCompleteTextView answerInputBox2 = findViewById(R.id.drop_down_input);
-
-        Log.d("Success", "Yay");
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(AnswerSurveyActivity.this, R.layout.item_list_text, listItems);
-//        answerInputBox2.setAdapter(adapter);
-        Log.d("View", String.valueOf(findViewById(0)));
     }
 
     Date now = new Date();
@@ -118,24 +109,13 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         ScrollView scrollView = findViewById(R.id.survey_items_scroll_view);
         LinearLayout layout = (LinearLayout) scrollView.getChildAt(0);
 
-        // ToDo - remember that there could be a basic view
-        // How many layout children
-        // Is the first tagged with basic
-
-        Log.d("Children", String.valueOf(layout.getChildCount()));
         // Process each item
         for(int i = 0; i < layout.getChildCount(); i++) {
             // Get the question item
             View child = layout.getChildAt(i);
 
-            Log.d("I1", String.valueOf(i));
-            Log.d("Type", String.valueOf(child.getId()));
-
-
             // Get the question type
             SurveyItemTypes questionType = (SurveyItemTypes) child.getTag();
-
-            Log.d("tag", String.valueOf(questionType));
 
             if(questionType == BASIC_SURVEY) {
                 EditText titleView = child.findViewById(R.id.survey_title_input);
@@ -146,12 +126,8 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
                 surveyResponse.setTitle(titleView.getText().toString());
                 surveyResponse.setDescription(descriptionView.getText().toString());
-                Log.d("I2", String.valueOf(i));
-
                 break;
             }
-
-            Log.d("I3", String.valueOf(i));
 
             // Get the question title
             TextView questionTitleView = child.findViewById(R.id.question_title);
@@ -188,19 +164,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
             }
         }
 
-
-
-//        EditText answerInputBox1 = findViewById(0).findViewById(R.id.text_input);
-//        AutoCompleteTextView answerInputBox2 = findViewById(R.id.drop_down_input);
-//        EditText answerInputBox3 = findViewById(R.id.slider_input);
-//
-//        String answer1 = answerInputBox1.getText().toString();
-//        String answer2 = answerInputBox2.getText().toString();
-//        String answer3 = answerInputBox3.getText().toString();
-////
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-//            this.surveyResponseDao.insert(new SurveyResponse(478653, WaysToWellbeing.BE_ACTIVE));
-//            this.surveyResponseDao.insert(new SurveyResponse(478657, WaysToWellbeing.GIVE));
             this.surveyResponseDao.insert(surveyResponse);
             finish();
         });

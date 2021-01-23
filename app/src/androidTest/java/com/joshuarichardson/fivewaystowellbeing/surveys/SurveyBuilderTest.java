@@ -50,7 +50,6 @@ public class SurveyBuilderTest {
             .withType(DROP_DOWN_LIST)
             .build();
 
-
 //      https://stackoverflow.com/a/56356650/13496270
         answerSurveyActivity.getScenario().onActivity(
             (activity) -> {

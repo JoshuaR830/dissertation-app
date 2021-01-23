@@ -1,7 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing.surveys;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,17 +43,10 @@ public class SurveyBuilder {
     }
 
     public LinearLayout build() {
-
-        // ToDo work out how to use the actual one
-
-//        LinearLayout layout = this.activityViewSurveys.findViewById(R.id.survey_items_layout);
-//        view = new View(this.context);
-
         LinearLayout layout = new LinearLayout(this.context);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        Log.d("Hello", "Let's see what happens");
 
         int counter = 0;
 
@@ -62,7 +54,6 @@ public class SurveyBuilder {
             LayoutInflater basicSurveyInflater = LayoutInflater.from(this.context);
             View basicSurvey = basicSurveyInflater.inflate(R.layout.basic_survey_details, layout, false);
             basicSurvey.setTag(BASIC_SURVEY);
-//            View container = basicSurvey.findViewById(R.id.basic_survey_container);
             TextInputLayout dropDownContainer = basicSurvey.findViewById(R.id.survey_activity_input_container);
             AutoCompleteTextView dropDownInput = dropDownContainer.findViewById(R.id.survey_activity_input);
             List<String> myQuestions = this.basicSurveyQuestions;

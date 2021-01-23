@@ -3,15 +3,15 @@
     <item
         android:id="@+id/navigation_home"
         android:title="@string/navigation_home"
-        android:icon="@drawable/ic_baseline_home_24" />
+        android:icon="@drawable/icon_navigation_home" />
 
     <item
         android:id="@+id/navigation_view_survey_responses"
         android:title="@string/navigation_surveys"
-        android:icon="@drawable/ic_baseline_list_alt_24" />
+        android:icon="@drawable/icon_navigation_surveys" />
 
     <item
         android:id="@+id/navigation_view_pass_times"
         android:title="@string/navigation_pass_times"
-        android:icon="@drawable/ic_round_sports_kabaddi_24" />
+        android:icon="@drawable/icon_navigation_passtimes" />
 </menu>

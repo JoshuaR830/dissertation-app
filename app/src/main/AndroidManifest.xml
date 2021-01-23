@@ -16,14 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ViewPassTimesActivity"
-            android:label="@string/launch_view_pass_time"/>
-        <activity
             android:name=".CreatePassTimeActivity"
             android:label="@string/launch_create_activity" />
-        <activity
-            android:name=".ViewSurveysActivity"
-            android:label="@string/launch_view_surveys" />
         <activity
             android:name=".AnswerSurveyActivity"
             android:label="@string/launch_answer_survey" />

@@ -26,44 +26,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/survey_items_layout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical">-->
-
-            <!--            <include-->
-            <!--                android:id="@+id/drop_down_question"-->
-            <!--                layout="@layout/input_drop_down"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content" />-->
-
-            <!--            <include-->
-            <!--                android:id="@+id/radio_button__question"-->
-            <!--                layout="@layout/container_radio_button_options"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content" />-->
-
-            <!--            <include-->
-            <!--                android:id="@+id/text_input_question"-->
-            <!--                layout="@layout/input_text"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content" />-->
-
-            <!--            <include-->
-            <!--                layout="@layout/container_check_box_options"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content" />-->
-
-            <!--            <include-->
-            <!--                android:id="@+id/slider_question"-->
-            <!--                layout="@layout/input_slider"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content" />-->
-
-
-<!--        </LinearLayout>-->
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

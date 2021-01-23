@@ -44,8 +44,8 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
 
     public class SurveyResponseViewHolder extends RecyclerView.ViewHolder {
 
-        TextView surveyTitle;
-        TextView surveyDescription;
+        private TextView surveyTitle;
+        private TextView surveyDescription;
 
         public SurveyResponseViewHolder(@NonNull View itemView) {
             super(itemView);

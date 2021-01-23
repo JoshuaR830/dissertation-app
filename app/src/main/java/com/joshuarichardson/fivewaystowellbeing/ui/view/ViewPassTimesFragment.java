@@ -49,7 +49,6 @@ public class ViewPassTimesFragment extends Fragment {
 
         passTimes.observe(getViewLifecycleOwner(), passTimeObserver);
 
-
         return root;
     }
 

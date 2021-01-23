@@ -62,7 +62,7 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             SurveyResponseDao mockSurveyDao = mock(SurveyResponseDao.class);
 
             SurveyResponse[] responses = new SurveyResponse[] {
-                new SurveyResponse(73426786, WaysToWellbeing.CONNECT, "A survey title", "A survey title")
+                new SurveyResponse(73426786, WaysToWellbeing.CONNECT, "A survey title", "A survey description")
             };
 
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList(responses));
@@ -81,7 +81,7 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
         onView(withId(R.id.surveyRecyclerView))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_title), withText("A survey title"))))))
-            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_description), withText("A survey title"))))))
+            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_description), withText("A survey description"))))))
             .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.expand_button), withText("Expand"))))));
     }
 }

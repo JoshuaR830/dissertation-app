@@ -46,11 +46,11 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
     }
 
     public class PassTimeViewHolder extends RecyclerView.ViewHolder {
+        private TextView nameTextView;
+        private TextView timestampTextView;
+        private TextView durationTextView;
+        private TextView typeTextView;
         private ImageView image;
-        TextView nameTextView;
-        TextView timestampTextView;
-        TextView durationTextView;
-        TextView typeTextView;
 
         public PassTimeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,7 +59,7 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             this.timestampTextView = itemView.findViewById(R.id.survey_list_title);
             this.durationTextView = itemView.findViewById(R.id.durationTextView);
             this.typeTextView = itemView.findViewById(R.id.typeTextView);
-            this.image = itemView.findViewById(R.id.passtime_list_item_image);
+            this.image = itemView.findViewById(R.id.list_item_image);
         }
 
         public void onBind(String name, int duration, long timestamp, String type) {

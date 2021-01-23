@@ -20,8 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class CreatePassTimeActivity extends AppCompatActivity {
-
-
     ActivityRecordDao passTimeDao;
 
     @Inject
@@ -34,7 +32,7 @@ public class CreatePassTimeActivity extends AppCompatActivity {
 
         AutoCompleteTextView dropDownInput = findViewById(R.id.pass_time_type_input);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreatePassTimeActivity.this, R.layout.item_list_text, DropDownHelper.getEnumStrings(ActivityType.values()));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(CreatePassTimeActivity.this, R.layout.item_list_text, DropDownHelper.getEnumStrings(ActivityType.values()));
         dropDownInput.setAdapter(adapter);
 
         this.passTimeDao = this.db.activityRecordDao();
