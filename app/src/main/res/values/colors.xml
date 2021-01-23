@@ -3,7 +3,9 @@
     <color name="colorPrimary">#00BCD4</color>
     <color name="colorPrimaryDark">#0097A7</color>
     <color name="colorAccent">#F5AAAA</color>
+    <color name="colorAccentDark">#65F7B1</color>
     <color name="listItemColour">#FFFFFF</color>
     <color name="colorSilver">#BEC2CB</color>
     <color name="black12Percent">#1F000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>
