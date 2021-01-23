@@ -22,6 +22,11 @@ allprojects {
         google()
         jcenter()
     }
+
+    // Reference - objenesis 3.1 not supported by API 24 (requires >=26) https://github.com/mockito/mockito/issues/2007#issuecomment-689365556
+    configurations.all {
+        resolutionStrategy.force 'org.objenesis:objenesis:2.6'
+    }
 }
 
 task clean(type: Delete) {
