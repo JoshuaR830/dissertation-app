@@ -59,8 +59,8 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetActivitiesForSurvey_ShouldReturnTheActivity() throws TimeoutException, InterruptedException {
-        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active");
-        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active");
+        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description");
         ActivityRecord activityRecord1 = new ActivityRecord("Running", 1200, 1607960240, "Sport");
         ActivityRecord activityRecord2 = new ActivityRecord("Sprinting", 1200, 1607960240, "Sport");
         ActivityRecord activityRecord3 = new ActivityRecord("Boating", 1200, 1607960240, "Sport");
@@ -105,11 +105,11 @@ public class SurveyResponseActivityRecordTests {
     @Test
     public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetSurveyForActivity_ShouldReturnTheSurvey() throws TimeoutException, InterruptedException {
         // Create an insert a survey response
-        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE);
-        SurveyResponse surveyResponse2 = new SurveyResponse(1607960246, WaysToWellbeing.KEEP_LEARNING);
-        SurveyResponse surveyResponse3 = new SurveyResponse(1607960247, WaysToWellbeing.GIVE);
-        SurveyResponse surveyResponse4 = new SurveyResponse(1607960248, WaysToWellbeing.BE_ACTIVE);
-        SurveyResponse surveyResponse5 = new SurveyResponse(1607960249, WaysToWellbeing.CONNECT);
+        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE, "title", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(1607960246, WaysToWellbeing.KEEP_LEARNING, "title", "description");
+        SurveyResponse surveyResponse3 = new SurveyResponse(1607960247, WaysToWellbeing.GIVE, "title", "description");
+        SurveyResponse surveyResponse4 = new SurveyResponse(1607960248, WaysToWellbeing.BE_ACTIVE, "title", "description");
+        SurveyResponse surveyResponse5 = new SurveyResponse(1607960249, WaysToWellbeing.CONNECT, "title", "description");
 
         int surveyId1 = (int) this.surveyResponseDao.insert(surveyResponse1);
         int surveyId2 = (int) this.surveyResponseDao.insert(surveyResponse2);
@@ -168,7 +168,7 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void whenBothSurveyResponseAndActivityExist_NoExceptionShouldBeThrown() {
-        SurveyResponse surveyResponse = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE);
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE, "title", "description");
         int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
 
         ActivityRecord activityRecord = new ActivityRecord("Throwing", 1200, 1607960240, "Sport");
@@ -199,8 +199,8 @@ public class SurveyResponseActivityRecordTests {
         }
 
         assertWithMessage("Inserting activity/survey that don't exist should violate constraints")
-                .that(exception)
-                .isInstanceOf(SQLiteConstraintException.class);
+            .that(exception)
+            .isInstanceOf(SQLiteConstraintException.class);
     }
 
     @Test
@@ -221,14 +221,14 @@ public class SurveyResponseActivityRecordTests {
         }
 
         assertWithMessage("Inserting a survey Id of a survey response that doesn't exist should violate constraints")
-                .that(exception)
-                .isInstanceOf(SQLiteConstraintException.class);
+            .that(exception)
+            .isInstanceOf(SQLiteConstraintException.class);
     }
 
     @Test
     public void insertingAnActionIdWhichDoesNotExist_ShouldThrowAConstraintException() {
         // Add a survey to the database
-        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active");
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
         int surveyResponseId = (int) this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyResponseId, 332211);
@@ -244,7 +244,7 @@ public class SurveyResponseActivityRecordTests {
 
         // If constraints not met, then should throw
         assertWithMessage("Inserting an activity Id of a activity record that doesn't exist should violate constraints")
-                .that(exception)
-                .isInstanceOf(SQLiteConstraintException.class);
+            .that(exception)
+            .isInstanceOf(SQLiteConstraintException.class);
     }
 }

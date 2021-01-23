@@ -50,17 +50,17 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
 
     public class WellbeingSupportViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title;
-        TextView description;
-        ImageView image;
-        Button button;
+        private TextView title;
+        private TextView description;
+        private ImageView image;
+        private Button button;
 
         public WellbeingSupportViewHolder(@NonNull View itemView) {
             super(itemView);
             // Get all of the views to set values for
             this.title = itemView.findViewById(R.id.wellbeing_support_list_item_title);
             this.description = itemView.findViewById(R.id.wellbeing_support_list_item_description);
-            this.image = itemView.findViewById(R.id.wellbeing_support_list_item_image);
+            this.image = itemView.findViewById(R.id.list_item_image);
             this.button = itemView.findViewById(R.id.wellbeing_support_list_item_button);
         }
 

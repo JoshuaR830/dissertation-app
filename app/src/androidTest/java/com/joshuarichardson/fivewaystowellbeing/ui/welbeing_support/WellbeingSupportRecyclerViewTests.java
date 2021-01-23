@@ -7,7 +7,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import dagger.hilt.android.testing.HiltAndroidTest;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -17,15 +16,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.RecyclerViewTestUtil.atRecyclerPosition;
 
-@HiltAndroidTest
 public class WellbeingSupportRecyclerViewTests {
     @Rule
     public ActivityScenarioRule<WellbeingSupportActivity> wellbeingSupportActivity = new ActivityScenarioRule<>(WellbeingSupportActivity.class);
 
-    // How to test recycler views using espresso https://developer.android.com/training/testing/espresso/lists#recycler-view-list-items
-
     @Test
     public void theCardForMindShouldBeShown() {
+        // How to test recycler views using espresso https://developer.android.com/training/testing/espresso/lists#recycler-view-list-items
         onView(withId(R.id.wellbeing_support_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(withText("Mind")))))

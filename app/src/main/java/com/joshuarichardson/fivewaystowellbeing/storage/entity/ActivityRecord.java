@@ -30,20 +30,20 @@ public class ActivityRecord {
 
     @NonNull
     @ColumnInfo(name = ACTIVITY_RECORD_TIMESTAMP)
-    private int activityTimestamp;
+    private long activityTimestamp;
 
     @NonNull
     @ColumnInfo(name = ACTIVITY_RECORD_DURATION)
     private int activityDuration;
 
-    public ActivityRecord(String activityName, int activityDuration, int activityTimestamp, String activityType) {
+    public ActivityRecord(String activityName, int activityDuration, long activityTimestamp, String activityType) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
         this.setActivityType(activityType);
     }
 
-    public ActivityRecord(String activityName, int activityDuration, int activityTimestamp, ActivityType activityType) {
+    public ActivityRecord(String activityName, int activityDuration, long activityTimestamp, ActivityType activityType) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
@@ -66,7 +66,7 @@ public class ActivityRecord {
         this.activityDuration = duration;
     }
 
-    public void setActivityTimestamp(int timestamp) {
+    public void setActivityTimestamp(long timestamp) {
         this.activityTimestamp = timestamp;
     }
 
@@ -87,7 +87,7 @@ public class ActivityRecord {
         return this.activityDuration;
     }
 
-    public int getActivityTimestamp() {
+    public long getActivityTimestamp() {
         return this.activityTimestamp;
     }
 }

@@ -21,28 +21,27 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/question_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/question_one"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <View style="@style/Divider" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/answer_1_container"
+                android:id="@+id/text_input_container"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="@string/question_one">
+                android:layout_marginBottom="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName" />
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

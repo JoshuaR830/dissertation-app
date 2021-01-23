@@ -23,7 +23,6 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import dagger.hilt.android.testing.HiltAndroidTest;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -91,9 +90,7 @@ public class ActivityRecordTests {
 
     @Test
     public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() throws TimeoutException, InterruptedException {
-        ArrayList<Integer> insertIds = DatabaseInsertionHelper.insert(new ActivityRecord[]{
-                // 16/12/2020 12am = 1608076800
-                // 17/12/2020 12am = 1608163200
+        DatabaseInsertionHelper.insert(new ActivityRecord[]{
                 new ActivityRecord("Snapchat", 1201, 1608076799, ActivityType.APP), // Should not be included
                 new ActivityRecord("Google Photos", 1202, 1608076800, ActivityType.APP), // Should be included
                 new ActivityRecord("Phone", 1203, 1608076801, ActivityType.APP), // Should be included
