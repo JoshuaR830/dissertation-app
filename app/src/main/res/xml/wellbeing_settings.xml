@@ -7,5 +7,6 @@
         android:dialogTitle="@string/settings_theme_title"
         android:entries="@array/settings_theme_titles"
         android:entryValues="@array/settings_theme_values"
-        app:useSimpleSummaryProvider="true"/>
+        app:useSimpleSummaryProvider="true"
+        android:icon="@drawable/icon_theme_switcher"/>
 </PreferenceScreen>
