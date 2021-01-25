@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.joshuarichardson.fivewaystowellbeing.ui.settings.SettingsActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportActivity;
 
@@ -26,11 +25,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAnalytics mFirebaseAnalytics;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         // Switch to the theme chosen in settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -78,24 +74,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onAnswerSurveysButtonClicked(View v) {
-        mFirebaseAnalytics.setUserId("Joshua");
-        mFirebaseAnalytics.setUserProperty("custom", "somethingCustomJoshua");
-        Log.d("joshua", "It worked");
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Survey_Answer_Clicked");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "Answer_Survey");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle);
-
         Intent answerSurveyIntent = new Intent(MainActivity.this, AnswerSurveyActivity.class);
         startActivity(answerSurveyIntent);
     }
 
     public void onCreatePassTimeButtonClicked(View v) {
-        Bundle viewCreatePassTime = new Bundle();
-        viewCreatePassTime.putString(FirebaseAnalytics.Param.ITEM_ID, "Create_PassTime_Clicked");
-        viewCreatePassTime.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "Create_PassTime");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, viewCreatePassTime);
-
         Intent answerSurveyIntent = new Intent(MainActivity.this, CreatePassTimeActivity.class);
         startActivity(answerSurveyIntent);
     }

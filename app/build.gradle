@@ -30,6 +30,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [analytics_deactivated: "true"]
+        }
+
+        // Disable logging while debugging https://stackoverflow.com/a/40961374/13496270
+        debug {
+            manifestPlaceholders = [analytics_deactivated: "false"]
         }
     }
     sourceSets {
@@ -42,6 +48,10 @@ android {
                         'src/main/res/layouts/settings', 'src/main/res/layouts/surveys/questions', 'src/main/res/values-night'
             }
         }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
@@ -74,6 +84,7 @@ dependencies {
     androidTestImplementation 'com.google.truth:truth:1.1'
     androidTestImplementation 'android.arch.core:core-testing:1.1.1'
     androidTestImplementation 'org.mockito:mockito-android:3.7.7'
+    testImplementation 'org.mockito:mockito-android:3.7.7'
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
