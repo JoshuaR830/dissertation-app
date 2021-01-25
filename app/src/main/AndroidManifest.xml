@@ -17,9 +17,9 @@
         android:theme="@style/AppTheme">
 
         <!-- Disable analytics while debugging https://stackoverflow.com/a/40961374/13496270 -->
-<!--        <meta-data-->
-<!--            android:name="firebase_analytics_collection_deactivated"-->
-<!--            android:value="${analytics_deactivated}"/>-->
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="${analytics_deactivated}"/>
         <activity
             android:name=".CreatePassTimeActivity"
             android:label="@string/launch_create_activity" />
