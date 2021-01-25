@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
@@ -35,6 +36,9 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
     @Inject
     WellbeingDatabase db;
+
+    @Inject
+    public LogAnalyticEventHelper analyticsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +109,9 @@ public class AnswerSurveyActivity extends AppCompatActivity {
     SurveyResponse surveyResponse = new SurveyResponse((int)now.getTime(), WaysToWellbeing.CONNECT, "", "");
 
     public void onSubmit(View v) {
+        // Log the survey completion
+        analyticsHelper.logCreateSurveyEvent(this);
+
         // Get the layout that contains all of the survey items
         ScrollView scrollView = findViewById(R.id.survey_items_scroll_view);
         LinearLayout layout = (LinearLayout) scrollView.getChildAt(0);

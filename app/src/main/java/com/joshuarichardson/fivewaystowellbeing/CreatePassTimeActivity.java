@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
+import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
@@ -25,6 +26,9 @@ public class CreatePassTimeActivity extends AppCompatActivity {
     @Inject
     WellbeingDatabase db;
 
+    @Inject
+    LogAnalyticEventHelper analyticsHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +43,13 @@ public class CreatePassTimeActivity extends AppCompatActivity {
     }
 
     public void onSubmit(View v) {
+        // Log the interaction
+        this.analyticsHelper.logCreatePasstimeEvent(this);
+
         EditText passTimeName = findViewById(R.id.pass_time_name_input);
         EditText passTimeDuration = findViewById(R.id.pass_time_duration_input);
         EditText passTimeType = findViewById(R.id.pass_time_type_input);
+
 
         String name = passTimeName.getText().toString();
         int duration = Integer.parseInt(passTimeDuration.getText().toString());
