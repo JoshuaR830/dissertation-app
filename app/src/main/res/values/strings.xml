@@ -27,4 +27,7 @@
     <string name="settings">Settings</string>
 
     <string name="button_visit_site">Visit site</string>
+
+    <string name="settings_theme_title">Theme</string>
+    <string name="settings_theme_description">Change the theme to dark, light or system default</string>
 </resources>
