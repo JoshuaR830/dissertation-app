@@ -1,6 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,7 +11,7 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.SettingsActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.settings.SettingsActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportActivity;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -29,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        // Switch to the theme chosen in settings
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String theme = preferences.getString("theme_settings_list", "SYSTEM");
+        ThemeHelper.setTheme(theme);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

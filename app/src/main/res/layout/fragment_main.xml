@@ -7,7 +7,7 @@
     tools:context=".MainActivity"
     android:background="@drawable/gradient_background">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
