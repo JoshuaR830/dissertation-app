@@ -13,6 +13,7 @@ import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyBuilder;
@@ -33,6 +34,7 @@ import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.B
 public class AnswerSurveyActivity extends AppCompatActivity {
 
     private SurveyResponseDao surveyResponseDao;
+    private SurveyResponseElementDao surveyResponseElementDao;
 
     @Inject
     WellbeingDatabase db;
@@ -46,6 +48,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_answer_survey);
 
         this.surveyResponseDao = this.db.surveyResponseDao();
+        this.surveyResponseElementDao = this.db.surveyResponseElementDao();
 
 
         ArrayList<String> listItems = new ArrayList<>();
