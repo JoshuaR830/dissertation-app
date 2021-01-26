@@ -35,4 +35,23 @@ public class WaysToWellbeingContract {
 
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID = "survey_response_id";
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID = "activity_record_id";
+
+    // Questions to ask
+    public static final String QUESTIONS_TO_ASK_TABLE_NAME = "questions_to_ask";
+
+    public static final String QUESTIONS_TO_ASK_ID = "id";
+    public static final String QUESTIONS_TO_ASK_QUESTION = "question";
+    public static final String QUESTIONS_TO_ASK_TYPE = "type";
+    public static final String QUESTIONS_TO_ASK_REASON = "reason";
+    public static final String QUESTIONS_TO_ASK_SEQUENCE_NUMBER = "sequence_number";
+    public static final String QUESTIONS_TO_ASK_SET_ID = "set_id";
+
+
+    // Survey question set
+    public static final String SURVEY_QUESTION_SET_TABLE_NAME = "survey_question_set";
+
+    public static final String SURVEY_QUESTION_SET_ID = "set_id";
+    public static final String SURVEY_QUESTION_SET_TIMESTAMP = "timestamp";
+    public static final String SURVEY_QUESTION_SET_SURVEY_ID = "survey_id";
+
 }
