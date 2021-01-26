@@ -81,9 +81,6 @@ public class ComplexSurveyViewBuiltCorrectly {
             QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
             SurveyQuestionSetDao surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
 
-            // ToDo don't need activity because it doesn't have a basic item
-
-
             DropDownListOptionWrapper feelings = new DropDownListOptionWrapper(Arrays.asList("Happy", "Moderate", "Sad"));
             DropDownListOptionWrapper apps = new DropDownListOptionWrapper(Arrays.asList("Facebook", "Snapchat", "WhatsApp"));
 
@@ -100,7 +97,6 @@ public class ComplexSurveyViewBuiltCorrectly {
             MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
             when(questionsToAskDao.getQuestionsBySetId(anyLong())).thenReturn(liveQuestionsToAsk);
 
-
             // Set the data to return for unanswered surveys
             SurveyQuestionSet[] surveyQuestionList = new SurveyQuestionSet[] {new SurveyQuestionSet(485798345, 0)};
             List<SurveyQuestionSet> surveyQuestionSets = Arrays.asList(surveyQuestionList);
@@ -109,7 +105,6 @@ public class ComplexSurveyViewBuiltCorrectly {
 
             when(mockWellbeingDatabase.questionsToAskDao()).thenReturn(questionsToAskDao);
             when(mockWellbeingDatabase.surveyQuestionSetDao()).thenReturn(surveyQuestionsDao);
-
 
             MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 

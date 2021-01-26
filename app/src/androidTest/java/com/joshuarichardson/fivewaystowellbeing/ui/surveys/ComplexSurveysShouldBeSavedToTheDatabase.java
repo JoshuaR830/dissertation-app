@@ -89,26 +89,9 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
 
-
-//            ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
-//
-//            ArrayList<ActivityRecord> activityList = new ArrayList<>();
-//            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP));
-//            when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
-
-//
-//            DropDownListOptionWrapper feelings = new DropDownListOptionWrapper(Arrays.asList("Happy", "Moderate", "Sad"));
-//            DropDownListOptionWrapper apps = new DropDownListOptionWrapper(Arrays.asList("Facebook", "Snapchat", "Whatsapp"));
-//
-//            Gson gson = new Gson();
-
             // Mock the response from these DAOs
             QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
             SurveyQuestionSetDao surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
-
-//            QuestionsToAsk[] questionsList = new QuestionsToAsk[] {
-//                    new QuestionsToAsk("Enter something for question 1", "N/A", 1, SurveyItemTypes.TEXT.name(), 0, null),
-//            };
 
             // Set the data for the questions to ask
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(

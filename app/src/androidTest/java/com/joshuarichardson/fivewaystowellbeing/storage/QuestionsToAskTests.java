@@ -46,7 +46,6 @@ public class QuestionsToAskTests {
 
     @Test
     public void insertQuestions_ThenGetById_ShouldReturnTheCorrectQuestion() throws TimeoutException, InterruptedException {
-        // ToDo need to add the list to this
         QuestionsToAsk question1 = new QuestionsToAsk("How was Facebook today?", "You spent longer using it than usual", 1, SurveyItemTypes.DROP_DOWN_LIST.name(), 0, null);
         QuestionsToAsk question2 = new QuestionsToAsk("How was Twitter today?", "You spent less time than usual using it", 1, SurveyItemTypes.TEXT.name(), 1, null);
         this.questionsToAskDao.insert(question2);
@@ -88,7 +87,6 @@ public class QuestionsToAskTests {
 
     @Test
     public void insertQuestions_thenGetAllQuestionsForNonExistentSet_ShouldReturnNoQuestions() throws TimeoutException, InterruptedException {
-        // ToDo - need to add drop down list items
         QuestionsToAsk question1 = new QuestionsToAsk("How was Google Chrome today?", "reason 1", 2, SurveyItemTypes.TEXT.name(), 0, null);
         QuestionsToAsk question2 = new QuestionsToAsk("How was Reddit today?", "reason 2", 1, SurveyItemTypes.DROP_DOWN_LIST.name(), 0, null);
         QuestionsToAsk question3 = new QuestionsToAsk("How was Instagram today?", "reason 3", 1, SurveyItemTypes.DROP_DOWN_LIST.name(), 1, null);

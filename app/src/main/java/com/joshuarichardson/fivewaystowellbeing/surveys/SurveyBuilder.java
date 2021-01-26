@@ -58,19 +58,6 @@ public class SurveyBuilder {
 
         int counter = 0;
 
-//        if(hasBasicSurvey) {
-//            LayoutInflater basicSurveyInflater = LayoutInflater.from(this.context);
-//            View basicSurvey = basicSurveyInflater.inflate(R.layout.basic_survey_details, layout, false);
-//            basicSurvey.setTag(BASIC_SURVEY);
-//            TextInputLayout dropDownContainer = basicSurvey.findViewById(R.id.survey_activity_input_container);
-//            AutoCompleteTextView dropDownInput = dropDownContainer.findViewById(R.id.survey_activity_input);
-//            List<String> myQuestions = this.basicSurveyQuestions;
-//
-//            ArrayAdapter<String> adapter = new ArrayAdapter<>(this.context, R.layout.item_list_text, myQuestions);
-//            dropDownInput.setAdapter(adapter);
-//            layout.addView(basicSurvey);
-//        }
-
         for(QuestionsToAsk question : this.questions) {
             switch (SurveyItemTypes.valueOf(question.getType())) {
                 case DROP_DOWN_LIST:
@@ -82,8 +69,7 @@ public class SurveyBuilder {
 
                     TextInputLayout container = cardView.findViewById(R.id.drop_down_container);
                     AutoCompleteTextView dropDownInput = container.findViewById(R.id.drop_down_input);
-
-                    // ToDo some JSON parsing needed
+                    
                     Gson gson = new Gson();
                     DropDownListOptionWrapper optionsList = gson.fromJson(question.extraData, DropDownListOptionWrapper.class);
                     List<String> myQuestions = optionsList.getOptionsList();
