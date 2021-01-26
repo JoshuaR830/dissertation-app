@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.QUESTIONS_TO_ASK_EXTRA_DATA;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.QUESTIONS_TO_ASK_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.QUESTIONS_TO_ASK_QUESTION;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.QUESTIONS_TO_ASK_REASON;
@@ -36,12 +37,16 @@ public class QuestionsToAsk {
     @ColumnInfo(name = QUESTIONS_TO_ASK_SEQUENCE_NUMBER)
     public int sequenceNumber;
 
-    public QuestionsToAsk(String question, String reason, long setId, String type, int sequenceNumber) {
+    @ColumnInfo(name = QUESTIONS_TO_ASK_EXTRA_DATA)
+    public String extraData;
+
+    public QuestionsToAsk(String question, String reason, long setId, String type, int sequenceNumber, String extraData) {
         this.question = question;
         this.reason = reason;
         this.setId = setId;
         this.type = type;
         this.sequenceNumber = sequenceNumber;
+        this.extraData = extraData;
     }
 
     public long getId() {

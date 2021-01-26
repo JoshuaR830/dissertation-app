@@ -8,13 +8,18 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.QuestionsToAskDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyQuestionSetDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -42,8 +47,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.MaterialComponentTestUtil.withMaterialHint;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,6 +74,27 @@ public class BasicSurveyViewBuiltCorrectly {
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
             ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
+            QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
+            SurveyQuestionSetDao surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
+
+            // Set the data for the questions to ask
+            List<QuestionsToAsk> questionsToAsk = Arrays.asList(new QuestionsToAsk("N/A", "N/A", 1, BASIC_SURVEY.name(), 0, null));
+            MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
+            when(questionsToAskDao.getQuestionsBySetId(anyInt())).thenReturn(liveQuestionsToAsk);
+
+            // Set the data to return for unanswered surveys
+            SurveyQuestionSet[] surveyQuestionList = new SurveyQuestionSet[] {new SurveyQuestionSet(485798345, 0)};
+            List<SurveyQuestionSet> surveyQuestionSets = Arrays.asList(surveyQuestionList);
+            MutableLiveData<List<SurveyQuestionSet>> liveSurveyQuestionSets = new MutableLiveData<>(surveyQuestionSets);
+            when(surveyQuestionsDao.getUnansweredSurveyQuestionSets()).thenReturn(liveSurveyQuestionSets);
+
+            when(mockWellbeingDatabase.questionsToAskDao()).thenReturn(questionsToAskDao);
+            when(mockWellbeingDatabase.surveyQuestionSetDao()).thenReturn(surveyQuestionsDao);
+
+            // Set up the activities for the list
+            ArrayList<ActivityRecord> activityList = new ArrayList<>();
+            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP));
+            when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
 
             MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 

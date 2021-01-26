@@ -45,6 +45,7 @@ public class WaysToWellbeingContract {
     public static final String QUESTIONS_TO_ASK_REASON = "reason";
     public static final String QUESTIONS_TO_ASK_SEQUENCE_NUMBER = "sequence_number";
     public static final String QUESTIONS_TO_ASK_SET_ID = "set_id";
+    public static final String QUESTIONS_TO_ASK_EXTRA_DATA = "extra_data";
 
 
     // Survey question set

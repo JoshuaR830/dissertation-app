@@ -118,10 +118,10 @@ public class SurveyQuestionSetTests {
         long set2Id = this.surveyQuestionSetDao.insert(set2);
         long set3Id = this.surveyQuestionSetDao.insert(set3);
 
-        QuestionsToAsk question1 = new QuestionsToAsk("How was Google Chrome today?", "reason 1", set1Id, SurveyItemTypes.TEXT.name(), 0);
-        QuestionsToAsk question2 = new QuestionsToAsk("How was Reddit today?", "reason 2", set2Id, SurveyItemTypes.DROP_DOWN_LIST.name(), 1);
-        QuestionsToAsk question3 = new QuestionsToAsk("How was Instagram today?", "reason 3", set3Id, SurveyItemTypes.DROP_DOWN_LIST.name(), 1);
-        QuestionsToAsk question4 = new QuestionsToAsk("How was YouTube today?", "reason 4", set2Id, SurveyItemTypes.TEXT.name(), 0);
+        QuestionsToAsk question1 = new QuestionsToAsk("How was Google Chrome today?", "reason 1", set1Id, SurveyItemTypes.TEXT.name(), 0, null);
+        QuestionsToAsk question2 = new QuestionsToAsk("How was Reddit today?", "reason 2", set2Id, SurveyItemTypes.DROP_DOWN_LIST.name(), 1, null);
+        QuestionsToAsk question3 = new QuestionsToAsk("How was Instagram today?", "reason 3", set3Id, SurveyItemTypes.DROP_DOWN_LIST.name(), 1, null);
+        QuestionsToAsk question4 = new QuestionsToAsk("How was YouTube today?", "reason 4", set2Id, SurveyItemTypes.TEXT.name(), 0, null);
 
         this.questionsToAskDao.insert(question1);
         long question2Id = this.questionsToAskDao.insert(question2);
