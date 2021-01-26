@@ -69,6 +69,10 @@ public class QuestionsToAsk {
         return this.type;
     }
 
+    public String getExtraData() {
+        return this.extraData;
+    }
+
     public int getSequenceNumber() {
         return this.sequenceNumber;
     }

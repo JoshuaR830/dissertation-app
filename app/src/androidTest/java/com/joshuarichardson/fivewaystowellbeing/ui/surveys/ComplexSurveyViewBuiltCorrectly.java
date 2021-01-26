@@ -3,12 +3,15 @@ package com.joshuarichardson.fivewaystowellbeing.ui.surveys;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.AnswerSurveyActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.QuestionsToAskDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyQuestionSetDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 import com.joshuarichardson.fivewaystowellbeing.surveys.DropDownListOptionWrapper;
@@ -17,6 +20,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +55,7 @@ import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.T
 import static com.joshuarichardson.fivewaystowellbeing.utilities.MaterialComponentTestUtil.withMaterialHint;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -73,7 +77,7 @@ public class ComplexSurveyViewBuiltCorrectly {
         @Provides
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
-//            ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
+            ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
             QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
             SurveyQuestionSetDao surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
 
@@ -87,14 +91,14 @@ public class ComplexSurveyViewBuiltCorrectly {
 
             // Set the data for the questions to ask
             QuestionsToAsk[] questionsList = new QuestionsToAsk[] {
-                    new QuestionsToAsk("What activity have you been doing?", "N/A", 1, DROP_DOWN_LIST.name(), 3, gson.toJson(apps)),
-                    new QuestionsToAsk("Set a description", "N/A", 1, TEXT.name(), 1, null),
                     new QuestionsToAsk("Add a title", "N/A", 1, TEXT.name(), 0, null),
-                    new QuestionsToAsk("How are you feeling?", "N/A", 1, DROP_DOWN_LIST.name(), 2, gson.toJson(feelings))
+                    new QuestionsToAsk("Set a description", "N/A", 1, TEXT.name(), 1, null),
+                    new QuestionsToAsk("What activity have you been doing?", "N/A", 1, DROP_DOWN_LIST.name(), 2, gson.toJson(apps)),
+                    new QuestionsToAsk("How are you feeling?", "N/A", 1, DROP_DOWN_LIST.name(), 3, gson.toJson(feelings))
             };
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(questionsList);
             MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
-            when(questionsToAskDao.getQuestionsBySetId(anyInt())).thenReturn(liveQuestionsToAsk);
+            when(questionsToAskDao.getQuestionsBySetId(anyLong())).thenReturn(liveQuestionsToAsk);
 
 
             // Set the data to return for unanswered surveys
@@ -107,19 +111,19 @@ public class ComplexSurveyViewBuiltCorrectly {
             when(mockWellbeingDatabase.surveyQuestionSetDao()).thenReturn(surveyQuestionsDao);
 
 
-//            MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
+            MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 
-//            ArrayList<ActivityRecord> array = new ArrayList<>();
-//            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT));
-//            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT));
-//            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT));
+            ArrayList<ActivityRecord> array = new ArrayList<>();
+            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT));
+            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT));
+            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT));
 
-//            data.setValue(array);
+            data.setValue(array);
 
-//            when(activityDao.getAllActivities()).thenReturn(data);
-//            when(activityDao.getAllActivitiesNotLive()).thenReturn(array);
+            when(activityDao.getAllActivities()).thenReturn(data);
+            when(activityDao.getAllActivitiesNotLive()).thenReturn(array);
 
-//            when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
+            when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
 
             return mockWellbeingDatabase;
         }

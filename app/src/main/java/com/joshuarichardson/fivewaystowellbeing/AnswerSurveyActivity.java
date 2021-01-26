@@ -9,30 +9,33 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
-import com.joshuarichardson.fivewaystowellbeing.surveys.QuestionBuilder;
+import com.joshuarichardson.fivewaystowellbeing.surveys.DropDownListOptionWrapper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyBuilder;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
-import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyQuestion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
-import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.TEXT;
 
 @AndroidEntryPoint
 public class AnswerSurveyActivity extends AppCompatActivity {
@@ -63,6 +66,50 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<ActivityRecord> activities = this.db.activityRecordDao().getAllActivitiesNotLive();
 
+            // ToDo - work out how to get the stuff in here
+            // This gets all unanswered question sets - these have IDs - these Ids are the set ids used to get the question sets
+            LiveData<List<SurveyQuestionSet>> questionSets = this.db.surveyQuestionSetDao().getUnansweredSurveyQuestionSets();
+
+            List<SurveyQuestionSet> something = questionSets.getValue();
+
+            long setId = 0;
+            if(something != null) {
+                // This gets the id from the data
+                // ToDo - if there are multiple surveys - probably want to have a way to deal with that
+                setId = something.get(0).getId();
+            }
+
+            // This is a list of questions - should all be from unanswered surveys
+            LiveData<List<QuestionsToAsk>> questions = this.db.questionsToAskDao().getQuestionsBySetId(setId);
+
+            List<QuestionsToAsk> questionList = new ArrayList<>();
+
+            if(questions != null && questions.getValue() != null) {
+                questionList = questions.getValue();
+            }
+
+            DropDownListOptionWrapper data = new DropDownListOptionWrapper(Arrays.asList("1", "2", "3"));
+            Gson gson = new Gson();
+
+//            questionList = Arrays.asList(
+//                new QuestionsToAsk("Question 1", "Reason 1", 1, BASIC_SURVEY.name(), 0, gson.toJson(data)),
+//                new QuestionsToAsk("Question 2", "Reason 2", 1, DROP_DOWN_LIST.name(), 0, gson.toJson(data))
+//            );
+
+
+
+            // ToDo - the survey builder should use this list instead of building a question item - that just makes no sense - instead - pass in this list - use that instead of the previous item
+            // ToDo - edit some tests before undertaking this work so that I know that it does infact work
+
+//            for(QuestionsToAsk question : questionList) {
+//                question.getQuestion();
+//                question.getReason();
+//                question.getType();
+//                question.getExtraData();
+//            }
+
+            // ToDo remove old
+
             ArrayList<String> apps = new ArrayList<>();
             if (activities != null) {
                 for (ActivityRecord activity : activities) {
@@ -71,10 +118,10 @@ public class AnswerSurveyActivity extends AppCompatActivity {
             }
             // ToDo - need to implement the table to save this to
             // ToDo - need a way to generate the questions to ask
-            SurveyQuestion title = new QuestionBuilder()
-                .withQuestionText("Add a title")
-                .withType(TEXT)
-                .build();
+//            SurveyQuestion title = new QuestionBuilder()
+//                .withQuestionText("Add a title")
+//                .withType(TEXT)
+//                .build();
 //
 //            SurveyQuestion description = new QuestionBuilder()
 //                .withQuestionText("Set a description")
@@ -93,11 +140,13 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 //                .withType(DROP_DOWN_LIST)
 //                .build();
 
+            List<QuestionsToAsk> finalQuestionList = questionList;
+
             runOnUiThread(() -> {
                 LinearLayout surveyBuilder = new SurveyBuilder(AnswerSurveyActivity.this)
-//                        .withBasicSurvey(apps)
+                        .withBasicSurvey(apps)
                         // ToDo - need to re-implement this when the database is ready
-                        .withQuestion(title)
+                        .withQuestions(finalQuestionList)
 //                        .withQuestion(description)
 //                        .withQuestion(firstQuestion)
 //                        .withQuestion(secondQuestion)
@@ -147,7 +196,6 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 surveyResponse.setDescription(descriptionView.getText().toString());
                 break;
             }
-
 
 
             // ToDo add a way to set specific elements with ids - these should always be added first - all other questions are generated - makes sense

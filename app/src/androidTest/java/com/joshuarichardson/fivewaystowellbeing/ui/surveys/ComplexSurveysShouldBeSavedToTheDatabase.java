@@ -54,7 +54,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.google.common.truth.Truth.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -115,7 +115,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
                 new QuestionsToAsk("Enter something for question 1", "N/A", 1, SurveyItemTypes.TEXT.name(), 0, null)
             );
             MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
-            when(questionsToAskDao.getQuestionsBySetId(anyInt())).thenReturn(liveQuestionsToAsk);
+            when(questionsToAskDao.getQuestionsBySetId(anyLong())).thenReturn(liveQuestionsToAsk);
 
 
             // Set the data to return for unanswered surveys

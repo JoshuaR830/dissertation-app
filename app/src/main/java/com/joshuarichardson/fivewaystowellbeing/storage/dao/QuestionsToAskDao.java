@@ -18,5 +18,5 @@ public interface QuestionsToAskDao {
     LiveData<List<QuestionsToAsk>> getQuestionsById(long questionRecordId);
 
     @Query("SELECT * FROM questions_to_ask WHERE set_id = :setId")
-    LiveData<List<QuestionsToAsk>> getQuestionsBySetId(int setId);
+    LiveData<List<QuestionsToAsk>> getQuestionsBySetId(long setId);
 }

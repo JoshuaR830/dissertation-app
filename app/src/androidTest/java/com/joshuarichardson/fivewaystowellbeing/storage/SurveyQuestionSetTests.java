@@ -46,7 +46,7 @@ public class SurveyQuestionSetTests {
     }
 
     @Test
-    public void insertSets_thenGetAllSetsWithoutSurveys_ShouldReturnAllUncompletedSurveyQuestionSets() throws TimeoutException, InterruptedException {
+    public void insertSets_thenGetAllSetsWithoutSurveys_ShouldReturnAllIncompleteSurveyQuestionSets() throws TimeoutException, InterruptedException {
         SurveyQuestionSet set1 = new SurveyQuestionSet(376248736, 1);
         SurveyQuestionSet set2 = new SurveyQuestionSet(476248747, 0);
         SurveyQuestionSet set3 = new SurveyQuestionSet(576248758, 0);
