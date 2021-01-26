@@ -12,6 +12,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -77,6 +78,11 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
 
             return mockWellbeingDatabase;
         }
+    }
+
+    @Before
+    public void setup() {
+        hiltTest.inject();
     }
 
     @Test

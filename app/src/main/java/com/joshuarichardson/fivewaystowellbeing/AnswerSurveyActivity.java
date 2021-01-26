@@ -16,8 +16,11 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
+import com.joshuarichardson.fivewaystowellbeing.surveys.QuestionBuilder;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyBuilder;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
+import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyQuestion;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
+import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.TEXT;
 
 @AndroidEntryPoint
 public class AnswerSurveyActivity extends AppCompatActivity {
@@ -67,10 +71,10 @@ public class AnswerSurveyActivity extends AppCompatActivity {
             }
             // ToDo - need to implement the table to save this to
             // ToDo - need a way to generate the questions to ask
-//            SurveyQuestion title = new QuestionBuilder()
-//                .withQuestionText("Add a title")
-//                .withType(TEXT)
-//                .build();
+            SurveyQuestion title = new QuestionBuilder()
+                .withQuestionText("Add a title")
+                .withType(TEXT)
+                .build();
 //
 //            SurveyQuestion description = new QuestionBuilder()
 //                .withQuestionText("Set a description")
@@ -91,9 +95,9 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 LinearLayout surveyBuilder = new SurveyBuilder(AnswerSurveyActivity.this)
-                        .withBasicSurvey(apps)
+//                        .withBasicSurvey(apps)
                         // ToDo - need to re-implement this when the database is ready
-//                        .withQuestion(title)
+                        .withQuestion(title)
 //                        .withQuestion(description)
 //                        .withQuestion(firstQuestion)
 //                        .withQuestion(secondQuestion)
@@ -109,6 +113,8 @@ public class AnswerSurveyActivity extends AppCompatActivity {
     }
 
     Date now = new Date();
+
+    // ToDo - what to do about this if there is no basic survey?
     SurveyResponse surveyResponse = new SurveyResponse((int)now.getTime(), WaysToWellbeing.CONNECT, "", "");
 
     public void onSubmit(View v) {
@@ -118,6 +124,9 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         // Get the layout that contains all of the survey items
         ScrollView scrollView = findViewById(R.id.survey_items_scroll_view);
         LinearLayout layout = (LinearLayout) scrollView.getChildAt(0);
+
+        ArrayList<String> questionTitles = new ArrayList<>();
+        ArrayList<String> questionAnswers = new ArrayList<>();
 
         // Process each item
         for(int i = 0; i < layout.getChildCount(); i++) {
@@ -139,9 +148,6 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 break;
             }
 
-            // Get the question title
-            TextView questionTitleView = child.findViewById(R.id.question_title);
-            String questionTitle = questionTitleView.getText().toString();
 
 
             // ToDo add a way to set specific elements with ids - these should always be added first - all other questions are generated - makes sense
@@ -160,25 +166,47 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 // FK - Survey_id -> clicking expand can do a get all where survey_id = the id of that survey
 
             // Process the question types appropriately to get the responses
+
+
+            String questionAnswer = "";
+
             switch(questionType) {
                 // ToDo add all of the questions to database with the survey ID as a foreign key
                 // ToDo Survey sequence order would be useful to remember for reconstructing
                 // ToDo Survey
                 case DROP_DOWN_LIST:
                     AutoCompleteTextView dropDown = child.findViewById(R.id.drop_down_input);
+                    questionAnswer = dropDown.getText().toString();
                     Log.d("Selected item", String.valueOf(dropDown.getText()));
                     break;
                 case TEXT:
                     EditText inputText = child.findViewById(R.id.text_input);
+                    questionAnswer = inputText.getText().toString();
                     Log.d("Selected item", String.valueOf(inputText.getText()));
+                    break;
+                default:
+                   break;
             }
+
+            // Get the question title
+            TextView questionTitleView = child.findViewById(R.id.question_title);
+            questionTitles.add(questionTitleView.getText().toString());
+            questionAnswers.add(questionAnswer);
         }
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            this.surveyResponseDao.insert(surveyResponse);
+            long surveyId = this.surveyResponseDao.insert(surveyResponse);
+
+            Log.d("Length", String.valueOf(questionAnswers.size()));
+
+            for(int i = 0; i < questionAnswers.size(); i++) {
+                SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, questionTitles.get(i), questionAnswers.get(i));
+                Log.d("Survey Id", String.valueOf(surveyId));
+                long elementId = this.surveyResponseElementDao.insert(surveyResponseElement);
+                Log.d("Element Id", String.valueOf(elementId));
+            }
+
             finish();
         });
-
-        // ToDo some database stuff here - but need the database first which is on another branch
     }
 }
