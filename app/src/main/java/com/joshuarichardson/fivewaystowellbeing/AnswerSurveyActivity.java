@@ -13,8 +13,12 @@ import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyBuilder;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
@@ -33,6 +37,8 @@ import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.B
 public class AnswerSurveyActivity extends AppCompatActivity {
 
     private SurveyResponseDao surveyResponseDao;
+    private SurveyResponseElementDao surveyResponseElementDao;
+    private long setId;
 
     @Inject
     WellbeingDatabase db;
@@ -46,54 +52,52 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_answer_survey);
 
         this.surveyResponseDao = this.db.surveyResponseDao();
-
-
-        ArrayList<String> listItems = new ArrayList<>();
-        listItems.add("Happy");
-        listItems.add("Moderate");
-        listItems.add("Sad");
+        this.surveyResponseElementDao = this.db.surveyResponseElementDao();
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<ActivityRecord> activities = this.db.activityRecordDao().getAllActivitiesNotLive();
+            List<SurveyQuestionSet> questionSets = this.db.surveyQuestionSetDao().getUnansweredSurveyQuestionSets();
 
+            // Cope with potentially null values
+            List<SurveyQuestionSet> questionSetValues = new ArrayList<>();
+            if(questionSets != null && questionSets != null) {
+                questionSetValues = questionSets;
+            }
+
+            // Cope with null values
+            this.setId = 0;
+            if(questionSetValues != null && questionSetValues.size() > 0) {
+                // This gets the id from the data
+                // ToDo - if there are multiple surveys - probably want to have a way to deal with that
+                this.setId = questionSetValues.get(0).getId();
+            }
+
+            // This is a list of questions - should all be from unanswered surveys
+            List<QuestionsToAsk> questions = this.db.questionsToAskDao().getQuestionsBySetId(setId);
+
+            List<QuestionsToAsk> questionList = new ArrayList<>();
+
+            // Cope with null values
+            if(questions != null && questions != null) {
+                questionList = questions;
+            }
+
+            // ToDo - might be better if this didn't have to be passed in separately
             ArrayList<String> apps = new ArrayList<>();
             if (activities != null) {
                 for (ActivityRecord activity : activities) {
                     apps.add(activity.getActivityName());
                 }
             }
-            // ToDo - need to implement the table to save this to
-            // ToDo - need a way to generate the questions to ask
-//            SurveyQuestion title = new QuestionBuilder()
-//                .withQuestionText("Add a title")
-//                .withType(TEXT)
-//                .build();
-//
-//            SurveyQuestion description = new QuestionBuilder()
-//                .withQuestionText("Set a description")
-//                .withType(TEXT)
-//                .build();
-//
-//            SurveyQuestion firstQuestion = new QuestionBuilder()
-//                .withQuestionText("What activity have you been doing?")
-//                .withOptionsList(apps)
-//                .withType(DROP_DOWN_LIST)
-//                .build();
-//
-//            SurveyQuestion secondQuestion = new QuestionBuilder()
-//                .withQuestionText("How are you feeling?")
-//                .withOptionsList(listItems)
-//                .withType(DROP_DOWN_LIST)
-//                .build();
+
+
+            // ToDo - need a way to populate the database with questions
+            List<QuestionsToAsk> finalQuestionList = questionList;
 
             runOnUiThread(() -> {
                 LinearLayout surveyBuilder = new SurveyBuilder(AnswerSurveyActivity.this)
                         .withBasicSurvey(apps)
-                        // ToDo - need to re-implement this when the database is ready
-//                        .withQuestion(title)
-//                        .withQuestion(description)
-//                        .withQuestion(firstQuestion)
-//                        .withQuestion(secondQuestion)
+                        .withQuestions(finalQuestionList)
                         .build();
 
                 ScrollView view = findViewById(R.id.survey_items_scroll_view);
@@ -106,6 +110,8 @@ public class AnswerSurveyActivity extends AppCompatActivity {
     }
 
     Date now = new Date();
+
+    // ToDo - what to do about this if there is no basic survey?
     SurveyResponse surveyResponse = new SurveyResponse((int)now.getTime(), WaysToWellbeing.CONNECT, "", "");
 
     public void onSubmit(View v) {
@@ -115,6 +121,9 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         // Get the layout that contains all of the survey items
         ScrollView scrollView = findViewById(R.id.survey_items_scroll_view);
         LinearLayout layout = (LinearLayout) scrollView.getChildAt(0);
+
+        ArrayList<String> questionTitles = new ArrayList<>();
+        ArrayList<String> questionAnswers = new ArrayList<>();
 
         // Process each item
         for(int i = 0; i < layout.getChildCount(); i++) {
@@ -136,46 +145,39 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 break;
             }
 
-            // Get the question title
-            TextView questionTitleView = child.findViewById(R.id.question_title);
-            String questionTitle = questionTitleView.getText().toString();
-
-
-            // ToDo add a way to set specific elements with ids - these should always be added first - all other questions are generated - makes sense
-            // The first item in the survey creation could have 4 things
-                // Title
-                // Description
-                // Activity
-                // Date time picker
-            // The second item could be about mood - then that can be saved elsewhere in the database
-            // All following items are generated numerically - question 0 -> question max -> only these are saved in the survey_response_element
-
-            // Build the question and answer objects then push them all to the database at once - inserts allow lists
-                // Question
-                // Answer
-                // Id - this can be an auto increment
-                // FK - Survey_id -> clicking expand can do a get all where survey_id = the id of that survey
+            String questionAnswer = "";
 
             // Process the question types appropriately to get the responses
             switch(questionType) {
                 // ToDo add all of the questions to database with the survey ID as a foreign key
                 // ToDo Survey sequence order would be useful to remember for reconstructing
-                // ToDo Survey
                 case DROP_DOWN_LIST:
                     AutoCompleteTextView dropDown = child.findViewById(R.id.drop_down_input);
-                    Log.d("Selected item", String.valueOf(dropDown.getText()));
+                    questionAnswer = dropDown.getText().toString();
                     break;
                 case TEXT:
                     EditText inputText = child.findViewById(R.id.text_input);
-                    Log.d("Selected item", String.valueOf(inputText.getText()));
+                    questionAnswer = inputText.getText().toString();
+                    break;
+                default:
+                   break;
             }
+
+            // Get the question title
+            TextView questionTitleView = child.findViewById(R.id.question_title);
+            questionTitles.add(questionTitleView.getText().toString());
+            questionAnswers.add(questionAnswer);
         }
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            this.surveyResponseDao.insert(surveyResponse);
+            long surveyId = this.surveyResponseDao.insert(surveyResponse);
+
+            for(int i = 0; i < questionAnswers.size(); i++) {
+                SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, questionTitles.get(i), questionAnswers.get(i));
+                long elementId = this.surveyResponseElementDao.insert(surveyResponseElement);
+            }
+            this.db.surveyQuestionSetDao().updateSetWithCompletedSurveyId(this.setId, surveyId);
             finish();
         });
-
-        // ToDo some database stuff here - but need the database first which is on another branch
     }
 }

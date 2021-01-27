@@ -3,8 +3,10 @@ package com.joshuarichardson.fivewaystowellbeing.surveys;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.joshuarichardson.fivewaystowellbeing.AnswerSurveyActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.hilt.android.testing.HiltAndroidRule;
@@ -33,13 +36,18 @@ public class SurveyBuilderWithBasicSurveyItemsTest {
 
     @Before
     public void setUp() {
-        String[] apps = new String[]{"Facebook", "Snapchat", "Whatsapp"};
 
-        // How to get the activity https://stackoverflow.com/a/56356650/13496270
+        Gson gson = new Gson();
+
+        List<QuestionsToAsk> questions = Arrays.asList(
+                new QuestionsToAsk("How are you feeling?", "", 1, BASIC_SURVEY.name(), 0, gson.toJson(new DropDownListOptionWrapper(Arrays.asList("Facebook", "Snapchat", "Whatsapp"))))
+        );
+
+//      https://stackoverflow.com/a/56356650/13496270
         answerSurveyActivity.getScenario().onActivity(
             (activity) -> {
                 this.surveyBuilder = new SurveyBuilder(activity)
-                    .withBasicSurvey(Arrays.asList(apps))
+                    .withQuestions(questions)
                     .build();
             }
         );

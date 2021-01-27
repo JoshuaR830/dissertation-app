@@ -28,9 +28,9 @@ public class SurveyResponseElement {
 
     @ColumnInfo(name= SURVEY_RESPONSE_ELEMENT_SURVEY_ID)
     @ForeignKey(entity = SurveyResponse.class, parentColumns = SURVEY_RESPONSE_ID, childColumns = SURVEY_RESPONSE_ELEMENT_SURVEY_ID, onDelete = CASCADE)
-    private int surveyId;
+    private long surveyId;
 
-    public SurveyResponseElement(int surveyId, String question, String answer) {
+    public SurveyResponseElement(long surveyId, String question, String answer) {
         this.setAnswer(answer);
         this.setSurveyId(surveyId);
         this.setQuestion(question);
@@ -44,7 +44,7 @@ public class SurveyResponseElement {
         this.answer = answer;
     }
 
-    public void setSurveyId(int surveyId) {
+    public void setSurveyId(long surveyId) {
         this.surveyId = surveyId;
     }
 
@@ -60,7 +60,7 @@ public class SurveyResponseElement {
         return answer;
     }
 
-    public int getSurveyId() {
+    public long getSurveyId() {
         return surveyId;
     }
 
