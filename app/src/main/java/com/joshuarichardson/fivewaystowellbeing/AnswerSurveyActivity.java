@@ -44,6 +44,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
     @Inject
     public LogAnalyticEventHelper analyticsHelper;
+    private long setId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +69,14 @@ public class AnswerSurveyActivity extends AppCompatActivity {
             }
 
             // Cope with null values
-            long setId = 0;
+            this.setId = 0;
             if(questionSetValues != null && questionSetValues.size() > 0) {
                 // This gets the id from the data
                 // ToDo - if there are multiple surveys - probably want to have a way to deal with that
-                setId = questionSetValues.get(0).getId();
+                this.setId = questionSetValues.get(0).getId();
             }
 
-            Log.d("Id", String.valueOf(setId));
+            Log.d("Id", String.valueOf(this.setId));
 
             // This is a list of questions - should all be from unanswered surveys
             List<QuestionsToAsk> questions = this.db.questionsToAskDao().getQuestionsBySetId(setId);
@@ -184,7 +185,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 long elementId = this.surveyResponseElementDao.insert(surveyResponseElement);
                 // ToDo - need to link this to the survey itself
             }
-
+            this.db.surveyQuestionSetDao().updateSetWithCompletedSurveyId(this.setId, surveyId);
             finish();
         });
     }

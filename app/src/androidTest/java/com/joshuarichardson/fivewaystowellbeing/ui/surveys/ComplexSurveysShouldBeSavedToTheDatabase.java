@@ -65,6 +65,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
     // ToDo - implement the tests for testing questions
     private SurveyResponseDao surveyDao;
     private SurveyResponseElementDao surveyResponseElementDao;
+    private SurveyQuestionSetDao surveyQuestionsDao;
 
     @Captor
     ArgumentCaptor<SurveyResponseElement> surveyResponseElementCaptor = ArgumentCaptor.forClass(SurveyResponseElement.class);
@@ -84,13 +85,14 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
     @Module
     @InstallIn(ApplicationComponent.class)
     public class TestWellbeingDatabaseModule {
+
         @Provides
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
 
             // Mock the response from these DAOs
             QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
-            SurveyQuestionSetDao surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
+            ComplexSurveysShouldBeSavedToTheDatabase.this.surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
 
             // Set the data for the questions to ask
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(
@@ -142,6 +144,9 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
 
         verify(this.surveyResponseElementDao, times(1))
             .insert(this.surveyResponseElementCaptor.capture());
+
+        verify(this.surveyQuestionsDao, times(1))
+            .updateSetWithCompletedSurveyId(anyLong(), anyLong());
 
         SurveyResponseElement testSubject = this.surveyResponseElementCaptor.getAllValues().get(0);
         assertThat(testSubject.getAnswer()).isEqualTo("Question 1 response");

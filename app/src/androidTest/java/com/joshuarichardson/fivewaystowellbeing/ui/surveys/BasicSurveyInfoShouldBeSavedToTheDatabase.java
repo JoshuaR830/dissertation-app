@@ -46,6 +46,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -66,6 +67,7 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
 
     @Rule
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
+    private SurveyQuestionSetDao surveyQuestionsDao;
 
     @Module
     @InstallIn(ApplicationComponent.class)
@@ -75,7 +77,7 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
             ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
             QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
-            SurveyQuestionSetDao surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
+            BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
 
             // Set the data for the questions to ask
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(new QuestionsToAsk("N/A", "N/A", 1, BASIC_SURVEY.name(), 0, null));
@@ -86,10 +88,10 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
             SurveyQuestionSet[] surveyQuestionList = new SurveyQuestionSet[] {new SurveyQuestionSet(485798345, 0)};
             List<SurveyQuestionSet> surveyQuestionSets = Arrays.asList(surveyQuestionList);
 //            MutableLiveData<List<SurveyQuestionSet>> liveSurveyQuestionSets = new MutableLiveData<>(surveyQuestionSets);
-            when(surveyQuestionsDao.getUnansweredSurveyQuestionSets()).thenReturn(surveyQuestionSets);
+            when(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyQuestionsDao.getUnansweredSurveyQuestionSets()).thenReturn(surveyQuestionSets);
 
             when(mockWellbeingDatabase.questionsToAskDao()).thenReturn(questionsToAskDao);
-            when(mockWellbeingDatabase.surveyQuestionSetDao()).thenReturn(surveyQuestionsDao);
+            when(mockWellbeingDatabase.surveyQuestionSetDao()).thenReturn(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyQuestionsDao);
 
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
             activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP));
@@ -125,5 +127,8 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
 
         verify(this.surveyDao, times(1))
                 .insert(any(SurveyResponse.class));
+
+        verify(this.surveyQuestionsDao, times(1))
+                .updateSetWithCompletedSurveyId(anyLong(), anyLong());
     }
 }

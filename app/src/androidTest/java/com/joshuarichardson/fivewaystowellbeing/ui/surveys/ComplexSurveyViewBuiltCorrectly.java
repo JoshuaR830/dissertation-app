@@ -94,13 +94,11 @@ public class ComplexSurveyViewBuiltCorrectly {
                     new QuestionsToAsk("How are you feeling?", "N/A", 1, DROP_DOWN_LIST.name(), 3, gson.toJson(feelings))
             };
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(questionsList);
-//            MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
             when(questionsToAskDao.getQuestionsBySetId(anyLong())).thenReturn(questionsToAsk);
 
             // Set the data to return for unanswered surveys
             SurveyQuestionSet[] surveyQuestionList = new SurveyQuestionSet[] {new SurveyQuestionSet(485798345, 0)};
             List<SurveyQuestionSet> surveyQuestionSets = Arrays.asList(surveyQuestionList);
-//            MutableLiveData<List<SurveyQuestionSet>> liveSurveyQuestionSets = new MutableLiveData<>(surveyQuestionSets);
             when(surveyQuestionsDao.getUnansweredSurveyQuestionSets()).thenReturn(surveyQuestionSets);
 
             when(mockWellbeingDatabase.questionsToAskDao()).thenReturn(questionsToAskDao);
@@ -132,9 +130,11 @@ public class ComplexSurveyViewBuiltCorrectly {
     @Test
     public void surveyTitle_ShouldAllowTextEntry() {
          onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(0))))
+            .perform(scrollTo())
             .check(matches(withText("Add a title")));
 
         onView(allOf(withId(R.id.text_input_container), isDescendantOfA(withId(0))))
+            .perform(scrollTo())
             .check(matches(withMaterialHint("Add a title")));
 
         onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(0))))
@@ -149,9 +149,11 @@ public class ComplexSurveyViewBuiltCorrectly {
     @Test
     public void surveyDescription_ShouldAllowTextEntry() {
         onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(1))))
+            .perform(scrollTo())
             .check(matches(withText("Set a description")));
 
         onView(allOf(withId(R.id.text_input_container), isDescendantOfA(withId(1))))
+            .perform(scrollTo())
             .check(matches(withMaterialHint("Set a description")));
 
         onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(1))))
@@ -165,7 +167,9 @@ public class ComplexSurveyViewBuiltCorrectly {
 
     @Test
     public void activityDropDownList_ShouldContainAllActivities() {
-        onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(2)))).check(matches(withText("What activity have you been doing?")));
+        onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(2))))
+            .perform(scrollTo())
+            .check(matches(withText("What activity have you been doing?")));
 
         onView(withId(2))
             .perform(scrollTo(), click());
@@ -190,7 +194,9 @@ public class ComplexSurveyViewBuiltCorrectly {
     @Test
     public void moodDropDownList_ShouldContainAllMoods() {
 
-        onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(3)))).check(matches(withText("How are you feeling?")));
+        onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(3))))
+            .perform(scrollTo())
+            .check(matches(withText("How are you feeling?")));
 
         onView(withId(3))
                 .perform(scrollTo(), click());

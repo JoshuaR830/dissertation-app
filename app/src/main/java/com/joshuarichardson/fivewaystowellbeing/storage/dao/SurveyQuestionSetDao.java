@@ -22,7 +22,7 @@ public interface SurveyQuestionSetDao {
     LiveData<List<SurveyQuestionSet>> getSurveyQuestionSetById(long setId);
 
     @Query("UPDATE survey_question_set SET survey_id = :surveyId WHERE set_id = :setId")
-    void updateSetWithCompletedSurveyId(long setId, int surveyId);
+    void updateSetWithCompletedSurveyId(long setId, long surveyId);
 
     @Query("SELECT * FROM questions_to_ask as qta INNER JOIN survey_question_set as sqs ON sqs.set_id == qta.set_id WHERE qta.set_id = :setId ORDER BY qta.sequence_number ASC")
     LiveData<List<QuestionsToAsk>> getQuestionsForSurveyQuestionSetWithId(long setId);
