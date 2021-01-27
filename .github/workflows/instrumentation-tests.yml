@@ -31,4 +31,4 @@ jobs:
           profile: Nexus 6
           disable-animations: true  
           # Run the tests in src/androidTests/
-          script: ./gradlew connectedCheck --stacktrace
+          script: ./gradlew connectedCheck --debug
