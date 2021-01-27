@@ -62,7 +62,6 @@ import static org.mockito.Mockito.when;
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
 public class ComplexSurveysShouldBeSavedToTheDatabase {
-    // ToDo - implement the tests for testing questions
     private SurveyResponseDao surveyDao;
     private SurveyResponseElementDao surveyResponseElementDao;
     private SurveyQuestionSetDao surveyQuestionsDao;
@@ -98,14 +97,12 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(
                 new QuestionsToAsk("Enter something for question 1", "N/A", 1, SurveyItemTypes.TEXT.name(), 0, null)
             );
-//            MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
             when(questionsToAskDao.getQuestionsBySetId(anyLong())).thenReturn(questionsToAsk);
 
 
             // Set the data to return for unanswered surveys
             SurveyQuestionSet[] surveyQuestionList = new SurveyQuestionSet[] {new SurveyQuestionSet(485798345, 0)};
             List<SurveyQuestionSet> surveyQuestionSets = Arrays.asList(surveyQuestionList);
-//            MutableLiveData<List<SurveyQuestionSet>> liveSurveyQuestionSets = new MutableLiveData<>(surveyQuestionSets);
             when(surveyQuestionsDao.getUnansweredSurveyQuestionSets()).thenReturn(surveyQuestionSets);
 
             when(mockWellbeingDatabase.questionsToAskDao()).thenReturn(questionsToAskDao);

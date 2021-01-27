@@ -46,7 +46,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -81,13 +80,11 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
 
             // Set the data for the questions to ask
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(new QuestionsToAsk("N/A", "N/A", 1, BASIC_SURVEY.name(), 0, null));
-//            MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
             when(questionsToAskDao.getQuestionsBySetId(anyLong())).thenReturn(questionsToAsk);
 
             // Set the data to return for unanswered surveys
             SurveyQuestionSet[] surveyQuestionList = new SurveyQuestionSet[] {new SurveyQuestionSet(485798345, 0)};
             List<SurveyQuestionSet> surveyQuestionSets = Arrays.asList(surveyQuestionList);
-//            MutableLiveData<List<SurveyQuestionSet>> liveSurveyQuestionSets = new MutableLiveData<>(surveyQuestionSets);
             when(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyQuestionsDao.getUnansweredSurveyQuestionSets()).thenReturn(surveyQuestionSets);
 
             when(mockWellbeingDatabase.questionsToAskDao()).thenReturn(questionsToAskDao);

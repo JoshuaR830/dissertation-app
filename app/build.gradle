@@ -60,7 +60,7 @@ hilt {
 }
 
 dependencies {
-    def room_version = "2.2.5"
+    def room_version = "2.2.6"
 
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
     implementation 'com.google.firebase:firebase-analytics'

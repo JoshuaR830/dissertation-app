@@ -38,13 +38,13 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
     private SurveyResponseDao surveyResponseDao;
     private SurveyResponseElementDao surveyResponseElementDao;
+    private long setId;
 
     @Inject
     WellbeingDatabase db;
 
     @Inject
     public LogAnalyticEventHelper analyticsHelper;
-    private long setId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +57,6 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<ActivityRecord> activities = this.db.activityRecordDao().getAllActivitiesNotLive();
             List<SurveyQuestionSet> questionSets = this.db.surveyQuestionSetDao().getUnansweredSurveyQuestionSets();
-            Log.d("Questions", String.valueOf(questionSets.size()));
-
-            // ToDo - when to use live data vs when to use normal data - the delay in live data will cause a problem
-            // ToDo - could use an observer instead - but is that too complicated
 
             // Cope with potentially null values
             List<SurveyQuestionSet> questionSetValues = new ArrayList<>();
@@ -76,12 +72,8 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 this.setId = questionSetValues.get(0).getId();
             }
 
-            Log.d("Id", String.valueOf(this.setId));
-
             // This is a list of questions - should all be from unanswered surveys
             List<QuestionsToAsk> questions = this.db.questionsToAskDao().getQuestionsBySetId(setId);
-
-            Log.d("Question count", String.valueOf(questions.size()));
 
             List<QuestionsToAsk> questionList = new ArrayList<>();
 
@@ -183,7 +175,6 @@ public class AnswerSurveyActivity extends AppCompatActivity {
             for(int i = 0; i < questionAnswers.size(); i++) {
                 SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, questionTitles.get(i), questionAnswers.get(i));
                 long elementId = this.surveyResponseElementDao.insert(surveyResponseElement);
-                // ToDo - need to link this to the survey itself
             }
             this.db.surveyQuestionSetDao().updateSetWithCompletedSurveyId(this.setId, surveyId);
             finish();
