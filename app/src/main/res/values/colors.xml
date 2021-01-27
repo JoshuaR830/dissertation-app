@@ -6,6 +6,8 @@
     <color name="colorAccentDark">#65F7B1</color>
     <color name="listItemColour">#FFFFFF</color>
     <color name="colorSilver">#BEC2CB</color>
+    <color name="colorGold">#D7BE69</color>
     <color name="black12Percent">#1F000000</color>
+    <color name="white12Percent">#1FFFFFFF</color>
     <color name="white">#FFFFFF</color>
 </resources>

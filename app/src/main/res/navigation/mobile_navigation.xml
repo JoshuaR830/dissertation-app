@@ -9,13 +9,7 @@
         android:id="@+id/navigation_home"
         android:label="@string/app_name"
         android:name="com.joshuarichardson.fivewaystowellbeing.ui.view.CreateSelectionFragment"
-        tools:layout="@layout/fragment_main" />
-
-    <fragment
-        android:id="@+id/navigation_view_survey_responses"
-        android:label="@string/launch_view_surveys"
-        android:name="com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragment"
-        tools:layout="@layout/fragment_view_surveys" />
+        tools:layout="@layout/fragment_progress" />
 
     <fragment
         android:id="@+id/navigation_view_pass_times"
@@ -23,5 +17,10 @@
         android:name="com.joshuarichardson.fivewaystowellbeing.ui.view.ViewPassTimesFragment"
         tools:layout="@layout/fragment_view_pass_times" />
 
+    <fragment
+        android:id="@+id/navigation_view_survey_responses"
+        android:label="@string/launch_view_surveys"
+        android:name="com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragment"
+        tools:layout="@layout/fragment_view_surveys" />
 
 </navigation>

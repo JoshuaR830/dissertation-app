@@ -1,10 +1,16 @@
 <resources>
-    <string name="app_name">Five Ways to Wellbeing</string>
+    <string name="app_name">Five ways to wellbeing</string>
 
-    <string name="launch_view_surveys">View Completed Surveys</string>
-    <string name="launch_view_pass_time">View Activities</string>
-    <string name="launch_create_activity">Create Activity</string>
-    <string name="launch_answer_survey">Complete Survey</string>
+    <string name="launch_view_surveys">View completed surveys</string>
+    <string name="launch_view_pass_time">View activities</string>
+    <string name="launch_create_activity">Record activity</string>
+    <string name="launch_answer_survey">Complete survey</string>
+    <string name="log_your_day_title">Keep track of your day</string>
+    <string name="log_your_day_description">Record the activities you have done throughout the day, then complete surveys to check in on how things are going.</string>
+
+    <string name="no_surveys_title">No surveys yet</string>
+    <string name="no_surveys_description">Do you want to complete one?</string>
+
 
     <string name="expand_button">Expand</string>
 
@@ -19,14 +25,17 @@
     <string name="survey_input_activity">Select an activity</string>
 
     <string name="submit_button">Submit</string>
-    <string name="navigation_home">Home</string>
+    <string name="navigation_home">Progress</string>
     <string name="navigation_surveys">Surveys</string>
     <string name="navigation_pass_times">Activities</string>
 
-    <string name="get_wellbeing_support">Wellbeing Support</string>
+    <string name="get_wellbeing_support">Wellbeing support</string>
     <string name="settings">Settings</string>
 
     <string name="button_visit_site">Visit site</string>
+
+    <string name="today_title">Today</string>
+    <string name="today_description">Here is how your day is looking so far</string>
 
     <string name="settings_theme_title">Theme</string>
     <string name="settings_theme_description">Change the theme to dark, light or system default</string>

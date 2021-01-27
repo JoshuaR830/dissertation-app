@@ -56,6 +56,7 @@ import static org.mockito.Mockito.when;
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
 public class BasicSurveyInfoShouldBeSavedToTheDatabase {
+    private SurveyQuestionSetDao surveyQuestionsDao;
     SurveyResponseDao surveyDao;
 
     @Rule
@@ -66,7 +67,6 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
 
     @Rule
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
-    private SurveyQuestionSetDao surveyQuestionsDao;
 
     @Module
     @InstallIn(ApplicationComponent.class)
