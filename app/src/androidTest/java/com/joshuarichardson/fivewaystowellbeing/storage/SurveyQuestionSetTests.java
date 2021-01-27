@@ -55,7 +55,7 @@ public class SurveyQuestionSetTests {
         this.surveyQuestionSetDao.insert(set2);
         this.surveyQuestionSetDao.insert(set3);
 
-        List<SurveyQuestionSet> retrievedSurveyQuestionSets = LiveDataTestUtil.getOrAwaitValue(this.surveyQuestionSetDao.getUnansweredSurveyQuestionSets());
+        List<SurveyQuestionSet> retrievedSurveyQuestionSets = this.surveyQuestionSetDao.getUnansweredSurveyQuestionSets();
 
         // Check that only the 2 surveyId = 0 records are returned
         assertThat(retrievedSurveyQuestionSets.size()).isEqualTo(2);

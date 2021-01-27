@@ -16,7 +16,7 @@ public interface SurveyQuestionSetDao {
     long insert(SurveyQuestionSet surveyQuestionSet);
 
     @Query("SELECT * FROM survey_question_set WHERE survey_id = 0")
-    LiveData<List<SurveyQuestionSet>> getUnansweredSurveyQuestionSets();
+    List<SurveyQuestionSet> getUnansweredSurveyQuestionSets();
 
     @Query("SELECT * FROM survey_question_set WHERE set_id = :setId")
     LiveData<List<SurveyQuestionSet>> getSurveyQuestionSetById(long setId);

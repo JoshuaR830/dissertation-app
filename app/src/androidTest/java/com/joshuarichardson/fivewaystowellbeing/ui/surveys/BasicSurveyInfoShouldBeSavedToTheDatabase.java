@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.MutableLiveData;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.Module;
@@ -80,14 +79,14 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
 
             // Set the data for the questions to ask
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(new QuestionsToAsk("N/A", "N/A", 1, BASIC_SURVEY.name(), 0, null));
-            MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
-            when(questionsToAskDao.getQuestionsBySetId(anyLong())).thenReturn(liveQuestionsToAsk);
+//            MutableLiveData<List<QuestionsToAsk>> liveQuestionsToAsk = new MutableLiveData<>(questionsToAsk);
+            when(questionsToAskDao.getQuestionsBySetId(anyLong())).thenReturn(questionsToAsk);
 
             // Set the data to return for unanswered surveys
             SurveyQuestionSet[] surveyQuestionList = new SurveyQuestionSet[] {new SurveyQuestionSet(485798345, 0)};
             List<SurveyQuestionSet> surveyQuestionSets = Arrays.asList(surveyQuestionList);
-            MutableLiveData<List<SurveyQuestionSet>> liveSurveyQuestionSets = new MutableLiveData<>(surveyQuestionSets);
-            when(surveyQuestionsDao.getUnansweredSurveyQuestionSets()).thenReturn(liveSurveyQuestionSets);
+//            MutableLiveData<List<SurveyQuestionSet>> liveSurveyQuestionSets = new MutableLiveData<>(surveyQuestionSets);
+            when(surveyQuestionsDao.getUnansweredSurveyQuestionSets()).thenReturn(surveyQuestionSets);
 
             when(mockWellbeingDatabase.questionsToAskDao()).thenReturn(questionsToAskDao);
             when(mockWellbeingDatabase.surveyQuestionSetDao()).thenReturn(surveyQuestionsDao);

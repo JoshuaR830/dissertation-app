@@ -69,7 +69,7 @@ public class SurveyBuilder {
 
                     TextInputLayout container = cardView.findViewById(R.id.drop_down_container);
                     AutoCompleteTextView dropDownInput = container.findViewById(R.id.drop_down_input);
-                    
+
                     Gson gson = new Gson();
                     DropDownListOptionWrapper optionsList = gson.fromJson(question.extraData, DropDownListOptionWrapper.class);
                     List<String> myQuestions = optionsList.getOptionsList();

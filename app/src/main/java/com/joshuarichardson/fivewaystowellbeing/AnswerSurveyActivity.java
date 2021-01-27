@@ -1,6 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -28,7 +29,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
@@ -55,30 +55,38 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<ActivityRecord> activities = this.db.activityRecordDao().getAllActivitiesNotLive();
-            LiveData<List<SurveyQuestionSet>> questionSets = this.db.surveyQuestionSetDao().getUnansweredSurveyQuestionSets();
+            List<SurveyQuestionSet> questionSets = this.db.surveyQuestionSetDao().getUnansweredSurveyQuestionSets();
+            Log.d("Questions", String.valueOf(questionSets.size()));
+
+            // ToDo - when to use live data vs when to use normal data - the delay in live data will cause a problem
+            // ToDo - could use an observer instead - but is that too complicated
 
             // Cope with potentially null values
             List<SurveyQuestionSet> questionSetValues = new ArrayList<>();
-            if(questionSets != null && questionSets.getValue() != null) {
-                questionSetValues = questionSets.getValue();
+            if(questionSets != null && questionSets != null) {
+                questionSetValues = questionSets;
             }
 
             // Cope with null values
             long setId = 0;
-            if(questionSetValues != null) {
+            if(questionSetValues != null && questionSetValues.size() > 0) {
                 // This gets the id from the data
                 // ToDo - if there are multiple surveys - probably want to have a way to deal with that
                 setId = questionSetValues.get(0).getId();
             }
 
+            Log.d("Id", String.valueOf(setId));
+
             // This is a list of questions - should all be from unanswered surveys
-            LiveData<List<QuestionsToAsk>> questions = this.db.questionsToAskDao().getQuestionsBySetId(setId);
+            List<QuestionsToAsk> questions = this.db.questionsToAskDao().getQuestionsBySetId(setId);
+
+            Log.d("Question count", String.valueOf(questions.size()));
 
             List<QuestionsToAsk> questionList = new ArrayList<>();
 
             // Cope with null values
-            if(questions != null && questions.getValue() != null) {
-                questionList = questions.getValue();
+            if(questions != null && questions != null) {
+                questionList = questions;
             }
 
             // ToDo - might be better if this didn't have to be passed in separately

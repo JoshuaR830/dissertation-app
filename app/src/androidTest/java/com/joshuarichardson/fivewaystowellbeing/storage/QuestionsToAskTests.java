@@ -78,7 +78,7 @@ public class QuestionsToAskTests {
         this.questionsToAskDao.insert(question3);
         this.questionsToAskDao.insert(question4);
 
-        List<QuestionsToAsk> retrievedQuestion = LiveDataTestUtil.getOrAwaitValue(this.questionsToAskDao.getQuestionsBySetId(1));
+        List<QuestionsToAsk> retrievedQuestion = this.questionsToAskDao.getQuestionsBySetId(1);
 
         assertThat(retrievedQuestion.size()).isEqualTo(2);
         assertThat(retrievedQuestion.get(0).getSetId()).isEqualTo(1);
@@ -97,7 +97,7 @@ public class QuestionsToAskTests {
         this.questionsToAskDao.insert(question3);
         this.questionsToAskDao.insert(question4);
 
-        List<QuestionsToAsk> retrievedQuestion = LiveDataTestUtil.getOrAwaitValue(this.questionsToAskDao.getQuestionsBySetId(3));
+        List<QuestionsToAsk> retrievedQuestion = this.questionsToAskDao.getQuestionsBySetId(3);
 
         assertThat(retrievedQuestion).isNotNull();
         assertThat(retrievedQuestion).isEmpty();
