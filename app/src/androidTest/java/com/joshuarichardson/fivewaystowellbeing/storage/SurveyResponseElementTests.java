@@ -49,7 +49,7 @@ public class SurveyResponseElementTests {
     @Test
     public void insertingSurveyResponseElement_ThenGettingResponseElementById_ShouldReturnTheCorrectSurveyResponse() throws TimeoutException, InterruptedException {
 
-        int surveyId = 12345678;
+        long surveyId = 12345678;
         String question = "What is the question?";
         String answer = "I don't know";
 
@@ -58,7 +58,7 @@ public class SurveyResponseElementTests {
 
         // Inserting in this order means that the first element is not the one that the test is interested in
         surveyResponseElementDao.insert(surveyResponseElement2);
-        int surveyElementId = (int) surveyResponseElementDao.insert(surveyResponseElement1);
+        long surveyElementId = surveyResponseElementDao.insert(surveyResponseElement1);
 
         List<SurveyResponseElement> surveyResponseElements = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseElementDao.getSurveyResponseElementBySurveyResponseElementId(surveyElementId));
 
@@ -75,7 +75,7 @@ public class SurveyResponseElementTests {
     @Test
     public void insertingMultipleSurveyResponseElementsIndividually_ThenRetrievingBySurveyId_ShouldReturnTheCorrectNumberOfSurveys() {
         SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE, "title", "description");
-        int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
+        long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseElement surveyResponseElement1 = new SurveyResponseElement(surveyId, "", "");
         SurveyResponseElement surveyResponseElement2 = new SurveyResponseElement(surveyId, "", "");
@@ -100,7 +100,7 @@ public class SurveyResponseElementTests {
     @Test
     public void insertingMultipleSurveyResponseElementsFromAList_ThenRetrievingBySurveyId_ShouldReturnTheCorrectNumberOfSurveys() throws TimeoutException, InterruptedException {
         SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE, "title", "description");
-        int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
+        long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseElement[] surveyResponseElements = new SurveyResponseElement[] {
                 new SurveyResponseElement(surveyId, "", ""),

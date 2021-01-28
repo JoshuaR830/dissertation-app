@@ -38,6 +38,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.RecyclerViewTestUtil.atRecyclerPosition;
 import static org.hamcrest.Matchers.allOf;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -68,6 +69,7 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList(responses));
 
             when(mockSurveyDao.getAllSurveyResponses()).thenReturn(data);
+            when(mockSurveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong())).thenReturn(data);
 
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(mockSurveyDao);
 
@@ -81,7 +83,9 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
         onView(withId(R.id.surveyRecyclerView))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_title), withText("A survey title"))))))
-            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_description), withText("A survey description"))))))
-            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.expand_button), withText("Expand"))))));
+            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_description), withText("A survey description"))))));
+
+        //ToDo add this back in in future when expand button added again
+//            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.expand_button), withText("Expand"))))));
     }
 }

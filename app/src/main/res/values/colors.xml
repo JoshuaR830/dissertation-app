@@ -6,6 +6,14 @@
     <color name="colorAccentDark">#65F7B1</color>
     <color name="listItemColour">#FFFFFF</color>
     <color name="colorSilver">#BEC2CB</color>
+    <color name="colorGold">#D7BE69</color>
     <color name="black12Percent">#1F000000</color>
+    <color name="white12Percent">#1FFFFFFF</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="way_to_wellbeing_be_active">#FD7698</color>
+    <color name="way_to_wellbeing_connect">#FFD176</color>
+    <color name="way_to_wellbeing_give">#52D396</color>
+    <color name="way_to_wellbeing_keep_learning">#71C4F7</color>
+    <color name="way_to_wellbeing_take_notice">#EA8AF6</color>
 </resources>

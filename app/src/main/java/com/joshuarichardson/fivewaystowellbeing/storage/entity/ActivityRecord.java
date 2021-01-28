@@ -19,7 +19,7 @@ public class ActivityRecord {
     @NonNull
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ACTIVITY_RECORD_ID)
-    private Integer activityRecordId;
+    private long activityRecordId;
 
     @NonNull
     @ColumnInfo(name = ACTIVITY_RECORD_NAME)
@@ -34,23 +34,23 @@ public class ActivityRecord {
 
     @NonNull
     @ColumnInfo(name = ACTIVITY_RECORD_DURATION)
-    private int activityDuration;
+    private long activityDuration;
 
-    public ActivityRecord(String activityName, int activityDuration, long activityTimestamp, String activityType) {
+    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, String activityType) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
         this.setActivityType(activityType);
     }
 
-    public ActivityRecord(String activityName, int activityDuration, long activityTimestamp, ActivityType activityType) {
+    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, ActivityType activityType) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
         this.setActivityType(activityType.name());
     }
 
-    public void setActivityRecordId(@NonNull Integer recordId) {
+    public void setActivityRecordId(@NonNull long recordId) {
         this.activityRecordId = recordId;
     }
 
@@ -62,7 +62,7 @@ public class ActivityRecord {
         this.activityType = type;
     }
 
-    public void setActivityDuration(int duration) {
+    public void setActivityDuration(long duration) {
         this.activityDuration = duration;
     }
 
@@ -71,7 +71,7 @@ public class ActivityRecord {
     }
 
     @NonNull
-    public Integer getActivityRecordId() {
+    public long getActivityRecordId() {
         return activityRecordId;
     }
 
@@ -83,7 +83,7 @@ public class ActivityRecord {
         return activityType;
     }
 
-    public int getActivityDuration() {
+    public long getActivityDuration() {
         return this.activityDuration;
     }
 

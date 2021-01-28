@@ -48,7 +48,7 @@ public class SurveyResponseTests {
 
         SurveyResponse surveyResponse = new SurveyResponse(1607960240, WaysToWellbeing.BE_ACTIVE, "title", "description");
 
-        int surveyId = (int) this.surveyResponseDao.insert(surveyResponse);
+        long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
         List<SurveyResponse> surveyResponses = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseDao.getSurveyResponseById(surveyId));
 

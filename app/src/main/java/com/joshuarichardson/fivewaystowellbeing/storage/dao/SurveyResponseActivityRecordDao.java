@@ -21,12 +21,12 @@ public interface SurveyResponseActivityRecordDao {
     @Query("SELECT * FROM activity_records " +
             "INNER JOIN survey_activity ON activity_records.id=survey_activity.activity_record_id " +
             "WHERE survey_activity.survey_response_id = :surveyId")
-    LiveData<List<ActivityRecord>> getActivitiesBySurveyId(int surveyId);
+    LiveData<List<ActivityRecord>> getActivitiesBySurveyId(long surveyId);
 
     @Query("SELECT * FROM survey_response " +
             "INNER JOIN survey_activity ON survey_response.id = survey_activity.survey_response_id " +
             "WHERE survey_activity.activity_record_id = :activityId")
-    LiveData<List<SurveyResponse>> getSurveyByActivityId(int activityId);
+    LiveData<List<SurveyResponse>> getSurveyByActivityId(long activityId);
 
     // ToDo Need a delete method
 }

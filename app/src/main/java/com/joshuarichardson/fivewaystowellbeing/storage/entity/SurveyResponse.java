@@ -19,11 +19,11 @@ public class SurveyResponse {
     @NonNull
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = SURVEY_RESPONSE_ID)
-    private int surveyResponseId;
+    private long surveyResponseId;
 
     @NonNull
     @ColumnInfo(name = SURVEY_RESPONSE_TIMESTAMP)
-    private int surveyResponseTimestamp;
+    private long surveyResponseTimestamp;
 
     @ColumnInfo(name = SURVEY_RESPONSE_WAY_TO_WELLBEING)
     private String surveyResponseWayToWellbeing;
@@ -34,14 +34,14 @@ public class SurveyResponse {
     @ColumnInfo(name = SURVEY_RESPONSE_DESCRIPTION)
     private String description;
 
-    public SurveyResponse(int surveyResponseTimestamp, String surveyResponseWayToWellbeing, String title, String description) {
+    public SurveyResponse(long surveyResponseTimestamp, String surveyResponseWayToWellbeing, String title, String description) {
         this.setSurveyResponseTimestamp(surveyResponseTimestamp);
         this.setSurveyResponseWayToWellbeing(surveyResponseWayToWellbeing);
         this.setTitle(title);
         this.setDescription(description);
     }
 
-    public SurveyResponse(int surveyResponseTimestamp, WaysToWellbeing surveyResponseWayToWellbeing, String title, String description) {
+    public SurveyResponse(long surveyResponseTimestamp, WaysToWellbeing surveyResponseWayToWellbeing, String title, String description) {
         this.setSurveyResponseTimestamp(surveyResponseTimestamp);
         this.setSurveyResponseWayToWellbeing(surveyResponseWayToWellbeing.name());
         this.setTitle(title);
@@ -57,11 +57,11 @@ public class SurveyResponse {
     }
 
 
-    public void setSurveyResponseId(int surveyResponseId) {
+    public void setSurveyResponseId(long surveyResponseId) {
         this.surveyResponseId = surveyResponseId;
     }
 
-    public void setSurveyResponseTimestamp(int surveyResponseTimestamp) {
+    public void setSurveyResponseTimestamp(long surveyResponseTimestamp) {
         this.surveyResponseTimestamp = surveyResponseTimestamp;
     }
 
@@ -69,11 +69,11 @@ public class SurveyResponse {
         this.surveyResponseWayToWellbeing = surveyResponseWayToWellbeing;
     }
 
-    public int getSurveyResponseId() {
+    public long getSurveyResponseId() {
         return this.surveyResponseId;
     }
 
-    public int getSurveyResponseTimestamp() {
+    public long getSurveyResponseTimestamp() {
         return this.surveyResponseTimestamp;
     }
 

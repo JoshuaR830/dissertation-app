@@ -1,7 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -112,7 +111,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
     Date now = new Date();
 
     // ToDo - what to do about this if there is no basic survey?
-    SurveyResponse surveyResponse = new SurveyResponse((int)now.getTime(), WaysToWellbeing.CONNECT, "", "");
+    SurveyResponse surveyResponse = new SurveyResponse(now.getTime(), WaysToWellbeing.CONNECT, "", "");
 
     public void onSubmit(View v) {
         // Log the survey completion
@@ -176,7 +175,9 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, questionTitles.get(i), questionAnswers.get(i));
                 long elementId = this.surveyResponseElementDao.insert(surveyResponseElement);
             }
-            this.db.surveyQuestionSetDao().updateSetWithCompletedSurveyId(this.setId, surveyId);
+
+            // ToDo - this is right - but not yet - because I can't auto generate questions
+//            this.db.surveyQuestionSetDao().updateSetWithCompletedSurveyId(this.setId, surveyId);
             finish();
         });
     }
