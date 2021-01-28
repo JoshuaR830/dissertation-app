@@ -51,7 +51,7 @@ public class ActivityRecordTests {
     @Test
     public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() throws TimeoutException, InterruptedException {
         ActivityRecord insertedActivity = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT);
-        int activityRecordId = (int) this.activityDao.insert(insertedActivity);
+        long activityRecordId = this.activityDao.insert(insertedActivity);
         insertedActivity.setActivityRecordId(activityRecordId);
 
         List<ActivityRecord> retrievedActivities = LiveDataTestUtil.getOrAwaitValue(this.activityDao.getActivityRecordById(activityRecordId));
@@ -71,7 +71,7 @@ public class ActivityRecordTests {
     public void insertMultiple_ThenGetActivities_ShouldReturnAllActivities() throws TimeoutException, InterruptedException {
 
         // Test inserting multiple activity records
-        ArrayList<Integer> insertedIds = DatabaseInsertionHelper.insert(new ActivityRecord[]{
+        ArrayList<Long> insertedIds = DatabaseInsertionHelper.insert(new ActivityRecord[]{
             new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT),
             new ActivityRecord("Swimming", 1202, 1607960242, ActivityType.SPORT),
             new ActivityRecord("Throwing", 1203, 1607960243, ActivityType.SPORT)

@@ -23,30 +23,30 @@ public class SurveyResponseActivityRecord {
 
     @NonNull
     @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID,  index = true)
-    private int activityRecordId;
+    private long activityRecordId;
 
     @NonNull
     @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID,  index = true)
-    private int surveyResponseId;
+    private long surveyResponseId;
 
-    public SurveyResponseActivityRecord(int surveyResponseId, int activityRecordId) {
+    public SurveyResponseActivityRecord(long surveyResponseId, long activityRecordId) {
         this.setSurveyResponseId(surveyResponseId);
         this.setActivityRecordId(activityRecordId);
     }
 
-    public void setActivityRecordId(int activityRecordId) {
+    public void setActivityRecordId(long activityRecordId) {
         this.activityRecordId = activityRecordId;
     }
 
-    public void setSurveyResponseId(int surveyResponseId) {
+    public void setSurveyResponseId(long surveyResponseId) {
         this.surveyResponseId = surveyResponseId;
     }
 
-    public int getActivityRecordId() {
+    public long getActivityRecordId() {
         return this.activityRecordId;
     }
 
-    public int getSurveyResponseId() {
+    public long getSurveyResponseId() {
         return this.surveyResponseId;
     }
 }

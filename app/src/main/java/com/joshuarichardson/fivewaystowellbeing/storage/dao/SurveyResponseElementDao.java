@@ -17,8 +17,8 @@ public interface SurveyResponseElementDao {
     long insert(SurveyResponseElement surveyResponseElements);
 
     @Query("SELECT * FROM survey_response_element WHERE id = :surveyElementId")
-    LiveData<List<SurveyResponseElement>> getSurveyResponseElementBySurveyResponseElementId(int surveyElementId);
+    LiveData<List<SurveyResponseElement>> getSurveyResponseElementBySurveyResponseElementId(long surveyElementId);
 
     @Query("SELECT * FROM survey_response_element WHERE survey_id = :surveyId")
-    LiveData<List<SurveyResponseElement>> getSurveyResponseElementBySurveyResponseId(int surveyId);
+    LiveData<List<SurveyResponseElement>> getSurveyResponseElementBySurveyResponseId(long surveyId);
 }

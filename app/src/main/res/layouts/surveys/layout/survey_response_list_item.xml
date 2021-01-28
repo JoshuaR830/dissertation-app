@@ -39,10 +39,9 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:id="@+id/surveys_completed_today_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/frame_circle" />
+                            android:id="@+id/surveys_completed_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
                     </FrameLayout>
 
                     <LinearLayout

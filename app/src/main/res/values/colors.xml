@@ -10,4 +10,10 @@
     <color name="black12Percent">#1F000000</color>
     <color name="white12Percent">#1FFFFFFF</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="way_to_wellbeing_be_active">#FD7698</color>
+    <color name="way_to_wellbeing_connect">#FFD176</color>
+    <color name="way_to_wellbeing_give">#52D396</color>
+    <color name="way_to_wellbeing_keep_learning">#71C4F7</color>
+    <color name="way_to_wellbeing_take_notice">#EA8AF6</color>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
@@ -46,16 +47,19 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
 
         private TextView surveyTitle;
         private TextView surveyDescription;
+        private ImageView surveyImage;
 
         public SurveyResponseViewHolder(@NonNull View itemView) {
             super(itemView);
             this.surveyTitle =  itemView.findViewById(R.id.survey_list_title);
             this.surveyDescription = itemView.findViewById(R.id.survey_list_description);
+            this.surveyImage = itemView.findViewById(R.id.surveys_completed_image);
         }
 
         public void onBind(SurveyResponse response) {
             this.surveyTitle.setText(response.getTitle());
             this.surveyDescription.setText(response.getDescription());
+            this.surveyImage.setImageResource(WellbeingHelper.getImage(WaysToWellbeing.valueOf(response.getSurveyResponseWayToWellbeing())));
         }
     }
 }

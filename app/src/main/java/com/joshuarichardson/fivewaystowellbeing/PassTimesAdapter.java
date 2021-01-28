@@ -62,7 +62,7 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             this.image = itemView.findViewById(R.id.list_item_image);
         }
 
-        public void onBind(String name, int duration, long timestamp, String type) {
+        public void onBind(String name, long duration, long timestamp, String type) {
             nameTextView.setText(name);
             durationTextView.setText(String.format(Locale.getDefault(), "%d", duration));
             timestampTextView.setText(String.format(Locale.getDefault(), "%d", timestamp));

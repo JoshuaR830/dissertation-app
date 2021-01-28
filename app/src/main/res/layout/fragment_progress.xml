@@ -57,11 +57,11 @@
                                 app:layout_constraintTop_toTopOf="parent">
 
                                 <ImageView
-                                    android:id="@+id/surveys_completed_today_image"
+                                    android:id="@+id/surveys_completed_image"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    app:srcCompat="@drawable/icon_navigation_progress"
-                                    app:tint="@color/colorGold" />
+                                    app:srcCompat="@drawable/progress_survey_today"
+                                    app:tint="@color/colorSilver" />
                             </FrameLayout>
 
                             <LinearLayout
@@ -130,22 +130,6 @@
                                     android:layout_marginTop="16dp"
                                     android:onClick="onAnswerSurveysButtonClicked"
                                     android:text="@string/launch_answer_survey" />
-
-                                <include
-                                    layout="@layout/surveys_completed_today_item"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
-
-                                <include
-                                    layout="@layout/surveys_completed_today_item"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
-
-                                <include
-                                    layout="@layout/surveys_completed_today_item"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
-
                             </LinearLayout>
 
                             <View

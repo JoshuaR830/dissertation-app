@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -34,20 +34,21 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
 public class NoSurveysCompletedTodayTests {
-    private SurveyResponseDao surveyDao;
 
     @Rule(order = 0)
-    public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
+    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
     @Rule(order = 1)
-    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
+    public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
 
     @Rule(order = 2)
     public ActivityScenarioRule<MainActivity> mainActivity = new ActivityScenarioRule<>(MainActivity.class);
@@ -65,14 +66,13 @@ public class NoSurveysCompletedTodayTests {
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
 
-            LiveData<List<SurveyResponse>> data = new MutableLiveData<>(new ArrayList<>());
+            SurveyResponseDao surveyDao = mock(SurveyResponseDao.class);
 
-            NoSurveysCompletedTodayTests.this.surveyDao = mock(SurveyResponseDao.class);
-            when(NoSurveysCompletedTodayTests.this.surveyDao.getSurveyResponsesByTimestampRange(anyInt(), anyInt()))
+            LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList());
+            when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                 .thenReturn(data);
-            NoSurveysCompletedTodayTests.this.surveyDao = mock(SurveyResponseDao.class);
-            when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(NoSurveysCompletedTodayTests.this.surveyDao);
 
+            when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
             return mockWellbeingDatabase;
         }
     }
@@ -96,8 +96,8 @@ public class NoSurveysCompletedTodayTests {
 
     @Test
     public void WhenNoSurveysCompletedToday_ThenTheCardShouldDisplayNoSurveysYet() {
-        onView(withId(R.id.no_surveys_title)).check(matches(isDisplayed()));
-        onView(withId(R.id.no_surveys_description)).check(matches(isDisplayed()));
-        onView(withId(R.id.no_surveys_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.no_surveys_title)).check(matches(allOf(isDisplayed(), withText("No surveys yet"))));
+        onView(withId(R.id.no_surveys_description)).check(matches(allOf(isDisplayed(), withText("Do you want to complete one?"))));
+        onView(withId(R.id.no_surveys_button)).check(matches(allOf(isDisplayed(), withText("Complete survey"))));
     }
 }
