@@ -36,7 +36,8 @@ public class InsightsFragment extends Fragment {
 
         String prefix = getString(R.string.wellbeing_insight_prefix) + " ";
 
-        MaterialButton activityButton = new MaterialButton(getActivity(), null, R.attr.materialButtonOutlinedStyle);
+        MaterialButton activityButton = new MaterialButton(getActivity(), null, R.attr.materialTextButton);
+        activityButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         activityButton.setText(R.string.launch_view_pass_time);
         activityButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ViewPassTimesActivity.class);
@@ -45,7 +46,7 @@ public class InsightsFragment extends Fragment {
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<InsightsItem> insights = Arrays.asList(
-                new InsightsItem(getString(R.string.wellbeing_insight_activities), "", 2, activityButton),
+                new InsightsItem(getString(R.string.wellbeing_insight_activities), getString(R.string.wellbeing_insight_activities_description), 2, activityButton),
                 new InsightsItem(prefix + getString(R.string.wellbeing_connect), String.format(Locale.getDefault(), "%d", db.surveyResponseDao().getInsights(WaysToWellbeing.CONNECT.toString()))),
                 new InsightsItem(prefix + getString(R.string.wellbeing_be_active), String.format(Locale.getDefault(), "%d", db.surveyResponseDao().getInsights(WaysToWellbeing.BE_ACTIVE.toString()))),
                 new InsightsItem(prefix + getString(R.string.wellbeing_keep_learning), String.format(Locale.getDefault(), "%d", db.surveyResponseDao().getInsights(WaysToWellbeing.KEEP_LEARNING.toString()))),

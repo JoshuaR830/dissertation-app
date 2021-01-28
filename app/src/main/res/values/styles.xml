@@ -20,6 +20,8 @@
 
         <item name="floatingActionButtonStyle">@style/Widget.App.FloatingActionButton</item>
 
+        <item name="materialTextButton">@style/Widget.MaterialComponents.Button.TextButton</item>
+
 
     </style>
 

@@ -29,7 +29,7 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
     @NonNull
     @Override
     public InsightsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.insight_item, parent, false);
+        View view = inflater.inflate(R.layout.insight_container, parent, false);
         return new InsightsViewHolder(view);
     }
 
@@ -48,25 +48,49 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
 
     public class InsightsViewHolder extends RecyclerView.ViewHolder {
 
-        private final LinearLayout layout;
+        private LinearLayout layout;
+
+        View small_card;
+        View large_card;
+
         TextView title;
         TextView info;
 
         public InsightsViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.layout = itemView.findViewById(R.id.insight_card_layout);
-            this.title = itemView.findViewById(R.id.insight_title);
-            this.info = itemView.findViewById(R.id.insight_description);
+            this.small_card = itemView.findViewById(R.id.small_insight);
+            this.large_card = itemView.findViewById(R.id.large_insight);
+
         }
 
         public void onBind(InsightsItem insightsItem) {
-            Log.d("Hello", "Hi");
+            if(insightsItem.getColumnWidth() == 2) {
+                this.title = this.large_card.findViewById(R.id.insight_title);
+                this.info = this.large_card.findViewById(R.id.insight_description);
+                this.layout = this.large_card.findViewById(R.id.insight_card_layout);
+                this.large_card.setVisibility(View.VISIBLE);
+                this.small_card.setVisibility(View.GONE);
+            } else {
+                this.title = this.small_card.findViewById(R.id.insight_title);
+                this.info = this.small_card.findViewById(R.id.insight_description);
+                this.layout = this.small_card.findViewById(R.id.insight_card_layout);
+                this.small_card.setVisibility(View.VISIBLE);
+                this.large_card.setVisibility(View.GONE);
+            }
+
+
+            View divider = this.layout.findViewById(R.id.insight_divider);
+
+            if(insightsItem.getSpecialView() != null) {
+                divider.setVisibility(View.VISIBLE);
+                this.layout.addView(insightsItem.getSpecialView());
+            } else {
+                divider.setVisibility(View.GONE);
+            }
+
             this.title.setText(insightsItem.getTitle());
             this.info.setText(insightsItem.getInfo());
 
-            if(insightsItem.getSpecialView() != null) {
-                this.layout.addView(insightsItem.getSpecialView());
-            }
         }
     }
 }

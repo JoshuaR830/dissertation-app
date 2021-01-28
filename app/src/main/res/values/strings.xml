@@ -32,6 +32,7 @@
 
     <string name="wellbeing_insight_prefix">Times achieved:</string>
     <string name="wellbeing_insight_activities">View your activities</string>
+    <string name="wellbeing_insight_activities_description">Find a list of all the activities you have completed</string>
 
     <string name="wellbeing_connect">Connect</string>
     <string name="wellbeing_be_active">Be active</string>

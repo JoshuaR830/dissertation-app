@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Reference https://stackoverflow.com/a/60592731/13496270 -->
+    <attr name="materialTextButton" format="reference"/>
+</resources>
