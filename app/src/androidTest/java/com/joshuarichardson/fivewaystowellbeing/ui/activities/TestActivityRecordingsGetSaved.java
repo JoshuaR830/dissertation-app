@@ -71,7 +71,6 @@ public class TestActivityRecordingsGetSaved {
     @Test
     public void passTimeSubmission_ShouldCallTheDatabase() {
         onView(withId(R.id.pass_time_name_input)).perform(typeText("Activity Name"), closeSoftKeyboard());
-        onView(withId(R.id.pass_time_duration_input)).perform(typeText("3000"), closeSoftKeyboard());
 
         // Select the first option from the drop down menu
         onView(withId(R.id.pass_time_type_input)).perform(click());

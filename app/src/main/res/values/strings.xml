@@ -44,6 +44,10 @@
     <string name="settings">Settings</string>
 
     <string name="button_visit_site">Visit site</string>
+    <string name="button_timer">Set duration</string>
+
+    <string name="minutes">m</string>
+    <string name="hours">h</string>
 
     <string name="today_title">Today</string>
     <string name="today_description">Here is how your day is looking so far</string>
