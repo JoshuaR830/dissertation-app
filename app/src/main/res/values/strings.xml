@@ -28,6 +28,16 @@
     <string name="navigation_home">Progress</string>
     <string name="navigation_surveys">Surveys</string>
     <string name="navigation_pass_times">Activities</string>
+    <string name="navigation_insights">Insights</string>
+
+    <string name="wellbeing_insight_prefix">Times achieved:</string>
+    <string name="wellbeing_insight_activities">View your activities</string>
+
+    <string name="wellbeing_connect">Connect</string>
+    <string name="wellbeing_be_active">Be active</string>
+    <string name="wellbeing_take_notice">Take notice</string>
+    <string name="wellbeing_keep_learning">Keep learning</string>
+    <string name="wellbeing_give">Give</string>
 
     <string name="get_wellbeing_support">Wellbeing support</string>
     <string name="settings">Settings</string>

@@ -57,11 +57,6 @@ public class NoSurveysCompletedTodayTests {
     @Module
     @InstallIn(ApplicationComponent.class)
     public class TestWellbeingDatabaseModule {
-
-        // ToDo - make it so that surveys by time returns only things from today
-        // ToDo - how can I check that only items from correct time range are done
-        // ToDo - create a function that checks that the time returned is
-
         @Provides
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);

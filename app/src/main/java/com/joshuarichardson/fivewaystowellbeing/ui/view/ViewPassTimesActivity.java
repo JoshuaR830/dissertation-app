@@ -1,12 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.PassTimesAdapter;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
@@ -17,8 +12,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,34 +20,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ViewPassTimesFragment extends Fragment {
+public class ViewPassTimesActivity extends AppCompatActivity {
+
     private RecyclerView passTimeRecycler;
 
     @Inject
     WellbeingDatabase db;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_view_pass_times);
         ActivityRecordDao passTimeDao = this.db.activityRecordDao();
 
         LiveData<List<ActivityRecord>> passTimes = passTimeDao.getAllActivities();
 
-        View root = inflater.inflate(R.layout.fragment_view_pass_times, parentView, false);
-
-        this.passTimeRecycler = root.findViewById(R.id.passTimeRecyclerView);
-        this.passTimeRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        this.passTimeRecycler = findViewById(R.id.passTimeRecyclerView);
+        this.passTimeRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         Observer<List<ActivityRecord>> passTimeObserver = passTimeData -> {
-            PassTimesAdapter passTimeAdapter = new PassTimesAdapter(getActivity(), passTimeData);
+            PassTimesAdapter passTimeAdapter = new PassTimesAdapter(this, passTimeData);
             this.passTimeRecycler.setAdapter(passTimeAdapter);
         };
 
-        passTimes.observe(getViewLifecycleOwner(), passTimeObserver);
-
-        return root;
-    }
-
-    public void onCreatePassTimeButtonClicked(View v) {
-        Intent answerSurveyIntent = new Intent(getActivity(), CreatePassTimeActivity.class);
-        startActivity(answerSurveyIntent);
+        passTimes.observe(this, passTimeObserver);
     }
 }

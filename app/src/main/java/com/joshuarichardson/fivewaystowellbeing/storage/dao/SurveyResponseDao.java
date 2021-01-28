@@ -25,5 +25,8 @@ public interface SurveyResponseDao {
     @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp")
     LiveData<List<SurveyResponse>> getSurveyResponsesByTimestampRange(long startTimestamp, long endTimestamp);
 
+    @Query("SELECT COUNT(way_to_wellbeing) FROM survey_response WHERE way_to_wellbeing = :wayToWellbeing")
+    int getInsights(String wayToWellbeing);
+
     // ToDo Will need to add a delete
 }

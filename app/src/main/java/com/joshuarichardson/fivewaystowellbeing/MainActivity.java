@@ -12,6 +12,7 @@ import android.view.View;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.ui.settings.SettingsActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewPassTimesActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportActivity;
 
 import javax.inject.Inject;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
 
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_home, R.id.navigation_view_survey_responses, R.id.navigation_view_pass_times)
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.navigation_progress, R.id.navigation_view_survey_responses, R.id.navigation_insights)
                 .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -87,5 +88,10 @@ public class MainActivity extends AppCompatActivity {
     public void onCreatePassTimeButtonClicked(View v) {
         Intent answerSurveyIntent = new Intent(MainActivity.this, CreatePassTimeActivity.class);
         startActivity(answerSurveyIntent);
+    }
+
+    public void onLaunchActivitiesActivity(View v) {
+        Intent activityViewIntent = new Intent(this, ViewPassTimesActivity.class);
+        startActivity(activityViewIntent);
     }
 }
