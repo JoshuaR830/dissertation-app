@@ -103,15 +103,14 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/surveys_completed_today_divider">
 
-                                <Button
-                                    android:id="@+id/no_surveys_button"
-                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                    android:layout_width="wrap_content"
+                                <TextView
+                                    android:id="@+id/no_surveys_title"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginTop="16dp"
-                                    android:onClick="onAnswerSurveysButtonClicked"
-                                    android:text="@string/launch_answer_survey" />
+                                    android:text="@string/no_surveys_title"
+                                    android:textAlignment="center"
+                                    android:textAppearance="?attr/textAppearanceHeadline6"
+                                    android:textColor="?android:attr/textColorPrimary" />
 
                                 <TextView
                                     android:id="@+id/no_surveys_description"
@@ -122,14 +121,16 @@
                                     android:textAppearance="?attr/textAppearanceBody2"
                                     android:textColor="?android:attr/textColorSecondary" />
 
-                                <TextView
-                                    android:id="@+id/no_surveys_title"
-                                    android:layout_width="match_parent"
+                                <Button
+                                    android:id="@+id/no_surveys_button"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/no_surveys_title"
-                                    android:textAlignment="center"
-                                    android:textAppearance="?attr/textAppearanceHeadline6"
-                                    android:textColor="?android:attr/textColorPrimary" />
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="16dp"
+                                    android:onClick="onAnswerSurveysButtonClicked"
+                                    android:text="@string/launch_answer_survey" />
+
                             </LinearLayout>
 
                             <View
