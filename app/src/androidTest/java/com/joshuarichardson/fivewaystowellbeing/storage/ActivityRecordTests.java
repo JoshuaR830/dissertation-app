@@ -55,17 +55,15 @@ public class ActivityRecordTests {
         long activityRecordId = this.activityDao.insert(insertedActivity);
         insertedActivity.setActivityRecordId(activityRecordId);
 
-        List<ActivityRecord> retrievedActivities = LiveDataTestUtil.getOrAwaitValue(this.activityDao.getActivityRecordById(activityRecordId));
+        ActivityRecord selectedActivity = this.activityDao.getActivityRecordById(activityRecordId);
 
-        assertThat(retrievedActivities.size()).isGreaterThan(0);
+        assertThat(selectedActivity).isNotNull();
 
-        ActivityRecord actualActivity = retrievedActivities.get(0);
-
-        assertThat(actualActivity.getActivityType()).isEqualTo(ActivityType.SPORT.name());
-        assertThat(actualActivity.getActivityName()).isEqualTo("Running");
-        assertThat(actualActivity.getActivityRecordId()).isEqualTo(activityRecordId);
-        assertThat(actualActivity.getActivityDuration()).isEqualTo(1200);
-        assertThat(actualActivity.getActivityTimestamp()).isEqualTo(1607960240);
+        assertThat(selectedActivity.getActivityType()).isEqualTo(ActivityType.SPORT.name());
+        assertThat(selectedActivity.getActivityName()).isEqualTo("Running");
+        assertThat(selectedActivity.getActivityRecordId()).isEqualTo(activityRecordId);
+        assertThat(selectedActivity.getActivityDuration()).isEqualTo(1200);
+        assertThat(selectedActivity.getActivityTimestamp()).isEqualTo(1607960240);
     }
 
     @Test

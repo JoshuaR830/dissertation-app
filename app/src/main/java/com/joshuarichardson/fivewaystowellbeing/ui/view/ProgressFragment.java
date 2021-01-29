@@ -1,9 +1,11 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.IndividualSurveyActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,7 +33,7 @@ import androidx.lifecycle.Observer;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class CreateSelectionFragment extends Fragment {
+public class ProgressFragment extends Fragment {
 
     @Inject
     WellbeingDatabase db;
@@ -88,11 +91,25 @@ public class CreateSelectionFragment extends Fragment {
                 TextView title = surveyItemToDisplay.findViewById(R.id.today_survey_item_title);
                 TextView description = surveyItemToDisplay.findViewById(R.id.today_survey_item_description);
                 ImageView surveyImage = surveyItemToDisplay.findViewById(R.id.today_survey_item_image);
+                ImageButton button = surveyItemToDisplay.findViewById(R.id.today_survey_item_image_button);
 
                 // Set values
                 title.setText(survey.getTitle());
                 description.setText(survey.getDescription());
                 surveyImage.setImageResource(WellbeingHelper.getImage(WaysToWellbeing.valueOf(survey.getSurveyResponseWayToWellbeing())));
+
+                // Launch an activity to view a survey
+                View.OnClickListener listener = v -> {
+                    Intent surveyIntent = new Intent(getActivity(), IndividualSurveyActivity.class);
+
+                    Bundle surveyBundle = new Bundle();
+                    surveyBundle.putLong("survey_id", survey.getSurveyResponseId());
+                    surveyIntent.putExtras(surveyBundle);
+                    startActivity(surveyIntent);
+                };
+
+                surveyItemToDisplay.setOnClickListener(listener);
+                button.setOnClickListener(listener);
 
                 newView.addView(surveyItemToDisplay);
 

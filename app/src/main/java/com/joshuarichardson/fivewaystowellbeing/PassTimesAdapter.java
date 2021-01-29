@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,12 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.PassTimeViewHolder> {
 
+    private final Context context;
     List<ActivityRecord> passTimeItems;
     LayoutInflater inflater;
 
     public PassTimesAdapter (Context context, List<ActivityRecord> passTimeItems) {
         this.inflater = LayoutInflater.from(context);
         this.passTimeItems = passTimeItems;
+        this.context = context;
     }
 
     @NonNull
@@ -65,10 +68,17 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
 
         public void onBind(ActivityRecord passTime) {
             this.nameTextView.setText(passTime.getActivityName());
-            this.durationTextView.setText(String.format(Locale.getDefault(), "%d", passTime.getActivityDuration()));
-            this.timestampTextView.setText(String.format(Locale.getDefault(), "%d", passTime.getActivityTimestamp()));
+            this.durationTextView.setText(String.format(Locale.getDefault(),"%d %s", passTime.getActivityDuration() / (1000 * 60), PassTimesAdapter.this.context.getString(R.string.minutes)));
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
+            this.timestampTextView.setText(dateFormatter.format(passTime.getActivityTimestamp()));
             this.typeTextView.setText(passTime.getActivityType());
-            this.wayToWellbeingTextView.setText(passTime.getActivityWayToWellbeing());
+
+            if(passTime.getActivityWayToWellbeing().equals("UNASSIGNED")) {
+                this.wayToWellbeingTextView.setVisibility(View.GONE);
+            } else {
+                this.wayToWellbeingTextView.setText(passTime.getActivityWayToWellbeing());
+                this.wayToWellbeingTextView.setVisibility(View.VISIBLE);
+            }
 
             this.image.setImageResource(ActivityTypeImageHelper.getActivityImage(passTime.getActivityType()));
         }

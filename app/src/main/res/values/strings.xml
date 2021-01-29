@@ -47,8 +47,10 @@
     <string name="button_visit_site">Visit site</string>
     <string name="button_timer">Set duration</string>
 
-    <string name="minutes">m</string>
-    <string name="hours">h</string>
+    <string name="minutes">mins</string>
+    <string name="hours">hrs</string>
+
+    <string name="survey_summary_title">Summary</string>
 
     <string name="today_title">Today</string>
     <string name="today_description">Here is how your day is looking so far</string>

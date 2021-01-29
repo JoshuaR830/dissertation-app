@@ -79,7 +79,7 @@ public class SurveyResponseActivityRecordTests {
         this.surveyActivityDao.insert(record2);
         this.surveyActivityDao.insert(record3);
 
-        List<ActivityRecord> actualRecords = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getActivitiesBySurveyId(surveyId2));
+        List<ActivityRecord> actualRecords = this.surveyActivityDao.getActivitiesBySurveyId(surveyId2);
 
         assertThat(actualRecords.size()).isEqualTo(2);
 

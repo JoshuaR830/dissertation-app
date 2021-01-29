@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".ui.individual_surveys.IndividualSurveyActivity"></activity>
         <!-- Disable analytics while debugging https://stackoverflow.com/a/40961374/13496270 -->
         <meta-data
             android:name="firebase_analytics_collection_deactivated"
