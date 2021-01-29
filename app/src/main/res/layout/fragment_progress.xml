@@ -295,27 +295,7 @@
                             app:layout_constraintEnd_toStartOf="@+id/wellbeing_education_button"
                             app:layout_constraintStart_toEndOf="@+id/info_frame"
                             app:layout_constraintTop_toTopOf="parent" />
-
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-<!--                        <View-->
-<!--                            android:id="@+id/wellbeing_education_divider"-->
-<!--                            style="@style/Divider"-->
-<!--                            android:layout_height="1dp"-->
-<!--                            android:layout_marginEnd="16dp"-->
-<!--                            android:layout_marginStart="16dp"-->
-<!--                            android:layout_marginTop="16dp"-->
-<!--                            app:layout_constraintEnd_toEndOf="parent"-->
-<!--                            app:layout_constraintStart_toStartOf="parent"-->
-<!--                            app:layout_constraintTop_toBottomOf="@+id/wellbeing_education_description" />-->
-
-<!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

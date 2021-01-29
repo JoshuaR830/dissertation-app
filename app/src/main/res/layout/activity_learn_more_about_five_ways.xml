@@ -127,9 +127,9 @@
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary"/>
 
-        </LinearLayout>
+                </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -164,9 +164,9 @@
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary"/>
 
-            </LinearLayout>
+                </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -200,10 +200,8 @@
                         android:text="@string/wellbeing_give_description"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary"/>
-
-            </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

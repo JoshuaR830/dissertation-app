@@ -48,11 +48,11 @@ public class CreatePassTimeActivity extends AppCompatActivity {
 
     public void onTimerButtonClicked(View view) {
         MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
-                .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setHour(0)
-                .setMinute(10)
-                .setTitleText(R.string.passtime_duration)
-                .build();
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(0)
+            .setMinute(10)
+            .setTitleText(R.string.passtime_duration)
+            .build();
 
         timePicker.addOnPositiveButtonClickListener(v -> {
             int minutes = timePicker.getMinute();

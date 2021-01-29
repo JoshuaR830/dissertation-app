@@ -11,11 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LearnMoreAboutFiveWaysActivity" android:parentActivityName=".MainActivity" android:label="@string/learn_more_title"></activity>
-        <activity android:name=".ui.individual_surveys.IndividualSurveyActivity" /> <!-- Disable analytics while debugging https://stackoverflow.com/a/40961374/13496270 -->
+        <activity android:name=".ui.individual_surveys.IndividualSurveyActivity" />
         <activity
             android:name=".CreatePassTimeActivity"
             android:label="@string/launch_create_activity" />
-
         <activity
             android:name=".AnswerSurveyActivity"
             android:label="@string/launch_answer_survey" />
@@ -41,6 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Disable analytics while debugging https://stackoverflow.com/a/40961374/13496270 -->
         <meta-data
             android:name="firebase_analytics_collection_deactivated"
             android:value="${analytics_deactivated}" />
