@@ -5,6 +5,8 @@
     <string name="launch_view_pass_time">View activities</string>
     <string name="launch_create_activity">Record activity</string>
     <string name="launch_answer_survey">Complete survey</string>
+    <string name="learn_more_title">Learn more</string>
+
     <string name="log_your_day_title">Keep track of your day</string>
     <string name="log_your_day_description">Record the activities you have done throughout the day, then complete surveys to check in on how things are going.</string>
 
@@ -40,6 +42,15 @@
     <string name="wellbeing_take_notice">Take notice</string>
     <string name="wellbeing_keep_learning">Keep learning</string>
     <string name="wellbeing_give">Give</string>
+
+    <string name="wellbeing_connect_description">Connect is all about building relationships, in person or over video call it all counts, what really matters is that you spend time getting to know each other deeply, build a sense of trust, go deeper than the superficial, and most importantly make time to listen.</string>
+    <string name="wellbeing_be_active_description">Be active is all about getting in some exercise, whether that be grabbing your yoga mat and taking on the downward dog, going for a short walk during your lunch break or training for your next marathon, make sure to keep it at a level you are comfortable with, if you don\'t feel better, change it up until you find something you love.</string>
+    <string name="wellbeing_take_notice_description">Take notice is all about taking the time to reflect, look at the bigger picture, how was your day today? Make the most of the little things, put that phone down, stop scrolling. Ah, that\'s better, now you can enjoy the moment.</string>
+    <string name="wellbeing_keep_learning_description">Keep learning is all about taking time to learn what you love. Growing your skills and finding a real sense of achievement in what you love to do. Whether it be a new skill or string theory, get learning.</string>
+    <string name="wellbeing_give_description">Giving is all about using what you have to benefit someone else. Whether that be giving a smile or a quick nod of the head to a stranger as you pass by or donning the apron for a charity bake sale, it all counts.</string>
+
+    <string name="wellbeing_education_title">Learn more about the five ways to wellbeing</string>
+
 
     <string name="get_wellbeing_support">Wellbeing support</string>
     <string name="settings">Settings</string>
