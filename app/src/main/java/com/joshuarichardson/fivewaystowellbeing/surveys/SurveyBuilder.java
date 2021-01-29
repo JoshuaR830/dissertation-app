@@ -15,6 +15,8 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
@@ -26,7 +28,7 @@ public class SurveyBuilder {
     List<QuestionsToAsk> questions;
 
     boolean hasBasicSurvey;
-    private List<String> basicSurveyQuestions;
+    private HashMap<Long, String> basicSurveyQuestions = new HashMap<>();
 
     public SurveyBuilder(Context context) {
         this.context = context;
@@ -44,7 +46,7 @@ public class SurveyBuilder {
         return this;
     }
 
-    public SurveyBuilder withBasicSurvey(List<String> activities) {
+    public SurveyBuilder withBasicSurvey(HashMap<Long, String> activities) {
         this.basicSurveyQuestions = activities;
         this.hasBasicSurvey = true;
         return this;
@@ -108,10 +110,27 @@ public class SurveyBuilder {
                     TextInputLayout dropDownContainer = basicSurvey.findViewById(R.id.survey_activity_input_container);
                     AutoCompleteTextView activityDropDownInput = dropDownContainer.findViewById(R.id.survey_activity_input);
 
-                    List<String> basicSurveyQuestion = this.basicSurveyQuestions;
+                    // Need to get the keys/values as separate lists
+                    List<String> activityOptionsValues = new ArrayList<>(this.basicSurveyQuestions.values());
+                    List<Long> activityOptionsKeys = new ArrayList<>(this.basicSurveyQuestions.keySet());
 
-                    ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(this.context, R.layout.item_list_text, basicSurveyQuestion);
+                    // Add the values to the list
+                    ArrayAdapter<String> activityAdapter = new ArrayAdapter<>(this.context, R.layout.item_list_text, activityOptionsValues);
                     activityDropDownInput.setAdapter(activityAdapter);
+
+                    // Get the position of the selection - not just the activity name as that may not be unique
+                    activityDropDownInput.setOnItemClickListener((parent, view, position, id) -> {
+                        TextView activityRecordIdView = basicSurvey.findViewById(R.id.survey_activity_record_id);
+                        // Get the key at the selected position - the key is the activity id
+                        activityRecordIdView.setText(String.valueOf(activityOptionsKeys.get(position)));
+                    });
+
+                    TextInputLayout wayToWellbeingDropDownContainer = basicSurvey.findViewById(R.id.way_to_wellbeing_input_container);
+                    AutoCompleteTextView waysToWellbeingDropDownInput = wayToWellbeingDropDownContainer.findViewById(R.id.way_to_wellbeing_input);
+
+                    // ToDo would be good to use string constants instead of local strings - also - text should be from resource
+                    ArrayAdapter<String> waysToWellbeingAdapter = new ArrayAdapter<>(this.context, R.layout.item_list_text, Arrays.asList("Connect", "Be active", "Keep learning", "Take notice", "Give"));
+                    waysToWellbeingDropDownInput.setAdapter(waysToWellbeingAdapter);
                     layout.addView(basicSurvey);
                 default:
                     break;

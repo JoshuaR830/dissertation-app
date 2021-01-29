@@ -23,6 +23,7 @@
     <string name="survey_input_title">Enter a title</string>
     <string name="survey_input_description">Enter a description</string>
     <string name="survey_input_activity">Select an activity</string>
+    <string name="way_to_wellbeing_input">Select way to wellbeing</string>
 
     <string name="submit_button">Submit</string>
     <string name="navigation_home">Progress</string>

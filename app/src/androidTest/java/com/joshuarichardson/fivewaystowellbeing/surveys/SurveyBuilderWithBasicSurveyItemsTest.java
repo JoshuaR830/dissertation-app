@@ -72,6 +72,7 @@ public class SurveyBuilderWithBasicSurveyItemsTest {
         basicContainer.requireViewById(R.id.survey_title_input);
         basicContainer.requireViewById(R.id.survey_description_input);
         basicContainer.requireViewById(R.id.survey_activity_input);
+        basicContainer.requireViewById(R.id.way_to_wellbeing_input);
 
         View parent = (View) basicContainer.getParent();
         assertThat(parent.getTag()).isEqualTo(BASIC_SURVEY);

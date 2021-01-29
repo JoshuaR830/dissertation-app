@@ -71,8 +71,31 @@
                 android:layout_marginBottom="16dp"
                 android:hint="@string/survey_input_activity">
 
+                <TextView
+                    android:id="@+id/survey_activity_record_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:text="0"/>
+
                 <AutoCompleteTextView
                     android:id="@+id/survey_activity_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/way_to_wellbeing_input_container"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/way_to_wellbeing_input">
+
+                <AutoCompleteTextView
+                    android:id="@+id/way_to_wellbeing_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"

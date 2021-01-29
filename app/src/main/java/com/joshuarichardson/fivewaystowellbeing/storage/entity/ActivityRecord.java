@@ -1,6 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.storage.entity;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -13,6 +14,7 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_TABLE_NAME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_TIMESTAMP;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_TYPE;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_WAY_TO_WELLBEING;
 
 @Entity(tableName = ACTIVITY_RECORD_TABLE_NAME)
 public class ActivityRecord {
@@ -36,18 +38,27 @@ public class ActivityRecord {
     @ColumnInfo(name = ACTIVITY_RECORD_DURATION)
     private long activityDuration;
 
-    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, String activityType) {
+    @ColumnInfo(name = ACTIVITY_RECORD_WAY_TO_WELLBEING)
+    private String activityWayToWellbeing;
+
+    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, String activityType, String activityWayToWellbeing) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
         this.setActivityType(activityType);
+        this.setWayToWellbeing(activityWayToWellbeing);
     }
 
-    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, ActivityType activityType) {
+    private void setWayToWellbeing(String wayToWellbeing) {
+        this.activityWayToWellbeing = wayToWellbeing;
+    }
+
+    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, ActivityType activityType, WaysToWellbeing activityWayToWellbeing) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
-        this.setActivityType(activityType.name());
+        this.setActivityType(activityType.toString());
+        this.setWayToWellbeing(activityWayToWellbeing.toString());
     }
 
     public void setActivityRecordId(@NonNull long recordId) {
@@ -89,5 +100,9 @@ public class ActivityRecord {
 
     public long getActivityTimestamp() {
         return this.activityTimestamp;
+    }
+
+    public String getActivityWayToWellbeing() {
+        return this.activityWayToWellbeing;
     }
 }

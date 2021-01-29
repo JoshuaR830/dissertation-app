@@ -5,18 +5,21 @@ import android.content.Context;
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.AnswerSurveyActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.QuestionsToAskDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyQuestionSetDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
@@ -65,6 +68,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
     private SurveyResponseDao surveyDao;
     private SurveyResponseElementDao surveyResponseElementDao;
     private SurveyQuestionSetDao surveyQuestionsDao;
+    SurveyResponseActivityRecordDao surveyActivityDao;
 
     @Captor
     ArgumentCaptor<SurveyResponseElement> surveyResponseElementCaptor = ArgumentCaptor.forClass(SurveyResponseElement.class);
@@ -92,6 +96,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
             // Mock the response from these DAOs
             QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
             ComplexSurveysShouldBeSavedToTheDatabase.this.surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
+            ComplexSurveysShouldBeSavedToTheDatabase.this.surveyActivityDao = mock(SurveyResponseActivityRecordDao.class);
 
             // Set the data for the questions to ask
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(
@@ -113,7 +118,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
             ComplexSurveysShouldBeSavedToTheDatabase.this.surveyDao = mock(SurveyResponseDao.class);
             when(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyDao.insert(any(SurveyResponse.class))).thenReturn(3L);
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
-            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP));
+            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED));
             when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
             when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyDao);
@@ -122,6 +127,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
             ComplexSurveysShouldBeSavedToTheDatabase.this.surveyResponseElementDao = mock(SurveyResponseElementDao.class);
             when(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyResponseElementDao.insert(any(SurveyResponseElement.class))).thenReturn(0L);
             when(mockWellbeingDatabase.surveyResponseElementDao()).thenReturn(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyResponseElementDao);
+            when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyActivityDao);
 
             return mockWellbeingDatabase;
         }
@@ -141,6 +147,10 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
 
         verify(this.surveyResponseElementDao, times(1))
             .insert(this.surveyResponseElementCaptor.capture());
+
+        // Should not be called as no activity selected
+        verify(this.surveyActivityDao, times(0))
+                .insert(any(SurveyResponseActivityRecord.class));
 
         // ToDo - this needs added back in later
 //        verify(this.surveyQuestionsDao, times(1))

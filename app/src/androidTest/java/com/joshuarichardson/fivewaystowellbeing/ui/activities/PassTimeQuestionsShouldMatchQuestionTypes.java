@@ -54,7 +54,7 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
         onView(withId(R.id.pass_time_type_input)).check(matches(withClassName(equalTo(MaterialAutoCompleteTextView.class.getName()))));
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withText("")));
-        onView(withId(R.id.pass_time_duration_input)).check(matches(withText("")));
+        onView(withId(R.id.pass_time_duration_input)).check(matches(withText("0")));
         onView(withId(R.id.pass_time_type_input)).check(matches(withText("")));
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withInputType(TYPE_CLASS_TEXT)));

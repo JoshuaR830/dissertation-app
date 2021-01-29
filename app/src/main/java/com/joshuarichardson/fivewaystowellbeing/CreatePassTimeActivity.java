@@ -84,7 +84,7 @@ public class CreatePassTimeActivity extends AppCompatActivity {
         long unixTime = currentTime.getTime();
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            this.passTimeDao.insert(new ActivityRecord(name, duration, unixTime, type));
+            this.passTimeDao.insert(new ActivityRecord(name, duration, unixTime, type, WaysToWellbeing.UNASSIGNED.toString()));
             finish();
         });
     }
