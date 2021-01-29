@@ -3,6 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.hilt.modules;
 import android.content.Context;
 import android.util.Log;
 
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
@@ -16,6 +17,7 @@ import javax.inject.Singleton;
 import androidx.annotation.NonNull;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import dagger.Module;
 import dagger.Provides;
@@ -31,10 +33,19 @@ import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.B
 public class WellbeingDatabaseModule {
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
 
+    // Add the new wellbeing column to the activity_records table
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE activity_records ADD COLUMN way_to_wellbeing TEXT DEFAULT " + WaysToWellbeing.UNASSIGNED.toString());
+        }
+    };
+
     @Provides
     @Singleton
     public static WellbeingDatabase getWellbeingDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
+            .addMigrations(MIGRATION_1_2)
             .addCallback(new RoomDatabase.Callback() {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {

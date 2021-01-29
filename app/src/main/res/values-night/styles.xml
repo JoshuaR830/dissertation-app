@@ -10,6 +10,8 @@
         <item name="textAllCaps">false</item>
 
         <item name="android:windowBackground">@drawable/gradient_background</item>
+
+        <item name="materialTextButton">@style/Widget.MaterialComponents.Button.TextButton</item>
     </style>
 
     <style name="Divider">

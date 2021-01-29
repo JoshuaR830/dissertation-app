@@ -61,9 +61,9 @@ public class SurveyResponseActivityRecordTests {
     public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetActivitiesForSurvey_ShouldReturnTheActivity() throws TimeoutException, InterruptedException {
         SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description");
         SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description");
-        ActivityRecord activityRecord1 = new ActivityRecord("Running", 1200, 1607960240, "Sport");
-        ActivityRecord activityRecord2 = new ActivityRecord("Sprinting", 1200, 1607960240, "Sport");
-        ActivityRecord activityRecord3 = new ActivityRecord("Boating", 1200, 1607960240, "Sport");
+        ActivityRecord activityRecord1 = new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED");
+        ActivityRecord activityRecord2 = new ActivityRecord("Sprinting", 1200, 1607960240, "Sport", "UNASSIGNED");
+        ActivityRecord activityRecord3 = new ActivityRecord("Boating", 1200, 1607960240, "Sport", "UNASSIGNED");
 
         long surveyId1 = this.surveyResponseDao.insert(surveyResponse1);
         long surveyId2 = this.surveyResponseDao.insert(surveyResponse2);
@@ -79,7 +79,7 @@ public class SurveyResponseActivityRecordTests {
         this.surveyActivityDao.insert(record2);
         this.surveyActivityDao.insert(record3);
 
-        List<ActivityRecord> actualRecords = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getActivitiesBySurveyId(surveyId2));
+        List<ActivityRecord> actualRecords = this.surveyActivityDao.getActivitiesBySurveyId(surveyId2);
 
         assertThat(actualRecords.size()).isEqualTo(2);
 
@@ -118,8 +118,8 @@ public class SurveyResponseActivityRecordTests {
         long surveyId5 = this.surveyResponseDao.insert(surveyResponse5);
 
         // Create and insert an activity record
-        ActivityRecord activityRecord1 = new ActivityRecord("Throwing", 1200, 1607960240, "Sport");
-        ActivityRecord activityRecord2 = new ActivityRecord("Fishing", 1200, 1607960240, "Sport");
+        ActivityRecord activityRecord1 = new ActivityRecord("Throwing", 1200, 1607960240, "Sport", "UNASSIGNED");
+        ActivityRecord activityRecord2 = new ActivityRecord("Fishing", 1200, 1607960240, "Sport", "UNASSIGNED");
 
         long activityId1 = this.activityRecordDao.insert(activityRecord1);
         long activityId2 = this.activityRecordDao.insert(activityRecord2);
@@ -171,7 +171,7 @@ public class SurveyResponseActivityRecordTests {
         SurveyResponse surveyResponse = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE, "title", "description");
         long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
-        ActivityRecord activityRecord = new ActivityRecord("Throwing", 1200, 1607960240, "Sport");
+        ActivityRecord activityRecord = new ActivityRecord("Throwing", 1200, 1607960240, "Sport", "UNASSIGNED");
         long activityId = this.activityRecordDao.insert(activityRecord);
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyId, activityId);
@@ -206,7 +206,7 @@ public class SurveyResponseActivityRecordTests {
     @Test
     public void insertingASurveyIdWhichDoesNotExist_ShouldThrowAConstraintException() {
         // Create and insert a real activity
-        ActivityRecord activityResult = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT);
+        ActivityRecord activityResult = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
         long activityRecordId = this.activityRecordDao.insert(activityResult);
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, activityRecordId);

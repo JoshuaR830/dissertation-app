@@ -97,16 +97,20 @@ public class SurveysCompletedTodayTests {
                 .perform(scrollTo())
                 .check(matches(allOf(isDisplayed(), withText("title 1"))));
         onView(allOf(withId(R.id.today_survey_item_description), isDescendantOfA(withId(0))))
+                .perform(scrollTo())
                 .check(matches(allOf(isDisplayed(), withText("description 1"))));
         onView(allOf(withId(R.id.today_survey_item_image_button), isDescendantOfA(withId(0))))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.today_survey_item_title), isDescendantOfA(withId(1))))
                 .perform(scrollTo())
                 .check(matches(allOf(isDisplayed(), withText("title 2"))));
         onView(allOf(withId(R.id.today_survey_item_description), isDescendantOfA(withId(1))))
+                .perform(scrollTo())
                 .check(matches(allOf(isDisplayed(), withText("description 2"))));
         onView(allOf(withId(R.id.today_survey_item_image_button), isDescendantOfA(withId(1))))
+                .perform(scrollTo())
                 .check(matches(isDisplayed()));
     }
 }

@@ -3,6 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
@@ -50,21 +51,19 @@ public class ActivityRecordTests {
 
     @Test
     public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() throws TimeoutException, InterruptedException {
-        ActivityRecord insertedActivity = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT);
+        ActivityRecord insertedActivity = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
         long activityRecordId = this.activityDao.insert(insertedActivity);
         insertedActivity.setActivityRecordId(activityRecordId);
 
-        List<ActivityRecord> retrievedActivities = LiveDataTestUtil.getOrAwaitValue(this.activityDao.getActivityRecordById(activityRecordId));
+        ActivityRecord selectedActivity = this.activityDao.getActivityRecordById(activityRecordId);
 
-        assertThat(retrievedActivities.size()).isGreaterThan(0);
+        assertThat(selectedActivity).isNotNull();
 
-        ActivityRecord actualActivity = retrievedActivities.get(0);
-
-        assertThat(actualActivity.getActivityType()).isEqualTo(ActivityType.SPORT.name());
-        assertThat(actualActivity.getActivityName()).isEqualTo("Running");
-        assertThat(actualActivity.getActivityRecordId()).isEqualTo(activityRecordId);
-        assertThat(actualActivity.getActivityDuration()).isEqualTo(1200);
-        assertThat(actualActivity.getActivityTimestamp()).isEqualTo(1607960240);
+        assertThat(selectedActivity.getActivityType()).isEqualTo(ActivityType.SPORT.name());
+        assertThat(selectedActivity.getActivityName()).isEqualTo("Running");
+        assertThat(selectedActivity.getActivityRecordId()).isEqualTo(activityRecordId);
+        assertThat(selectedActivity.getActivityDuration()).isEqualTo(1200);
+        assertThat(selectedActivity.getActivityTimestamp()).isEqualTo(1607960240);
     }
 
     @Test
@@ -72,9 +71,9 @@ public class ActivityRecordTests {
 
         // Test inserting multiple activity records
         ArrayList<Long> insertedIds = DatabaseInsertionHelper.insert(new ActivityRecord[]{
-            new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT),
-            new ActivityRecord("Swimming", 1202, 1607960242, ActivityType.SPORT),
-            new ActivityRecord("Throwing", 1203, 1607960243, ActivityType.SPORT)
+            new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED),
+            new ActivityRecord("Swimming", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED),
+            new ActivityRecord("Throwing", 1203, 1607960243, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED)
         }, this.activityDao);
 
         assertThat(insertedIds.size())
@@ -91,14 +90,14 @@ public class ActivityRecordTests {
     @Test
     public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() throws TimeoutException, InterruptedException {
         DatabaseInsertionHelper.insert(new ActivityRecord[]{
-                new ActivityRecord("Snapchat", 1201, 1608076799, ActivityType.APP), // Should not be included
-                new ActivityRecord("Google Photos", 1202, 1608076800, ActivityType.APP), // Should be included
-                new ActivityRecord("Phone", 1203, 1608076801, ActivityType.APP), // Should be included
-                new ActivityRecord("Facebook", 1204, 1608163199, ActivityType.APP), // Should be included
-                new ActivityRecord("Forest", 1204, 1608163200, ActivityType.APP), // Should be included
-                new ActivityRecord("Fishing", 1205, 1608163201, ActivityType.SPORT), // Should not be included
-                new ActivityRecord("Forest", 1204, 0, ActivityType.APP), // Should not be included (min)
-                new ActivityRecord("Play Store", 1204, 2147483647, ActivityType.APP), // Should not be included (max)
+                new ActivityRecord("Snapchat", 1201, 1608076799, ActivityType.APP, WaysToWellbeing.UNASSIGNED), // Should not be included
+                new ActivityRecord("Google Photos", 1202, 1608076800, ActivityType.APP, WaysToWellbeing.UNASSIGNED), // Should be included
+                new ActivityRecord("Phone", 1203, 1608076801, ActivityType.APP, WaysToWellbeing.UNASSIGNED), // Should be included
+                new ActivityRecord("Facebook", 1204, 1608163199, ActivityType.APP, WaysToWellbeing.UNASSIGNED), // Should be included
+                new ActivityRecord("Forest", 1204, 1608163200, ActivityType.APP, WaysToWellbeing.UNASSIGNED), // Should be included
+                new ActivityRecord("Fishing", 1205, 1608163201, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED), // Should not be included
+                new ActivityRecord("Forest", 1204, 0, ActivityType.APP, WaysToWellbeing.UNASSIGNED), // Should not be included (min)
+                new ActivityRecord("Play Store", 1204, 2147483647, ActivityType.APP, WaysToWellbeing.UNASSIGNED), // Should not be included (max)
         }, this.activityDao);
 
         LiveData<List<ActivityRecord>> activities = this.activityDao.getActivitiesInTimeRange(1608076800, 1608163200);

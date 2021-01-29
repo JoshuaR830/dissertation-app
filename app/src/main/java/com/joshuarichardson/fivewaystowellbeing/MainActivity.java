@@ -73,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent wellbeingIntent = new Intent(MainActivity.this, WellbeingSupportActivity.class);
                 startActivity(wellbeingIntent);
                 break;
+            case R.id.menu_learn_more:
+                Intent learnMoreIntent = new Intent(MainActivity.this, LearnMoreAboutFiveWaysActivity.class);
+                startActivity(learnMoreIntent);
+                break;
             default:
                 Log.d("Menu", "Menu");
         }
@@ -93,5 +97,10 @@ public class MainActivity extends AppCompatActivity {
     public void onLaunchActivitiesActivity(View v) {
         Intent activityViewIntent = new Intent(this, ViewPassTimesActivity.class);
         startActivity(activityViewIntent);
+    }
+
+    public void onLearnMoreButtonClicked(View v) {
+        Intent learnMoreIntent = new Intent(this, LearnMoreAboutFiveWaysActivity.class);
+        startActivity(learnMoreIntent);
     }
 }

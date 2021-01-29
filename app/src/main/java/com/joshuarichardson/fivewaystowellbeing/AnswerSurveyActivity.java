@@ -17,12 +17,14 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyBuilder;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
+import static java.lang.Long.parseLong;
 
 @AndroidEntryPoint
 public class AnswerSurveyActivity extends AppCompatActivity {
@@ -82,10 +85,10 @@ public class AnswerSurveyActivity extends AppCompatActivity {
             }
 
             // ToDo - might be better if this didn't have to be passed in separately
-            ArrayList<String> apps = new ArrayList<>();
+            HashMap<Long, String> apps = new HashMap<>();
             if (activities != null) {
                 for (ActivityRecord activity : activities) {
-                    apps.add(activity.getActivityName());
+                    apps.put(activity.getActivityRecordId(), activity.getActivityName());
                 }
             }
 
@@ -111,7 +114,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
     Date now = new Date();
 
     // ToDo - what to do about this if there is no basic survey?
-    SurveyResponse surveyResponse = new SurveyResponse(now.getTime(), WaysToWellbeing.CONNECT, "", "");
+    SurveyResponse surveyResponse = new SurveyResponse(now.getTime(), WaysToWellbeing.UNASSIGNED, "", "");
 
     public void onSubmit(View v) {
         // Log the survey completion
@@ -123,6 +126,8 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
         ArrayList<String> questionTitles = new ArrayList<>();
         ArrayList<String> questionAnswers = new ArrayList<>();
+
+        long activityId = -1;
 
         // Process each item
         for(int i = 0; i < layout.getChildCount(); i++) {
@@ -136,11 +141,36 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                 EditText titleView = child.findViewById(R.id.survey_title_input);
                 EditText descriptionView = child.findViewById(R.id.survey_description_input);
 
-                // ToDo - do something with the activity
-                AutoCompleteTextView activityView = child.findViewById(R.id.survey_activity_input);
+                TextView activityIdSelected = child.findViewById(R.id.survey_activity_record_id);
+                activityId = parseLong(activityIdSelected.getText().toString());
+
+                AutoCompleteTextView waysToWellbeingView = child.findViewById(R.id.way_to_wellbeing_input);
 
                 surveyResponse.setTitle(titleView.getText().toString());
                 surveyResponse.setDescription(descriptionView.getText().toString());
+
+                // ToDo - have constant string in place of the enum - rather than having to convert everywhere have a fixed, human readable value
+                // Convert between the drop down value and the enum
+                String wayToWellbeing = "";
+                switch(waysToWellbeingView.getText().toString().toLowerCase()) {
+                    case "connect":
+                        wayToWellbeing = WaysToWellbeing.CONNECT.toString();
+                        break;
+                    case "be active":
+                        wayToWellbeing = WaysToWellbeing.BE_ACTIVE.toString();
+                        break;
+                    case "keep learning":
+                        wayToWellbeing = WaysToWellbeing.KEEP_LEARNING.toString();
+                        break;
+                    case "take notice":
+                        wayToWellbeing = WaysToWellbeing.TAKE_NOTICE.toString();
+                        break;
+                    case "give":
+                        wayToWellbeing = WaysToWellbeing.GIVE.toString();
+                        break;
+                }
+
+                surveyResponse.setSurveyResponseWayToWellbeing(wayToWellbeing);
                 break;
             }
 
@@ -168,12 +198,18 @@ public class AnswerSurveyActivity extends AppCompatActivity {
             questionAnswers.add(questionAnswer);
         }
 
+        long finalActivityId = activityId;
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
             for(int i = 0; i < questionAnswers.size(); i++) {
                 SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, questionTitles.get(i), questionAnswers.get(i));
                 long elementId = this.surveyResponseElementDao.insert(surveyResponseElement);
+            }
+
+            // Link activity to a survey
+            if(finalActivityId != -1) {
+                this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, finalActivityId));
             }
 
             // ToDo - this is right - but not yet - because I can't auto generate questions

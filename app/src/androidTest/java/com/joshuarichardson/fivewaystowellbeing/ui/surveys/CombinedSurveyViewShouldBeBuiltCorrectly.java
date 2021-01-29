@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.AnswerSurveyActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
@@ -99,9 +100,9 @@ public class CombinedSurveyViewShouldBeBuiltCorrectly {
             MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 
             ArrayList<ActivityRecord> array = new ArrayList<>();
-            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT));
-            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT));
-            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT));
+            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
+            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
+            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
 
             data.setValue(array);
 

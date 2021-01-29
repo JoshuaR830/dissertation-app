@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.joshuarichardson.fivewaystowellbeing">
 
-    <permission android:name="android.permission.INTERNET"/>
-    <permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <permission android:name="android.permission.WAKE_LOCK"/>
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:name=".HiltApplication"
         android:allowBackup="true"
@@ -15,11 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <!-- Disable analytics while debugging https://stackoverflow.com/a/40961374/13496270 -->
-        <meta-data
-            android:name="firebase_analytics_collection_deactivated"
-            android:value="${analytics_deactivated}"/>
+        <activity android:name=".LearnMoreAboutFiveWaysActivity" android:parentActivityName=".MainActivity" android:label="@string/learn_more_title"></activity>
+        <activity android:name=".ui.individual_surveys.IndividualSurveyActivity" />
         <activity
             android:name=".CreatePassTimeActivity"
             android:label="@string/launch_create_activity" />
@@ -32,7 +24,7 @@
         <activity
             android:name=".ui.wellbeing_support.WellbeingSupportWebViewActivity"
             android:label="@string/get_wellbeing_support"
-            android:parentActivityName=".ui.wellbeing_support.WellbeingSupportActivity"/>
+            android:parentActivityName=".ui.wellbeing_support.WellbeingSupportActivity" />
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/settings"
@@ -48,5 +40,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Disable analytics while debugging https://stackoverflow.com/a/40961374/13496270 -->
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="${analytics_deactivated}" />
     </application>
+    <permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <permission android:name="android.permission.WAKE_LOCK" />
+
+    <permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 </manifest>

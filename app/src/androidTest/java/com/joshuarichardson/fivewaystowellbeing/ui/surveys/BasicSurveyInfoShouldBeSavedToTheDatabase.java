@@ -5,16 +5,19 @@ import android.content.Context;
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.AnswerSurveyActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.QuestionsToAskDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyQuestionSetDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -58,6 +61,7 @@ import static org.mockito.Mockito.when;
 public class BasicSurveyInfoShouldBeSavedToTheDatabase {
     private SurveyQuestionSetDao surveyQuestionsDao;
     SurveyResponseDao surveyDao;
+    SurveyResponseActivityRecordDao surveyActivityDao;
 
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
@@ -77,6 +81,7 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
             ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
             QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
             BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
+            BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyActivityDao = mock(SurveyResponseActivityRecordDao.class);
 
             // Set the data for the questions to ask
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(new QuestionsToAsk("N/A", "N/A", 1, BASIC_SURVEY.name(), 0, null));
@@ -91,13 +96,14 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
             when(mockWellbeingDatabase.surveyQuestionSetDao()).thenReturn(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyQuestionsDao);
 
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
-            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP));
+            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED));
             when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
 
             BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyDao = mock(SurveyResponseDao.class);
 
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyDao);
             when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
+            when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyActivityDao);
 
             return mockWellbeingDatabase;
         }
@@ -124,6 +130,9 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
 
         verify(this.surveyDao, times(1))
                 .insert(any(SurveyResponse.class));
+
+        verify(this.surveyActivityDao, times(1))
+                .insert(any(SurveyResponseActivityRecord.class));
 
         // ToDo - this needs added back in later
 //        verify(this.surveyQuestionsDao, times(1))

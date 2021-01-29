@@ -50,22 +50,20 @@ public class SurveyResponseTests {
 
         long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
-        List<SurveyResponse> surveyResponses = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseDao.getSurveyResponseById(surveyId));
+        SurveyResponse actualResponse = this.surveyResponseDao.getSurveyResponseById(surveyId);
 
         assertWithMessage("There should be at least 1 item in the list")
-                .that(surveyResponses.size())
-                .isGreaterThan(0);
-
-        SurveyResponse actualSurveyResponse = surveyResponses.get(0);
+                .that(actualResponse)
+                .isNotNull();
 
         // Need to confirm that the properties are correct
-        assertThat(actualSurveyResponse.getSurveyResponseId())
+        assertThat(actualResponse.getSurveyResponseId())
                 .isEqualTo(surveyId);
 
-        assertThat(actualSurveyResponse.getSurveyResponseTimestamp())
+        assertThat(actualResponse.getSurveyResponseTimestamp())
                 .isEqualTo(1607960240);
 
-        assertThat(actualSurveyResponse.getSurveyResponseWayToWellbeing())
+        assertThat(actualResponse.getSurveyResponseWayToWellbeing())
                 .isEqualTo(WaysToWellbeing.BE_ACTIVE.name());
     }
 

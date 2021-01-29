@@ -5,6 +5,7 @@ import android.content.Context;
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.AnswerSurveyActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
@@ -91,15 +92,23 @@ public class BasicSurveyViewBuiltCorrectly {
 
             // Set up the activities for the list
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
-            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP));
+            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED));
             when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
 
             MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 
+            ActivityRecord activity1 = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
+            ActivityRecord activity2 = new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
+            ActivityRecord activity3 = new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
+
+            activity1.setActivityRecordId(0);
+            activity2.setActivityRecordId(1);
+            activity3.setActivityRecordId(2);
+
             ArrayList<ActivityRecord> array = new ArrayList<>();
-            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT));
-            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT));
-            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT));
+            array.add(activity1);
+            array.add(activity2);
+            array.add(activity3);
 
             data.setValue(array);
 
@@ -168,5 +177,36 @@ public class BasicSurveyViewBuiltCorrectly {
 
         popup.atPosition(2)
             .check(matches(withText("Fishing")));
+    }
+
+    @Test
+    public void waysToWellbeingDropDownList_ShouldContainAllWaysToWellbeing() {
+        onView(withId(R.id.way_to_wellbeing_input_container))
+                .check(matches(withMaterialHint("Select way to wellbeing")));
+
+        onView(withId(R.id.way_to_wellbeing_input))
+            .perform(scrollTo(), click());
+
+        // Trying to get the drop down list https://stackoverflow.com/a/45368345/13496270
+        // Get the adapter of Strings
+        // Search the popup
+        DataInteraction popup = onData(instanceOf(String.class))
+                .inRoot(RootMatchers.isPlatformPopup());
+
+        // Check the text matches on all items in the drop down list
+        popup.atPosition(0)
+            .check(matches(withText("Connect")));
+
+        popup.atPosition(1)
+            .check(matches(withText("Be active")));
+
+        popup.atPosition(2)
+            .check(matches(withText("Keep learning")));
+
+        popup.atPosition(3)
+            .check(matches(withText("Take notice")));
+
+        popup.atPosition(4)
+            .check(matches(withText("Give")));
     }
 }

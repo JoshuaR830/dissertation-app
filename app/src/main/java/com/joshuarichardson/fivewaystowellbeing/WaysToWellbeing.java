@@ -5,5 +5,6 @@ public enum WaysToWellbeing {
     BE_ACTIVE,
     TAKE_NOTICE,
     KEEP_LEARNING,
-    GIVE
+    GIVE,
+    UNASSIGNED // for if nothing was selected so it doesn't all go wrong
 }

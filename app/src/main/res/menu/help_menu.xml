@@ -5,6 +5,10 @@
         android:title="@string/get_wellbeing_support" />
 
     <item
+        android:id="@+id/menu_learn_more"
+        android:title="@string/learn_more_title" />
+
+    <item
         android:id="@+id/menu_settings"
         android:title="@string/settings"
         />
