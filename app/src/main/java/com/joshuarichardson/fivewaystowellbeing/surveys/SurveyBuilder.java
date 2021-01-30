@@ -129,7 +129,7 @@ public class SurveyBuilder {
                     AutoCompleteTextView waysToWellbeingDropDownInput = wayToWellbeingDropDownContainer.findViewById(R.id.way_to_wellbeing_input);
 
                     // ToDo would be good to use string constants instead of local strings - also - text should be from resource
-                    ArrayAdapter<String> waysToWellbeingAdapter = new ArrayAdapter<>(this.context, R.layout.item_list_text, Arrays.asList("Connect", "Be active", "Keep learning", "Take notice", "Give"));
+                    ArrayAdapter<String> waysToWellbeingAdapter = new ArrayAdapter<>(this.context, R.layout.item_list_text, Arrays.asList("Connect", "Be active", "Keep learning", "Take notice", "Give", "None"));
                     waysToWellbeingDropDownInput.setAdapter(waysToWellbeingAdapter);
                     layout.addView(basicSurvey);
                 default:

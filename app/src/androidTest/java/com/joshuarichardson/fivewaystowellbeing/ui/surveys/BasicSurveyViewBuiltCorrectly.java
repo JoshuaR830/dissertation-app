@@ -208,5 +208,8 @@ public class BasicSurveyViewBuiltCorrectly {
 
         popup.atPosition(4)
             .check(matches(withText("Give")));
+
+        popup.atPosition(5)
+            .check(matches(withText("None")));
     }
 }

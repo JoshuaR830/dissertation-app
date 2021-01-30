@@ -96,7 +96,16 @@ public class ProgressFragment extends Fragment {
                 // Set values
                 title.setText(survey.getTitle());
                 description.setText(survey.getDescription());
-                surveyImage.setImageResource(WellbeingHelper.getImage(WaysToWellbeing.valueOf(survey.getSurveyResponseWayToWellbeing())));
+
+                // Catch the exception if the user does not set a value
+                WaysToWellbeing way;
+                try {
+                    way = WaysToWellbeing.valueOf(survey.getSurveyResponseWayToWellbeing());
+                } catch(IllegalArgumentException e) {
+                    way = WaysToWellbeing.UNASSIGNED;
+                }
+
+                surveyImage.setImageResource(WellbeingHelper.getImage(way));
 
                 // Launch an activity to view a survey
                 View.OnClickListener listener = v -> {

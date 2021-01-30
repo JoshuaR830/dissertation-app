@@ -168,6 +168,8 @@ public class AnswerSurveyActivity extends AppCompatActivity {
                     case "give":
                         wayToWellbeing = WaysToWellbeing.GIVE.toString();
                         break;
+                    default:
+                        wayToWellbeing = WaysToWellbeing.UNASSIGNED.toString();
                 }
 
                 surveyResponse.setSurveyResponseWayToWellbeing(wayToWellbeing);

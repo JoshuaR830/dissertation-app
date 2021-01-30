@@ -85,7 +85,17 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
                 title.setText(surveyResponse.getTitle());
                 description.setText(surveyResponse.getDescription());
-                image.setImageResource(WellbeingHelper.getImage(WaysToWellbeing.valueOf(surveyResponse.getSurveyResponseWayToWellbeing())));
+
+
+                // Catch the exception if the user does not set a value
+                WaysToWellbeing way;
+                try {
+                    way = WaysToWellbeing.valueOf(surveyResponse.getSurveyResponseWayToWellbeing());
+                } catch(IllegalArgumentException e) {
+                    way = WaysToWellbeing.UNASSIGNED;
+                }
+
+                image.setImageResource(WellbeingHelper.getImage(way));
 
                 Date dateTime = new Date(surveyResponse.getSurveyResponseTimestamp());
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
