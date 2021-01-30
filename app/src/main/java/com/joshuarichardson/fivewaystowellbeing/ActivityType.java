@@ -4,6 +4,7 @@ public enum ActivityType {
     APP,
     SPORT,
     HOBBY,
+    PET,
     WORK,
     LEARNING
 }

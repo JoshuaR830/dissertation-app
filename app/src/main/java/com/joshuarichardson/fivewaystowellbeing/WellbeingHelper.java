@@ -14,7 +14,7 @@ public class WellbeingHelper {
             case GIVE:
                 return R.drawable.icon_way_to_wellbeing_give;
             default:
-                return 0;
+                return R.drawable.icon_way_to_wellbeing_unassigned;
         }
     }
 }

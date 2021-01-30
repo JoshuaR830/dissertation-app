@@ -59,7 +59,16 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
         public void onBind(SurveyResponse response) {
             this.surveyTitle.setText(response.getTitle());
             this.surveyDescription.setText(response.getDescription());
-            this.surveyImage.setImageResource(WellbeingHelper.getImage(WaysToWellbeing.valueOf(response.getSurveyResponseWayToWellbeing())));
+
+            // Catch the exception if the user does not set a value
+            WaysToWellbeing way;
+            try {
+                way = WaysToWellbeing.valueOf(response.getSurveyResponseWayToWellbeing());
+            } catch(IllegalArgumentException e) {
+                way = WaysToWellbeing.UNASSIGNED;
+            }
+
+            this.surveyImage.setImageResource(WellbeingHelper.getImage(way));
         }
     }
 }
