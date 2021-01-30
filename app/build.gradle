@@ -20,8 +20,8 @@ android {
         applicationId "com.joshuarichardson.fivewaystowellbeing"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 7
-        versionName "0.0.6"
+        versionCode 8
+        versionName "0.0.7"
 
         testInstrumentationRunner "com.joshuarichardson.fivewaystowellbeing.MockTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
