@@ -24,6 +24,7 @@ android {
         versionName "0.0.5"
 
         testInstrumentationRunner "com.joshuarichardson.fivewaystowellbeing.MockTestRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
     buildTypes {
@@ -52,6 +53,7 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 }
 
@@ -87,6 +89,8 @@ dependencies {
     androidTestImplementation 'org.mockito:mockito-android:3.7.7'
     androidTestImplementation 'com.google.code.gson:gson:2.8.6'
     testImplementation 'org.mockito:mockito-android:3.7.7'
+
+    androidTestUtil 'androidx.test:orchestrator:1.3.0'
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
