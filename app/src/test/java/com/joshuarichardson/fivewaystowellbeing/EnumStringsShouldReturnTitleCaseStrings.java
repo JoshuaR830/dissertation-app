@@ -11,9 +11,12 @@ public class EnumStringsShouldReturnTitleCaseStrings {
     public void EnumStrings_ShouldReturnTitleCaseStrings() {
         List<String> enumList = DropDownHelper.getEnumStrings(ActivityType.values());
 
-        assertThat(enumList.size()).isEqualTo(2);
+        assertThat(enumList.size()).isEqualTo(5);
 
         assertThat(enumList.get(0)).isEqualTo("App");
         assertThat(enumList.get(1)).isEqualTo("Sport");
+        assertThat(enumList.get(2)).isEqualTo("Hobby");
+        assertThat(enumList.get(3)).isEqualTo("Work");
+        assertThat(enumList.get(4)).isEqualTo("Learning");
     }
 }
