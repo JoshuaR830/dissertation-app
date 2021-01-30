@@ -1,7 +1,10 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
+import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.PassTimesAdapter;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
@@ -44,5 +47,10 @@ public class ViewPassTimesActivity extends AppCompatActivity {
         };
 
         passTimes.observe(this, passTimeObserver);
+    }
+
+    public void onCreatePassTimeButtonClicked(View v) {
+        Intent answerSurveyIntent = new Intent(ViewPassTimesActivity.this, CreatePassTimeActivity.class);
+        startActivity(answerSurveyIntent);
     }
 }
