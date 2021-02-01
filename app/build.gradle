@@ -20,8 +20,8 @@ android {
         applicationId "com.joshuarichardson.fivewaystowellbeing"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 8
-        versionName "0.0.7"
+        versionCode 9
+        versionName "0.0.8"
 
         testInstrumentationRunner "com.joshuarichardson.fivewaystowellbeing.MockTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -31,12 +31,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [analytics_deactivated: "true"]
+            manifestPlaceholders = [analytics_deactivated: "false"]
         }
 
         // Disable logging while debugging https://stackoverflow.com/a/40961374/13496270
         debug {
-            manifestPlaceholders = [analytics_deactivated: "false"]
+            manifestPlaceholders = [analytics_deactivated: "true"]
         }
     }
     sourceSets {
