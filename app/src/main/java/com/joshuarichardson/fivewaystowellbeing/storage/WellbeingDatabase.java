@@ -6,17 +6,21 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyQuestionSetDao
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {ActivityRecord.class, SurveyResponse.class, SurveyResponseActivityRecord.class, SurveyResponseElement.class, QuestionsToAsk.class, SurveyQuestionSet.class}, exportSchema = false, version = 2)
+@Database(entities = {ActivityRecord.class, SurveyResponse.class, SurveyResponseActivityRecord.class, SurveyResponseElement.class, QuestionsToAsk.class, SurveyQuestionSet.class, WellbeingQuestion.class, WellbeingRecord.class}, exportSchema = false, version = 2)
 public abstract class WellbeingDatabase extends RoomDatabase {
 
     public abstract ActivityRecordDao activityRecordDao();
@@ -25,4 +29,6 @@ public abstract class WellbeingDatabase extends RoomDatabase {
     public abstract SurveyResponseElementDao surveyResponseElementDao();
     public abstract QuestionsToAskDao questionsToAskDao();
     public abstract SurveyQuestionSetDao surveyQuestionSetDao();
+    public abstract WellbeingQuestionDao wellbeingQuestionDao();
+    public abstract WellbeingRecordDao wellbeingRecordDao();
 }

@@ -4,34 +4,66 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_END_TIME;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_NOTE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_SEQUENCE_NUMBER;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_START_TIME;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_ACTIVITY_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_TABLE_NAME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ID;
 
 @Entity(
         tableName = SURVEY_RESPONSE_ACTIVITY_RECORD_TABLE_NAME,
-        primaryKeys = {SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID, SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID},
         foreignKeys = {
                 @ForeignKey(entity = ActivityRecord.class, parentColumns = ACTIVITY_RECORD_ID, childColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID, onDelete = CASCADE),
                 @ForeignKey(entity = SurveyResponse.class, parentColumns = SURVEY_RESPONSE_ID, childColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID, onDelete = CASCADE)
         })
 public class SurveyResponseActivityRecord {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_ACTIVITY_ID)
+    private long surveyActivityId;
+
     @NonNull
-    @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID,  index = true)
+    @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID)
     private long activityRecordId;
 
     @NonNull
-    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID,  index = true)
+    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID)
     private long surveyResponseId;
 
-    public SurveyResponseActivityRecord(long surveyResponseId, long activityRecordId) {
+    @NonNull
+    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_SEQUENCE_NUMBER)
+    private int sequenceNumber;
+
+    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_NOTE)
+    private String note;
+
+    @NonNull
+    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_START_TIME)
+    private long startTime;
+
+    @NonNull
+    @ColumnInfo(name  = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_END_TIME)
+    private long endTime;
+
+    public SurveyResponseActivityRecord(long surveyResponseId, long activityRecordId, int sequenceNumber, String note, long startTime, long endTime) {
         this.setSurveyResponseId(surveyResponseId);
         this.setActivityRecordId(activityRecordId);
+        this.setSequenceNumber(sequenceNumber);
+        this.setNote(note);
+        this.setStartTime(startTime);
+        this.setEndTime(endTime);
+    }
+
+    public void setSurveyActivityId(long id) {
+        this.surveyActivityId = id;
     }
 
     public void setActivityRecordId(long activityRecordId) {
@@ -42,11 +74,47 @@ public class SurveyResponseActivityRecord {
         this.surveyResponseId = surveyResponseId;
     }
 
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
     public long getActivityRecordId() {
         return this.activityRecordId;
     }
 
     public long getSurveyResponseId() {
         return this.surveyResponseId;
+    }
+
+    public long getSurveyActivityId() {
+        return this.surveyActivityId;
+    }
+
+    public String getNote() {
+        return this.note;
+    }
+
+    public int getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+
+    public long getStartTime() {
+        return this.startTime;
+    }
+
+    public long getEndTime() {
+        return this.endTime;
     }
 }
