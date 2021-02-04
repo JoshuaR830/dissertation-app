@@ -1,5 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -7,8 +8,11 @@ import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.List;
 
@@ -18,6 +22,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = {Build.VERSION_CODES.N})
 public class AnalyticsTests {
 
     FirebaseAnalytics mockFirebaseAnalytics;
