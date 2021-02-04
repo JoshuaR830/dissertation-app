@@ -15,7 +15,7 @@ import static com.google.common.truth.Truth.assertThat;
 public class ShapeOfGraphTests {
     @Test
     public void updateSizeTestsWhenMultiplierIs1() {
-        WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 1, 0);
+        WaysToWellbeingGraphValues wellbeingGraph = new WaysToWellbeingGraphValues(10, Color.BLACK, 1, 0);
         wellbeingGraph.updateSize(1, 10, 10);
 
         assertThat(wellbeingGraph.getShape().bottom).isEqualTo(20);
@@ -27,7 +27,7 @@ public class ShapeOfGraphTests {
 
     @Test
     public void updateSizeTestsWhenMultiplierIs2() {
-        WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 1, 0);
+        WaysToWellbeingGraphValues wellbeingGraph = new WaysToWellbeingGraphValues(10, Color.BLACK, 1, 0);
         wellbeingGraph.updateSize(2, 10, 10);
 
         assertThat(wellbeingGraph.getShape().bottom).isEqualTo(30);
@@ -38,7 +38,7 @@ public class ShapeOfGraphTests {
 
     @Test
     public void updateSizeTestsWhenSizeIs0() {
-        WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 1, 0);
+        WaysToWellbeingGraphValues wellbeingGraph = new WaysToWellbeingGraphValues(10, Color.BLACK, 1, 0);
         wellbeingGraph.updateSize(2, 0, 0);
 
         assertThat(wellbeingGraph.getShape().bottom).isEqualTo(20);

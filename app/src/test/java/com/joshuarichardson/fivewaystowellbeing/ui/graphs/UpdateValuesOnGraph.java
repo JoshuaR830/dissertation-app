@@ -15,7 +15,7 @@ import static com.google.common.truth.Truth.assertThat;
 public class UpdateValuesOnGraph {
     @Test
     public void whenThereIs1Segment() {
-        WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 1, 0);
+        WaysToWellbeingGraphValues wellbeingGraph = new WaysToWellbeingGraphValues(10, Color.BLACK, 1, 0);
 
         wellbeingGraph.updateSize(1, 10, 10);
 
@@ -26,9 +26,9 @@ public class UpdateValuesOnGraph {
 
         wellbeingGraph.updateValue(20, 1, 10, 10);
 
-        assertThat(wellbeingGraph.getShape().bottom).isEqualTo(20);
-        assertThat(wellbeingGraph.getShape().top).isEqualTo(-20);
-        assertThat(wellbeingGraph.getShape().left).isEqualTo(-20);
-        assertThat(wellbeingGraph.getShape().right).isEqualTo(20);
+        assertThat(wellbeingGraph.getShape().bottom).isEqualTo(30);
+        assertThat(wellbeingGraph.getShape().top).isEqualTo(-10);
+        assertThat(wellbeingGraph.getShape().left).isEqualTo(-10);
+        assertThat(wellbeingGraph.getShape().right).isEqualTo(30);
     }
 }

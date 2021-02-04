@@ -3,7 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.graphs;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-public class WaysToWellbeingGraph {
+public class WaysToWellbeingGraphValues {
 
     private final int FULL_CIRCLE = 360;
 
@@ -13,7 +13,7 @@ public class WaysToWellbeingGraph {
     private Paint paint = new Paint();
     private int value;
 
-    public WaysToWellbeingGraph(int value, int paintColor, int totalSegments, int segment) {
+    public WaysToWellbeingGraphValues(int value, int paintColor, int totalSegments, int segment) {
         if(segment < 0 || totalSegments == 0 || segment >= totalSegments) {
             return;
         }
@@ -40,7 +40,8 @@ public class WaysToWellbeingGraph {
     }
 
     public void updateValue(int value, float multiplier, int height, int width) {
-
+        this.value = value;
+        this.updateSize(multiplier, height, width);
     }
 
     public RectF getShape() {
