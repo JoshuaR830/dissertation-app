@@ -1,18 +1,18 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.graphs;
 
 import android.graphics.Color;
+import android.os.Build;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import static com.google.common.truth.Truth.assertThat;
 
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = {Build.VERSION_CODES.N})
 public class ArcOfGraphTests {
-
-    @Before
-    public void setup() {
-    }
-
     @Test
     public void whenThereAre0SegmentsAndThisIsTheFirstSegment() {
         WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 0, 0);
@@ -58,9 +58,9 @@ public class ArcOfGraphTests {
 
     @Test
     public void whenThereAre360Segments() {
-        WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 5, 0);
+        WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 360, 1);
 
-        assertThat(wellbeingGraph.getStartAngle()).isEqualTo(265.5);
+        assertThat(wellbeingGraph.getStartAngle()).isEqualTo(271);
         assertThat(wellbeingGraph.getArcLength()).isEqualTo(1);
     }
 

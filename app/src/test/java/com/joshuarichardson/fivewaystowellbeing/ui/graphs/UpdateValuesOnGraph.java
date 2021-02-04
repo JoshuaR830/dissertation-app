@@ -12,10 +12,11 @@ import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {Build.VERSION_CODES.N})
-public class ShapeOfGraphTests {
+public class UpdateValuesOnGraph {
     @Test
-    public void updateSizeTestsWhenMultiplierIs1() {
+    public void whenThereIs1Segment() {
         WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 1, 0);
+
         wellbeingGraph.updateSize(1, 10, 10);
 
         assertThat(wellbeingGraph.getShape().bottom).isEqualTo(20);
@@ -23,23 +24,7 @@ public class ShapeOfGraphTests {
         assertThat(wellbeingGraph.getShape().left).isEqualTo(0);
         assertThat(wellbeingGraph.getShape().right).isEqualTo(20);
 
-    }
-
-    @Test
-    public void updateSizeTestsWhenMultiplierIs2() {
-        WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 1, 0);
-        wellbeingGraph.updateSize(2, 10, 10);
-
-        assertThat(wellbeingGraph.getShape().bottom).isEqualTo(30);
-        assertThat(wellbeingGraph.getShape().top).isEqualTo(-10);
-        assertThat(wellbeingGraph.getShape().left).isEqualTo(-10);
-        assertThat(wellbeingGraph.getShape().right).isEqualTo(30);
-    }
-
-    @Test
-    public void updateSizeTestsWhenSizeIs0() {
-        WaysToWellbeingGraph wellbeingGraph = new WaysToWellbeingGraph(10, Color.BLACK, 1, 0);
-        wellbeingGraph.updateSize(2, 0, 0);
+        wellbeingGraph.updateValue(20, 1, 10, 10);
 
         assertThat(wellbeingGraph.getShape().bottom).isEqualTo(20);
         assertThat(wellbeingGraph.getShape().top).isEqualTo(-20);
