@@ -44,6 +44,7 @@ public class InsightsFragment extends Fragment {
             startActivity(intent);
         });
 
+        // ToDo - could this use live data
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<InsightsItem> insights = Arrays.asList(
                 new InsightsItem(getString(R.string.wellbeing_insight_activities), getString(R.string.wellbeing_insight_activities_description), 2, activityButton),

@@ -39,6 +39,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.RecyclerViewTestUtil.atRecyclerPosition;
 import static org.hamcrest.Matchers.allOf;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -65,6 +66,10 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             SurveyResponse[] responses = new SurveyResponse[] {
                 new SurveyResponse(73426786, WaysToWellbeing.CONNECT, "A survey title", "A survey description")
             };
+
+            LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
+            when(mockSurveyDao.getLiveInsights(anyString()))
+                    .thenReturn(wayToWellbeing);
 
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList(responses));
 

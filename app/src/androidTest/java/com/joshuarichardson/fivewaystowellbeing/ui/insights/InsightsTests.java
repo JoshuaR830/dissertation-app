@@ -38,6 +38,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.RecyclerViewTestUtil.atRecyclerPosition;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -66,6 +67,10 @@ public class InsightsTests {
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(new ArrayList<>());
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                     .thenReturn(data);
+
+            LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
+            when(surveyDao.getLiveInsights(anyString()))
+                    .thenReturn(wayToWellbeing);
 
             when(surveyDao.getInsights("CONNECT")).thenReturn(1);
             when(surveyDao.getInsights("BE_ACTIVE")).thenReturn(64);

@@ -28,5 +28,9 @@ public interface SurveyResponseDao {
     @Query("SELECT COUNT(way_to_wellbeing) FROM survey_response WHERE way_to_wellbeing = :wayToWellbeing")
     int getInsights(String wayToWellbeing);
 
+    // ToDo - this could be made daily
+    @Query("SELECT COUNT(way_to_wellbeing) FROM survey_response WHERE way_to_wellbeing = :wayToWellbeing")
+    LiveData<Integer> getLiveInsights(String wayToWellbeing);
+
     // ToDo Will need to add a delete
 }

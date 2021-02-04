@@ -30,6 +30,7 @@ import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -37,6 +38,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,6 +69,10 @@ public class NoSurveysCompletedTodayTests {
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                 .thenReturn(data);
 
+            LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
+            when(surveyDao.getLiveInsights(anyString()))
+                    .thenReturn(wayToWellbeing);
+
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
             return mockWellbeingDatabase;
         }
@@ -91,8 +97,8 @@ public class NoSurveysCompletedTodayTests {
 
     @Test
     public void WhenNoSurveysCompletedToday_ThenTheCardShouldDisplayNoSurveysYet() {
-        onView(withId(R.id.no_surveys_title)).check(matches(allOf(isDisplayed(), withText("No surveys yet"))));
-        onView(withId(R.id.no_surveys_description)).check(matches(allOf(isDisplayed(), withText("Do you want to complete one?"))));
-        onView(withId(R.id.no_surveys_button)).check(matches(allOf(isDisplayed(), withText("Complete survey"))));
+        onView(withId(R.id.no_surveys_title)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("No surveys yet"))));
+        onView(withId(R.id.no_surveys_description)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Do you want to complete one?"))));
+        onView(withId(R.id.no_surveys_button)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Complete survey"))));
     }
 }

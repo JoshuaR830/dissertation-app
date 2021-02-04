@@ -2,9 +2,11 @@ package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +18,7 @@ import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.IndividualSurveyActivity;
 
 import java.util.Calendar;
@@ -27,6 +30,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -51,6 +55,14 @@ public class ProgressFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.surveyDao = db.surveyResponseDao();
+
+        CardView container = view.findViewById(R.id.graph_card);
+        FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
+
+        int[] values = new int[]{0, 0, 0, 0, 0};
+        WellbeingGraphView graphView = new WellbeingGraphView(getActivity(), 600, values);
+        tempObserveValues(graphView, values);
+        canvasContainer.addView(graphView);
 
         // Found out how to get today midnight from https://stackoverflow.com/a/6850919/13496270
         Calendar calendar = GregorianCalendar.getInstance();
@@ -128,6 +140,42 @@ public class ProgressFragment extends Fragment {
         // Epoch seconds give a 24 hour time frame - any new surveys added will get updated live (using now meant that future surveys today didn't get shown)
         this.surveyResponseItems = this.surveyDao.getSurveyResponsesByTimestampRange(epochSecondsToday, epochSecondsTomorrow);
         this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
+    }
+
+    public void tempObserveValues(WellbeingGraphView graphView, int[] values) {
+        Observer<Integer> giveObserver = giveNum -> {
+            values[0] = giveNum*20;
+            graphView.updateValues(values);
+        };
+
+        Observer<Integer> connectObserver = connectNum -> {
+            values[1] = connectNum*20;
+            graphView.updateValues(values);
+        };
+
+        Observer<Integer> beActiveObserver = beActiveNum -> {
+            values[2] = beActiveNum*20;
+            graphView.updateValues(values);
+        };
+
+        Observer<Integer> takeNoticeObserver = takeNoticeNum -> {
+            values[3] = takeNoticeNum*20;
+            graphView.updateValues(values);
+        };
+
+        Observer<Integer> keepLearningObserver = keepLearningNum -> {
+            values[4] = keepLearningNum*20;
+            graphView.updateValues(values);
+        };
+
+
+        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.GIVE.toString()).observe(requireActivity(), giveObserver);
+        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.CONNECT.toString()).observe(requireActivity(), connectObserver);
+        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.BE_ACTIVE.toString()).observe(requireActivity(), beActiveObserver);
+        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.TAKE_NOTICE.toString()).observe(requireActivity(), takeNoticeObserver);
+        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.KEEP_LEARNING.toString()).observe(requireActivity(), keepLearningObserver);
+
+        // ToDo - in some places I have removed the observers - should I not do this here too?
     }
 
     @Override

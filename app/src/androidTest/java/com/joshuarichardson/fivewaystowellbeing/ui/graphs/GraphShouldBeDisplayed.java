@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.MainActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
@@ -25,15 +26,20 @@ import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.android.testing.HiltAndroidRule;
+import dagger.hilt.android.testing.HiltAndroidTest;
+import dagger.hilt.android.testing.UninstallModules;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@HiltAndroidTest
+@UninstallModules(WellbeingDatabaseModule.class)
 public class GraphShouldBeDisplayed {
     @Rule(order = 0)
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
@@ -57,6 +63,10 @@ public class GraphShouldBeDisplayed {
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList());
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                     .thenReturn(data);
+
+            LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
+            when(surveyDao.getLiveInsights(anyString()))
+                    .thenReturn(wayToWellbeing);
 
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
             return mockWellbeingDatabase;

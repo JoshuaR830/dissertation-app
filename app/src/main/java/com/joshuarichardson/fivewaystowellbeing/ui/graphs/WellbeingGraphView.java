@@ -4,8 +4,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -51,8 +51,10 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
 
         // Prepare an outline for the circle
         this.outline.setStyle(Paint.Style.STROKE);
-        this.outline.setStrokeWidth(1);
-        this.outline.setColor(Color.BLACK);
+        this.outline.setStrokeWidth(2);
+        TypedValue colorValue = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.lineColor, colorValue, true);
+        this.outline.setColor(colorValue.data);
 
         // Reference: https://stackoverflow.com/a/54327730/13496270
         // Create an animator which will make the graph enter with a glorious fanfare
@@ -86,22 +88,22 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.width = this.canvas.getWidth() / 2;
 
         // Update the size
+        this.give.updateSize(this.multiplier, this.height, this.width);
         this.connect.updateSize(this.multiplier, this.height, this.width);
         this.beActive.updateSize(this.multiplier, this.height, this.width);
         this.takeNotice.updateSize(this.multiplier, this.height, this.width);
         this.keepLearning.updateSize(this.multiplier, this.height, this.width);
-        this.give.updateSize(this.multiplier, this.height, this.width);
 
         // Remove the existing drawing and redraw it
         this.invalidate();
     }
 
     public void updateValues(int[] ints) {
-        this.connect.updateValue(ints[0], this.multiplier, this.height, this.width);
-        this.beActive.updateValue(ints[1], this.multiplier, this.height, this.width);
-        this.takeNotice.updateValue(ints[2], this.multiplier, this.height, this.width);
-        this.keepLearning.updateValue(ints[3], this.multiplier, this.height, this.width);
-        this.give.updateValue(ints[4], this.multiplier, this.height, this.width);
+        this.give.updateValue(ints[0], this.multiplier, this.height, this.width);
+        this.connect.updateValue(ints[1], this.multiplier, this.height, this.width);
+        this.beActive.updateValue(ints[2], this.multiplier, this.height, this.width);
+        this.takeNotice.updateValue(ints[3], this.multiplier, this.height, this.width);
+        this.keepLearning.updateValue(ints[4], this.multiplier, this.height, this.width);
         animator.start();
 
         this.invalidate();

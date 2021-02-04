@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.Module;
@@ -40,6 +41,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -71,6 +73,11 @@ public class SurveysCompletedTodayTests {
                 new SurveyResponse(now.getTime(), WaysToWellbeing.BE_ACTIVE.name(), "title 2", "description 2"));
 
             SurveyResponseDao surveyDao = mock(SurveyResponseDao.class);
+
+            LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
+            when(surveyDao.getLiveInsights(anyString()))
+                    .thenReturn(wayToWellbeing);
+
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                 .thenReturn(new MutableLiveData<>(list));
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
