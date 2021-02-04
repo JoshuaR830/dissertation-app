@@ -49,9 +49,15 @@ public class WellbeingQuestion {
     @ColumnInfo(name = WELLBEING_QUESTIONS_INPUT_TYPE)
     private String inputType;
 
-    public WellbeingQuestion(long id, String question, String positiveMessage, String negativeMessage, String wayToWellbeing, int weighting, String activityType, String inputType) {
-        // ToDo - implement this
+    public WellbeingQuestion(long id, @NonNull String question, @NonNull String positiveMessage, @NonNull String negativeMessage, @NonNull String wayToWellbeing, int weighting, @NonNull String activityType, @NonNull String inputType) {
         this.id = id;
+        this.question = question;
+        this.positiveMessage = positiveMessage;
+        this.negativeMessage = negativeMessage;
+        this.wayToWellbeing = wayToWellbeing;
+        this.weighting = weighting;
+        this.activityType = activityType;
+        this.inputType = inputType;
     }
 
     public void setId(long id) {

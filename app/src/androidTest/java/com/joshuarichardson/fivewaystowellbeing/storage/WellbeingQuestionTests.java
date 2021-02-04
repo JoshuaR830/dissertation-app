@@ -77,20 +77,20 @@ public class WellbeingQuestionTests {
 
     @Test
     public void insertingWellbeingQuestions_ThenGettingWellbeingQuestionsByActivityType_ShouldReturnAllQuestionsForActivityType() {
-        List<WellbeingQuestion> questions = this.wellbeingQuestionDao.getQuestionsByActivityType(WaysToWellbeing.BE_ACTIVE.toString());
+        List<WellbeingQuestion> questions = this.wellbeingQuestionDao.getQuestionsByActivityType(ActivityType.LEARNING.toString());
 
         assertThat(questions.size())
             .isEqualTo(3);
 
         // Order of questions not guaranteed
         assertThat(questions.get(0).getId())
-            .isAnyOf(456, 567, 678);
+            .isAnyOf(456L, 567L, 678L);
 
         assertThat(questions.get(1).getId())
-            .isAnyOf(456, 567, 678);
+            .isAnyOf(456L, 567L, 678L);
 
         assertThat(questions.get(2).getId())
-            .isAnyOf(456, 567, 678);
+            .isAnyOf(456L, 567L, 678L);
 
         // Ensure that they are different to each other
         assertThat(questions.get(0).getId())
@@ -116,10 +116,17 @@ public class WellbeingQuestionTests {
     }
 
     @Test
-    // ToDo - rename - probably won't be null - but not quite sure of the behaviour
     public void insertingWellbeingQuestions_ThenGettingWellbeingResponseByNonExistentId_ShouldReturnNull() {
         WellbeingQuestion question = this.wellbeingQuestionDao.getQuestionById(123);
         assertThat(question)
             .isNull();
+    }
+
+    @Test
+    public void onDelete_TheQuestionShouldBeDeleted() {
+        this.wellbeingQuestionDao.delete(new WellbeingQuestion(567, "question 4", "positive 4", "negative 4", WaysToWellbeing.BE_ACTIVE.toString(), 4, ActivityType.LEARNING.toString(), SurveyItemTypes.CHECKBOX.toString()));
+        WellbeingQuestion deletedItem = this.wellbeingQuestionDao.getQuestionById(567);
+
+        assertThat(deletedItem).isNull();
     }
 }

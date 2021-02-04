@@ -3,8 +3,11 @@ package com.joshuarichardson.fivewaystowellbeing.storage.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_ACTIVITY_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_QUESTIONS_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_QUESTION_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_SEQUENCE_NUMBER;
@@ -13,14 +16,19 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_USER_INPUT;
 
-@Entity(tableName = WELLBEING_RECORDS_TABLE_NAME)
+@Entity(
+    tableName = WELLBEING_RECORDS_TABLE_NAME,
+    foreignKeys = {
+        @ForeignKey(entity = WellbeingQuestion.class, parentColumns = WELLBEING_QUESTIONS_ID, childColumns = WELLBEING_RECORDS_QUESTION_ID, onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = SurveyResponseActivityRecord.class, parentColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_ACTIVITY_ID, childColumns = WELLBEING_RECORDS_SURVEY_RESPONSE_ACTIVITY_RECORD_ID, onDelete = ForeignKey.CASCADE)
+    })
 public class WellbeingRecord {
 
     @PrimaryKey(autoGenerate = true)
-    @NonNull
     @ColumnInfo(name = WELLBEING_RECORDS_ID)
     private long id;
 
+    @NonNull
     @ColumnInfo(name = WELLBEING_RECORDS_USER_INPUT)
     private Boolean userInput;
 
@@ -36,8 +44,12 @@ public class WellbeingRecord {
     @ColumnInfo(name = WELLBEING_RECORDS_QUESTION_ID)
     private long questionId;
 
-    public WellbeingRecord(Boolean userInput, long time, long surveyActivityId, int sequenceNumber, long questionId) {
-        // ToDo implement this
+    public WellbeingRecord(@NonNull Boolean userInput, long time, long surveyActivityId, int sequenceNumber, long questionId) {
+        this.userInput = userInput;
+        this.time = time;
+        this.surveyActivityId = surveyActivityId;
+        this.sequenceNumber = sequenceNumber;
+        this.questionId = questionId;
     }
 
     public void setId(long id) {
@@ -52,6 +64,7 @@ public class WellbeingRecord {
         return this.sequenceNumber;
     }
 
+    @NonNull
     public Boolean getUserInput() {
         return this.userInput;
     }

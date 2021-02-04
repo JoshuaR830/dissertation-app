@@ -18,9 +18,12 @@ public interface SurveyResponseActivityRecordDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(SurveyResponseActivityRecord surveyResponseActivityRecord);
 
+    @Query("SELECT * FROM survey_activity WHERE survey_response_id = :surveyResponseId ORDER BY sequence_number")
+    List<SurveyResponseActivityRecord> getActivityRecordDetailsForSurvey(long surveyResponseId);
+
     @Query("SELECT * FROM activity_records " +
             "INNER JOIN survey_activity ON activity_records.id=survey_activity.activity_record_id " +
-            "WHERE survey_activity.survey_response_id = :surveyId")
+            "WHERE survey_activity.survey_response_id = :surveyId ORDER BY sequence_number")
     List<ActivityRecord> getActivitiesBySurveyId(long surveyId);
 
     @Query("SELECT * FROM survey_response " +

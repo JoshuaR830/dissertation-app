@@ -41,11 +41,48 @@ public class WellbeingDatabaseModule {
         }
     };
 
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+            // The questions should exist already - but should not get deleted - they need to persist as they don't get added to in normal operation of code
+            database.execSQL("CREATE TABLE wellbeing_questions (" +
+                "wellbeing_question_id INTEGER NOT NULL PRIMARY KEY, " +
+                "question TEXT NOT NULL, " +
+                "positive_message TEXT NOT NULL, " +
+                "negative_message TEXT NOT NULL, " +
+                "way_to_wellbeing TEXT NOT NULL, " +
+                "weighting INTEGER NOT NULL, " +
+                "activity_type TEXT NOT NULL, " +
+                "input_type TEXT NOT NULL " +
+                ")"
+            );
+
+            // Requires a question so should technically be deleted when a question is deleted
+            // foreign key goes on thing that can't exist without it - a record can't exist without the question - the whole point of a record is that it has info about a question
+            database.execSQL("CREATE TABLE wellbeing_records (" +
+                "wellbeing_record_id INTEGER NOT NULL PRIMARY KEY, " +
+                "user_input BOOLEAN, " +
+                "time INTEGER NOT NULL, " +
+                "survey_response_activity_record_id INTEGER NOT NULL, " +
+                "sequence_number INTEGER NOT NULL, " +
+                "question_id INTEGER NOT NULL, "  +
+                "FOREIGN KEY(question_id) REFERENCES wellbeing_questions(wellbeing_question_id) ON DELETE CASCADE" +
+                ")"
+            );
+
+            database.execSQL("ALTER TABLE survey_activity ADD COLUMN sequence_number INTEGER DEFAULT 0");
+            database.execSQL("ALTER TABLE survey_activity ADD COLUMN note TEXT");
+            database.execSQL("ALTER TABLE survey_activity ADD COLUMN start_time INTEGER DEFAULT -1");
+            database.execSQL("ALTER TABLE survey_activity ADD COLUMN end_time INTEGER DEFAULT -1");
+        }
+    };
+
     @Provides
     @Singleton
     public static WellbeingDatabase getWellbeingDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .addCallback(new RoomDatabase.Callback() {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {

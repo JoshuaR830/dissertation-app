@@ -34,6 +34,7 @@ public class WaysToWellbeingContract {
     // Survey response activity record
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_TABLE_NAME = "survey_activity";
 
+    public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_ACTIVITY_ID = "survey_activity_id";
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID = "survey_response_id";
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID = "activity_record_id";
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_SEQUENCE_NUMBER = "sequence_number";
@@ -63,7 +64,7 @@ public class WaysToWellbeingContract {
     // Wellbeing record
     public static final String WELLBEING_RECORDS_TABLE_NAME = "wellbeing_records";
 
-    public static final String WELLBEING_RECORDS_ID = "id";
+    public static final String WELLBEING_RECORDS_ID = "wellbeing_record_id";
     public static final String WELLBEING_RECORDS_USER_INPUT = "user_input";
     public static final String WELLBEING_RECORDS_TIME = "time";
     public static final String WELLBEING_RECORDS_SURVEY_RESPONSE_ACTIVITY_RECORD_ID = "survey_response_activity_record_id";
@@ -73,11 +74,11 @@ public class WaysToWellbeingContract {
     // Wellbeing questions
     public static final String WELLBEING_QUESTIONS_TABLE_NAME = "wellbeing_questions";
 
-    public static final String WELLBEING_QUESTIONS_ID = "id";
+    public static final String WELLBEING_QUESTIONS_ID = "wellbeing_question_id";
     public static final String WELLBEING_QUESTIONS_QUESTION = "question";
     public static final String WELLBEING_QUESTIONS_POSITIVE_MESSAGE = "positive_message";
     public static final String WELLBEING_QUESTIONS_NEGATIVE_MESSAGE = "negative_message";
-    public static final String WELLBEING_QUESTIONS_WAY_TO_WELLBEING = "way-to_wellbeing";
+    public static final String WELLBEING_QUESTIONS_WAY_TO_WELLBEING = "way_to_wellbeing";
     public static final String WELLBEING_QUESTIONS_WEIGHTING = "weighting";
     public static final String WELLBEING_QUESTIONS_ACTIVITY_TYPE = "activity_type";
     public static final String WELLBEING_QUESTIONS_INPUT_TYPE = "input_type";
