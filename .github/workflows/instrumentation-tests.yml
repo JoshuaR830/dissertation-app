@@ -22,6 +22,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Run unit tests
+        run: ./gradlew test
+
       # Runs a single command using the runners shell
       # Help from https://dev.to/ychescale9/running-android-emulators-on-ci-from-bitrise-io-to-github-actions-3j76
       - name: Run instrumentation tests
