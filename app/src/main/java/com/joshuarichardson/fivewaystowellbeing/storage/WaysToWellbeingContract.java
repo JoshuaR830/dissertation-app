@@ -67,7 +67,7 @@ public class WaysToWellbeingContract {
     public static final String WELLBEING_RECORDS_ID = "wellbeing_record_id";
     public static final String WELLBEING_RECORDS_USER_INPUT = "user_input";
     public static final String WELLBEING_RECORDS_TIME = "time";
-    public static final String WELLBEING_RECORDS_SURVEY_RESPONSE_ACTIVITY_RECORD_ID = "survey_response_activity_record_id";
+    public static final String WELLBEING_RECORDS_SURVEY_ACTIVITY_ID = "survey_response_activity_record_id";
     public static final String WELLBEING_RECORDS_SEQUENCE_NUMBER = "sequence_number";
     public static final String WELLBEING_RECORDS_QUESTION_ID = "question_id";
 

@@ -11,7 +11,7 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_QUESTION_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_SEQUENCE_NUMBER;
-import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_SURVEY_RESPONSE_ACTIVITY_RECORD_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_SURVEY_ACTIVITY_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_TABLE_NAME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_USER_INPUT;
@@ -20,7 +20,7 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
     tableName = WELLBEING_RECORDS_TABLE_NAME,
     foreignKeys = {
         @ForeignKey(entity = WellbeingQuestion.class, parentColumns = WELLBEING_QUESTIONS_ID, childColumns = WELLBEING_RECORDS_QUESTION_ID, onDelete = ForeignKey.CASCADE),
-        @ForeignKey(entity = SurveyResponseActivityRecord.class, parentColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_ACTIVITY_ID, childColumns = WELLBEING_RECORDS_SURVEY_RESPONSE_ACTIVITY_RECORD_ID, onDelete = ForeignKey.CASCADE)
+        @ForeignKey(entity = SurveyResponseActivityRecord.class, parentColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_ACTIVITY_ID, childColumns = WELLBEING_RECORDS_SURVEY_ACTIVITY_ID, onDelete = ForeignKey.CASCADE)
     })
 public class WellbeingRecord {
 
@@ -35,7 +35,7 @@ public class WellbeingRecord {
     @ColumnInfo(name = WELLBEING_RECORDS_TIME)
     private long time;
 
-    @ColumnInfo(name = WELLBEING_RECORDS_SURVEY_RESPONSE_ACTIVITY_RECORD_ID)
+    @ColumnInfo(name = WELLBEING_RECORDS_SURVEY_ACTIVITY_ID)
     private long surveyActivityId;
 
     @ColumnInfo(name = WELLBEING_RECORDS_SEQUENCE_NUMBER)

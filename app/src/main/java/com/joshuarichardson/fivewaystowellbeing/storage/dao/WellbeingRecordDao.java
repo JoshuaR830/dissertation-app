@@ -14,8 +14,8 @@ public interface WellbeingRecordDao {
     @Insert
     long insert(WellbeingRecord wellbeingRecord);
 
-    @Query("SELECT * FROM wellbeing_records WHERE survey_response_activity_record_id = :surveyResponseActivityRecordId ORDER BY sequence_number ASC")
-    List<WellbeingRecord> getWellbeingRecordsByActivitySurveyId(long surveyResponseActivityRecordId);
+    @Query("SELECT * FROM wellbeing_records WHERE survey_response_activity_record_id = :surveyActivityId ORDER BY sequence_number ASC")
+    List<WellbeingRecord> getWellbeingRecordsBySurveyActivityId(long surveyActivityId);
 
     @Query("SELECT * FROM wellbeing_records WHERE wellbeing_record_id = :id")
     WellbeingRecord getWellbeingRecordById(long id);
