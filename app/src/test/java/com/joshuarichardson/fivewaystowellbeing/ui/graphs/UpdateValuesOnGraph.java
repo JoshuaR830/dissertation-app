@@ -14,7 +14,7 @@ import static com.google.common.truth.Truth.assertThat;
 @Config(sdk = {Build.VERSION_CODES.N})
 public class UpdateValuesOnGraph {
     @Test
-    public void whenThereIs1Segment() {
+    public void whenSizeUpdated_ShapeValuesShouldChange() {
         WaysToWellbeingGraphValues wellbeingGraph = new WaysToWellbeingGraphValues(10, Color.BLACK, 1, 0);
 
         wellbeingGraph.updateSize(1, 10, 10);

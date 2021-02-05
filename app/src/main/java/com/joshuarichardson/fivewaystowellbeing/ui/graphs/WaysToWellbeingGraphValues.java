@@ -14,7 +14,7 @@ public class WaysToWellbeingGraphValues {
     private int value;
 
     public WaysToWellbeingGraphValues(int value, int paintColor, int totalSegments, int segment) {
-        if(segment < 0 || totalSegments == 0 || segment >= totalSegments) {
+        if(segment < 0 || totalSegments <= 0 || segment >= totalSegments) {
             return;
         }
 

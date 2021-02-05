@@ -2,7 +2,6 @@ package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +44,16 @@ public class ProgressFragment extends Fragment {
     private Observer<List<SurveyResponse>> surveyResponsesObserver;
     private SurveyResponseDao surveyDao;
     private LiveData<List<SurveyResponse>> surveyResponseItems;
+    private LiveData<Integer> wayToWellbeingGive;
+    private LiveData<Integer> wayToWellbeingConnect;
+    private LiveData<Integer> wayToWellbeingBeActive;
+    private LiveData<Integer> wayToWellbeingTakeNotice;
+    private LiveData<Integer> wayToWellbeingKeepLearning;
+    private Observer<Integer>  giveObserver;
+    private Observer<Integer> connectObserver;
+    private Observer<Integer> beActiveObserver;
+    private Observer<Integer> takeNoticeObserver;
+    private Observer<Integer> keepLearningObserver;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -143,44 +152,52 @@ public class ProgressFragment extends Fragment {
     }
 
     public void tempObserveValues(WellbeingGraphView graphView, int[] values) {
-        Observer<Integer> giveObserver = giveNum -> {
+        this.giveObserver = giveNum -> {
             values[0] = giveNum*20;
             graphView.updateValues(values);
         };
 
-        Observer<Integer> connectObserver = connectNum -> {
+        this.connectObserver = connectNum -> {
             values[1] = connectNum*20;
             graphView.updateValues(values);
         };
 
-        Observer<Integer> beActiveObserver = beActiveNum -> {
+        this.beActiveObserver = beActiveNum -> {
             values[2] = beActiveNum*20;
             graphView.updateValues(values);
         };
 
-        Observer<Integer> takeNoticeObserver = takeNoticeNum -> {
+        this.takeNoticeObserver = takeNoticeNum -> {
             values[3] = takeNoticeNum*20;
             graphView.updateValues(values);
         };
 
-        Observer<Integer> keepLearningObserver = keepLearningNum -> {
+        this.keepLearningObserver = keepLearningNum -> {
             values[4] = keepLearningNum*20;
             graphView.updateValues(values);
         };
 
+        this.wayToWellbeingGive = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.GIVE.toString());
+        this.wayToWellbeingConnect = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.CONNECT.toString());
+        this.wayToWellbeingBeActive = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.BE_ACTIVE.toString());
+        this.wayToWellbeingTakeNotice = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.TAKE_NOTICE.toString());
+        this.wayToWellbeingKeepLearning = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.KEEP_LEARNING.toString());
 
-        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.GIVE.toString()).observe(requireActivity(), giveObserver);
-        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.CONNECT.toString()).observe(requireActivity(), connectObserver);
-        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.BE_ACTIVE.toString()).observe(requireActivity(), beActiveObserver);
-        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.TAKE_NOTICE.toString()).observe(requireActivity(), takeNoticeObserver);
-        this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.KEEP_LEARNING.toString()).observe(requireActivity(), keepLearningObserver);
-
-        // ToDo - in some places I have removed the observers - should I not do this here too?
+        this.wayToWellbeingGive.observe(requireActivity(), this.giveObserver);
+        this.wayToWellbeingConnect.observe(requireActivity(), this.connectObserver);
+        this.wayToWellbeingBeActive.observe(requireActivity(), this.beActiveObserver);
+        this.wayToWellbeingTakeNotice.observe(requireActivity(), this.takeNoticeObserver);
+        this.wayToWellbeingKeepLearning.observe(requireActivity(), this.keepLearningObserver);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         this.surveyResponseItems.removeObserver(this.surveyResponsesObserver);
+        this.wayToWellbeingGive.removeObserver(this.giveObserver);
+        this.wayToWellbeingConnect.removeObserver(this.connectObserver);
+        this.wayToWellbeingBeActive.removeObserver(this.beActiveObserver);
+        this.wayToWellbeingTakeNotice.removeObserver(this.takeNoticeObserver);
+        this.wayToWellbeingKeepLearning.removeObserver(this.keepLearningObserver);
     }
 }
