@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.ui.surveys.today;
+package com.joshuarichardson.fivewaystowellbeing.ui.graphs;
 
 import android.content.Context;
 
@@ -30,13 +30,9 @@ import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -44,8 +40,7 @@ import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class NoSurveysCompletedTodayTests {
-
+public class GraphShouldBeDisplayed {
     @Rule(order = 0)
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
@@ -67,7 +62,7 @@ public class NoSurveysCompletedTodayTests {
 
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList());
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
-                .thenReturn(data);
+                    .thenReturn(data);
 
             LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
             when(surveyDao.getLiveInsights(anyString()))
@@ -84,21 +79,9 @@ public class NoSurveysCompletedTodayTests {
     }
 
     @Test
-    public void WhenNoSurveysCompletedToday_ThenNoSurveysShouldBeDisplayed() {
-        onView(withId(R.id.today_survey_item_title))
-            .check(doesNotExist());
-
-        onView(withId(R.id.today_survey_item_description))
-            .check(doesNotExist());
-
-        onView(withId(R.id.today_survey_item_image_button))
-            .check(doesNotExist());
-    }
-
-    @Test
-    public void WhenNoSurveysCompletedToday_ThenTheCardShouldDisplayNoSurveysYet() {
-        onView(withId(R.id.no_surveys_title)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("No surveys yet"))));
-        onView(withId(R.id.no_surveys_description)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Do you want to complete one?"))));
-        onView(withId(R.id.no_surveys_button)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Complete survey"))));
+    public void whenOnFirstPage_ThenAGraphShouldBeDisplayedToUsers() {
+        // Check that the graph is displayed
+        onView(withId(R.id.graph_card_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.graph_card)).check(matches(isDisplayed()));
     }
 }

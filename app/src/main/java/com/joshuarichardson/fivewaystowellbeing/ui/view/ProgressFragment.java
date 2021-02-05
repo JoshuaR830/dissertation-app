@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +17,7 @@ import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.IndividualSurveyActivity;
 
 import java.util.Calendar;
@@ -27,6 +29,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -41,6 +44,16 @@ public class ProgressFragment extends Fragment {
     private Observer<List<SurveyResponse>> surveyResponsesObserver;
     private SurveyResponseDao surveyDao;
     private LiveData<List<SurveyResponse>> surveyResponseItems;
+    private LiveData<Integer> wayToWellbeingGive;
+    private LiveData<Integer> wayToWellbeingConnect;
+    private LiveData<Integer> wayToWellbeingBeActive;
+    private LiveData<Integer> wayToWellbeingTakeNotice;
+    private LiveData<Integer> wayToWellbeingKeepLearning;
+    private Observer<Integer>  giveObserver;
+    private Observer<Integer> connectObserver;
+    private Observer<Integer> beActiveObserver;
+    private Observer<Integer> takeNoticeObserver;
+    private Observer<Integer> keepLearningObserver;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -51,6 +64,14 @@ public class ProgressFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.surveyDao = db.surveyResponseDao();
+
+        CardView container = view.findViewById(R.id.graph_card);
+        FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
+
+        int[] values = new int[]{0, 0, 0, 0, 0};
+        WellbeingGraphView graphView = new WellbeingGraphView(getActivity(), 600, values);
+        tempObserveValues(graphView, values);
+        canvasContainer.addView(graphView);
 
         // Found out how to get today midnight from https://stackoverflow.com/a/6850919/13496270
         Calendar calendar = GregorianCalendar.getInstance();
@@ -130,9 +151,53 @@ public class ProgressFragment extends Fragment {
         this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
     }
 
+    public void tempObserveValues(WellbeingGraphView graphView, int[] values) {
+        this.giveObserver = giveNum -> {
+            values[0] = giveNum*20;
+            graphView.updateValues(values);
+        };
+
+        this.connectObserver = connectNum -> {
+            values[1] = connectNum*20;
+            graphView.updateValues(values);
+        };
+
+        this.beActiveObserver = beActiveNum -> {
+            values[2] = beActiveNum*20;
+            graphView.updateValues(values);
+        };
+
+        this.takeNoticeObserver = takeNoticeNum -> {
+            values[3] = takeNoticeNum*20;
+            graphView.updateValues(values);
+        };
+
+        this.keepLearningObserver = keepLearningNum -> {
+            values[4] = keepLearningNum*20;
+            graphView.updateValues(values);
+        };
+
+        this.wayToWellbeingGive = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.GIVE.toString());
+        this.wayToWellbeingConnect = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.CONNECT.toString());
+        this.wayToWellbeingBeActive = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.BE_ACTIVE.toString());
+        this.wayToWellbeingTakeNotice = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.TAKE_NOTICE.toString());
+        this.wayToWellbeingKeepLearning = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.KEEP_LEARNING.toString());
+
+        this.wayToWellbeingGive.observe(requireActivity(), this.giveObserver);
+        this.wayToWellbeingConnect.observe(requireActivity(), this.connectObserver);
+        this.wayToWellbeingBeActive.observe(requireActivity(), this.beActiveObserver);
+        this.wayToWellbeingTakeNotice.observe(requireActivity(), this.takeNoticeObserver);
+        this.wayToWellbeingKeepLearning.observe(requireActivity(), this.keepLearningObserver);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         this.surveyResponseItems.removeObserver(this.surveyResponsesObserver);
+        this.wayToWellbeingGive.removeObserver(this.giveObserver);
+        this.wayToWellbeingConnect.removeObserver(this.connectObserver);
+        this.wayToWellbeingBeActive.removeObserver(this.beActiveObserver);
+        this.wayToWellbeingTakeNotice.removeObserver(this.takeNoticeObserver);
+        this.wayToWellbeingKeepLearning.removeObserver(this.keepLearningObserver);
     }
 }
