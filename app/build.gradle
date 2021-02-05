@@ -24,7 +24,7 @@ android {
         versionName "0.0.8"
 
         testInstrumentationRunner "com.joshuarichardson.fivewaystowellbeing.MockTestRunner"
-        testInstrumentationRunnerArguments clearPackageData: 'true'
+//        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
     buildTypes {
@@ -52,7 +52,7 @@ android {
     }
 
     testOptions {
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
 
         unitTests {
             includeAndroidResources = true;
@@ -94,12 +94,18 @@ dependencies {
     testImplementation 'org.mockito:mockito-android:3.7.7'
     testImplementation 'androidx.test:runner:1.3.0'
 
-    // ToDo - find out how to move all tests to run in Robolectric instead of runing on the emulator for faster tests#
+    // ToDo - find out how to move all tests to run in Robolectric instead of runing on the emulator for faster tests
+    testImplementation 'android.arch.core:core-testing:1.1.1'
+
     // Reference https://proandroiddev.com/robolectric-testing-with-androidjunitrunner-86292bceef25
     // Robolectric
-//    testImplementation 'com.android.support.test:rules:1.0.2'
-//    testImplementation 'com.android.support.test:runner:1.0.2'
-//    testImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation 'androidx.test:rules:1.3.0'
+    testImplementation 'androidx.test:runner:1.3.0'
+    testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    // Robolectric hilt
+    testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+    testAnnotationProcessor "com.google.dagger:hilt-android-compiler:$hilt_version"
     testImplementation 'org.robolectric:robolectric:4.4'
 
     androidTestUtil 'androidx.test:orchestrator:1.3.0'
