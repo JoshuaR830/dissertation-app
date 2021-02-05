@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -43,7 +44,7 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.keepLearning = new WaysToWellbeingGraphValues(wayToWellbeingValues[4], getResources().getColor(R.color.way_to_wellbeing_keep_learning, context.getTheme()), 5, 4);
 
         // Set the correct size for the layout
-        this.setLayoutParams(new FrameLayout.LayoutParams(graphSize, graphSize));
+        this.setLayoutParams(new FrameLayout.LayoutParams(graphSize, graphSize, Gravity.CENTER));
 
         // Create the bitmap
         bitmap = Bitmap.createBitmap(graphSize, graphSize, Bitmap.Config.ARGB_8888);

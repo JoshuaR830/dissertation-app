@@ -87,10 +87,8 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
         onView(withId(R.id.navigation_view_survey_responses)).perform(click());
         onView(withId(R.id.surveyRecyclerView))
             .perform(scrollToPosition(0))
-            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_title), withText("A survey title"))))))
-            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_description), withText("A survey description"))))));
-
-        //ToDo add this back in in future when expand button added again
-//            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.expand_button), withText("Expand"))))));
+            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_title), withText("29 Apr 1972"))))))
+            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_description), withText("A survey description"))))))
+            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.expand_button), withText("Expand"))))));
     }
 }

@@ -1,16 +1,18 @@
 <resources>
     <string name="app_name">Five ways to wellbeing</string>
 
-    <string name="launch_view_surveys">View completed surveys</string>
+    <string name="launch_view_surveys">Your wellbeing log</string>
     <string name="launch_view_pass_time">View activities</string>
     <string name="launch_create_activity">Record activity</string>
-    <string name="launch_answer_survey">Complete survey</string>
+    <string name="launch_answer_survey">Complete log</string>
     <string name="learn_more_title">Learn more</string>
+    <string name="view_more">View more</string>
 
     <string name="log_your_day_title">Keep track of your day</string>
-    <string name="log_your_day_description">Record the activities you have done throughout the day, then complete surveys to check in on how things are going.</string>
+    <string name="log_your_day_description">Record the activities you have done throughout the day, then complete your daily wellbeing log to check in on how things are going.</string>
 
-    <string name="no_surveys_title">No surveys yet</string>
+    <!-- ToDo change this to be fore activities -->
+    <string name="no_surveys_title">No wellbeing logs today</string>
     <string name="no_surveys_description">Do you want to complete one?</string>
     
     <string name="expand_button">Expand</string>
@@ -20,7 +22,7 @@
     <string name="passtime_duration">Activity duration</string>
     <string name="passtime_type">Activity type</string>
 
-    <string name="survey_details_title">Survey information</string>
+    <string name="survey_details_title">Wellbeing information</string>
     <string name="survey_input_title">Enter a title</string>
     <string name="survey_input_description">Enter a description</string>
     <string name="survey_input_activity">Select an activity</string>
@@ -28,7 +30,7 @@
 
     <string name="submit_button">Submit</string>
     <string name="navigation_home">Progress</string>
-    <string name="navigation_surveys">Surveys</string>
+    <string name="navigation_surveys">History</string>
     <string name="navigation_pass_times">Activities</string>
     <string name="navigation_insights">Insights</string>
 

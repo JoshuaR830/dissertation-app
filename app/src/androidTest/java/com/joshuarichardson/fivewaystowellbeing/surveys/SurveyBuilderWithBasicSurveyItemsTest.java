@@ -68,7 +68,7 @@ public class SurveyBuilderWithBasicSurveyItemsTest {
         View basicContainer = this.surveyBuilder.requireViewById(R.id.basic_survey_container);
 
         TextView title = basicContainer.requireViewById(R.id.basic_survey_title);
-        assertThat(title.getText()).isEqualTo("Survey information");
+        assertThat(title.getText()).isEqualTo("Wellbeing information");
         basicContainer.requireViewById(R.id.survey_title_input);
         basicContainer.requireViewById(R.id.survey_description_input);
         basicContainer.requireViewById(R.id.survey_activity_input);

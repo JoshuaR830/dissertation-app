@@ -17,8 +17,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,21 +26,19 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="16dp">
 
                     <FrameLayout
                         android:id="@+id/surveys_completed_frame_layout"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:background="@drawable/frame_circle"
-                        android:padding="16dp"
+                        android:layout_gravity="center"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/surveys_completed_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
                     </FrameLayout>
 
                     <LinearLayout
@@ -68,21 +65,25 @@
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary" />
                     </LinearLayout>
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <View
+                    android:id="@+id/view"
+                    style="@style/Divider"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"/>
 
-<!--                ToDo bring this back when survey view becomes day by day-->
-<!--                <View-->
-<!--                    android:id="@+id/view"-->
-<!--                    style="@style/Divider" />-->
-
-<!--                <Button-->
-<!--                    android:id="@+id/expand_button"-->
-<!--                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="0dp"-->
-<!--                    android:text="@string/expand_button" />-->
-
+                <Button
+                    android:id="@+id/expand_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/view_more" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

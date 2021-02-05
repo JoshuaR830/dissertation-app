@@ -55,7 +55,6 @@ public class NoSurveysCompletedTodayTests {
     @Rule(order = 2)
     public ActivityScenarioRule<MainActivity> mainActivity = new ActivityScenarioRule<>(MainActivity.class);
 
-
     @Module
     @InstallIn(ApplicationComponent.class)
     public class TestWellbeingDatabaseModule {
@@ -97,8 +96,8 @@ public class NoSurveysCompletedTodayTests {
 
     @Test
     public void WhenNoSurveysCompletedToday_ThenTheCardShouldDisplayNoSurveysYet() {
-        onView(withId(R.id.no_surveys_title)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("No surveys yet"))));
+        onView(withId(R.id.no_surveys_title)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("No wellbeing logs today"))));
         onView(withId(R.id.no_surveys_description)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Do you want to complete one?"))));
-        onView(withId(R.id.no_surveys_button)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Complete survey"))));
+        onView(withId(R.id.no_surveys_button)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Complete log"))));
     }
 }

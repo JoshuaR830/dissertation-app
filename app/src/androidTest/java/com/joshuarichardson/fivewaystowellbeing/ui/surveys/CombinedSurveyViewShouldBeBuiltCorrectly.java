@@ -123,7 +123,7 @@ public class CombinedSurveyViewShouldBeBuiltCorrectly {
     @Test
     public void surveyTitle_ShouldShowAllQuestions() {
         onView(withId(R.id.basic_survey_title))
-            .check(matches(withText("Survey information")));
+            .check(matches(withText("Wellbeing information")));
         onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(1))))
             .check(matches(withText("Add a title")));
         onView(allOf(withId(R.id.question_title), isDescendantOfA(withId(2))))
