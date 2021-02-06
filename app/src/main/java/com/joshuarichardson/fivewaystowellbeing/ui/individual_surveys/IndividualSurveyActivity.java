@@ -19,6 +19,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -26,8 +27,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -58,19 +57,28 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
         RecyclerView recycler = findViewById(R.id.survey_summary_recycler_view);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        Observer<List<SurveyResponseElement>> observer = list -> {
-            // This hides the recycler view to stop it from scrolling when there is no content
-            if(list.size() == 0) {
-                recycler.setVisibility(View.INVISIBLE);
-            } else {
-                recycler.setVisibility(View.VISIBLE);
-            }
-            recycler.setAdapter(new IndividualSurveyAdapter(this, list));
-        };
+//        Observer<List<SurveyResponseElement>> observer = list -> {
+//            // This hides the recycler view to stop it from scrolling when there is no content
+//            if(list.size() == 0) {
+//                recycler.setVisibility(View.INVISIBLE);
+//            } else {
+//                recycler.setVisibility(View.VISIBLE);
+//            }
+//            recycler.setAdapter(new IndividualSurveyAdapter(this, list));
+//        };
+//
+//        LiveData<List<SurveyResponseElement>> data = this.db.surveyResponseElementDao().getSurveyResponseElementBySurveyResponseId(surveyId);
+//        data.observe(this, observer);
 
-        LiveData<List<SurveyResponseElement>> data = this.db.surveyResponseElementDao().getSurveyResponseElementBySurveyResponseId(surveyId);
-        data.observe(this, observer);
-
+        List<SurveyResponseElement> list = Arrays.asList(
+            new SurveyResponseElement(1, "Question 1", "Answer 1"),
+            new SurveyResponseElement(1, "Question 2", "Answer 2"),
+            new SurveyResponseElement(1, "Question 3", "Answer 3"),
+            new SurveyResponseElement(1, "Question 4", "Answer 4"),
+            new SurveyResponseElement(1, "Question 5", "Answer 5"),
+            new SurveyResponseElement(1, "Question 6", "Answer 6")
+        );
+        recycler.setAdapter(new IndividualSurveyAdapter(this, list));
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             SurveyResponse surveyResponse = this.db.surveyResponseDao().getSurveyResponseById(surveyId);
