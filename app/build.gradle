@@ -25,7 +25,7 @@ android {
 
         testInstrumentationRunner "com.joshuarichardson.fivewaystowellbeing.MockTestRunner"
 
-        if(System.getenv("GITHUB_ACTIONS")) {
+        if(System.getenv("USE_TEST_ORCHESTRATOR")) {
             testInstrumentationRunnerArguments clearPackageData: 'true'
         }
     }
@@ -55,7 +55,7 @@ android {
     }
 
     testOptions {
-        if(System.getenv("GITHUB_ACTIONS")) {
+        if(System.getenv("USE_TEST_ORCHESTRATOR")) {
             execution 'ANDROIDX_TEST_ORCHESTRATOR'
         }
 
