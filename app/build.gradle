@@ -24,7 +24,10 @@ android {
         versionName "0.0.8"
 
         testInstrumentationRunner "com.joshuarichardson.fivewaystowellbeing.MockTestRunner"
-        testInstrumentationRunnerArguments clearPackageData: System.getenv("GITHUB_ACTIONS").toString()
+
+        if(System.getenv("GITHUB_ACTIONS")) {
+            testInstrumentationRunnerArguments clearPackageData: 'true'
+        }
     }
 
     buildTypes {
@@ -52,7 +55,9 @@ android {
     }
 
     testOptions {
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        if(System.getenv("GITHUB_ACTIONS")) {
+            execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        }
 
         unitTests {
             includeAndroidResources = true;
