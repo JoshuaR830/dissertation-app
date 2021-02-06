@@ -24,7 +24,7 @@ android {
         versionName "0.0.8"
 
         testInstrumentationRunner "com.joshuarichardson.fivewaystowellbeing.MockTestRunner"
-        testInstrumentationRunnerArguments clearPackageData: System.getenv().containsKey("CI")
+        testInstrumentationRunnerArguments clearPackageData: System.getenv("GITHUB_ACTIONS").toString()
     }
 
     buildTypes {
