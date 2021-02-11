@@ -10,8 +10,8 @@ public class SurveyDay {
 
     private String title;
     private String note;
-    private ArrayList<Long> activitySurveyKeys;
-    private HashMap<Long, Passtime> questionMap;
+    private ArrayList<Long> passtimeSurveyKeys;
+    private HashMap<Long, Passtime> passtimeMap;
 
     // ToDo - get the data about the ways to wellbeing achieved for the day
     private List<Integer> waysToWellbeingValues;
@@ -19,8 +19,8 @@ public class SurveyDay {
     public SurveyDay(long time, String surveyNote, ArrayList<Long> activityRecordIds, HashMap<Long, Passtime> list) {
         this.title = TimeFormatter.formatTimeAsDayMonthYearString(time);
         this.note = surveyNote;
-        this.activitySurveyKeys = activityRecordIds;
-        this.questionMap = list;
+        this.passtimeSurveyKeys = activityRecordIds;
+        this.passtimeMap = list;
     }
 
     public String getTitle() {
@@ -31,11 +31,11 @@ public class SurveyDay {
         return this.note;
     }
 
-    public ArrayList<Long> getActivitySurveyKeys() {
-        return this.activitySurveyKeys;
+    public ArrayList<Long> getPasstimeSurveyKeys() {
+        return this.passtimeSurveyKeys;
     }
 
     public HashMap<Long, Passtime> getPasstimeMap() {
-        return this.questionMap;
+        return this.passtimeMap;
     }
 }

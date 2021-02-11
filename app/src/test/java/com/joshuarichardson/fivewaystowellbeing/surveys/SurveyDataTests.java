@@ -34,7 +34,7 @@ public class SurveyDataTests {
         assertThat(day.getTitle()).isEqualTo("29 Mar 1999");
 
         // check that the right number of keys are returned
-        assertThat(day.getActivitySurveyKeys().size()).isEqualTo(2);
+        assertThat(day.getPasstimeSurveyKeys().size()).isEqualTo(2);
 
         assertThat(day.getPasstimeMap().size()).isEqualTo(2);
         Passtime passtime1 = day.getPasstimeMap().get(1L);

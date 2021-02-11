@@ -20,7 +20,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -79,19 +78,18 @@ public class IndividualSurveyWithoutQuestionsTests {
             SurveyResponseDao surveyResponseDao = mock(SurveyResponseDao.class);
             WellbeingRecordDao wellbeingRecordDao = mock(WellbeingRecordDao.class);
 
-            Calendar date = new GregorianCalendar();
-            date.set(1999, 2, 29, 15, 10, 0);
-            date.getTime();
+            long time = new GregorianCalendar(1999, 2, 29, 15, 10, 0).getTimeInMillis();
+
             // Return a survey response
-            SurveyResponse surveyResponse = new SurveyResponse(date.getTime().getTime(), WaysToWellbeing.CONNECT, "Title 1", "Description 1");
+            SurveyResponse surveyResponse = new SurveyResponse(time, WaysToWellbeing.CONNECT, "Title 1", "Description 1");
             surveyResponse.setSurveyResponseId(123);
             when(surveyResponseDao.getSurveyResponseById(123))
                     .thenReturn(surveyResponse);
 
             when(wellbeingRecordDao.getLimitedDataBySurvey(123))
                 .thenReturn(Arrays.asList(
-                    new LimitedRawSurveyData(date.getTime().getTime(), "Description 1", "Activity 1", ActivityType.HOBBY.toString()),
-                    new LimitedRawSurveyData(date.getTime().getTime(), "Description 1", "Activity 2", ActivityType.HOBBY.toString())
+                    new LimitedRawSurveyData(time, "Description 1", "Activity 1", ActivityType.HOBBY.toString()),
+                    new LimitedRawSurveyData(time, "Description 1", "Activity 2", ActivityType.HOBBY.toString())
                 )
             );
 
@@ -124,6 +122,9 @@ public class IndividualSurveyWithoutQuestionsTests {
 
         onView(withId(R.id.individual_survey_time))
             .check(matches(allOf(isDisplayed(), withText("29 Mar 1999 15:10"))));
+
+        onView(withId(R.id.graph_card_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.graph_card)).check(matches(isDisplayed()));
     }
 
     @Test

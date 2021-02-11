@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityTypeImageHelper;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
@@ -26,10 +27,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -63,15 +61,15 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
         // ToDo: should probably turn this to live data at some point
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            List<RawSurveyData> obj = this.db.wellbeingRecordDao().getDataBySurvey(surveyId);
+            List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(surveyId);
 
-            if(obj == null || obj.size() == 0) {
+            if(rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
                 // This converts a limited response to an entire RawSurveyData response
                 List<LimitedRawSurveyData> limitedData = this.db.wellbeingRecordDao().getLimitedDataBySurvey(surveyId);
-                obj = LimitedRawSurveyData.convertToRawSurveyDataList(limitedData);
+                rawSurveyDataList = LimitedRawSurveyData.convertToRawSurveyDataList(limitedData);
             }
 
-            SurveyDay surveyData = SurveyDataHelper.transform(obj);
+            SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
 
 
             if(surveyData == null) {
@@ -88,7 +86,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                     continue;
                 }
 
-                View view = LayoutInflater.from(this).inflate(R.layout.pass_time_question_item, layout, false);
+                View view = LayoutInflater.from(this).inflate(R.layout.pass_time_item, layout, false);
                 TextView title = view.findViewById(R.id.activity_text);
                 TextView note = view.findViewById(R.id.activity_note_text);
                 ImageView image = view.findViewById(R.id.activity_image);
@@ -107,8 +105,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                     }
 
                     expandButton.setOnClickListener(v -> {
-
-                        // ToDO: Why doesn't tag work
                         if(checkboxView.getVisibility() == View.GONE) {
                             checkboxView.setVisibility(View.VISIBLE);
                             checkboxView.getVisibility();
@@ -117,7 +113,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                             checkboxView.setVisibility(View.GONE);
                             expandButton.setImageResource(R.drawable.button_expand);
                         }
-
                     });
 
                     if(passtime.getQuestions().size() == 0) {
@@ -168,9 +163,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
                 image.setImageResource(WellbeingHelper.getImage(way));
 
-                Date dateTime = new Date(surveyResponse.getSurveyResponseTimestamp());
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
-                date.setText(dateFormatter.format(dateTime));
+                date.setText(TimeFormatter.formatTimeAsDayMonthYearString(surveyResponse.getSurveyResponseTimestamp()));
 
             });
         });

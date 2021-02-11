@@ -71,6 +71,7 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
 
             FrameLayout canvasContainer = itemView.findViewById(R.id.surveys_completed_frame_layout);
 
+            // ToDo - don't use fixed value
             int[] values = new int[]{50, 30, 20, 10, 90};
             this.graphView = new WellbeingGraphView(SurveyResponseAdapter.this.context, DisplayHelper.dpToPx(SurveyResponseAdapter.this.context, 72), values);
             canvasContainer.addView(this.graphView);
@@ -84,7 +85,6 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
 
             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
 
-//            this.surveyTitle.setText(response.getTitle());
             this.surveyTitle.setText(dateFormatter.format(response.getSurveyResponseTimestamp()));
             this.surveyDescription.setText(response.getDescription());
 
@@ -105,8 +105,6 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
             } catch(IllegalArgumentException e) {
                 way = WaysToWellbeing.UNASSIGNED;
             }
-
-//            this.surveyImage.setImageResource(WellbeingHelper.getImage(way));
         }
     }
 }

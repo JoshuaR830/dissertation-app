@@ -20,7 +20,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -81,25 +80,24 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
             SurveyResponseDao surveyResponseDao = mock(SurveyResponseDao.class);
             WellbeingRecordDao wellbeingRecordDao = mock(WellbeingRecordDao.class);
 
-            Calendar date = new GregorianCalendar();
-            date.set(1999, 2, 29, 15, 10, 0);
-            date.getTime();
+            long time = new GregorianCalendar(1999, 2, 29, 15, 10, 0).getTimeInMillis();
+
             // Return a survey response
-            SurveyResponse surveyResponse = new SurveyResponse(date.getTime().getTime(), WaysToWellbeing.CONNECT, "Title 1", "Description 1");
+            SurveyResponse surveyResponse = new SurveyResponse(time, WaysToWellbeing.CONNECT, "Title 1", "Description 1");
             surveyResponse.setSurveyResponseId(123);
             when(surveyResponseDao.getSurveyResponseById(123))
                     .thenReturn(surveyResponse);
 
             when(wellbeingRecordDao.getDataBySurvey(123))
                 .thenReturn(Arrays.asList(
-                    new RawSurveyData(date.getTime().getTime(), "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString()),
-                    new RawSurveyData(date.getTime().getTime(), "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 2, true, ActivityType.HOBBY.toString()),
-                    new RawSurveyData(date.getTime().getTime(), "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 3", 3, true, ActivityType.HOBBY.toString()),
-                    new RawSurveyData(date.getTime().getTime(), "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 4", 4, false, ActivityType.HOBBY.toString()),
-                    new RawSurveyData(date.getTime().getTime(), "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 5", 5, true, ActivityType.HOBBY.toString()),
-                    new RawSurveyData(date.getTime().getTime(), "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 6", 6, false, ActivityType.HOBBY.toString()),
-                    new RawSurveyData(date.getTime().getTime(), "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 7", 7, false, ActivityType.HOBBY.toString()),
-                    new RawSurveyData(date.getTime().getTime(), "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 8", 8, true, ActivityType.HOBBY.toString())
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString()),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 2, true, ActivityType.HOBBY.toString()),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 3", 3, true, ActivityType.HOBBY.toString()),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 4", 4, false, ActivityType.HOBBY.toString()),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 5", 5, true, ActivityType.HOBBY.toString()),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 6", 6, false, ActivityType.HOBBY.toString()),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 7", 7, false, ActivityType.HOBBY.toString()),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 8", 8, true, ActivityType.HOBBY.toString())
                 )
             );
 
@@ -131,6 +129,9 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
 
         onView(withId(R.id.individual_survey_time))
             .check(matches(allOf(isDisplayed(), withText("29 Mar 1999 15:10"))));
+
+        onView(withId(R.id.graph_card_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.graph_card)).check(matches(isDisplayed()));
     }
 
     @Test

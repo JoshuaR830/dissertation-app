@@ -19,11 +19,11 @@ public class LimitedSurveyDataTests {
     @Before
     public void setup() {
         List<LimitedRawSurveyData> data = Arrays.asList(
-                new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 1", ActivityType.SPORT.toString()),
-                new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 2", ActivityType.SPORT.toString()),
-                new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 3", ActivityType.SPORT.toString()),
-                new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 4", ActivityType.SPORT.toString()),
-                new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 5", ActivityType.SPORT.toString())
+            new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 1", ActivityType.SPORT.toString()),
+            new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 2", ActivityType.SPORT.toString()),
+            new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 3", ActivityType.SPORT.toString()),
+            new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 4", ActivityType.SPORT.toString()),
+            new LimitedRawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity name 5", ActivityType.SPORT.toString())
         );
 
         this.transformedData = LimitedRawSurveyData.convertToRawSurveyDataList(data);
@@ -37,7 +37,7 @@ public class LimitedSurveyDataTests {
         assertThat(day.getTitle()).isEqualTo("29 Mar 1999");
 
         // check that the right number of keys are returned
-        assertThat(day.getActivitySurveyKeys().size()).isEqualTo(5);
+        assertThat(day.getPasstimeSurveyKeys().size()).isEqualTo(5);
 
         assertThat(day.getPasstimeMap().size()).isEqualTo(5);
         Passtime passtime1 = day.getPasstimeMap().get(-1L);
