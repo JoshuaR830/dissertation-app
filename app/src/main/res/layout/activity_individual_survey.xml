@@ -97,7 +97,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
-                            android:text="TextView"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary"
                             app:layout_constraintEnd_toStartOf="@+id/individual_survey_image_frame"

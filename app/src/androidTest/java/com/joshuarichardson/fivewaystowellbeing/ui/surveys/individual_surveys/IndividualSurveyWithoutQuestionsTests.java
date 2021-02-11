@@ -121,7 +121,7 @@ public class IndividualSurveyWithoutQuestionsTests {
             .check(matches(allOf(isDisplayed(), withText("Description 1"))));
 
         onView(withId(R.id.individual_survey_time))
-            .check(matches(allOf(isDisplayed(), withText("29 Mar 1999 15:10"))));
+            .check(matches(allOf(isDisplayed(), withText("29 Mar 1999"))));
 
         onView(withId(R.id.graph_card_container)).check(matches(isDisplayed()));
         onView(withId(R.id.graph_card)).check(matches(isDisplayed()));
