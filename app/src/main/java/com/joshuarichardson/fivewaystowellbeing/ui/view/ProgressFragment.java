@@ -47,13 +47,13 @@ public class ProgressFragment extends Fragment {
     private LiveData<Integer> wayToWellbeingGive;
     private LiveData<Integer> wayToWellbeingConnect;
     private LiveData<Integer> wayToWellbeingBeActive;
-    private LiveData<Integer> wayToWellbeingTakeNotice;
     private LiveData<Integer> wayToWellbeingKeepLearning;
+    private LiveData<Integer> wayToWellbeingTakeNotice;
     private Observer<Integer>  giveObserver;
     private Observer<Integer> connectObserver;
     private Observer<Integer> beActiveObserver;
-    private Observer<Integer> takeNoticeObserver;
     private Observer<Integer> keepLearningObserver;
+    private Observer<Integer> takeNoticeObserver;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -167,27 +167,27 @@ public class ProgressFragment extends Fragment {
             graphView.updateValues(values);
         };
 
-        this.takeNoticeObserver = takeNoticeNum -> {
-            values[3] = takeNoticeNum*20;
+        this.keepLearningObserver = keepLearningNum -> {
+            values[3] = keepLearningNum*20;
             graphView.updateValues(values);
         };
 
-        this.keepLearningObserver = keepLearningNum -> {
-            values[4] = keepLearningNum*20;
+        this.takeNoticeObserver = takeNoticeNum -> {
+            values[4] = takeNoticeNum*20;
             graphView.updateValues(values);
         };
 
         this.wayToWellbeingGive = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.GIVE.toString());
         this.wayToWellbeingConnect = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.CONNECT.toString());
         this.wayToWellbeingBeActive = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.BE_ACTIVE.toString());
-        this.wayToWellbeingTakeNotice = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.TAKE_NOTICE.toString());
         this.wayToWellbeingKeepLearning = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.KEEP_LEARNING.toString());
+        this.wayToWellbeingTakeNotice = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.TAKE_NOTICE.toString());
 
         this.wayToWellbeingGive.observe(requireActivity(), this.giveObserver);
         this.wayToWellbeingConnect.observe(requireActivity(), this.connectObserver);
         this.wayToWellbeingBeActive.observe(requireActivity(), this.beActiveObserver);
-        this.wayToWellbeingTakeNotice.observe(requireActivity(), this.takeNoticeObserver);
         this.wayToWellbeingKeepLearning.observe(requireActivity(), this.keepLearningObserver);
+        this.wayToWellbeingTakeNotice.observe(requireActivity(), this.takeNoticeObserver);
     }
 
     @Override
@@ -197,7 +197,7 @@ public class ProgressFragment extends Fragment {
         this.wayToWellbeingGive.removeObserver(this.giveObserver);
         this.wayToWellbeingConnect.removeObserver(this.connectObserver);
         this.wayToWellbeingBeActive.removeObserver(this.beActiveObserver);
-        this.wayToWellbeingTakeNotice.removeObserver(this.takeNoticeObserver);
         this.wayToWellbeingKeepLearning.removeObserver(this.keepLearningObserver);
+        this.wayToWellbeingTakeNotice.removeObserver(this.takeNoticeObserver);
     }
 }
