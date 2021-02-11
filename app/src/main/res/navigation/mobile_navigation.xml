@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_insights"
-        android:label="@string/launch_view_pass_time"
+        android:label="@string/navigation_insights"
         android:name="com.joshuarichardson.fivewaystowellbeing.ui.insights.InsightsFragment"
         tools:layout="@layout/fragment_insights" />
 

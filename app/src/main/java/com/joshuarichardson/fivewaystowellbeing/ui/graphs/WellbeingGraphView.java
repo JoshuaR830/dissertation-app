@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -27,8 +28,8 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
     WaysToWellbeingGraphValues give;
     WaysToWellbeingGraphValues connect;
     WaysToWellbeingGraphValues beActive;
-    WaysToWellbeingGraphValues takeNotice;
     WaysToWellbeingGraphValues keepLearning;
+    WaysToWellbeingGraphValues takeNotice;
 
     public WellbeingGraphView(Context context, int graphSize, @Size(value = 5) int[] wayToWellbeingValues) {
         super(context);
@@ -39,11 +40,11 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.give = new WaysToWellbeingGraphValues(wayToWellbeingValues[0], getResources().getColor(R.color.way_to_wellbeing_give, context.getTheme()), 5, 0);
         this.connect = new WaysToWellbeingGraphValues(wayToWellbeingValues[1], getResources().getColor(R.color.way_to_wellbeing_connect, context.getTheme()), 5, 1);
         this.beActive = new WaysToWellbeingGraphValues(wayToWellbeingValues[2], getResources().getColor(R.color.way_to_wellbeing_be_active, context.getTheme()), 5, 2);
-        this.takeNotice = new WaysToWellbeingGraphValues(wayToWellbeingValues[3], getResources().getColor(R.color.way_to_wellbeing_take_notice, context.getTheme()), 5, 3);
-        this.keepLearning = new WaysToWellbeingGraphValues(wayToWellbeingValues[4], getResources().getColor(R.color.way_to_wellbeing_keep_learning, context.getTheme()), 5, 4);
+        this.keepLearning = new WaysToWellbeingGraphValues(wayToWellbeingValues[4], getResources().getColor(R.color.way_to_wellbeing_keep_learning, context.getTheme()), 5, 3);
+        this.takeNotice = new WaysToWellbeingGraphValues(wayToWellbeingValues[3], getResources().getColor(R.color.way_to_wellbeing_take_notice, context.getTheme()), 5, 4);
 
         // Set the correct size for the layout
-        this.setLayoutParams(new FrameLayout.LayoutParams(graphSize, graphSize));
+        this.setLayoutParams(new FrameLayout.LayoutParams(graphSize, graphSize, Gravity.CENTER));
 
         // Create the bitmap
         bitmap = Bitmap.createBitmap(graphSize, graphSize, Bitmap.Config.ARGB_8888);
@@ -73,8 +74,8 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         canvas.drawArc(this.give.getShape(), this.give.getStartAngle(), this.give.getArcLength(), this.give.getUseCenter(), this.give.getPaint());
         canvas.drawArc(this.connect.getShape(), this.connect.getStartAngle(), this.connect.getArcLength(), this.connect.getUseCenter(), this.connect.getPaint());
         canvas.drawArc(this.beActive.getShape(), this.beActive.getStartAngle(), this.beActive.getArcLength(), this.beActive.getUseCenter(), this.beActive.getPaint());
-        canvas.drawArc(this.takeNotice.getShape(), this.takeNotice.getStartAngle(), this.takeNotice.getArcLength(), this.takeNotice.getUseCenter(), this.takeNotice.getPaint());
         canvas.drawArc(this.keepLearning.getShape(), this.keepLearning.getStartAngle(), this.keepLearning.getArcLength(), this.keepLearning.getUseCenter(), this.keepLearning.getPaint());
+        canvas.drawArc(this.takeNotice.getShape(), this.takeNotice.getStartAngle(), this.takeNotice.getArcLength(), this.takeNotice.getUseCenter(), this.takeNotice.getPaint());
         canvas.drawCircle(this.width, this.height, this.graphSize/2f, this.outline);
     }
 
@@ -91,8 +92,8 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.give.updateSize(this.multiplier, this.height, this.width);
         this.connect.updateSize(this.multiplier, this.height, this.width);
         this.beActive.updateSize(this.multiplier, this.height, this.width);
-        this.takeNotice.updateSize(this.multiplier, this.height, this.width);
         this.keepLearning.updateSize(this.multiplier, this.height, this.width);
+        this.takeNotice.updateSize(this.multiplier, this.height, this.width);
 
         // Remove the existing drawing and redraw it
         this.invalidate();
@@ -102,8 +103,8 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.give.updateValue(ints[0], this.multiplier, this.height, this.width);
         this.connect.updateValue(ints[1], this.multiplier, this.height, this.width);
         this.beActive.updateValue(ints[2], this.multiplier, this.height, this.width);
-        this.takeNotice.updateValue(ints[3], this.multiplier, this.height, this.width);
-        this.keepLearning.updateValue(ints[4], this.multiplier, this.height, this.width);
+        this.keepLearning.updateValue(ints[3], this.multiplier, this.height, this.width);
+        this.takeNotice.updateValue(ints[4], this.multiplier, this.height, this.width);
         animator.start();
 
         this.invalidate();

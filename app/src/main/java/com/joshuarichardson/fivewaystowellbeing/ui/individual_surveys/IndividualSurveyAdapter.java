@@ -27,7 +27,7 @@ public class IndividualSurveyAdapter extends RecyclerView.Adapter<IndividualSurv
     @NonNull
     @Override
     public IndividualSurveyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = this.inflater.inflate(R.layout.survey_element_item, parent, false);
+        View view = this.inflater.inflate(R.layout.pass_time_item, parent, false);
         return new IndividualSurveyViewHolder(view);
     }
 
@@ -43,19 +43,19 @@ public class IndividualSurveyAdapter extends RecyclerView.Adapter<IndividualSurv
 
     public class IndividualSurveyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView question;
-        TextView answer;
+        TextView title;
+        TextView note;
 
         public IndividualSurveyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.question = itemView.findViewById(R.id.survey_question);
-            this.answer = itemView.findViewById(R.id.survey_answer);
+            this.title = itemView.findViewById(R.id.activity_text);
+            this.note = itemView.findViewById(R.id.activity_note_text);
         }
 
         public void onBind(SurveyResponseElement element) {
-            this.question.setText(element.getQuestion());
-            this.answer.setText(element.getAnswer());
+            this.title.setText(element.getQuestion());
+            this.note.setText(element.getAnswer());
         }
     }
 }
