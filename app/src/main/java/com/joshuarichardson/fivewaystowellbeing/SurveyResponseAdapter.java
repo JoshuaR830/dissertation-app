@@ -1,15 +1,19 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
+import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.IndividualSurveyActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -56,12 +60,14 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
         private TextView surveyTitle;
         private TextView surveyDescription;
         private ImageView surveyImage;
+        private Button viewMoreButton;
 
         public SurveyResponseViewHolder(@NonNull View itemView) {
             super(itemView);
             this.surveyTitle =  itemView.findViewById(R.id.survey_list_title);
             this.surveyDescription = itemView.findViewById(R.id.survey_list_description);
             this.surveyImage = itemView.findViewById(R.id.surveys_completed_image);
+            this.viewMoreButton = itemView.findViewById(R.id.view_more_button);
 
             FrameLayout canvasContainer = itemView.findViewById(R.id.surveys_completed_frame_layout);
 
@@ -81,6 +87,16 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
 //            this.surveyTitle.setText(response.getTitle());
             this.surveyTitle.setText(dateFormatter.format(response.getSurveyResponseTimestamp()));
             this.surveyDescription.setText(response.getDescription());
+
+            this.viewMoreButton.setOnClickListener(v -> {
+
+                // ToDo - this would probably be better as a callback
+                Intent surveyIntent = new Intent(SurveyResponseAdapter.this.context, IndividualSurveyActivity.class);
+                Bundle surveyBundle = new Bundle();
+                surveyBundle.putLong("survey_id", response.getSurveyResponseId());
+                surveyIntent.putExtras(surveyBundle);
+                SurveyResponseAdapter.this.context.startActivity(surveyIntent);
+            });
 
             // Catch the exception if the user does not set a value
             WaysToWellbeing way;

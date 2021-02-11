@@ -27,7 +27,7 @@ public class IndividualSurveyAdapter extends RecyclerView.Adapter<IndividualSurv
     @NonNull
     @Override
     public IndividualSurveyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = this.inflater.inflate(R.layout.activity_question_item, parent, false);
+        View view = this.inflater.inflate(R.layout.pass_time_question_item, parent, false);
         return new IndividualSurveyViewHolder(view);
     }
 

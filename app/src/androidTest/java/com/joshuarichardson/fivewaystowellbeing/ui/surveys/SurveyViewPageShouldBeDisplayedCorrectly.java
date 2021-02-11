@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -64,7 +65,7 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             SurveyResponseDao mockSurveyDao = mock(SurveyResponseDao.class);
 
             SurveyResponse[] responses = new SurveyResponse[] {
-                new SurveyResponse(73426786, WaysToWellbeing.CONNECT, "A survey title", "A survey description")
+                new SurveyResponse(new GregorianCalendar(1972, 3, 29).getTimeInMillis(), WaysToWellbeing.CONNECT, "A survey title", "A survey description")
             };
 
             LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
@@ -89,6 +90,6 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_title), withText("29 Apr 1972"))))))
             .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_description), withText("A survey description"))))))
-            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.expand_button), withText("Expand"))))));
+            .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.view_more_button), withText("View more"))))));
     }
 }

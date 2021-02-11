@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.individual_surveys.IndividualSurveyActivity"
+    android:animateLayoutChanges="true">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/survey_summary_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/survey_summary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="0dp"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="16dp">
+
+                        <FrameLayout
+                            android:id="@+id/individual_survey_image_frame"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="@drawable/frame_circle"
+                            android:padding="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:id="@+id/individual_survey_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                tools:srcCompat="@tools:sample/avatars" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/individual_survey_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:text="TextView"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            app:layout_constraintEnd_toStartOf="@+id/individual_survey_image_frame"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/survey_summary_title" />
+
+                        <TextView
+                            android:id="@+id/individual_survey_description"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:text="TextView"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            app:layout_constraintEnd_toStartOf="@+id/individual_survey_image_frame"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/individual_survey_title" />
+
+                        <TextView
+                            android:id="@+id/survey_summary_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:text="@string/survey_summary_title"
+                            android:textAppearance="?attr/textAppearanceHeadline5"
+                            android:textColor="?android:attr/textColorPrimary"
+                            app:layout_constraintEnd_toStartOf="@+id/individual_survey_image_frame"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/individual_survey_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:text="TextView"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?android:attr/textColorSecondary"
+                            app:layout_constraintEnd_toStartOf="@+id/individual_survey_image_frame"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/individual_survey_description" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/individual_survey_activity"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:paddingStart="8dp"-->
+<!--                    android:paddingEnd="8dp"-->
+<!--                    android:paddingTop="8dp"-->
+<!--                    android:clipToPadding="false"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/survey_summary">-->
+<!--                </LinearLayout>-->
+
+                <include
+                    android:id="@+id/include"
+                    layout="@layout/graph_card_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/survey_summary" />
+
+                <!--    <androidx.cardview.widget.CardView-->
+                <!--        android:id="@+id/survey_summary_recycler_view_container"-->
+                <!--        android:layout_width="0dp"-->
+                <!--        android:layout_height="0dp"-->
+                <!--        android:layout_marginBottom="16dp"-->
+                <!--        android:layout_marginEnd="16dp"-->
+                <!--        android:layout_marginStart="16dp"-->
+                <!--        android:layout_marginTop="8dp"-->
+                <!--        app:cardCornerRadius="16dp"-->
+                <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--        app:layout_constraintEnd_toEndOf="parent"-->
+                <!--        app:layout_constraintStart_toStartOf="parent"-->
+                <!--        app:layout_constraintTop_toBottomOf="@+id/individual_survey_activity">-->
+
+                <!--        <androidx.recyclerview.widget.RecyclerView-->
+                <!--            android:id="@+id/survey_summary_recycler_view"-->
+                <!--            android:layout_width="match_parent"-->
+                <!--            android:layout_height="match_parent"-->
+                <!--            android:clipToPadding="false"-->
+                <!--            android:paddingEnd="8dp"-->
+                <!--            android:paddingStart="8dp" />-->
+                <!--    </androidx.cardview.widget.CardView>-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/survey_summary_item_container"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/include">
+
+                    <LinearLayout
+                        android:id="@+id/individual_survey_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <FrameLayout
+                                android:id="@+id/surveys_completed_frame_layout"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginTop="16dp"
+                                android:background="@drawable/frame_circle"
+                                android:padding="16dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:id="@+id/surveys_completed_image"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:srcCompat="@drawable/progress_survey_today"
+                                    app:tint="@color/colorSilver" />
+                            </FrameLayout>
+
+                            <LinearLayout
+                                android:id="@+id/surveys_completed_today_linear_layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="16dp"
+                                android:orientation="vertical"
+                                app:layout_constraintEnd_toStartOf="@+id/surveys_completed_frame_layout"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:id="@+id/survey_list_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="@string/today_title"
+                                    android:textAppearance="?attr/textAppearanceHeadline5"
+                                    android:textColor="?android:attr/textColorPrimary" />
+
+                                <TextView
+                                    android:id="@+id/survey_list_description"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/today_description"
+                                    android:textAppearance="?attr/textAppearanceBody2"
+                                    android:textColor="?android:attr/textColorSecondary" />
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/surveys_completed_today_divider"
+                                style="@style/Divider"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/surveys_completed_frame_layout" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <LinearLayout
+                            android:id="@+id/survey_item_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="16dp"
+                            android:text="Activity"
+                            app:icon="@drawable/icon_add" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

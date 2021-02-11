@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,13 +16,17 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
+import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
+import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
+import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
+import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
+import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
+import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -27,8 +34,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -40,7 +46,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invividual_survey);
+        setContentView(R.layout.activity_individual_survey);
 
         Intent surveyIntent = getIntent();
         if(surveyIntent == null || surveyIntent.getExtras() == null) {
@@ -55,43 +61,100 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             return;
         }
 
-        RecyclerView recycler = findViewById(R.id.survey_summary_recycler_view);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
-//        Observer<List<SurveyResponseElement>> observer = list -> {
-//            // This hides the recycler view to stop it from scrolling when there is no content
-//            if(list.size() == 0) {
-//                recycler.setVisibility(View.INVISIBLE);
-//            } else {
-//                recycler.setVisibility(View.VISIBLE);
-//            }
-//            recycler.setAdapter(new IndividualSurveyAdapter(this, list));
-//        };
-//
-//        LiveData<List<SurveyResponseElement>> data = this.db.surveyResponseElementDao().getSurveyResponseElementBySurveyResponseId(surveyId);
-//        data.observe(this, observer);
-
-        List<SurveyResponseElement> list = Arrays.asList(
-            new SurveyResponseElement(1, "Question 1", "Answer 1"),
-            new SurveyResponseElement(1, "Question 2", "Answer 2"),
-            new SurveyResponseElement(1, "Question 3", "Answer 3"),
-            new SurveyResponseElement(1, "Question 4", "Answer 4"),
-            new SurveyResponseElement(1, "Question 5", "Answer 5"),
-            new SurveyResponseElement(1, "Question 6", "Answer 6")
-        );
-        recycler.setAdapter(new IndividualSurveyAdapter(this, list));
-
+        // ToDo: should probably turn this to live data at some point
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            List<RawSurveyData> obj = this.db.wellbeingRecordDao().getDataBySurvey(surveyId);
+
+            if(obj == null || obj.size() == 0) {
+                // This converts a limited response to an entire RawSurveyData response
+                List<LimitedRawSurveyData> limitedData = this.db.wellbeingRecordDao().getLimitedDataBySurvey(surveyId);
+                obj = LimitedRawSurveyData.convertToRawSurveyDataList(limitedData);
+            }
+
+            SurveyDay surveyData = SurveyDataHelper.transform(obj);
+
+
+            if(surveyData == null) {
+                return;
+            }
+
+            String surveyTitle = surveyData.getTitle();
+            String surveyNote = surveyData.getNote();
+
+            LinearLayout layout = findViewById(R.id.survey_item_container);
+            for(long key : surveyData.getQuestionMap().keySet()) {
+                Passtime passtime = surveyData.getQuestionMap().get(key);
+                if(passtime == null) {
+                    continue;
+                }
+
+                View view = LayoutInflater.from(this).inflate(R.layout.pass_time_question_item, layout, false);
+                TextView title = view.findViewById(R.id.activity_text);
+                TextView note = view.findViewById(R.id.activity_note_text);
+                ImageView image = view.findViewById(R.id.activity_image);
+
+                ImageButton expandButton = view.findViewById(R.id.expand_options_button);
+                View checkboxView = view.findViewById(R.id.pass_time_checkbox_container);
+
+                runOnUiThread(() -> {
+                    LinearLayout checkboxContainer = checkboxView.findViewById(R.id.check_box_container);
+
+                    for(Question question : passtime.getQuestions()) {
+                        CheckBox checkBox = (CheckBox) LayoutInflater.from(this).inflate(R.layout.item_check_box, checkboxContainer, false);
+                        checkBox.setChecked(question.getUserResponse());
+                        checkBox.setText(question.getQuestion());
+                        checkboxContainer.addView(checkBox);
+                    }
+
+                    expandButton.setOnClickListener(v -> {
+
+                        // ToDO: Why doesn't tag work
+                        if(checkboxView.getVisibility() == View.GONE) {
+                            checkboxView.setVisibility(View.VISIBLE);
+                            checkboxView.getVisibility();
+                            expandButton.setImageResource(R.drawable.button_collapse);
+                        } else {
+                            checkboxView.setVisibility(View.GONE);
+                            expandButton.setImageResource(R.drawable.button_expand);
+                        }
+
+                    });
+
+                    if(passtime.getQuestions().size() == 0) {
+                        expandButton.setVisibility(View.GONE);
+                    }
+
+                    title.setText(passtime.getName());
+                    note.setText(passtime.getNote());
+                    image.setImageResource(ActivityTypeImageHelper.getActivityImage(passtime.getType()));
+
+                    layout.addView(view);
+                });
+            }
+
             SurveyResponse surveyResponse = this.db.surveyResponseDao().getSurveyResponseById(surveyId);
-            List<ActivityRecord> activities = this.db.surveyResponseActivityRecordDao().getActivitiesBySurveyId(surveyId);
 
             runOnUiThread(() -> {
+                TextView activityLogTitle = findViewById(R.id.survey_list_title);
+                TextView note = findViewById(R.id.survey_list_description);
 
-                TextView title = findViewById(R.id.individual_survey_title);
+                activityLogTitle.setText(surveyTitle);
+                note.setText(surveyNote);
+
+                CardView container = findViewById(R.id.graph_card);
+                FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
+
+                // ToDo - change this to get values out of the table instead of fixed values
+                int[] values = new int[]{10, 30, 70, 40, 90};
+                WellbeingGraphView graphView = new WellbeingGraphView(this, 600, values);
+                canvasContainer.addView(graphView);
+
+                TextView summaryTitle = findViewById(R.id.individual_survey_title);
                 TextView description = findViewById(R.id.individual_survey_description);
                 TextView date = findViewById(R.id.individual_survey_time);
                 ImageView image = findViewById(R.id.individual_survey_image);
 
-                title.setText(surveyResponse.getTitle());
+                summaryTitle.setText(surveyResponse.getTitle());
                 description.setText(surveyResponse.getDescription());
 
 
@@ -109,29 +172,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
                 date.setText(dateFormatter.format(dateTime));
 
-                if(activities.size() > 0) {
-                    ActivityRecord pastimeActivity = activities.get(0);
-                    LinearLayout activity = findViewById(R.id.individual_survey_activity);
-                    View view = LayoutInflater.from(this).inflate(R.layout.pass_time_record_list_item, activity, false);
-                    ((TextView)view.findViewById(R.id.nameTextView)).setText(pastimeActivity.getActivityName());
-                    Date activityTime = new Date(pastimeActivity.getActivityTimestamp());
-                    // ToDo - Create a time helper
-                    ((TextView)view.findViewById(R.id.survey_list_title)).setText(dateFormatter.format(activityTime));
-                    ((TextView)view.findViewById(R.id.typeTextView)).setText(pastimeActivity.getActivityType());
-                    // ToDo - create a time helper
-                    ((TextView)view.findViewById(R.id.durationTextView)).setText(String.format(Locale.getDefault(),"%d %s", pastimeActivity.getActivityDuration() / (1000 * 60), getString(R.string.minutes)));
-                    TextView wayToWellbeingTextView = view.findViewById(R.id.wayToWellbeingTextView);
-
-                    if(pastimeActivity.getActivityWayToWellbeing().equals("UNASSIGNED")) {
-                        wayToWellbeingTextView.setVisibility(View.GONE);
-                    } else {
-                        wayToWellbeingTextView.setText(pastimeActivity.getActivityWayToWellbeing());
-                        wayToWellbeingTextView.setVisibility(View.VISIBLE);
-                    }
-
-                    ((ImageView)view.findViewById(R.id.list_item_image)).setImageResource(ActivityTypeImageHelper.getActivityImage(pastimeActivity.getActivityType()));
-                    activity.addView(view);
-                }
             });
         });
     }
