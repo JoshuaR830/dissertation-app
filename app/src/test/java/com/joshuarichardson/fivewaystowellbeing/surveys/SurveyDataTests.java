@@ -36,8 +36,8 @@ public class SurveyDataTests {
         // check that the right number of keys are returned
         assertThat(day.getActivitySurveyKeys().size()).isEqualTo(2);
 
-        assertThat(day.getQuestionMap().size()).isEqualTo(2);
-        Passtime passtime1 = day.getQuestionMap().get(1L);
+        assertThat(day.getPasstimeMap().size()).isEqualTo(2);
+        Passtime passtime1 = day.getPasstimeMap().get(1L);
 
         assertThat(passtime1).isNotNull();
 
@@ -68,7 +68,7 @@ public class SurveyDataTests {
         assertThat(question1_3.getUserResponse()).isEqualTo(false);
 
 
-        Passtime passtime2 = day.getQuestionMap().get(2L);
+        Passtime passtime2 = day.getPasstimeMap().get(2L);
 
         assertThat(passtime2).isNotNull();
 

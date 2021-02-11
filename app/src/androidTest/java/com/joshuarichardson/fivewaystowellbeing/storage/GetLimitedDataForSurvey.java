@@ -97,7 +97,7 @@ public class GetLimitedDataForSurvey {
     }
 
     @Test
-    public void getDataBySurvey_ShouldReturnQuestionsInCorrectOrder() {
+    public void getDataBySurvey_ShouldReturnNoQuestions() {
         List<LimitedRawSurveyData> data = this.wellbeingRecordDao.getLimitedDataBySurvey(this.surveyResponseId3);
 
         assertThat(data.size()).isEqualTo(1);

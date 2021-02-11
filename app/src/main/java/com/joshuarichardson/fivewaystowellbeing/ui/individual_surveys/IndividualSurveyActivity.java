@@ -82,8 +82,8 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             String surveyNote = surveyData.getNote();
 
             LinearLayout layout = findViewById(R.id.survey_item_container);
-            for(long key : surveyData.getQuestionMap().keySet()) {
-                Passtime passtime = surveyData.getQuestionMap().get(key);
+            for(long key : surveyData.getPasstimeMap().keySet()) {
+                Passtime passtime = surveyData.getPasstimeMap().get(key);
                 if(passtime == null) {
                     continue;
                 }

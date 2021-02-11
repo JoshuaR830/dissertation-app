@@ -35,7 +35,7 @@ public class SurveyDay {
         return this.activitySurveyKeys;
     }
 
-    public HashMap<Long, Passtime> getQuestionMap() {
+    public HashMap<Long, Passtime> getPasstimeMap() {
         return this.questionMap;
     }
 }

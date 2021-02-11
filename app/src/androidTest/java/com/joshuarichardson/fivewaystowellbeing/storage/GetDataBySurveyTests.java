@@ -36,13 +36,13 @@ public class GetDataBySurveyTests {
     private WellbeingRecordDao wellbeingRecordDao;
     private WellbeingQuestionDao wellbeingQuestionDao;
     private SurveyResponseActivityRecordDao surveyResponseActivityRecordDao;
-
-    @Rule
-    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
     private long surveyResponseId1;
     private long surveyResponseId2;
     private long surveyResponseId3;
     private long surveyActivityId1_1;
+
+    @Rule
+    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
     @Before
     public void setup() {
