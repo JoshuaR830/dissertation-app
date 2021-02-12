@@ -12,8 +12,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.joshuarichardson.fivewaystowellbeing.R;
-
-import androidx.annotation.Size;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 
 public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUpdateListener {
     private final Bitmap bitmap;
@@ -31,17 +30,17 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
     WaysToWellbeingGraphValues keepLearning;
     WaysToWellbeingGraphValues takeNotice;
 
-    public WellbeingGraphView(Context context, int graphSize, @Size(value = 5) int[] wayToWellbeingValues) {
+    public WellbeingGraphView(Context context, int graphSize, WellbeingGraphValueHelper wayToWellbeingValues) {
         super(context);
 
         this.graphSize = graphSize;
 
         // Instantiate each segment for the graph
-        this.give = new WaysToWellbeingGraphValues(wayToWellbeingValues[0], getResources().getColor(R.color.way_to_wellbeing_give, context.getTheme()), 5, 0);
-        this.connect = new WaysToWellbeingGraphValues(wayToWellbeingValues[1], getResources().getColor(R.color.way_to_wellbeing_connect, context.getTheme()), 5, 1);
-        this.beActive = new WaysToWellbeingGraphValues(wayToWellbeingValues[2], getResources().getColor(R.color.way_to_wellbeing_be_active, context.getTheme()), 5, 2);
-        this.keepLearning = new WaysToWellbeingGraphValues(wayToWellbeingValues[4], getResources().getColor(R.color.way_to_wellbeing_keep_learning, context.getTheme()), 5, 3);
-        this.takeNotice = new WaysToWellbeingGraphValues(wayToWellbeingValues[3], getResources().getColor(R.color.way_to_wellbeing_take_notice, context.getTheme()), 5, 4);
+        this.give = new WaysToWellbeingGraphValues(wayToWellbeingValues.getGiveValue(), getResources().getColor(R.color.way_to_wellbeing_give, context.getTheme()), 5, 0);
+        this.connect = new WaysToWellbeingGraphValues(wayToWellbeingValues.getConnectValue(), getResources().getColor(R.color.way_to_wellbeing_connect, context.getTheme()), 5, 1);
+        this.beActive = new WaysToWellbeingGraphValues(wayToWellbeingValues.getBeActiveValue(), getResources().getColor(R.color.way_to_wellbeing_be_active, context.getTheme()), 5, 2);
+        this.keepLearning = new WaysToWellbeingGraphValues(wayToWellbeingValues.getKeepLearningValue(), getResources().getColor(R.color.way_to_wellbeing_keep_learning, context.getTheme()), 5, 3);
+        this.takeNotice = new WaysToWellbeingGraphValues(wayToWellbeingValues.getTakeNoticeValue(), getResources().getColor(R.color.way_to_wellbeing_take_notice, context.getTheme()), 5, 4);
 
         // Set the correct size for the layout
         this.setLayoutParams(new FrameLayout.LayoutParams(graphSize, graphSize, Gravity.CENTER));
@@ -99,12 +98,12 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.invalidate();
     }
 
-    public void updateValues(int[] ints) {
-        this.give.updateValue(ints[0], this.multiplier, this.height, this.width);
-        this.connect.updateValue(ints[1], this.multiplier, this.height, this.width);
-        this.beActive.updateValue(ints[2], this.multiplier, this.height, this.width);
-        this.keepLearning.updateValue(ints[3], this.multiplier, this.height, this.width);
-        this.takeNotice.updateValue(ints[4], this.multiplier, this.height, this.width);
+    public void updateValues(WellbeingGraphValueHelper updatedGraphValues) {
+        this.give.updateValue(updatedGraphValues.getGiveValue(), this.multiplier, this.height, this.width);
+        this.connect.updateValue(updatedGraphValues.getConnectValue(), this.multiplier, this.height, this.width);
+        this.beActive.updateValue(updatedGraphValues.getBeActiveValue(), this.multiplier, this.height, this.width);
+        this.keepLearning.updateValue(updatedGraphValues.getKeepLearningValue(), this.multiplier, this.height, this.width);
+        this.takeNotice.updateValue(updatedGraphValues.getTakeNoticeValue(), this.multiplier, this.height, this.width);
         animator.start();
 
         this.invalidate();

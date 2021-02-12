@@ -81,7 +81,22 @@ public class SurveyResponseTests {
 
         assertThat(surveyResponses).isNotNull();
         assertThat(surveyResponses.size()).isEqualTo(5);
+    }
 
+    @Test
+    public void insertingMultipleSurveys_ThenGettingAllNonLiveSurveys_ShouldReturnAllAddedSurveyResponses() throws TimeoutException, InterruptedException {
+        DatabaseInsertionHelper.insert(new SurveyResponse[] {
+            new SurveyResponse(0, WaysToWellbeing.KEEP_LEARNING, "title", "description"),
+            new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description"),
+            new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description"),
+            new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description"),
+            new SurveyResponse(2147483647, WaysToWellbeing.TAKE_NOTICE, "title", "description")
+        }, this.surveyResponseDao);
+
+        List<SurveyResponse> surveyResponses = this.surveyResponseDao.getHistoryPageData();
+
+        assertThat(surveyResponses).isNotNull();
+        assertThat(surveyResponses.size()).isEqualTo(5);
     }
 
     @Test

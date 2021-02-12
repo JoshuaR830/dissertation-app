@@ -6,7 +6,9 @@ import com.joshuarichardson.fivewaystowellbeing.MainActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Before;
@@ -59,16 +61,23 @@ public class GraphShouldBeDisplayed {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
 
             SurveyResponseDao surveyDao = mock(SurveyResponseDao.class);
+            WellbeingQuestionDao questionDao = mock(WellbeingQuestionDao.class);
 
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList());
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                     .thenReturn(data);
+
+            when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(questionDao);
+
+            LiveData<List<WellbeingGraphItem>> graphData = new MutableLiveData<>(Arrays.asList());
+            when(questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong())).thenReturn(graphData);
 
             LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
             when(surveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
 
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
+            when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(questionDao);
             return mockWellbeingDatabase;
         }
     }
