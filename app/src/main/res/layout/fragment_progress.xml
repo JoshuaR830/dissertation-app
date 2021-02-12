@@ -26,11 +26,11 @@
                 android:layout_height="match_parent">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/today_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     app:cardCornerRadius="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/wellbeing_education_card">
@@ -156,6 +156,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
+                        <ImageButton
+                            android:id="@+id/infoButton"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:layout_marginBottom="16dp"
+                            android:onClick="onLearnMoreButtonClicked"
+                            android:src="@drawable/icon_learn_more"
+                            android:tint="@color/colorPrimary" />
+
                         <FrameLayout
                             android:id="@+id/graph_card_container"
                             android:layout_width="wrap_content"
@@ -167,8 +181,9 @@
                             app:layout_constraintHorizontal_bias="0.497"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
-
                         </FrameLayout>
+
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -326,6 +341,18 @@
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
+
+                <include
+                    android:id="@+id/include_survey"
+                    layout="@layout/survey_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/today_card_view" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
