@@ -12,18 +12,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
+import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
-import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
+import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
+import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.IndividualSurveyActivity;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -85,28 +91,79 @@ public class ProgressFragment extends Fragment {
         this.graphUpdateValues.observe(requireActivity(), this.wholeGraphUpdate);
         canvasContainer.addView(graphView);
 
-        // Found out how to get today midnight from https://stackoverflow.com/a/6850919/13496270
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+//        // Found out how to get today midnight from https://stackoverflow.com/a/6850919/13496270
+//        calendar.set(Calendar.MINUTE, 0);
+//        calendar.set(Calendar.HOUR_OF_DAY, 0);
+//        calendar.set(Calendar.SECOND, 0);
+//        calendar.set(Calendar.MILLISECOND, 0);
+//
+//        TimeHelper.getStartOfDay(GregorianCalendar.getInstance().getTimeInMillis());
+//
+//        // Calculate the epoch timestamp for 12am today
+//        Date todayMidnight = calendar.getTime();
 
-        // Calculate the epoch timestamp for 12am today
-        Date todayMidnight = calendar.getTime();
-        long epochSecondsToday = todayMidnight.getTime();
+        // Calculate time for today midnight
+        Calendar calendar = GregorianCalendar.getInstance();
+        long epochSecondsToday = TimeHelper.getStartOfDay(calendar.getTimeInMillis());
+        long epochSecondsTonight = TimeHelper.getEndOfDay(calendar.getTimeInMillis());
 
         // Calculate the epoch time for 12am tomorrow
-        calendar.add(Calendar.DATE, 1);
-        Date tomorrowMidnight = calendar.getTime();
-        long epochSecondsTomorrow = tomorrowMidnight.getTime();
+//        calendar.add(Calendar.DATE, 1);
+//        long epochSecondsTomorrow = TimeHelper.getStartOfDay(calendar.getTimeInMillis());
 
         LinearLayout newView = view.findViewById(R.id.surveys_completed_today);
 
         this.surveyResponsesObserver = surveys -> {
             if(surveys.size() == 0) {
+
+                // ToDo: create a new survey
                 return;
             }
+
+            // ToDo - in the new world there should only be 1 survey
+            long id = surveys.get(0).getSurveyResponseId();
+            // ToDo - get activities for the specific survey
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+//                List<ActivityRecord> activities = this.db.surveyResponseActivityRecordDao().getActivitiesBySurveyId(id);
+                LinearLayout layout = requireActivity().findViewById(R.id.survey_item_container);
+
+                List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(id);
+                if(rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
+                    // This converts a limited response to an entire RawSurveyData response
+                    List<LimitedRawSurveyData> limitedData = this.db.wellbeingRecordDao().getLimitedDataBySurvey(id);
+                    rawSurveyDataList = LimitedRawSurveyData.convertToRawSurveyDataList(limitedData);
+                }
+
+                SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
+
+                if(surveyData == null) {
+                    return;
+                }
+
+                requireActivity().runOnUiThread(() -> {
+                    // ToDo - this needs to display a whole activity - not just the name
+
+                    ActivityViewHelper.displayStuff(requireActivity(), surveyData);
+//                    for(long passtimeId : surveyData.getPasstimeMap().keySet()) {
+//                        Passtime passtime = surveyData.getPasstimeMap().get(passtimeId);
+//                        if(passtime == null) {
+//                            continue;
+//                        }
+//                        View passtimeItem = LayoutInflater.from(requireActivity()).inflate(R.layout.pass_time_item, layout, false);
+//                        TextView title = passtimeItem.findViewById(R.id.activity_text);
+//                        TextView note = passtimeItem.findViewById(R.id.activity_note_text);
+//                        title.setText(passtime.getName());
+//                        note.setText(passtime.getNote());
+//                        TextView textView = new TextView(requireActivity());
+//                        textView.setText(passtime.getName());
+//                        layout.addView(passtimeItem);
+//                    }
+                });
+            });
+
+
+
+
 
             // Hide the not displayed text
             newView.removeAllViews();
@@ -159,7 +216,7 @@ public class ProgressFragment extends Fragment {
         };
 
         // Epoch seconds give a 24 hour time frame - any new surveys added will get updated live (using now meant that future surveys today didn't get shown)
-        this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(epochSecondsToday, epochSecondsTomorrow);
+        this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(epochSecondsToday, epochSecondsTonight);
         this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
     }
 

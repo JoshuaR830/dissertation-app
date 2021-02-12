@@ -4,9 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+// Found out how to get today midnight from https://stackoverflow.com/a/6850919/13496270
 public class TimeHelper {
     public static long getStartOfDay(long time) {
         Date date = new Date(time);
+
         Calendar startOfDay = new GregorianCalendar();
         startOfDay.setTime(date);
         startOfDay.set(Calendar.HOUR_OF_DAY, 0);
