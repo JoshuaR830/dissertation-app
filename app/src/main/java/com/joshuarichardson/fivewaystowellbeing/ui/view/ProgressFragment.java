@@ -15,6 +15,8 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
@@ -42,18 +44,9 @@ public class ProgressFragment extends Fragment {
     WellbeingDatabase db;
 
     private Observer<List<SurveyResponse>> surveyResponsesObserver;
-    private SurveyResponseDao surveyDao;
     private LiveData<List<SurveyResponse>> surveyResponseItems;
-    private LiveData<Integer> wayToWellbeingGive;
-    private LiveData<Integer> wayToWellbeingConnect;
-    private LiveData<Integer> wayToWellbeingBeActive;
-    private LiveData<Integer> wayToWellbeingKeepLearning;
-    private LiveData<Integer> wayToWellbeingTakeNotice;
-    private Observer<Integer>  giveObserver;
-    private Observer<Integer> connectObserver;
-    private Observer<Integer> beActiveObserver;
-    private Observer<Integer> keepLearningObserver;
-    private Observer<Integer> takeNoticeObserver;
+    private Observer<List<WellbeingGraphItem>> wholeGraphUpdate;
+    private LiveData<List<WellbeingGraphItem>> graphUpdateValues;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -63,14 +56,33 @@ public class ProgressFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        this.surveyDao = db.surveyResponseDao();
+        SurveyResponseDao surveyDao = db.surveyResponseDao();
+
+        // Found out how to get today midnight from https://stackoverflow.com/a/6850919/13496270
+        Calendar thisMorning = GregorianCalendar.getInstance();
+        thisMorning.set(Calendar.MINUTE, 0);
+        thisMorning.set(Calendar.HOUR_OF_DAY, 0);
+        thisMorning.set(Calendar.SECOND, 0);
+        thisMorning.set(Calendar.MILLISECOND, 0);
+
+        Calendar tonight = GregorianCalendar.getInstance();
+        tonight.set(Calendar.HOUR_OF_DAY, 23);
+        tonight.set(Calendar.MINUTE, 59);
+        tonight.set(Calendar.SECOND, 59);
+        tonight.set(Calendar.MILLISECOND, 999);
 
         CardView container = view.findViewById(R.id.graph_card);
         FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
 
-        int[] values = new int[]{0, 0, 0, 0, 0};
-        WellbeingGraphView graphView = new WellbeingGraphView(getActivity(), 600, values);
-        tempObserveValues(graphView, values);
+        WellbeingGraphView graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
+
+        this.wholeGraphUpdate = graphValues -> {
+            WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
+            graphView.updateValues(values);
+        };
+
+        this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning.getTimeInMillis(), tonight.getTimeInMillis());
+        this.graphUpdateValues.observe(requireActivity(), this.wholeGraphUpdate);
         canvasContainer.addView(graphView);
 
         // Found out how to get today midnight from https://stackoverflow.com/a/6850919/13496270
@@ -147,57 +159,14 @@ public class ProgressFragment extends Fragment {
         };
 
         // Epoch seconds give a 24 hour time frame - any new surveys added will get updated live (using now meant that future surveys today didn't get shown)
-        this.surveyResponseItems = this.surveyDao.getSurveyResponsesByTimestampRange(epochSecondsToday, epochSecondsTomorrow);
+        this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(epochSecondsToday, epochSecondsTomorrow);
         this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
-    }
-
-    public void tempObserveValues(WellbeingGraphView graphView, int[] values) {
-        this.giveObserver = giveNum -> {
-            values[0] = giveNum*20;
-            graphView.updateValues(values);
-        };
-
-        this.connectObserver = connectNum -> {
-            values[1] = connectNum*20;
-            graphView.updateValues(values);
-        };
-
-        this.beActiveObserver = beActiveNum -> {
-            values[2] = beActiveNum*20;
-            graphView.updateValues(values);
-        };
-
-        this.keepLearningObserver = keepLearningNum -> {
-            values[3] = keepLearningNum*20;
-            graphView.updateValues(values);
-        };
-
-        this.takeNoticeObserver = takeNoticeNum -> {
-            values[4] = takeNoticeNum*20;
-            graphView.updateValues(values);
-        };
-
-        this.wayToWellbeingGive = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.GIVE.toString());
-        this.wayToWellbeingConnect = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.CONNECT.toString());
-        this.wayToWellbeingBeActive = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.BE_ACTIVE.toString());
-        this.wayToWellbeingKeepLearning = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.KEEP_LEARNING.toString());
-        this.wayToWellbeingTakeNotice = this.db.surveyResponseDao().getLiveInsights(WaysToWellbeing.TAKE_NOTICE.toString());
-
-        this.wayToWellbeingGive.observe(requireActivity(), this.giveObserver);
-        this.wayToWellbeingConnect.observe(requireActivity(), this.connectObserver);
-        this.wayToWellbeingBeActive.observe(requireActivity(), this.beActiveObserver);
-        this.wayToWellbeingKeepLearning.observe(requireActivity(), this.keepLearningObserver);
-        this.wayToWellbeingTakeNotice.observe(requireActivity(), this.takeNoticeObserver);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         this.surveyResponseItems.removeObserver(this.surveyResponsesObserver);
-        this.wayToWellbeingGive.removeObserver(this.giveObserver);
-        this.wayToWellbeingConnect.removeObserver(this.connectObserver);
-        this.wayToWellbeingBeActive.removeObserver(this.beActiveObserver);
-        this.wayToWellbeingKeepLearning.removeObserver(this.keepLearningObserver);
-        this.wayToWellbeingTakeNotice.removeObserver(this.takeNoticeObserver);
+        this.graphUpdateValues.removeObserver(this.wholeGraphUpdate);
     }
 }

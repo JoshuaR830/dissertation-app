@@ -20,6 +20,8 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
@@ -27,12 +29,16 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -53,10 +59,36 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         }
 
         long surveyId = surveyIntent.getExtras().getLong("survey_id", -1);
+        long startTime = surveyIntent.getExtras().getLong("start_time", -1);
 
         if(surveyId < 0) {
             finish();
             return;
+        }
+
+        CardView container = findViewById(R.id.graph_card);
+        FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
+
+        WellbeingGraphView graphView = new WellbeingGraphView(this, 600, new WellbeingGraphValueHelper(0, 0, 0, 0, 0));
+        canvasContainer.addView(graphView);
+
+        Observer<List<WellbeingGraphItem>> wholeGraphUpdate  = graphValues -> {
+            WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
+            graphView.updateValues(values);
+        };
+
+        if(startTime > -1) {
+            Date date = new Date(startTime);
+            Calendar morning = new GregorianCalendar();
+            Calendar night = new GregorianCalendar();
+            morning.setTime(date);
+            night.setTime(date);
+
+            night.set(Calendar.HOUR_OF_DAY, 23);
+            night.set(Calendar.MINUTE, 59);
+            night.set(Calendar.SECOND, 59);
+            night.set(Calendar.MILLISECOND, 999);
+            this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(morning.getTimeInMillis(), night.getTimeInMillis()).observe(this, wholeGraphUpdate);
         }
 
         // ToDo: should probably turn this to live data at some point
@@ -136,14 +168,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                 activityLogTitle.setText(surveyTitle);
                 note.setText(surveyNote);
 
-                CardView container = findViewById(R.id.graph_card);
-                FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
-
-                // ToDo - change this to get values out of the table instead of fixed values
-                int[] values = new int[]{10, 30, 70, 40, 90};
-                WellbeingGraphView graphView = new WellbeingGraphView(this, 600, values);
-                canvasContainer.addView(graphView);
-
                 TextView summaryTitle = findViewById(R.id.individual_survey_title);
                 TextView description = findViewById(R.id.individual_survey_description);
                 TextView date = findViewById(R.id.individual_survey_time);
@@ -164,7 +188,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                 image.setImageResource(WellbeingHelper.getImage(way));
 
                 date.setText(TimeFormatter.formatTimeAsDayMonthYearString(surveyResponse.getSurveyResponseTimestamp()));
-
             });
         });
     }
