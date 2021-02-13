@@ -2,13 +2,16 @@ package com.joshuarichardson.fivewaystowellbeing.ui.insights;
 
 import android.content.Context;
 
+import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.MainActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Before;
@@ -17,6 +20,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -64,6 +68,7 @@ public class InsightsTests {
         @Provides
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
+            WellbeingRecordDao wellbeingDao = mock(WellbeingRecordDao.class);
 
             SurveyResponseDao surveyDao = mock(SurveyResponseDao.class);
             WellbeingQuestionDao questionDao = mock(WellbeingQuestionDao.class);
@@ -76,7 +81,6 @@ public class InsightsTests {
             when(surveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
 
-
             LiveData<List<WellbeingGraphItem>> graphData = new MutableLiveData<>(Arrays.asList());
             when(questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong())).thenReturn(graphData);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(questionDao);
@@ -87,6 +91,9 @@ public class InsightsTests {
             when(surveyDao.getInsights("KEEP_LEARNING")).thenReturn(56);
             when(surveyDao.getInsights("GIVE")).thenReturn(7);
 
+            when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString())));
+
+            when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
             return mockWellbeingDatabase;
         }

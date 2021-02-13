@@ -17,7 +17,7 @@ public interface WellbeingQuestionDao {
     long insert(WellbeingQuestion wellbeingQuestion);
 
     @Query("SELECT * FROM wellbeing_questions WHERE wellbeing_question_id == :id")
-    WellbeingQuestion getQuestionById(int id);
+    WellbeingQuestion getQuestionById(long id);
 
     @Query("SELECT * FROM wellbeing_questions WHERE activity_type == :activityType")
     List<WellbeingQuestion> getQuestionsByActivityType(String activityType);

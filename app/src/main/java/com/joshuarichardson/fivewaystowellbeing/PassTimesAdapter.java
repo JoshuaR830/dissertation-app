@@ -21,11 +21,13 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
     private final Context context;
     List<ActivityRecord> passTimeItems;
     LayoutInflater inflater;
+    private PasstimeClickListener clickListener;
 
-    public PassTimesAdapter (Context context, List<ActivityRecord> passTimeItems) {
+    public PassTimesAdapter (Context context, List<ActivityRecord> passTimeItems, PasstimeClickListener clickListener) {
         this.inflater = LayoutInflater.from(context);
         this.passTimeItems = passTimeItems;
         this.context = context;
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -39,7 +41,7 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
     @Override
     public void onBindViewHolder(@NonNull PassTimeViewHolder holder, int position) {
         // This populates the view holder
-        holder.onBind(passTimeItems.get(position));
+        holder.onBind(passTimeItems.get(position), this.clickListener);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
 
         public PassTimeViewHolder(@NonNull View itemView) {
             super(itemView);
-;
+
             this.nameTextView = itemView.findViewById(R.id.nameTextView);
             this.timestampTextView = itemView.findViewById(R.id.survey_list_title);
             this.durationTextView = itemView.findViewById(R.id.durationTextView);
@@ -66,21 +68,30 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             this.image = itemView.findViewById(R.id.list_item_image);
         }
 
-        public void onBind(ActivityRecord passTime) {
-            this.nameTextView.setText(passTime.getActivityName());
-            this.durationTextView.setText(String.format(Locale.getDefault(),"%d %s", passTime.getActivityDuration() / (1000 * 60), PassTimesAdapter.this.context.getString(R.string.minutes)));
+        public void onBind(ActivityRecord passtime, PasstimeClickListener clickListener) {
+            this.nameTextView.setText(passtime.getActivityName());
+            this.durationTextView.setText(String.format(Locale.getDefault(),"%d %s", passtime.getActivityDuration() / (1000 * 60), PassTimesAdapter.this.context.getString(R.string.minutes)));
             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
-            this.timestampTextView.setText(dateFormatter.format(passTime.getActivityTimestamp()));
-            this.typeTextView.setText(passTime.getActivityType());
+            this.timestampTextView.setText(dateFormatter.format(passtime.getActivityTimestamp()));
+            this.typeTextView.setText(passtime.getActivityType());
 
-            if(passTime.getActivityWayToWellbeing().equals("UNASSIGNED")) {
+            if(passtime.getActivityWayToWellbeing().equals("UNASSIGNED")) {
                 this.wayToWellbeingTextView.setVisibility(View.GONE);
             } else {
-                this.wayToWellbeingTextView.setText(passTime.getActivityWayToWellbeing());
+                this.wayToWellbeingTextView.setText(passtime.getActivityWayToWellbeing());
                 this.wayToWellbeingTextView.setVisibility(View.VISIBLE);
             }
 
-            this.image.setImageResource(ActivityTypeImageHelper.getActivityImage(passTime.getActivityType()));
+            this.image.setImageResource(ActivityTypeImageHelper.getActivityImage(passtime.getActivityType()));
+
+            // Reference https://medium.com/android-gate/recyclerview-item-click-listener-the-right-way-daecc838fbb9
+            itemView.setOnClickListener((v) -> {
+                clickListener.onItemClick(v, passtime);
+            });
         }
+    }
+
+    public interface PasstimeClickListener {
+        void onItemClick(View view, ActivityRecord passtime);
     }
 }

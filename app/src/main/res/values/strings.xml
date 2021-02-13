@@ -7,15 +7,17 @@
     <string name="launch_answer_survey">Complete log</string>
     <string name="learn_more_title">Learn more</string>
     <string name="view_more">View more</string>
+    <string name="wellbeing_graph_title">Your ways to wellbeing</string>
 
     <string name="log_your_day_title">Keep track of your day</string>
     <string name="log_your_day_description">Record the activities you have done throughout the day, then complete your daily wellbeing log to check in on how things are going.</string>
 
-    <!-- ToDo change this to be fore activities -->
+    <!-- ToDo change this to before activities -->
     <string name="no_surveys_title">No wellbeing logs today</string>
     <string name="no_surveys_description">Do you want to complete one?</string>
     
     <string name="expand_button">Expand</string>
+    <string name="add_activity_button">Activity</string>
 
     <string name="passtime_title">Add activity details</string>
     <string name="passtime_name">Activity name</string>

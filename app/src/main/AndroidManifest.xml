@@ -10,17 +10,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LearnMoreAboutFiveWaysActivity" android:parentActivityName=".MainActivity" android:label="@string/learn_more_title"></activity>
-        <activity android:name=".ui.individual_surveys.IndividualSurveyActivity" />
+        <activity android:name=".LearnMoreAboutFiveWaysActivity" android:parentActivityName=".MainActivity" android:label="@string/learn_more_title"/>
+        <activity android:name=".ui.individual_surveys.IndividualSurveyActivity" android:parentActivityName=".MainActivity" android:label="@string/launch_view_surveys" />
         <activity
             android:name=".CreatePassTimeActivity"
-            android:label="@string/launch_create_activity" />
+            android:label="@string/launch_create_activity"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".AnswerSurveyActivity"
             android:label="@string/launch_answer_survey" />
         <activity
             android:name=".ui.view.ViewPassTimesActivity"
-            android:label="@string/launch_view_pass_time" />
+            android:label="@string/launch_view_pass_time"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".ui.wellbeing_support.WellbeingSupportWebViewActivity"
             android:label="@string/get_wellbeing_support"

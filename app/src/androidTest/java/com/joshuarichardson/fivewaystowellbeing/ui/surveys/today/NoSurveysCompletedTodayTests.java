@@ -9,12 +9,14 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +37,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -66,6 +69,7 @@ public class NoSurveysCompletedTodayTests {
 
             SurveyResponseDao surveyDao = mock(SurveyResponseDao.class);
             WellbeingQuestionDao questionDao = mock(WellbeingQuestionDao.class);
+            WellbeingRecordDao wellbeingDao = mock(WellbeingRecordDao.class);
 
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList());
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
@@ -78,6 +82,9 @@ public class NoSurveysCompletedTodayTests {
             when(surveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
 
+            when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(new ArrayList<>());
+
+            when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingDao);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(questionDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
             return mockWellbeingDatabase;
@@ -102,9 +109,20 @@ public class NoSurveysCompletedTodayTests {
     }
 
     @Test
-    public void WhenNoSurveysCompletedToday_ThenTheCardShouldDisplayNoSurveysYet() {
-        onView(withId(R.id.no_surveys_title)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("No wellbeing logs today"))));
-        onView(withId(R.id.no_surveys_description)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Do you want to complete one?"))));
-        onView(withId(R.id.no_surveys_button)).perform(scrollTo()).check(matches(allOf(isDisplayed(), withText("Complete log"))));
+    public void WhenNoActivitiesAddedToSurvey_ThenTheCardShouldDisplayAddActivityButton() {
+        onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
+            .perform(scrollTo())
+            .check(matches(allOf(isDisplayed(), withText("Today"))));
+
+        onView(allOf(withId(R.id.survey_list_description), isDescendantOfA(withId(R.id.survey_summary_item_container))))
+            .perform(scrollTo())
+            .check(matches(allOf(isDisplayed(), withText("Here is how your day is looking so far"))));
+
+        onView(allOf(withId(R.id.pass_time_item), isDescendantOfA(withId(R.id.survey_summary_item_container))))
+            .check(doesNotExist());
+
+        onView(allOf(withId(R.id.add_activity_button), isDescendantOfA(withId(R.id.survey_summary_item_container))))
+            .perform(scrollTo())
+            .check(matches(allOf(isDisplayed(), withText("Activity"))));
     }
 }
