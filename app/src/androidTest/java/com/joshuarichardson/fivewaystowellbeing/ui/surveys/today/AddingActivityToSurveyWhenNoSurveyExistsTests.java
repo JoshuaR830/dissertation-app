@@ -145,10 +145,5 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests {
 
         // Now check that the correct things were called
         WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-
-        // ToDo - in future try to work out why these work in practice but not in the tests
-//        verify(this.surveyResponseActivityDao, times(1)).insert(any(SurveyResponseActivityRecord.class));
-//        verify(this.wellbeingDao, times(1)).insert(any(WellbeingRecord.class));
-//        verify(this.questionDao, times(4)).getQuestionById(anyLong());
     }
 }
