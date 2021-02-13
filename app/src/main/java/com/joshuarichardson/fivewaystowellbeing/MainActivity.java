@@ -84,11 +84,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onAnswerSurveysButtonClicked(View v) {
-        Intent answerSurveyIntent = new Intent(MainActivity.this, AnswerSurveyActivity.class);
-        startActivity(answerSurveyIntent);
-    }
-
     public void onCreatePassTimeButtonClicked(View v) {
         Intent answerSurveyIntent = new Intent(MainActivity.this, CreatePassTimeActivity.class);
         startActivity(answerSurveyIntent);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -19,6 +20,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+            <TextView
+                android:id="@+id/graph_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/wellbeing_graph_title"
+                app:layout_constraintEnd_toStartOf="@+id/infoButton"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/infoButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="24dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="16dp"
+                android:onClick="onLearnMoreButtonClicked"
+                android:src="@drawable/icon_learn_more"
+                android:tint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@+id/graph_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/graph_title" />
+
             <FrameLayout
                 android:id="@+id/graph_card_container"
                 android:layout_width="wrap_content"
@@ -29,7 +58,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/graph_title">
 
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,9 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
@@ -23,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ViewPassTimesActivity extends AppCompatActivity {
+public class ViewPassTimesActivity extends AppCompatActivity implements PassTimesAdapter.PasstimeClickListener {
 
     private RecyclerView passTimeRecycler;
 
@@ -42,7 +44,7 @@ public class ViewPassTimesActivity extends AppCompatActivity {
         this.passTimeRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         Observer<List<ActivityRecord>> passTimeObserver = passTimeData -> {
-            PassTimesAdapter passTimeAdapter = new PassTimesAdapter(this, passTimeData);
+            PassTimesAdapter passTimeAdapter = new PassTimesAdapter(this, passTimeData, this);
             this.passTimeRecycler.setAdapter(passTimeAdapter);
         };
 
@@ -52,5 +54,17 @@ public class ViewPassTimesActivity extends AppCompatActivity {
     public void onCreatePassTimeButtonClicked(View v) {
         Intent answerSurveyIntent = new Intent(ViewPassTimesActivity.this, CreatePassTimeActivity.class);
         startActivity(answerSurveyIntent);
+    }
+
+    @Override
+    public void onItemClick(View view, ActivityRecord passtime) {
+        Intent passtimeResult = new Intent();
+        Bundle passtimeBundle = new Bundle();
+        passtimeBundle.putLong("activity_id", passtime.getActivityRecordId());
+        passtimeBundle.putString("activity_type", passtime.getActivityType());
+        passtimeBundle.putString("activity_name", passtime.getActivityName());
+        passtimeResult.putExtras(passtimeBundle);
+        setResult(Activity.RESULT_OK, passtimeResult);
+        finish();
     }
 }

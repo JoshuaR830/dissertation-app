@@ -3,14 +3,17 @@ package com.joshuarichardson.fivewaystowellbeing.ui.surveys;
 import android.content.Context;
 import android.widget.ImageView;
 
+import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.MainActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 
@@ -18,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -70,11 +74,14 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
             SurveyResponseDao mockSurveyDao = mock(SurveyResponseDao.class);
             WellbeingQuestionDao mockQuestionDao = mock(WellbeingQuestionDao.class);
+            WellbeingRecordDao mockWellbeingDao = mock(WellbeingRecordDao.class);
 
             SurveyResponse[] responses = new SurveyResponse[] {
                 new SurveyResponse(new GregorianCalendar(1972, 3, 29).getTimeInMillis(), WaysToWellbeing.CONNECT, "A survey title", "A survey description"),
                 new SurveyResponse(new GregorianCalendar(1999, 2, 29).getTimeInMillis(), WaysToWellbeing.UNASSIGNED, "A survey title", "Another survey description")
             };
+
+            when(mockWellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString())));
 
             LiveData<List<WellbeingGraphItem>> graphDataLive = new MutableLiveData<>(Arrays.asList());
             when(mockQuestionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong())).thenReturn(graphDataLive);
@@ -91,6 +98,7 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             when(mockSurveyDao.getHistoryPageData()).thenReturn(Arrays.asList(responses));
             when(mockSurveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong())).thenReturn(data);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(mockQuestionDao);
+            when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(mockWellbeingDao);
 
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(mockSurveyDao);
 
