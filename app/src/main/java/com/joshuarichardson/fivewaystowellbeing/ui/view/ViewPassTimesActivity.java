@@ -58,7 +58,6 @@ public class ViewPassTimesActivity extends AppCompatActivity implements PassTime
 
     @Override
     public void onItemClick(View view, ActivityRecord passtime) {
-        Log.d("Clicked it", "It's clicked");
         Intent passtimeResult = new Intent();
         Bundle passtimeBundle = new Bundle();
         passtimeBundle.putLong("activity_id", passtime.getActivityRecordId());

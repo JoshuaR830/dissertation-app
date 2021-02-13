@@ -120,7 +120,7 @@ public class ProgressFragment extends Fragment {
                 }
 
                 SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
-                ActivityViewHelper.displayStuff(requireActivity(), surveyData);
+                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData);
             });
         };
 

@@ -96,66 +96,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
 
 
-            ActivityViewHelper.displayStuff(this, surveyData);
-
-//            if(surveyData == null) {
-//                return;
-//            }
-//
-//
-//            LinearLayout layout = findViewById(R.id.survey_item_container);
-//            for(long key : surveyData.getPasstimeMap().keySet()) {
-//                Passtime passtime = surveyData.getPasstimeMap().get(key);
-//                if(passtime == null) {
-//                    continue;
-//                }
-//
-//                View view = LayoutInflater.from(this).inflate(R.layout.pass_time_item, layout, false);
-//                TextView title = view.findViewById(R.id.activity_text);
-//                TextView note = view.findViewById(R.id.activity_note_text);
-//                ImageView image = view.findViewById(R.id.activity_image);
-//
-//                ImageButton expandButton = view.findViewById(R.id.expand_options_button);
-//                View checkboxView = view.findViewById(R.id.pass_time_checkbox_container);
-//
-//                runOnUiThread(() -> {
-//                    LinearLayout checkboxContainer = checkboxView.findViewById(R.id.check_box_container);
-//
-//                    for(Question question : passtime.getQuestions()) {
-//                        CheckBox checkBox = (CheckBox) LayoutInflater.from(this).inflate(R.layout.item_check_box, checkboxContainer, false);
-//                        checkBox.setChecked(question.getUserResponse());
-//                        checkBox.setText(question.getQuestion());
-//                        checkboxContainer.addView(checkBox);
-//                    }
-//
-//                    expandButton.setOnClickListener(v -> {
-//                        if(checkboxView.getVisibility() == View.GONE) {
-//                            checkboxView.setVisibility(View.VISIBLE);
-//                            checkboxView.getVisibility();
-//                            expandButton.setImageResource(R.drawable.button_collapse);
-//                        } else {
-//                            checkboxView.setVisibility(View.GONE);
-//                            expandButton.setImageResource(R.drawable.button_expand);
-//                        }
-//                    });
-//
-//                    if(passtime.getQuestions().size() == 0) {
-//                        expandButton.setVisibility(View.GONE);
-//                    }
-//
-//                    title.setText(passtime.getName());
-//                    note.setText(passtime.getNote());
-//                    image.setImageResource(ActivityTypeImageHelper.getActivityImage(passtime.getType()));
-//
-//                    layout.addView(view);
-//                });
-//
-//                TextView surveyTitle = findViewById(R.id.survey_list_title);
-//                TextView surveyNote = findViewById(R.id.survey_list_description);
-//
-//                surveyTitle.setText(surveyData.getTitle());
-//                surveyNote.setText(surveyData.getNote());
-//            }
+            ActivityViewHelper.displaySurveyItems(this, surveyData);
 
             SurveyResponse surveyResponse = this.db.surveyResponseDao().getSurveyResponseById(surveyId);
 
@@ -168,7 +109,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
                 summaryTitle.setText(surveyResponse.getTitle());
                 description.setText(surveyResponse.getDescription());
-
 
                 // Catch the exception if the user does not set a value
                 WaysToWellbeing way;

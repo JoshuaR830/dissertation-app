@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.Module;
 import dagger.Provides;
@@ -139,11 +140,8 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests {
 
         // This should select an item from the activity
         onView(withId(R.id.passTimeRecyclerView))
-            .perform(scrollToPosition(1))
+            .perform(scrollToPosition(0))
             .check(matches(isDisplayed()))
-            .perform(click());
-
-        // Now check that the correct things were called
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+            .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
     }
 }

@@ -19,7 +19,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import java.util.Date;
 
 public class ActivityViewHelper {
-    public static void displayStuff(Activity activity, SurveyDay surveyData) {
+    public static void displaySurveyItems(Activity activity, SurveyDay surveyData) {
         if(surveyData == null) {
             return;
         }
