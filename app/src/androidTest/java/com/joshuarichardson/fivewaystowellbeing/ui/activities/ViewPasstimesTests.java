@@ -18,6 +18,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.espresso.matcher.RootMatchers;
@@ -52,9 +53,12 @@ import static org.mockito.Mockito.when;
 @UninstallModules(WellbeingDatabaseModule.class)
 public class ViewPasstimesTests {
     @Rule(order = 0)
-    public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
+    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
     @Rule(order = 1)
+    public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
+
+    @Rule(order = 2)
     public ActivityScenarioRule<ViewPassTimesActivity> viewPasstimesActivity = new ActivityScenarioRule<>(ViewPassTimesActivity.class);
 
     @Before
@@ -70,15 +74,14 @@ public class ViewPasstimesTests {
             WellbeingDatabase db = mock(WellbeingDatabase.class);
             ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
 
-            LiveData<List<ActivityRecord>> data = new MutableLiveData<>(
-                Arrays.asList(
+            List<ActivityRecord> data = Arrays.asList(
                     new ActivityRecord("Activity name 1", 0, 587468, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE),
                     new ActivityRecord("Activity name 2", 0, 587468, ActivityType.LEARNING, WaysToWellbeing.KEEP_LEARNING),
                     new ActivityRecord("Activity name 3", 0, 587468, ActivityType.HOBBY, WaysToWellbeing.KEEP_LEARNING)
-                )
             );
+            LiveData<List<ActivityRecord>> liveData = new MutableLiveData<>(data);
 
-            when(activityDao.getAllActivities()).thenReturn(data);
+            when(activityDao.getAllActivities()).thenReturn(liveData);
             when(db.activityRecordDao()).thenReturn(activityDao);
 
             return db;
@@ -115,7 +118,7 @@ public class ViewPasstimesTests {
     @Test
     public void onSearchForKnownPasstime_TheItemShouldBeDisplayedFirst() {
         onView(withId(R.id.passtime_search_box))
-            .perform(typeText("Activity 3"));
+            .perform(typeText("Activity name 3"));
 
         onView(withId(R.id.passTimeRecyclerView))
             .perform(scrollToPosition(0))
@@ -126,7 +129,7 @@ public class ViewPasstimesTests {
     }
 
     @Test
-    public void onSearchForUnknownPasstime_ACreateButtonShouldBeDisplayed() {
+    public void onSearchForUnknownPasstime_ACreateButtonShouldBeDisplayed() throws InterruptedException {
         onView(withId(R.id.passtime_search_box))
             .perform(typeText("New activity"));
 
@@ -147,9 +150,5 @@ public class ViewPasstimesTests {
             .perform(click());
 
         onView(withId(R.id.passtime_submit_button)).perform(click());
-
-        onView(withId(R.id.passTimeRecyclerView))
-            .perform(scrollToPosition(0))
-            .check(matches(atRecyclerPosition(0, hasDescendant(withText("New activity")))));
     }
 }

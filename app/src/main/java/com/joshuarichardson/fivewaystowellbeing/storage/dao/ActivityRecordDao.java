@@ -28,7 +28,8 @@ public interface ActivityRecordDao {
     @Query("SELECT * FROM activity_records")
     List<ActivityRecord> getAllActivitiesNotLive();
 
-    @Query("SELECT * FROM activity_records WHERE name = :searchTerm")
+    // ToDo - consider deleting this query
+    @Query("SELECT * FROM activity_records WHERE name LIKE :searchTerm || '%' ")
     List<ActivityRecord> getActivitiesMatchingSearch(String searchTerm);
 
     // ToDo Delete may be necessary later

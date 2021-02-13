@@ -114,8 +114,8 @@ public class ActivityRecordTests {
                 new ActivityRecord("Google FI", 1202, 1608076800, ActivityType.APP, WaysToWellbeing.UNASSIGNED),
                 new ActivityRecord("Phone", 1203, 1608076801, ActivityType.APP, WaysToWellbeing.UNASSIGNED),
                 new ActivityRecord("Facebook", 1204, 1608163199, ActivityType.APP, WaysToWellbeing.UNASSIGNED),
-                new ActivityRecord("Forest", 1204, 1608163200, ActivityType.APP, WaysToWellbeing.UNASSIGNED),
-                new ActivityRecord("Fishing", 1205, 1608163201, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED),
+                new ActivityRecord("forest", 1204, 1608163200, ActivityType.APP, WaysToWellbeing.UNASSIGNED),
+                new ActivityRecord("fishing", 1205, 1608163201, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED),
                 new ActivityRecord("Forest", 1204, 0, ActivityType.APP, WaysToWellbeing.UNASSIGNED),
                 new ActivityRecord("Play Store", 1204, 2147483647, ActivityType.APP, WaysToWellbeing.UNASSIGNED)
         }, this.activityDao);
