@@ -11,15 +11,15 @@
     <color name="white12Percent">#1FFFFFFF</color>
     <color name="white">#FFFFFF</color>
 
-    <color name="way_to_wellbeing_be_active">#FD7698</color>
-    <color name="way_to_wellbeing_connect">#FFD176</color>
-    <color name="way_to_wellbeing_give">#52D396</color>
-    <color name="way_to_wellbeing_keep_learning">#71C4F7</color>
-    <color name="way_to_wellbeing_take_notice">#EA8AF6</color>
+    <color name="way_to_wellbeing_be_active">#f693a7</color>
+    <color name="way_to_wellbeing_connect">#ffd176</color>
+    <color name="way_to_wellbeing_give">#79dc9d</color>
+    <color name="way_to_wellbeing_keep_learning">#6ac8df</color>
+    <color name="way_to_wellbeing_take_notice">#c994e9</color>
 
-    <color name="translucent_way_to_wellbeing_be_active">#55FD7698</color>
-    <color name="translucent_way_to_wellbeing_connect">#55FFD176</color>
-    <color name="translucent_way_to_wellbeing_give">#5552D396</color>
-    <color name="translucent_way_to_wellbeing_keep_learning">#5571C4F7</color>
-    <color name="translucent_way_to_wellbeing_take_notice">#55EA8AF6</color>
+    <color name="translucent_way_to_wellbeing_be_active">#55f693a7</color>
+    <color name="translucent_way_to_wellbeing_connect">#55ffd176</color>
+    <color name="translucent_way_to_wellbeing_give">#5579dc9d</color>
+    <color name="translucent_way_to_wellbeing_keep_learning">#556ac8df</color>
+    <color name="translucent_way_to_wellbeing_take_notice">#55c994e9</color>
 </resources>

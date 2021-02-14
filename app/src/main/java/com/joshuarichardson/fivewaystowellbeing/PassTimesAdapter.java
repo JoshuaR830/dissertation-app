@@ -4,30 +4,37 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.PassTimeViewHolder> {
+public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.PassTimeViewHolder> implements Filterable {
 
     private final Context context;
-    List<ActivityRecord> passTimeItems;
+    List<ActivityRecord> originalPasstimeItems = new ArrayList<>();
+    List<ActivityRecord> passTimeItems = new ArrayList<>();
     LayoutInflater inflater;
     private PasstimeClickListener clickListener;
+    private ItemCountUpdateListener itemUpdateCallback;
 
-    public PassTimesAdapter (Context context, List<ActivityRecord> passTimeItems, PasstimeClickListener clickListener) {
+    public PassTimesAdapter (Context context, List<ActivityRecord> passTimeItems, PasstimeClickListener clickListener, ItemCountUpdateListener itemUpdateCallback) {
         this.inflater = LayoutInflater.from(context);
-        this.passTimeItems = passTimeItems;
+        this.originalPasstimeItems.addAll(passTimeItems);
+        this.passTimeItems.addAll(passTimeItems);
         this.context = context;
         this.clickListener = clickListener;
+        this.itemUpdateCallback = itemUpdateCallback;
     }
 
     @NonNull
@@ -41,12 +48,61 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
     @Override
     public void onBindViewHolder(@NonNull PassTimeViewHolder holder, int position) {
         // This populates the view holder
-        holder.onBind(passTimeItems.get(position), this.clickListener);
+        holder.onBind(this.passTimeItems.get(position), this.clickListener);
     }
 
     @Override
     public int getItemCount() {
-        return passTimeItems.size();
+        return this.passTimeItems.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return this.searchPasstimeFilter;
+    }
+
+    Filter searchPasstimeFilter = new Filter() {
+
+        @Override
+        // Reference https://www.tutorialspoint.com/how-to-filter-a-recyclerview-with-a-searchview-on-android
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<ActivityRecord> filteredActivityRecords = new ArrayList<>();
+            FilterResults results = new FilterResults();
+            if(constraint == null || constraint.length() == 0) {
+                // Set to each item of the original list - without maintaining a reference to it
+                results.values = PassTimesAdapter.this.originalPasstimeItems;
+                return results;
+            }
+
+            // If there is a search pattern this will find all of the items
+            String filterPattern = constraint.toString().toLowerCase().trim();
+            for(ActivityRecord record : PassTimesAdapter.this.originalPasstimeItems) {
+                if(record.getActivityName().toLowerCase().startsWith(filterPattern)) {
+                    // Adds items that match the filter
+                    filteredActivityRecords.add(record);
+                }
+            }
+
+            results.values = filteredActivityRecords;
+            return results;
+        }
+
+        @Override
+        // Reference: https://www.tutorialspoint.com/how-to-filter-a-recyclerview-with-a-searchview-on-android
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            PassTimesAdapter.this.passTimeItems.clear();
+            PassTimesAdapter.this.passTimeItems.addAll((List)results.values);
+
+            // Update the recycler view
+            notifyDataSetChanged();
+            PassTimesAdapter.this.itemUpdateCallback.itemCount(PassTimesAdapter.this.getItemCount());
+        }
+    };
+
+    public void setValues(List<ActivityRecord> passTimeData, String searchTerm) {
+        this.originalPasstimeItems.clear();
+        this.originalPasstimeItems.addAll(passTimeData);
+        getFilter().filter(searchTerm);
     }
 
     public class PassTimeViewHolder extends RecyclerView.ViewHolder {
@@ -93,5 +149,9 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
 
     public interface PasstimeClickListener {
         void onItemClick(View view, ActivityRecord passtime);
+    }
+
+    public interface ItemCountUpdateListener {
+        void itemCount(int size);
     }
 }
