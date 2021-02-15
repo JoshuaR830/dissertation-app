@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        setTheme(R.style.AppTheme);
         // Switch to the theme chosen in settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String theme = preferences.getString("theme_settings_list", "SYSTEM");

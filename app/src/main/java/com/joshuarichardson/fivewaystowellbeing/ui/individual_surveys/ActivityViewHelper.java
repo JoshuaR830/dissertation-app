@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.joshuarichardson.fivewaystowellbeing.ActivityTypeImageHelper;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
@@ -19,7 +21,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import java.util.Date;
 
 public class ActivityViewHelper {
-    public static void displaySurveyItems(Activity activity, SurveyDay surveyData) {
+    public static void displaySurveyItems(Activity activity, SurveyDay surveyData, WellbeingDatabase db) {
         if(surveyData == null) {
             return;
         }
@@ -31,7 +33,7 @@ public class ActivityViewHelper {
                 continue;
             }
 
-            createPasstimeItem(activity, layout, passtime);
+            createPasstimeItem(activity, layout, passtime, db);
         }
 
         // This only needs to run once, after everything else
@@ -39,11 +41,10 @@ public class ActivityViewHelper {
             View todaySurveyContainer = activity.findViewById(R.id.survey_summary_item_container);
             TextView surveyNote = todaySurveyContainer.findViewById(R.id.survey_list_description);
 
-
             long surveyTime = TimeHelper.getStartOfDay(surveyData.getTimestamp());
             long currentTime = TimeHelper.getStartOfDay(new Date().getTime());
 
-            if (surveyTime != currentTime) {
+            if (surveyTime != currentTime && surveyTime >= 0) {
                 TextView surveyTitle = todaySurveyContainer.findViewById(R.id.survey_list_title);
                 surveyTitle.setText(surveyData.getTitle());
             }
@@ -52,7 +53,7 @@ public class ActivityViewHelper {
         });
     }
 
-    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime) {
+    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime, WellbeingDatabase db) {
         // Get the passtime template
         View view = LayoutInflater.from(activity).inflate(R.layout.pass_time_item, layout, false);
         TextView title = view.findViewById(R.id.activity_text);
@@ -70,6 +71,11 @@ public class ActivityViewHelper {
                 CheckBox checkBox = (CheckBox) LayoutInflater.from(activity).inflate(R.layout.item_check_box, checkboxContainer, false);
                 checkBox.setChecked(question.getUserResponse());
                 checkBox.setText(question.getQuestion());
+                checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                        db.wellbeingRecordDao().checkItem(question.getWellbeingRecordId(), isChecked);
+                    });
+                });
                 checkboxContainer.addView(checkBox);
             }
 
