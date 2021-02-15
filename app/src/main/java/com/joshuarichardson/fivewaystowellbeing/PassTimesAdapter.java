@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -107,8 +105,6 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
 
     public class PassTimeViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
-        private TextView timestampTextView;
-        private TextView durationTextView;
         private TextView wayToWellbeingTextView;
         private TextView typeTextView;
         private ImageView image;
@@ -117,8 +113,6 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             super(itemView);
 
             this.nameTextView = itemView.findViewById(R.id.nameTextView);
-            this.timestampTextView = itemView.findViewById(R.id.survey_list_title);
-            this.durationTextView = itemView.findViewById(R.id.durationTextView);
             this.wayToWellbeingTextView = itemView.findViewById(R.id.wayToWellbeingTextView);
             this.typeTextView = itemView.findViewById(R.id.typeTextView);
             this.image = itemView.findViewById(R.id.list_item_image);
@@ -126,15 +120,12 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
 
         public void onBind(ActivityRecord passtime, PasstimeClickListener clickListener) {
             this.nameTextView.setText(passtime.getActivityName());
-            this.durationTextView.setText(String.format(Locale.getDefault(),"%d %s", passtime.getActivityDuration() / (1000 * 60), PassTimesAdapter.this.context.getString(R.string.minutes)));
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault());
-            this.timestampTextView.setText(dateFormatter.format(passtime.getActivityTimestamp()));
             this.typeTextView.setText(passtime.getActivityType());
 
             if(passtime.getActivityWayToWellbeing().equals("UNASSIGNED")) {
                 this.wayToWellbeingTextView.setVisibility(View.GONE);
             } else {
-                this.wayToWellbeingTextView.setText(passtime.getActivityWayToWellbeing());
+                this.wayToWellbeingTextView.setText(WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.valueOf(passtime.getActivityWayToWellbeing())));
                 this.wayToWellbeingTextView.setVisibility(View.VISIBLE);
             }
 
