@@ -28,9 +28,7 @@ import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -79,28 +77,14 @@ public class ProgressFragment extends Fragment {
 
         this.graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
 
-        LinearLayout surveyContainer = requireActivity().findViewById(R.id.survey_item_container);
-
         this.wholeGraphUpdate = graphValues -> {
             this.values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             this.graphView.updateValues(this.values);
-//            this.graphView.updateValues(values);
-//            requireActivity().runOnUiThread(() -> {
-//                this.values.resetActivityValues();
-//                for(int i = 0; i < surveyContainer.getChildCount(); i++) {
-//                    this.values.updateActivityValuesForWayToWellbeing(WaysToWellbeing.valueOf(surveyContainer.getChildAt(i).getTag().toString()));
-//                }
-//            });
         };
 
         this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning, tonight);
         this.graphUpdateValues.observe(requireActivity(), this.wholeGraphUpdate);
         canvasContainer.addView(graphView);
-
-        // Calculate time for today midnight
-        Calendar calendar = GregorianCalendar.getInstance();
-        long epochSecondsToday = TimeHelper.getStartOfDay(calendar.getTimeInMillis());
-        long epochSecondsTonight = TimeHelper.getEndOfDay(calendar.getTimeInMillis());
 
         Button addActivityButton = requireActivity().findViewById(R.id.add_activity_button);
         addActivityButton.setOnClickListener(v -> {
@@ -134,7 +118,7 @@ public class ProgressFragment extends Fragment {
         };
 
         // Epoch seconds give a 24 hour time frame - any new surveys added will get updated live (using now meant that future surveys today didn't get shown)
-        this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(epochSecondsToday, epochSecondsTonight);
+        this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(thisMorning, tonight);
         this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
     }
 
@@ -159,9 +143,6 @@ public class ProgressFragment extends Fragment {
             String activityType = data.getExtras().getString("activity_type", "");
             String activityName = data.getExtras().getString("activity_name", "");
             String wayToWellbeing = data.getExtras().getString("activity_way_to_wellbeing", "UNASSIGNED");
-
-//            this.values.updateActivityValuesForWayToWellbeing(WaysToWellbeing.valueOf(wayToWellbeing));
-//            this.graphView.updateValues(this.values);
 
             if (activityId == -1) {
                 return;
