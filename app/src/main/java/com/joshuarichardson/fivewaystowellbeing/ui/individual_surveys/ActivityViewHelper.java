@@ -63,6 +63,8 @@ public class ActivityViewHelper {
         ImageButton expandButton = view.findViewById(R.id.expand_options_button);
         View checkboxView = view.findViewById(R.id.pass_time_checkbox_container);
 
+        view.setTag(passtime.getWayToWellbeing());
+
         // Start to populate the template
         activity.runOnUiThread(() -> {
             LinearLayout checkboxContainer = checkboxView.findViewById(R.id.check_box_container);

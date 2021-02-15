@@ -44,9 +44,11 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.LinearLayoutTestUtil.nthChildOf;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -92,10 +94,10 @@ public class SurveysCompletedTodayTests {
                     .thenReturn(wayToWellbeing);
 
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Arrays.asList(
-                new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString()),
-                new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 2", 2, false, ActivityType.HOBBY.toString()),
-                new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 3, false, ActivityType.LEARNING.toString()),
-                new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 4, false, ActivityType.LEARNING.toString())
+                new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString()),
+                new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 2", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString()),
+                new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.KEEP_LEARNING.toString()),
+                new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.KEEP_LEARNING.toString())
             ));
 
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
@@ -137,6 +139,10 @@ public class SurveysCompletedTodayTests {
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Activity name 1"))));
 
+        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 0)))
+            .perform(scrollTo())
+            .check(matches(withTagValue(is((Object) "KEEP_LEARNING"))));
+
         onView(allOf(withId(R.id.activity_note_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Activity note 1"))));
@@ -174,6 +180,10 @@ public class SurveysCompletedTodayTests {
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Activity name 2"))));
 
+        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 1)))
+            .perform(scrollTo())
+            .check(matches(withTagValue(is((Object) "KEEP_LEARNING"))));
+
         onView(allOf(withId(R.id.activity_note_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Activity note 2"))));
@@ -205,6 +215,10 @@ public class SurveysCompletedTodayTests {
         onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 2)))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
+
+        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 2)))
+            .perform(scrollTo())
+            .check(matches(withTagValue(is((Object) "KEEP_LEARNING"))));
 
         onView(allOf(withId(R.id.activity_note_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2))))
             .check(matches(not(isDisplayed())));

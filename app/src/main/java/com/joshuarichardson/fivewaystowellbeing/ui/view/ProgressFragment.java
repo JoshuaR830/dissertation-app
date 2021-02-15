@@ -3,7 +3,6 @@ package com.joshuarichardson.fivewaystowellbeing.ui.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +28,7 @@ import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -70,15 +67,13 @@ public class ProgressFragment extends Fragment {
         SurveyResponseDao surveyDao = db.surveyResponseDao();
 
         long time = new Date().getTime();
-        Log.d("Time", String.valueOf(time));
         long thisMorning = TimeHelper.getStartOfDay(time);
         long tonight = TimeHelper.getEndOfDay(time);
-        Log.d("Time morning", String.valueOf(thisMorning));
 
         CardView container = view.findViewById(R.id.graph_card);
         FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
 
-        WellbeingGraphView graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
+        WellbeingGraphView  graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
 
         this.wholeGraphUpdate = graphValues -> {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
@@ -88,11 +83,6 @@ public class ProgressFragment extends Fragment {
         this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning, tonight);
         this.graphUpdateValues.observe(requireActivity(), this.wholeGraphUpdate);
         canvasContainer.addView(graphView);
-
-        // Calculate time for today midnight
-        Calendar calendar = GregorianCalendar.getInstance();
-        long epochSecondsToday = TimeHelper.getStartOfDay(calendar.getTimeInMillis());
-        long epochSecondsTonight = TimeHelper.getEndOfDay(calendar.getTimeInMillis());
 
         Button addActivityButton = requireActivity().findViewById(R.id.add_activity_button);
         addActivityButton.setOnClickListener(v -> {
@@ -126,7 +116,7 @@ public class ProgressFragment extends Fragment {
         };
 
         // Epoch seconds give a 24 hour time frame - any new surveys added will get updated live (using now meant that future surveys today didn't get shown)
-        this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(epochSecondsToday, epochSecondsTonight);
+        this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(thisMorning, tonight);
         this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
     }
 
@@ -150,6 +140,7 @@ public class ProgressFragment extends Fragment {
             long activityId = data.getExtras().getLong("activity_id", -1);
             String activityType = data.getExtras().getString("activity_type", "");
             String activityName = data.getExtras().getString("activity_name", "");
+            String wayToWellbeing = data.getExtras().getString("activity_way_to_wellbeing", "UNASSIGNED");
 
             if (activityId == -1) {
                 return;
@@ -162,7 +153,7 @@ public class ProgressFragment extends Fragment {
 
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1));
-                Passtime passtime = new Passtime(activityName, "", activityType);
+                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
 
                 ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db);

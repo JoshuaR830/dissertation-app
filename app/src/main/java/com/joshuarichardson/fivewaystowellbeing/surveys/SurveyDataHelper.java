@@ -30,7 +30,7 @@ public class SurveyDataHelper {
 
             // If the activity doesn't exist in here already - add it
             if (!list.containsKey(activityId)) {
-                list.put(activityId, new Passtime(d.getActivityName(), d.getActivityNote(), d.getActivityType()));
+                list.put(activityId, new Passtime(d.getActivityName(), d.getActivityNote(), d.getActivityType(), d.getWayToWellbeing()));
                 activityRecordIds.add(activityId);
             }
 
