@@ -25,7 +25,6 @@ public class WellbeingRecordInsertionHelper {
 
     // Must be called from within a write executor
     public static Passtime addPasstimeQuestions(WellbeingDatabase db, long activitySurveyId, String activityType, Passtime passtime) {
-        WellbeingQuestion singleItem = db.wellbeingQuestionDao().getQuestionById(1);
         List<WellbeingQuestion> questions = db.wellbeingQuestionDao().getQuestionsByActivityType(activityType.toUpperCase());
         int counter = 0;
         long timeNow = new Date().getTime();

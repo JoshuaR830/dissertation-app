@@ -3,7 +3,6 @@ package com.joshuarichardson.fivewaystowellbeing.ui.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +57,8 @@ public class ProgressFragment extends Fragment {
     private Observer<List<WellbeingGraphItem>> wholeGraphUpdate;
     private LiveData<List<WellbeingGraphItem>> graphUpdateValues;
     private long surveyId;
+    private WellbeingGraphValueHelper values;
+    private WellbeingGraphView graphView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -70,19 +71,26 @@ public class ProgressFragment extends Fragment {
         SurveyResponseDao surveyDao = db.surveyResponseDao();
 
         long time = new Date().getTime();
-        Log.d("Time", String.valueOf(time));
         long thisMorning = TimeHelper.getStartOfDay(time);
         long tonight = TimeHelper.getEndOfDay(time);
-        Log.d("Time morning", String.valueOf(thisMorning));
 
         CardView container = view.findViewById(R.id.graph_card);
         FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
 
-        WellbeingGraphView graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
+        this.graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
+
+        LinearLayout surveyContainer = requireActivity().findViewById(R.id.survey_item_container);
 
         this.wholeGraphUpdate = graphValues -> {
-            WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
-            graphView.updateValues(values);
+            this.values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
+            this.graphView.updateValues(this.values);
+//            this.graphView.updateValues(values);
+//            requireActivity().runOnUiThread(() -> {
+//                this.values.resetActivityValues();
+//                for(int i = 0; i < surveyContainer.getChildCount(); i++) {
+//                    this.values.updateActivityValuesForWayToWellbeing(WaysToWellbeing.valueOf(surveyContainer.getChildAt(i).getTag().toString()));
+//                }
+//            });
         };
 
         this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning, tonight);
@@ -150,6 +158,10 @@ public class ProgressFragment extends Fragment {
             long activityId = data.getExtras().getLong("activity_id", -1);
             String activityType = data.getExtras().getString("activity_type", "");
             String activityName = data.getExtras().getString("activity_name", "");
+            String wayToWellbeing = data.getExtras().getString("activity_way_to_wellbeing", "UNASSIGNED");
+
+//            this.values.updateActivityValuesForWayToWellbeing(WaysToWellbeing.valueOf(wayToWellbeing));
+//            this.graphView.updateValues(this.values);
 
             if (activityId == -1) {
                 return;
@@ -162,7 +174,7 @@ public class ProgressFragment extends Fragment {
 
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1));
-                Passtime passtime = new Passtime(activityName, "", activityType);
+                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
 
                 ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db);

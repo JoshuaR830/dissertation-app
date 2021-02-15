@@ -8,14 +8,16 @@ public class Passtime {
     private final String name;
     private final String note;
     private final String type;
+    private final String wayToWellbeing;
 
     ArrayList<Question> questions;
 
-    public Passtime(String name, String note, String type) {
+    public Passtime(String name, String note, String type, String wayToWellbeing) {
         this.questions = new ArrayList<>();
         this.name = name;
         this.note = note;
         this.type = type;
+        this.wayToWellbeing = wayToWellbeing;
     }
 
     public void addQuestionToList(Question question) {
@@ -36,5 +38,9 @@ public class Passtime {
 
     public String getType() {
         return this.type;
+    }
+
+    public String getWayToWellbeing() {
+        return this.wayToWellbeing;
     }
 }

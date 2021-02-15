@@ -35,6 +35,7 @@ import dagger.hilt.android.testing.UninstallModules;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
@@ -118,7 +119,7 @@ public class ViewPasstimesTests {
     @Test
     public void onSearchForKnownPasstime_TheItemShouldBeDisplayedFirst() {
         onView(withId(R.id.passtime_search_box))
-            .perform(typeText("Activity name 3"));
+            .perform(typeText("Activity name 3"), closeSoftKeyboard());
 
         onView(withId(R.id.passTimeRecyclerView))
             .perform(scrollToPosition(0))

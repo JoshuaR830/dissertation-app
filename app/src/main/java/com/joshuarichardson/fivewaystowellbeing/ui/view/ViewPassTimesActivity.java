@@ -101,6 +101,7 @@ public class ViewPassTimesActivity extends AppCompatActivity implements PassTime
         passtimeBundle.putLong("activity_id", passtime.getActivityRecordId());
         passtimeBundle.putString("activity_type", passtime.getActivityType());
         passtimeBundle.putString("activity_name", passtime.getActivityName());
+        passtimeBundle.putString("activity_way_to_wellbeing", passtime.getActivityWayToWellbeing());
         passtimeResult.putExtras(passtimeBundle);
         setResult(Activity.RESULT_OK, passtimeResult);
         finish();
