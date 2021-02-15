@@ -96,7 +96,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
 
 
-            ActivityViewHelper.displaySurveyItems(this, surveyData);
+            ActivityViewHelper.displaySurveyItems(this, surveyData, this.db);
 
             SurveyResponse surveyResponse = this.db.surveyResponseDao().getSurveyResponseById(surveyId);
 

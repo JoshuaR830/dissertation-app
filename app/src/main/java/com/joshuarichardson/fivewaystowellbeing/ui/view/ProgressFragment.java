@@ -3,6 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +70,10 @@ public class ProgressFragment extends Fragment {
         SurveyResponseDao surveyDao = db.surveyResponseDao();
 
         long time = new Date().getTime();
+        Log.d("Time", String.valueOf(time));
         long thisMorning = TimeHelper.getStartOfDay(time);
         long tonight = TimeHelper.getEndOfDay(time);
+        Log.d("Time morning", String.valueOf(thisMorning));
 
         CardView container = view.findViewById(R.id.graph_card);
         FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
@@ -100,7 +103,7 @@ public class ProgressFragment extends Fragment {
         this.surveyResponsesObserver = surveys -> {
             if (surveys.size() == 0) {
                 long startTime = TimeHelper.getStartOfDay(new Date().getTime());
-
+                Log.d("New survey time", String.valueOf(startTime));
                 // Adding the new survey should trigger the live data to update
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                     this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", ""));
@@ -114,13 +117,12 @@ public class ProgressFragment extends Fragment {
                 List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(this.surveyId);
                 if (rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
                     // This converts a limited response to an entire RawSurveyData response
-                // ToDo - make sure that the results are ordered by sequence number not timestamp
                     List<LimitedRawSurveyData> limitedData = this.db.wellbeingRecordDao().getLimitedDataBySurvey(this.surveyId);
                     rawSurveyDataList = LimitedRawSurveyData.convertToRawSurveyDataList(limitedData);
                 }
 
                 SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
-                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData);
+                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db);
             });
         };
 
@@ -164,7 +166,7 @@ public class ProgressFragment extends Fragment {
                 Passtime passtime = new Passtime(activityName, "", activityType);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
 
-                ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime);
+                ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db);
             });
         }
     }

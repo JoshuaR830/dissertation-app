@@ -38,6 +38,9 @@ public interface WellbeingRecordDao {
         "WHERE survey_response.id == :surveyId ORDER BY activity_records.timestamp")
     List<LimitedRawSurveyData> getLimitedDataBySurvey(long surveyId);
 
+    @Query("UPDATE wellbeing_records SET user_input = :isChecked WHERE wellbeing_record_id = :wellbeingRecordId")
+    void checkItem(long wellbeingRecordId, boolean isChecked);
+
     @Delete
     void delete(WellbeingRecord wellbeingRecord);
 }
