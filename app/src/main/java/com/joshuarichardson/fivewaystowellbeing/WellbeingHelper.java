@@ -30,7 +30,15 @@ public class WellbeingHelper {
                 wayToWellbeing = WaysToWellbeing.CONNECT;
                 break;
             case SPORT:
+            case EXERCISE:
                 wayToWellbeing = WaysToWellbeing.BE_ACTIVE;
+                break;
+            case CHORES:
+            case COOKING:
+                wayToWellbeing = WaysToWellbeing.GIVE;
+                break;
+            case RELAXATION:
+                wayToWellbeing = WaysToWellbeing.TAKE_NOTICE;
                 break;
             case APP:
             default:
