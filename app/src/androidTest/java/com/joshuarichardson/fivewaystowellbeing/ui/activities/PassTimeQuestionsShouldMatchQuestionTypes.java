@@ -45,17 +45,20 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
 
     @Test
     public void passTimeQuestions_ShouldMatchQuestionType() {
-        onView(withId(R.id.passtimeQuestion1)).check(matches(withMaterialHint("Activity name")));
-        onView(withId(R.id.passtimeQuestion2)).check(matches(withMaterialHint("Activity duration")));
-        onView(withId(R.id.passtimeQuestion3)).check(matches(withMaterialHint("Activity type")));
+        onView(withId(R.id.pass_time_name_input_container)).check(matches(withMaterialHint("Activity name")));
+        onView(withId(R.id.pass_time_duration_input_container)).check(matches(withMaterialHint("Activity duration")));
+        onView(withId(R.id.pass_time_type_input_container)).check(matches(withMaterialHint("Activity type")));
+        onView(withId(R.id.way_to_wellbeing_input_container)).check(matches(withMaterialHint("Select way to wellbeing")));
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withClassName(equalTo(TextInputEditText.class.getName()))));
         onView(withId(R.id.pass_time_duration_input)).check(matches(withClassName(equalTo(TextInputEditText.class.getName()))));
         onView(withId(R.id.pass_time_type_input)).check(matches(withClassName(equalTo(MaterialAutoCompleteTextView.class.getName()))));
+        onView(withId(R.id.way_to_wellbeing_input)).check(matches(withClassName(equalTo(MaterialAutoCompleteTextView.class.getName()))));
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withText("")));
         onView(withId(R.id.pass_time_duration_input)).check(matches(withText("0")));
         onView(withId(R.id.pass_time_type_input)).check(matches(withText("")));
+        onView(withId(R.id.way_to_wellbeing_input)).check(matches(withText("")));
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withInputType(TYPE_CLASS_TEXT)));
         onView(withId(R.id.pass_time_duration_input)).check(matches(withInputType(TYPE_CLASS_NUMBER)));
@@ -70,5 +73,37 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
 
         popup.atPosition(0).check(matches(withText("App")));
         popup.atPosition(1).check(matches(withText("Sport")));
+        popup.atPosition(2).check(matches(withText("Hobby")));
+        popup.atPosition(3).check(matches(withText("Pet")));
+        popup.atPosition(4).check(matches(withText("Work")));
+        popup.atPosition(5).check(matches(withText("Learning")));
+    }
+
+    @Test
+    public void waysToWellbeingDropDown_ShouldContainAllWaysToWellbeing() {
+        onView(withId(R.id.way_to_wellbeing_input)).perform(click());
+
+        DataInteraction popup = onData(instanceOf(String.class))
+            .inRoot(RootMatchers.isPlatformPopup());
+
+        popup.atPosition(0).check(matches(withText("Connect")));
+        popup.atPosition(1).check(matches(withText("Be active")));
+        popup.atPosition(2).check(matches(withText("Keep learning")));
+        popup.atPosition(3).check(matches(withText("Take notice")));
+        popup.atPosition(4).check(matches(withText("Give")));
+        popup.atPosition(5).check(matches(withText("None")));
+    }
+
+    @Test
+    public void selectingActivityType_ShouldSetADefaultWayToWellbeing() {
+        onView(withId(R.id.way_to_wellbeing_input)).check(matches(withText("")));
+        onView(withId(R.id.pass_time_type_input)).perform(click());
+
+        DataInteraction popup = onData(instanceOf(String.class))
+            .inRoot(RootMatchers.isPlatformPopup());
+
+        popup.atPosition(1).perform(click());
+
+        onView(withId(R.id.way_to_wellbeing_input)).check(matches(withText("Be active")));
     }
 }

@@ -45,12 +45,13 @@
                 android:layout_marginBottom="16dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passtimeQuestion1"
+                android:id="@+id/pass_time_name_input_container"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="@string/passtime_name">
+                android:hint="@string/passtime_name"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/pass_time_name_input"
@@ -63,7 +64,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passtimeQuestion2"
+                android:id="@+id/pass_time_duration_input_container"
                 android:visibility="gone"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -82,15 +83,32 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passtimeQuestion3"
+                android:id="@+id/pass_time_type_input_container"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="@string/passtime_type">
+                android:hint="@string/passtime_type"
+                app:errorEnabled="true">
 
                 <AutoCompleteTextView
                     android:id="@+id/pass_time_type_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="none"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/way_to_wellbeing_input_container"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/way_to_wellbeing_input">
+
+                <AutoCompleteTextView
+                    android:id="@+id/way_to_wellbeing_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
