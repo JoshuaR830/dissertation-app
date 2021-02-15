@@ -46,6 +46,15 @@ public class WellbeingHelperWayToWellbeingFormatTests {
 
         wayToWellbeing = WellbeingHelper.getDefaultWayToWellbeingFromActivityType("Sport");
         assertThat(wayToWellbeing).isEqualTo(WaysToWellbeing.BE_ACTIVE);
+
+        wayToWellbeing = WellbeingHelper.getDefaultWayToWellbeingFromActivityType("Exercise");
+        assertThat(wayToWellbeing).isEqualTo(WaysToWellbeing.GIVE);
+
+        wayToWellbeing = WellbeingHelper.getDefaultWayToWellbeingFromActivityType("Cooking");
+        assertThat(wayToWellbeing).isEqualTo(WaysToWellbeing.GIVE);
+
+        wayToWellbeing = WellbeingHelper.getDefaultWayToWellbeingFromActivityType("Relaxation");
+        assertThat(wayToWellbeing).isEqualTo(WaysToWellbeing.TAKE_NOTICE);
     }
     
     @Test
