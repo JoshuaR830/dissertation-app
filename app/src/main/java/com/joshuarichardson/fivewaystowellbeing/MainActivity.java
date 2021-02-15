@@ -41,7 +41,18 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         // Switch to the theme chosen in settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!preferences.contains("theme_settings_list")) {
+            // Reference https://stackoverflow.com/a/552380/13496270
+            // Now before selecting a preference an options will be selected automatically
+            SharedPreferences.Editor preferenceEditor = preferences.edit();
+            preferenceEditor.putString("theme_settings_list", "SYSTEM");
+            preferenceEditor.apply();
+        }
+
         String theme = preferences.getString("theme_settings_list", "SYSTEM");
+        if(theme == null) {
+            theme = "SYSTEM";
+        }
         ThemeHelper.setTheme(theme);
 
 
