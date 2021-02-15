@@ -11,8 +11,9 @@ public class RawSurveyData {
     private String question;
     private Boolean userInput;
     private String activityType;
+    private String wayToWellbeing;
 
-    public RawSurveyData(long date, String surveyNote, String activityNote, String activityName, long surveyActivityId, String question, long wellbeingRecordId, Boolean userInput, String activityType) {
+    public RawSurveyData(long date, String surveyNote, String activityNote, String activityName, long surveyActivityId, String question, long wellbeingRecordId, Boolean userInput, String activityType, String wayToWellbeing) {
         this.date = date;
         this.surveyNote = surveyNote;
         this.activityNote = activityNote;
@@ -22,6 +23,7 @@ public class RawSurveyData {
         this.userInput = userInput;
         this.wellbeingRecordId = wellbeingRecordId;
         this.activityType = activityType;
+        this.wayToWellbeing = wayToWellbeing;
     }
 
     public long getSurveyActivityId() {
@@ -58,5 +60,9 @@ public class RawSurveyData {
 
     public long getWellbeingRecordId() {
         return this.wellbeingRecordId;
+    }
+
+    public String getWayToWellbeing() {
+        return this.wayToWellbeing;
     }
 }

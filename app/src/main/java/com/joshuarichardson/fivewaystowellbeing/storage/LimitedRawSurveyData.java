@@ -1,5 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class LimitedRawSurveyData {
         ArrayList<RawSurveyData> rawData = new ArrayList<>();
 
         for (LimitedRawSurveyData listItem : limitedList) {
-            rawData.add(new RawSurveyData(listItem.getDate(), listItem.getSurveyNote(), listItem.getActivityNote(), listItem.getActivityName(), listItem.getSurveyActivityId(), listItem.getQuestion(), listItem.getWellbeingRecordId(), listItem.getUserInput(), listItem.getActivityType()));
+            rawData.add(new RawSurveyData(listItem.getDate(), listItem.getSurveyNote(), listItem.getActivityNote(), listItem.getActivityName(), listItem.getSurveyActivityId(), listItem.getQuestion(), listItem.getWellbeingRecordId(), listItem.getUserInput(), listItem.getActivityType(), WaysToWellbeing.UNASSIGNED.toString()));
         }
 
         return rawData;
