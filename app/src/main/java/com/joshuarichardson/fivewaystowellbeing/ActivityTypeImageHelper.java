@@ -24,6 +24,14 @@ public class ActivityTypeImageHelper {
                     return R.drawable.activity_type_work;
                 case LEARNING:
                     return R.drawable.activity_type_learning;
+                case CHORES:
+                    return R.drawable.activity_type_chores;
+                case COOKING:
+                    return R.drawable.activity_type_cooking;
+                case EXERCISE:
+                    return R.drawable.activity_type_exercise;
+                case RELAXATION:
+                    return R.drawable.activity_type_relaxation;
                 default:
                     return 0;
             }

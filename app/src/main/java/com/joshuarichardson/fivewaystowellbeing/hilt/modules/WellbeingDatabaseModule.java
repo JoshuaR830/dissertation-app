@@ -1,14 +1,11 @@
 package com.joshuarichardson.fivewaystowellbeing.hilt.modules;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
-import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -121,10 +118,6 @@ public class WellbeingDatabaseModule {
                         Date now = new Date();
                         long setId = getWellbeingDatabase(context).surveyQuestionSetDao().insert(new SurveyQuestionSet(now.getTime(), 0));
                         getWellbeingDatabase(context).questionsToAskDao().insert(new QuestionsToAsk("", "", setId, BASIC_SURVEY.toString(), 0, null));
-
-                        for (WellbeingQuestion question : DatabaseQuestionHelper.getQuestions()) {
-                            getWellbeingDatabase(context).wellbeingQuestionDao().insert(question);
-                        }
                     });
                 }
 
@@ -135,10 +128,6 @@ public class WellbeingDatabaseModule {
                         Date now = new Date();
                         long setId = getWellbeingDatabase(context).surveyQuestionSetDao().insert(new SurveyQuestionSet(now.getTime(), 0));
                         getWellbeingDatabase(context).questionsToAskDao().insert(new QuestionsToAsk("", "", setId, BASIC_SURVEY.toString(), 0, null));
-
-                        for (WellbeingQuestion question : DatabaseQuestionHelper.getQuestions()) {
-                            getWellbeingDatabase(context).wellbeingQuestionDao().insert(question);
-                        }
                     });
                 }
             })

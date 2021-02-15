@@ -6,5 +6,9 @@ public enum ActivityType {
     HOBBY,
     PET,
     WORK,
-    LEARNING
+    LEARNING,
+    CHORES,
+    COOKING,
+    EXERCISE,
+    RELAXATION
 }

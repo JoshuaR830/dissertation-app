@@ -10,7 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.ui.settings.SettingsActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewPassTimesActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportActivity;
@@ -51,8 +55,23 @@ public class MainActivity extends AppCompatActivity {
         }
         ThemeHelper.setTheme(theme);
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Put the questions in the database whenever the questions are updated
+        int hasAddedQuestions = preferences.getInt("added_question_version", 0);
+        if (hasAddedQuestions != DatabaseQuestionHelper.VERSION_NUMBER) {
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                for (WellbeingQuestion question : DatabaseQuestionHelper.getQuestions()) {
+                    WellbeingQuestionDao questionDao = this.db.wellbeingQuestionDao();
+                    questionDao.insert(question);
+                }
+            });
+            SharedPreferences.Editor preferenceEditor = preferences.edit();
+            preferenceEditor.putInt("added_question_version", DatabaseQuestionHelper.VERSION_NUMBER);
+            preferenceEditor.apply();
+        }
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
 
