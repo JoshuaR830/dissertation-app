@@ -72,4 +72,8 @@
 
     <string name="settings_theme_title">Theme</string>
     <string name="settings_theme_description">Change the theme to dark, light or system default</string>
+
+    <string name="error_no_name_entered">Please enter a name</string>
+    <string name="error_no_type_selected">Please choose a type</string>
+    <string name="error_no_way_to_wellbeing_selected">Please choose a way to wellbeing</string>
 </resources>
