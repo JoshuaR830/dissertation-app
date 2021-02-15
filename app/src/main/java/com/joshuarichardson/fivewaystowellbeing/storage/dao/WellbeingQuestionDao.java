@@ -36,7 +36,7 @@ public interface WellbeingQuestionDao {
                 "WHERE  user_input == 1 AND wellbeing_records.time BETWEEN :startTime AND :endTime " +
                 "GROUP BY wellbeing_questions.way_to_wellbeing " +
             "UNION ALL " +
-            "SELECT activity_records.way_to_wellbeing AS wayToWellbeing, SUM("+ ACTIVITY_OF_TYPE_VALUE +") AS value FROM survey_activity " +
+            "SELECT activity_records.way_to_wellbeing AS wayToWellbeing, SUM("+ ACTIVITY_OF_TYPE_VALUE +") AS num FROM survey_activity " +
                 "INNER JOIN activity_records ON survey_activity.activity_record_id == activity_records.id " +
                 "INNER JOIN survey_response ON survey_activity.survey_response_id == survey_response.id " +
                 "WHERE survey_response.timestamp BETWEEN :startTime AND :endTime " +

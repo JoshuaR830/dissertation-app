@@ -21,7 +21,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
@@ -70,7 +69,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenAllWellbeingTypesPresent_AllValuesShouldGreaterThanZero() throws TimeoutException, InterruptedException {
+    public void whenAllWellbeingTypesPresent_AllValuesShouldGreaterThanZero() {
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 0, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 1, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 0, 2));
@@ -96,7 +95,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenNoWellbeingTypesPresent_AllValuesShouldBeZero() throws TimeoutException, InterruptedException {
+    public void whenNoWellbeingTypesPresent_AllValuesShouldBeZero() {
         List<WellbeingGraphItem> graphItem = this.wellbeingQuestionDao.getWaysToWellbeingBetweenTimesNotLive(467357, 467357);
 
         assertThat(graphItem.size()).isEqualTo(0);
@@ -111,7 +110,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenOnlyOneWellbeingTypeIsPresent_AllValuesShouldBeZeroExceptForTheValue() throws TimeoutException, InterruptedException {
+    public void whenOnlyOneWellbeingTypeIsPresent_AllValuesShouldBeZeroExceptForTheValue() {
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 0, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 1, 1));
 
@@ -129,7 +128,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenCheckboxNotSelected_ValuesShouldNotBeIncluded() throws TimeoutException, InterruptedException {
+    public void whenCheckboxNotSelected_ValuesShouldNotBeIncluded() {
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 0, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 1, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(false, 467356, surveyActivityId1, 2, 1));
@@ -149,7 +148,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenAllUserInputsFalse_AllValuesShouldBeZero() throws TimeoutException, InterruptedException {
+    public void whenAllUserInputsFalse_AllValuesShouldBeZero() {
         wellbeingRecordDao.insert(new WellbeingRecord(false, 467356, surveyActivityId1, 0, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(false, 467356, surveyActivityId1, 1, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(false, 467356, surveyActivityId1, 0, 2));
@@ -175,7 +174,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenOutOfTimeRange_NoValuesShouldBeReturned() throws TimeoutException, InterruptedException {
+    public void whenOutOfTimeRange_NoValuesShouldBeReturned() {
         wellbeingRecordDao.insert(new WellbeingRecord(true, 500, surveyActivityId1, 0, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(true, 500, surveyActivityId1, 1, 1));
 
@@ -193,7 +192,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenActivitiesSelected_TheyShouldCountTowardsTheValues() throws TimeoutException, InterruptedException {
+    public void whenActivitiesSelected_TheyShouldCountTowardsTheValues() {
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 0, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId2, 1, 1));
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467356, surveyActivityId1, 0, 1));
@@ -213,7 +212,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenSurveyIsBeforeTimeSelected_ShouldNotBeCountedButQuestionsThatAreInTimeRangeShould() throws TimeoutException, InterruptedException {
+    public void whenSurveyIsBeforeTimeSelected_ShouldNotBeCountedButQuestionsThatAreInTimeRangeShould() {
         wellbeingRecordDao.insert(new WellbeingRecord(true, 467357, surveyActivityId3, 0, 1));
 
         List<WellbeingGraphItem> graphItem = this.wellbeingQuestionDao.getWaysToWellbeingBetweenTimesNotLive(467357, 467357);
@@ -230,7 +229,7 @@ public class GetGraphDataNotLiveTests {
     }
 
     @Test
-    public void whenSurveyAndQuestionsAreBeforeTimeSelected_ShouldNotBeCountedButQuestionsThatAreInTimeRangeShould() throws TimeoutException, InterruptedException {
+    public void whenSurveyAndQuestionsAreBeforeTimeSelected_ShouldNotBeCountedButQuestionsThatAreInTimeRangeShould() {
         wellbeingRecordDao.insert(new WellbeingRecord(true, 500, surveyActivityId3, 0, 1));
 
         List<WellbeingGraphItem> graphItem = this.wellbeingQuestionDao.getWaysToWellbeingBetweenTimesNotLive(467357, 467357);

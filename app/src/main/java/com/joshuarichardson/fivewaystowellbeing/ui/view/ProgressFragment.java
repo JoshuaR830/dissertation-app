@@ -55,8 +55,6 @@ public class ProgressFragment extends Fragment {
     private Observer<List<WellbeingGraphItem>> wholeGraphUpdate;
     private LiveData<List<WellbeingGraphItem>> graphUpdateValues;
     private long surveyId;
-    private WellbeingGraphValueHelper values;
-    private WellbeingGraphView graphView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -75,11 +73,11 @@ public class ProgressFragment extends Fragment {
         CardView container = view.findViewById(R.id.graph_card);
         FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
 
-        this.graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
+        WellbeingGraphView  graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
 
         this.wholeGraphUpdate = graphValues -> {
-            this.values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
-            this.graphView.updateValues(this.values);
+            WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
+            graphView.updateValues(values);
         };
 
         this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning, tonight);
