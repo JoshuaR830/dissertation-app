@@ -47,18 +47,18 @@ public class DatabaseQuestionHelper {
             new WellbeingQuestion(20, "Did you spend quality time with your pet?", "positive message", "negative message", WaysToWellbeing.GIVE.toString(), HIGH_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
 
             // Add questions for work
-            new WellbeingQuestion(21, "Were you working with anyone else?", "positive message", "negative message", WaysToWellbeing.CONNECT.toString(), MEDIUM_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
-            new WellbeingQuestion(22, "Did you walk over to a colleague instead of communicating digitally?", "positive message", "negative message", WaysToWellbeing.BE_ACTIVE.toString(), LOW_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
-            new WellbeingQuestion(23, "Did you learn something new at work?", "positive message", "negative message", WaysToWellbeing.KEEP_LEARNING.toString(), HIGH_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
-            new WellbeingQuestion(24, "Has anything changed in your work environment?", "positive message", "negative message", WaysToWellbeing.TAKE_NOTICE.toString(), MEDIUM_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
-            new WellbeingQuestion(25, "Did you offer anyone a drink?", "positive message", "negative message", WaysToWellbeing.GIVE.toString(), HIGH_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(21, "Were you working with anyone else?", "positive message", "negative message", WaysToWellbeing.CONNECT.toString(), MEDIUM_VALUE, ActivityType.WORK.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(22, "Did you walk over to a colleague instead of communicating digitally?", "positive message", "negative message", WaysToWellbeing.BE_ACTIVE.toString(), LOW_VALUE, ActivityType.WORK.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(23, "Did you learn something new at work?", "positive message", "negative message", WaysToWellbeing.KEEP_LEARNING.toString(), HIGH_VALUE, ActivityType.WORK.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(24, "Has anything changed in your work environment?", "positive message", "negative message", WaysToWellbeing.TAKE_NOTICE.toString(), MEDIUM_VALUE, ActivityType.WORK.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(25, "Did you offer anyone a drink?", "positive message", "negative message", WaysToWellbeing.GIVE.toString(), HIGH_VALUE, ActivityType.WORK.toString(), SurveyItemTypes.CHECKBOX.toString()),
 
             // Add questions for learning
-            new WellbeingQuestion(26, "Was it a group activity?", "positive message", "negative message", WaysToWellbeing.CONNECT.toString(), HIGH_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
-            new WellbeingQuestion(27, "Did you get up and move around?", "positive message", "negative message", WaysToWellbeing.BE_ACTIVE.toString(), MEDIUM_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
-            new WellbeingQuestion(28, "Did you gain new knowledge?", "positive message", "negative message", WaysToWellbeing.KEEP_LEARNING.toString(), HIGH_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
-            new WellbeingQuestion(29, "Did you have a new revelation?", "positive message", "negative message", WaysToWellbeing.TAKE_NOTICE.toString(), HIGH_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
-            new WellbeingQuestion(30, "Did you share knowledge with someone else?", "positive message", "negative message", WaysToWellbeing.GIVE.toString(), HIGH_VALUE, ActivityType.PET.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(26, "Was it a group activity?", "positive message", "negative message", WaysToWellbeing.CONNECT.toString(), HIGH_VALUE, ActivityType.LEARNING.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(27, "Did you get up and move around?", "positive message", "negative message", WaysToWellbeing.BE_ACTIVE.toString(), MEDIUM_VALUE, ActivityType.LEARNING.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(28, "Did you gain new knowledge?", "positive message", "negative message", WaysToWellbeing.KEEP_LEARNING.toString(), HIGH_VALUE, ActivityType.LEARNING.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(29, "Did you have a new revelation?", "positive message", "negative message", WaysToWellbeing.TAKE_NOTICE.toString(), HIGH_VALUE, ActivityType.LEARNING.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(30, "Did you share knowledge with someone else?", "positive message", "negative message", WaysToWellbeing.GIVE.toString(), HIGH_VALUE, ActivityType.LEARNING.toString(), SurveyItemTypes.CHECKBOX.toString()),
 
             // Chores
             new WellbeingQuestion(31, "Was it a team effort?", "positive message", "negative message", WaysToWellbeing.CONNECT.toString(), HIGH_VALUE, ActivityType.CHORES.toString(), SurveyItemTypes.CHECKBOX.toString()),

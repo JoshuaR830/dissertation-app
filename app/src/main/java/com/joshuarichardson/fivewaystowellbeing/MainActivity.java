@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Put the questions in the database whenever the questions are updated
         int hasAddedQuestions = preferences.getInt("added_question_version", 0);
-        if (hasAddedQuestions == DatabaseQuestionHelper.VERSION_NUMBER) {
+        if (hasAddedQuestions != DatabaseQuestionHelper.VERSION_NUMBER) {
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 for (WellbeingQuestion question : DatabaseQuestionHelper.getQuestions()) {
                     WellbeingQuestionDao questionDao = this.db.wellbeingQuestionDao();
