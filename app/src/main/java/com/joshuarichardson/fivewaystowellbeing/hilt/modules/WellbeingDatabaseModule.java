@@ -133,9 +133,7 @@ public class WellbeingDatabaseModule {
                     super.onDestructiveMigration(db);
                     databaseWriteExecutor.execute(() -> {
                         Date now = new Date();
-                        Log.d("Destructive migration", "Add the stuff");
                         long setId = getWellbeingDatabase(context).surveyQuestionSetDao().insert(new SurveyQuestionSet(now.getTime(), 0));
-                        Log.d("Set Id", String.valueOf(setId));
                         getWellbeingDatabase(context).questionsToAskDao().insert(new QuestionsToAsk("", "", setId, BASIC_SURVEY.toString(), 0, null));
 
                         for (WellbeingQuestion question : DatabaseQuestionHelper.getQuestions()) {

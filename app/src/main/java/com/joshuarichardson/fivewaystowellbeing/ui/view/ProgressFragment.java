@@ -103,7 +103,6 @@ public class ProgressFragment extends Fragment {
         this.surveyResponsesObserver = surveys -> {
             if (surveys.size() == 0) {
                 long startTime = TimeHelper.getStartOfDay(new Date().getTime());
-                Log.d("New survey time", String.valueOf(startTime));
                 // Adding the new survey should trigger the live data to update
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                     this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", ""));

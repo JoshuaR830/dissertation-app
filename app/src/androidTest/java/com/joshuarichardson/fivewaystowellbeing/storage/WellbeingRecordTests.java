@@ -134,6 +134,27 @@ public class WellbeingRecordTests {
     }
 
     @Test
+    public void updatingCheckBox_ShouldUpdateTheUserInputValue() {
+        this.wellbeingRecordDao.checkItem(this.recordId4, false);
+        List<WellbeingRecord> record = this.wellbeingRecordDao.getWellbeingRecordsBySurveyActivityId(2);
+
+        assertThat(record.size())
+            .isEqualTo(1);
+
+        assertThat(record.get(0).getUserInput())
+            .isEqualTo(false);
+
+        this.wellbeingRecordDao.checkItem(this.recordId4, true);
+        record = this.wellbeingRecordDao.getWellbeingRecordsBySurveyActivityId(2);
+
+        assertThat(record.size())
+            .isEqualTo(1);
+
+        assertThat(record.get(0).getUserInput())
+            .isEqualTo(true);
+    }
+
+    @Test
     public void onDelete_TheItemShouldBeDeleted() {
         WellbeingRecord record = new WellbeingRecord(true, 5494589, this.surveyActivityId1, 3, 123);
         record.setId(this.recordId1);
