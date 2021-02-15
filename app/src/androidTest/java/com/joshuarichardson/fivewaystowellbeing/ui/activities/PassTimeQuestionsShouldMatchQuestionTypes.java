@@ -45,9 +45,9 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
 
     @Test
     public void passTimeQuestions_ShouldMatchQuestionType() {
-        onView(withId(R.id.passtimeQuestion1)).check(matches(withMaterialHint("Activity name")));
-        onView(withId(R.id.passtimeQuestion2)).check(matches(withMaterialHint("Activity duration")));
-        onView(withId(R.id.passtimeQuestion3)).check(matches(withMaterialHint("Activity type")));
+        onView(withId(R.id.pass_time_name_input_container)).check(matches(withMaterialHint("Activity name")));
+        onView(withId(R.id.pass_time_duration_input_container)).check(matches(withMaterialHint("Activity duration")));
+        onView(withId(R.id.pass_time_type_input_container)).check(matches(withMaterialHint("Activity type")));
 
         onView(withId(R.id.pass_time_name_input)).check(matches(withClassName(equalTo(TextInputEditText.class.getName()))));
         onView(withId(R.id.pass_time_duration_input)).check(matches(withClassName(equalTo(TextInputEditText.class.getName()))));

@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
@@ -56,11 +57,34 @@ public class CreatePassTimeActivity extends AppCompatActivity {
         EditText passTimeType = findViewById(R.id.pass_time_type_input);
 
         String name = passTimeName.getText().toString();
+
         int duration = Integer.parseInt(passTimeDuration.getText().toString());
         String type = passTimeType.getText().toString();
 
         Date currentTime = new Date();
         long unixTime = currentTime.getTime();
+
+        // Check that the inputs are not empty
+        TextInputLayout nameContainer = findViewById(R.id.pass_time_name_input_container);
+        TextInputLayout typeContainer = findViewById(R.id.pass_time_type_input_container);
+        boolean hasError = false;
+        if(name.length() == 0) {
+            nameContainer.setError(getString(R.string.error_no_name_entered));
+            hasError = true;
+        } else {
+            nameContainer.setError(null);
+        }
+
+        if(type.length() == 0) {
+            typeContainer.setError(getString(R.string.error_no_type_selected));
+            hasError = true;
+        } else {
+            typeContainer.setError(null);
+        }
+
+        if(hasError) {
+            return;
+        }
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             this.passTimeDao.insert(new ActivityRecord(name, duration, unixTime, type, WaysToWellbeing.UNASSIGNED.toString()));

@@ -11,12 +11,12 @@ import org.hamcrest.TypeSafeMatcher;
 public class MaterialComponentTestUtil {
 
     // Reference https://stackoverflow.com/a/38874162/13496270
-    public static Matcher<View> withMaterialHint(String hintText) {
+    public static Matcher<View> withMaterialHint(String errorText) {
         return new TypeSafeMatcher<View>() {
             @Override
             protected boolean matchesSafely(View view) {
                 // Check it is the expected layout type
-                if(!(view instanceof TextInputLayout)) {
+                if (!(view instanceof TextInputLayout)) {
                     return false;
                 }
 
@@ -29,12 +29,41 @@ public class MaterialComponentTestUtil {
                 }
 
                 // Return true if it matches
-                return hintText.equals(hint.toString());
+                return errorText.equals(hint.toString());
             }
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("with material hint: " + hintText);
+                description.appendText("with material hint: " + errorText);
+            }
+        };
+    }
+
+    // Reference https://stackoverflow.com/a/38874162/13496270
+    public static Matcher<View> withMaterialError(String errorText) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            protected boolean matchesSafely(View view) {
+                // Check it is the expected layout type
+                if(!(view instanceof TextInputLayout)) {
+                    return false;
+                }
+
+                // Get the hint text
+                CharSequence error = ((TextInputLayout) view).getError();
+
+                // Ensure that the hint has a value
+                if (error == null) {
+                    return false;
+                }
+
+                // Return true if it matches
+                return errorText.equals(error.toString());
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with material error: " + errorText);
             }
         };
     }
