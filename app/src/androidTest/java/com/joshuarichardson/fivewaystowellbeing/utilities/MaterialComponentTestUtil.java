@@ -11,7 +11,7 @@ import org.hamcrest.TypeSafeMatcher;
 public class MaterialComponentTestUtil {
 
     // Reference https://stackoverflow.com/a/38874162/13496270
-    public static Matcher<View> withMaterialHint(String errorText) {
+    public static Matcher<View> withMaterialHint(String hintText) {
         return new TypeSafeMatcher<View>() {
             @Override
             protected boolean matchesSafely(View view) {
@@ -29,12 +29,12 @@ public class MaterialComponentTestUtil {
                 }
 
                 // Return true if it matches
-                return errorText.equals(hint.toString());
+                return hintText.equals(hint.toString());
             }
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("with material hint: " + errorText);
+                description.appendText("with material hint: " + hintText);
             }
         };
     }
