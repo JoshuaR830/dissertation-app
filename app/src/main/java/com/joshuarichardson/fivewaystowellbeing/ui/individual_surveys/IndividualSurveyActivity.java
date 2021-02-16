@@ -12,6 +12,7 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
+import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
@@ -40,6 +41,9 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
     @Inject
     public WellbeingDatabase db;
+
+    @Inject
+    public LogAnalyticEventHelper analyticsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
 
 
-            ActivityViewHelper.displaySurveyItems(this, surveyData, this.db, getSupportFragmentManager());
+            ActivityViewHelper.displaySurveyItems(this, surveyData, this.db, getSupportFragmentManager(), analyticsHelper);
 
             SurveyResponse surveyResponse = this.db.surveyResponseDao().getSurveyResponseById(surveyId);
 
