@@ -123,8 +123,9 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests {
     }
 
     @Before
-    public void setup() {
+    public void setUp() throws InterruptedException {
         hiltTest.inject();
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

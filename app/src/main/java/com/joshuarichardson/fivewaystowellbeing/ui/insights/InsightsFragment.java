@@ -8,12 +8,15 @@ import android.view.ViewGroup;
 
 import com.google.android.material.button.MaterialButton;
 import com.joshuarichardson.fivewaystowellbeing.R;
-import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewPassTimesActivity;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,8 +37,6 @@ public class InsightsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_insights, parentView, false);
 
-        String prefix = getString(R.string.wellbeing_insight_prefix) + " ";
-
         MaterialButton activityButton = new MaterialButton(getActivity(), null, R.attr.materialTextButton);
         activityButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         activityButton.setText(R.string.launch_view_pass_time);
@@ -45,14 +46,49 @@ public class InsightsFragment extends Fragment {
         });
 
         // ToDo - could this use live data
+        long millisPerDay = 86400000;
+        Date now = new Date();
+        long startTime = TimeHelper.getStartOfDay(now.getTime());
+        long endTime = TimeHelper.getEndOfDay(now.getTime());
+
+
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+
+            int connect = 0;
+            int beActive = 0;
+            int keepLearning = 0;
+            int takeNotice = 0;
+            int give = 0;
+
+            for(int i = 0; i < 7; i++) {
+                List<WellbeingGraphItem> response = db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(startTime - (millisPerDay * i), endTime - (millisPerDay * i));
+                WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(response);
+
+                if(values.getConnectValue() >= 100) {
+                    connect ++;
+                }
+                if(values.getBeActiveValue() >= 100) {
+                    beActive ++;
+                }
+                if(values.getKeepLearningValue() >= 100) {
+                    keepLearning ++;
+                }
+                if(values.getTakeNoticeValue() >= 100) {
+                    takeNotice ++;
+                }
+                if(values.getGiveValue() >= 100) {
+                    give ++;
+                }
+            }
+
             List<InsightsItem> insights = Arrays.asList(
                 new InsightsItem(getString(R.string.wellbeing_insight_activities), getString(R.string.wellbeing_insight_activities_description), 2, activityButton),
-                new InsightsItem(prefix + getString(R.string.wellbeing_connect), String.format(Locale.getDefault(), "%d", db.surveyResponseDao().getInsights(WaysToWellbeing.CONNECT.toString()))),
-                new InsightsItem(prefix + getString(R.string.wellbeing_be_active), String.format(Locale.getDefault(), "%d", db.surveyResponseDao().getInsights(WaysToWellbeing.BE_ACTIVE.toString()))),
-                new InsightsItem(prefix + getString(R.string.wellbeing_keep_learning), String.format(Locale.getDefault(), "%d", db.surveyResponseDao().getInsights(WaysToWellbeing.KEEP_LEARNING.toString()))),
-                new InsightsItem(prefix + getString(R.string.wellbeing_take_notice), String.format(Locale.getDefault(), "%d", db.surveyResponseDao().getInsights(WaysToWellbeing.TAKE_NOTICE.toString()))),
-                new InsightsItem(prefix + getString(R.string.wellbeing_give), String.format(Locale.getDefault(), "%d", db.surveyResponseDao().getInsights(WaysToWellbeing.GIVE.toString())))
+                new InsightsItem(getString(R.string.title_weekly_insights_overview), getString(R.string.description_weekly_insights_overview), 2, null),
+                new InsightsItem(getString(R.string.wellbeing_connect), String.format(Locale.getDefault(), "%d", connect)),
+                new InsightsItem(getString(R.string.wellbeing_be_active), String.format(Locale.getDefault(), "%d", beActive)),
+                new InsightsItem(getString(R.string.wellbeing_keep_learning), String.format(Locale.getDefault(), "%d", keepLearning)),
+                new InsightsItem(getString(R.string.wellbeing_take_notice), String.format(Locale.getDefault(), "%d", takeNotice)),
+                new InsightsItem(getString(R.string.wellbeing_give), String.format(Locale.getDefault(), "%d", give))
             );
 
             getActivity().runOnUiThread(() -> {
@@ -61,7 +97,7 @@ public class InsightsFragment extends Fragment {
                 layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                     @Override
                     public int getSpanSize(int position) {
-                        return insights.get(position).getColumnWidth();
+                    return insights.get(position).getColumnWidth();
                     }
                 });
 

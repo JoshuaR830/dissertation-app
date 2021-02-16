@@ -25,7 +25,7 @@ public class LimitedRawSurveyData {
         ArrayList<RawSurveyData> rawData = new ArrayList<>();
 
         for (LimitedRawSurveyData listItem : limitedList) {
-            rawData.add(new RawSurveyData(listItem.getDate(), listItem.getSurveyNote(), listItem.getActivityNote(), listItem.getActivityName(), listItem.getSurveyActivityId(), listItem.getQuestion(), listItem.getWellbeingRecordId(), listItem.getUserInput(), listItem.getActivityType(), WaysToWellbeing.UNASSIGNED.toString()));
+            rawData.add(new RawSurveyData(listItem.getDate(), listItem.getSurveyNote(), listItem.getActivityNote(), listItem.getActivityName(), listItem.getSurveyActivityId(), listItem.getQuestion(), listItem.getWellbeingRecordId(), listItem.getUserInput(), listItem.getActivityType(), listItem.getWayToWellbeing(), listItem.getStartTime(), listItem.getEndTime()));
         }
 
         return rawData;
@@ -65,5 +65,17 @@ public class LimitedRawSurveyData {
 
     public String getActivityType() {
         return this.activityType;
+    }
+
+    public String getWayToWellbeing() {
+        return WaysToWellbeing.UNASSIGNED.toString();
+    }
+
+    public long getStartTime() {
+        return -1;
+    }
+
+    public long getEndTime() {
+        return -1;
     }
 }

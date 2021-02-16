@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
@@ -89,8 +90,8 @@ public class IndividualSurveyWithOneActivityWithQuestionsTests {
 
             when(wellbeingRecordDao.getDataBySurvey(123))
                 .thenReturn(Arrays.asList(
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString()),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString())
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1)
                 )
             );
 
@@ -103,12 +104,15 @@ public class IndividualSurveyWithOneActivityWithQuestionsTests {
     }
 
     @Before
-    public void setup() {
+    public void setUp() throws InterruptedException {
         hiltTest.inject();
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test
-    public void whenOnIndividualSurveyPage_ASummaryShouldBeDisplayed() {
+    public void whenOnIndividualSurveyPage_ASummaryShouldBeDisplayed() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
         onView(withId(R.id.survey_summary))
             .check(matches(isDisplayed()));
 
@@ -129,7 +133,9 @@ public class IndividualSurveyWithOneActivityWithQuestionsTests {
     }
 
     @Test
-    public void whenOnIndividualSurveyPageAndASingleActivity_AllQuestionsShouldBeDisplayed() {
+    public void whenOnIndividualSurveyPageAndASingleActivity_AllQuestionsShouldBeDisplayed() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
         onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .perform(scrollTo())
             .check(matches(withText("29 Mar 1999")));

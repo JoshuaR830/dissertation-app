@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
@@ -94,10 +95,10 @@ public class SurveysCompletedTodayTests {
                     .thenReturn(wayToWellbeing);
 
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Arrays.asList(
-                new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString()),
-                new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 2", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString()),
-                new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.KEEP_LEARNING.toString()),
-                new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.KEEP_LEARNING.toString())
+                new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
+                new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 2", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
+                new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
+                new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1)
             ));
 
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
@@ -111,8 +112,9 @@ public class SurveysCompletedTodayTests {
     }
 
     @Before
-    public void setup() {
+    public void setUp() throws InterruptedException {
         hiltTest.inject();
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

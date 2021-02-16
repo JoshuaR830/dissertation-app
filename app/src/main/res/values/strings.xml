@@ -42,6 +42,9 @@
     <string name="wellbeing_insight_activities">View your activities</string>
     <string name="wellbeing_insight_activities_description">Find a list of all the activities you have completed</string>
 
+    <string name="title_weekly_insights_overview">Weekly insights</string>
+    <string name="description_weekly_insights_overview">Here\'s how you\'ve done in the last 7 days</string>
+
     <string name="wellbeing_connect">Connect</string>
     <string name="wellbeing_be_active">Be active</string>
     <string name="wellbeing_take_notice">Take notice</string>
@@ -61,6 +64,20 @@
 
     <string name="button_visit_site">Visit site</string>
     <string name="button_timer">Set duration</string>
+    <string name="button_start_time">Start</string>
+    <string name="button_end_time">End</string>
+    <string name="button_add_note">Note</string>
+    <string name="button_save_note">Save note</string>
+    <string name="hint_add_note">Enter a note</string>
+    <string name="helper_saved_note">Saved</string>
+    <string name="helper_unsaved_note">Unsaved changes</string>
+
+    <string name="title_start_time">Start time</string>
+    <string name="title_end_time">End time</string>
+    <string name="title_delete_note">Delete your note</string>
+    <string name="body_delete_note">Your note will be permanently deleted</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_delete">Delete</string>
 
     <string name="minutes">mins</string>
     <string name="hours">hrs</string>

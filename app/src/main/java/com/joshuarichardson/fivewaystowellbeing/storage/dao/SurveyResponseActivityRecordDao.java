@@ -31,5 +31,17 @@ public interface SurveyResponseActivityRecordDao {
             "WHERE survey_activity.activity_record_id = :activityId")
     LiveData<List<SurveyResponse>> getSurveyByActivityId(long activityId);
 
+    @Query("SELECT * FROM survey_activity WHERE survey_activity_id = :surveyActivityId")
+    SurveyResponseActivityRecord getSurveyActivityById(long surveyActivityId);
+
+    @Query("UPDATE survey_activity SET note = :noteText WHERE survey_activity_id = :activitySurveyId")
+    void updateNote(long activitySurveyId, String noteText);
+
+    @Query("UPDATE survey_activity SET start_time = :startTime WHERE survey_activity_id = :activitySurveyId")
+    void updateStartTime(long activitySurveyId, long startTime);
+
+    @Query("UPDATE survey_activity SET end_time = :endTime WHERE survey_activity_id = :activitySurveyId")
+    void updateEndTime(long activitySurveyId, long endTime);
+
     // ToDo Need a delete method
 }

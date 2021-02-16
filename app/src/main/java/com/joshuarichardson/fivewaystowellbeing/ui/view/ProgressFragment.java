@@ -111,7 +111,7 @@ public class ProgressFragment extends Fragment {
                 }
 
                 SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
-                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db);
+                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db, getParentFragmentManager());
             });
         };
 
@@ -153,10 +153,10 @@ public class ProgressFragment extends Fragment {
 
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1));
-                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing);
+                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
 
-                ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db);
+                ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager());
             });
         }
     }
