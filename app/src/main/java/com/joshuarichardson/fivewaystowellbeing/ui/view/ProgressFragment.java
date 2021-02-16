@@ -62,7 +62,15 @@ public class ProgressFragment extends Fragment {
     private long surveyId;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_progress, parentView, false);
+        View view = inflater.inflate(R.layout.fragment_progress, parentView, false);
+
+        Button addActivityButton = view.findViewById(R.id.add_activity_button);
+        addActivityButton.setOnClickListener(v -> {
+            Intent activityIntent = new Intent(requireActivity(), ViewPassTimesActivity.class);
+            startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
+        });
+
+        return view;
     }
 
     @Override
@@ -88,12 +96,6 @@ public class ProgressFragment extends Fragment {
         this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning, tonight);
         this.graphUpdateValues.observe(requireActivity(), this.wholeGraphUpdate);
         canvasContainer.addView(graphView);
-
-        Button addActivityButton = requireActivity().findViewById(R.id.add_activity_button);
-        addActivityButton.setOnClickListener(v -> {
-            Intent activityIntent = new Intent(requireActivity(), ViewPassTimesActivity.class);
-            startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
-        });
 
         this.surveyResponsesObserver = surveys -> {
             if (surveys.size() == 0) {

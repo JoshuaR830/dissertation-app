@@ -1,5 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
@@ -42,5 +43,9 @@ public class HistoryPageData {
 
     public WellbeingGraphValueHelper getWellbeingValues() {
         return this.wellbeingValues;
+    }
+
+    public void setSurveyResponseWayToWellbeing(WaysToWellbeing wayToWellbeing) {
+        this.surveyResponseWayToWellbeing = wayToWellbeing.toString();
     }
 }
