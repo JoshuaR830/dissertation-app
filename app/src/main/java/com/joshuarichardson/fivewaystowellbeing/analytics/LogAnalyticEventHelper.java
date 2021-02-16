@@ -62,4 +62,17 @@ public class LogAnalyticEventHelper {
             this.firebaseAnalytics.logEvent(AnalyticEvents.Events.UNCHECKED_WAY_TO_WELLBEING, analyticsBundle);
         }
     }
+
+    public void logWayToWellbeingActivity(Object currentActivityObject, WaysToWellbeing waysToWellbeing) {
+        Bundle analyticsBundle = new Bundle();
+        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivityObject.getClass().getSimpleName());
+        analyticsBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, AnalyticEvents.Param.WAY_TO_WELLBEING);
+
+        // Log a specific way to wellbeing event
+        this.firebaseAnalytics.logEvent(waysToWellbeing.toString().toLowerCase(), analyticsBundle);
+
+        // Log a generic way to wellbeing event
+        analyticsBundle.putString(FirebaseAnalytics.Param.ACHIEVEMENT_ID, waysToWellbeing.toString().toLowerCase());
+        this.firebaseAnalytics.logEvent(AnalyticEvents.Events.ACTIVITY_WAY_TO_WELLBEING, analyticsBundle);
+    }
 }

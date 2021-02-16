@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
@@ -149,6 +150,8 @@ public class ProgressFragment extends Fragment {
             if (activityId == -1) {
                 return;
             }
+
+            analyticsHelper.logWayToWellbeingActivity(this, WaysToWellbeing.valueOf(wayToWellbeing));
 
             // Sequence number based on number of children in the linear layout
             LinearLayout passtimeContainer = requireActivity().findViewById(R.id.survey_item_container);
