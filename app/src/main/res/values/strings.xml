@@ -42,6 +42,9 @@
     <string name="wellbeing_insight_activities">View your activities</string>
     <string name="wellbeing_insight_activities_description">Find a list of all the activities you have completed</string>
 
+    <string name="title_weekly_insights_overview">Weekly insights</string>
+    <string name="description_weekly_insights_overview">Here\'s how you\'ve done in the last 7 days</string>
+
     <string name="wellbeing_connect">Connect</string>
     <string name="wellbeing_be_active">Be active</string>
     <string name="wellbeing_take_notice">Take notice</string>

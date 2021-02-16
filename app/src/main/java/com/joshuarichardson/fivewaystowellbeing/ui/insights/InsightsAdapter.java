@@ -46,7 +46,7 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
         View small_card;
         View large_card;
 
-        TextView title;
+        TextView titleType;
         TextView info;
 
         public InsightsViewHolder(@NonNull View itemView) {
@@ -59,13 +59,13 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
         public void onBind(InsightsItem insightsItem) {
             LinearLayout layout;
             if(insightsItem.getColumnWidth() == 2) {
-                this.title = this.large_card.findViewById(R.id.insight_title);
+                this.titleType = this.large_card.findViewById(R.id.insight_title_type);
                 this.info = this.large_card.findViewById(R.id.insight_description);
                 layout = this.large_card.findViewById(R.id.insight_card_layout);
                 this.large_card.setVisibility(View.VISIBLE);
                 this.small_card.setVisibility(View.GONE);
             } else {
-                this.title = this.small_card.findViewById(R.id.insight_title);
+                this.titleType = this.small_card.findViewById(R.id.insight_title_type);
                 this.info = this.small_card.findViewById(R.id.insight_description);
                 layout = this.small_card.findViewById(R.id.insight_card_layout);
                 this.small_card.setVisibility(View.VISIBLE);
@@ -81,7 +81,7 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
                 divider.setVisibility(View.GONE);
             }
 
-            this.title.setText(insightsItem.getTitle());
+            this.titleType.setText(insightsItem.getTitle());
             this.info.setText(insightsItem.getInfo());
         }
     }

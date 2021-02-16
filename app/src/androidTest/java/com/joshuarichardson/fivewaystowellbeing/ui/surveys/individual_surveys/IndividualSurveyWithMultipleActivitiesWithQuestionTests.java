@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
@@ -114,28 +115,44 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
     }
 
     @Test
-    public void whenOnIndividualSurveyPage_ASummaryShouldBeDisplayed() {
+    public void whenOnIndividualSurveyPage_ASummaryShouldBeDisplayed() throws InterruptedException {
+        // Wait a few seconds for the database to sort itself out
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
         onView(withId(R.id.survey_summary))
+            .perform(scrollTo())
             .check(matches(isDisplayed()));
 
         onView(withId(R.id.survey_summary_title))
+            .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Summary"))));
 
         onView(withId(R.id.individual_survey_title))
+            .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Title 1"))));
 
         onView(withId(R.id.individual_survey_description))
+            .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Description 1"))));
 
         onView(withId(R.id.individual_survey_time))
+            .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("29 Mar 1999"))));
 
-        onView(withId(R.id.graph_card_container)).check(matches(isDisplayed()));
-        onView(withId(R.id.graph_card)).check(matches(isDisplayed()));
+        onView(withId(R.id.graph_card_container))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()));
+
+        onView(withId(R.id.graph_card))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()));
     }
 
     @Test
-    public void whenOnIndividualSurveyPageAndMultipleActivities_AllQuestionsShouldBeDisplayed() {
+    public void whenOnIndividualSurveyPageAndMultipleActivities_AllQuestionsShouldBeDisplayed() throws InterruptedException {
+        // Wait a few seconds for the database to sort itself out
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
         onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .perform(scrollTo())
             .check(matches(withText("29 Mar 1999")));
@@ -229,8 +246,8 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
             .check(matches(withText("Activity note 3")));
 
         onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2))))
-                .check(matches(isDisplayed()))
                 .perform(scrollTo())
+                .check(matches(isDisplayed()))
                 .perform(click());
 
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2))))

@@ -86,11 +86,7 @@ public class InsightsTests {
             when(questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong())).thenReturn(graphData);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(questionDao);
 
-            when(surveyDao.getInsights("CONNECT")).thenReturn(1);
-            when(surveyDao.getInsights("BE_ACTIVE")).thenReturn(64);
-            when(surveyDao.getInsights("TAKE_NOTICE")).thenReturn(99);
-            when(surveyDao.getInsights("KEEP_LEARNING")).thenReturn(56);
-            when(surveyDao.getInsights("GIVE")).thenReturn(7);
+            when(questionDao.getWaysToWellbeingBetweenTimesNotLive(anyLong(), anyLong())).thenReturn(Arrays.asList(new WellbeingGraphItem(WaysToWellbeing.CONNECT.toString(), 140), new WellbeingGraphItem(WaysToWellbeing.BE_ACTIVE.toString(), 90), new WellbeingGraphItem(WaysToWellbeing.KEEP_LEARNING.toString(), 120), new WellbeingGraphItem(WaysToWellbeing.TAKE_NOTICE.toString(), 100), new WellbeingGraphItem(WaysToWellbeing.GIVE.toString(), 20)));
 
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString())));
 
@@ -113,29 +109,38 @@ public class InsightsTests {
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(withText("View your activities")))));
 
-        onView(withId(R.id.insights_recycler_view))
+       onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(1))
-            .check(matches(atRecyclerPosition(1, hasDescendant(withText("Times achieved: Connect")))))
-            .check(matches(atRecyclerPosition(1, hasDescendant(withText("1")))));
+            .check(matches(atRecyclerPosition(1, hasDescendant(withText("Weekly insights")))));
 
         onView(withId(R.id.insights_recycler_view))
-                .perform(scrollToPosition(2))
-                .check(matches(atRecyclerPosition(2, hasDescendant(withText("Times achieved: Be active")))))
-                .check(matches(atRecyclerPosition(2, hasDescendant(withText("64")))));
+            .perform(scrollToPosition(2))
+            .check(matches(atRecyclerPosition(2, hasDescendant(withText("Times achieved:")))))
+            .check(matches(atRecyclerPosition(2, hasDescendant(withText("Connect")))))
+            .check(matches(atRecyclerPosition(2, hasDescendant(withText("7")))));
 
         onView(withId(R.id.insights_recycler_view))
-                .perform(scrollToPosition(3))
-                .check(matches(atRecyclerPosition(3, hasDescendant(withText("Times achieved: Keep learning")))))
-                .check(matches(atRecyclerPosition(3, hasDescendant(withText("56")))));
+            .perform(scrollToPosition(3))
+            .check(matches(atRecyclerPosition(3, hasDescendant(withText("Times achieved:")))))
+            .check(matches(atRecyclerPosition(3, hasDescendant(withText("Be active")))))
+            .check(matches(atRecyclerPosition(3, hasDescendant(withText("0")))));
 
         onView(withId(R.id.insights_recycler_view))
-                .perform(scrollToPosition(4))
-                .check(matches(atRecyclerPosition(4, hasDescendant(withText("Times achieved: Take notice")))))
-                .check(matches(atRecyclerPosition(4, hasDescendant(withText("99")))));
+            .perform(scrollToPosition(4))
+            .check(matches(atRecyclerPosition(4, hasDescendant(withText("Times achieved:")))))
+            .check(matches(atRecyclerPosition(4, hasDescendant(withText("Keep learning")))))
+            .check(matches(atRecyclerPosition(4, hasDescendant(withText("7")))));
 
         onView(withId(R.id.insights_recycler_view))
-                .perform(scrollToPosition(5))
-                .check(matches(atRecyclerPosition(5, hasDescendant(withText("Times achieved: Give")))))
-                .check(matches(atRecyclerPosition(5, hasDescendant(withText("7")))));
+            .perform(scrollToPosition(5))
+            .check(matches(atRecyclerPosition(5, hasDescendant(withText("Times achieved:")))))
+            .check(matches(atRecyclerPosition(5, hasDescendant(withText("Take notice")))))
+            .check(matches(atRecyclerPosition(5, hasDescendant(withText("7")))));
+
+        onView(withId(R.id.insights_recycler_view))
+            .perform(scrollToPosition(6))
+            .check(matches(atRecyclerPosition(6, hasDescendant(withText("Times achieved:")))))
+            .check(matches(atRecyclerPosition(6, hasDescendant(withText("Give")))))
+            .check(matches(atRecyclerPosition(6, hasDescendant(withText("0")))));
     }
 }
