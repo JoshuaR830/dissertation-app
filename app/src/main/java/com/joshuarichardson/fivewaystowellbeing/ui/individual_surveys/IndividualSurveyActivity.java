@@ -2,6 +2,8 @@ package com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -69,6 +71,10 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             graphView.updateValues(values);
         };
 
+        // ToDo - at some point make this visible and allow it to be edited
+        Button addActivityButton = findViewById(R.id.add_activity_button);
+        addActivityButton.setVisibility(View.GONE);
+
         if(startTime > -1) {
             Date date = new Date(startTime);
             Calendar morning = new GregorianCalendar();
@@ -96,7 +102,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
 
 
-            ActivityViewHelper.displaySurveyItems(this, surveyData, this.db);
+            ActivityViewHelper.displaySurveyItems(this, surveyData, this.db, getSupportFragmentManager());
 
             SurveyResponse surveyResponse = this.db.surveyResponseDao().getSurveyResponseById(surveyId);
 

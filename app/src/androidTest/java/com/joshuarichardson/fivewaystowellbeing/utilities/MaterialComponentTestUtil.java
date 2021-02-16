@@ -67,4 +67,33 @@ public class MaterialComponentTestUtil {
             }
         };
     }
+
+    // Reference https://stackoverflow.com/a/38874162/13496270
+    public static Matcher<View> withMaterialHelper(String helperText) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            protected boolean matchesSafely(View view) {
+                // Check it is the expected layout type
+                if(!(view instanceof TextInputLayout)) {
+                    return false;
+                }
+
+                // Get the hint text
+                CharSequence helper = ((TextInputLayout) view).getHelperText();
+
+                // Ensure that the hint has a value
+                if (helper == null) {
+                    return false;
+                }
+
+                // Return true if it matches
+                return helperText.equals(helper.toString());
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with material helper: " + helperText);
+            }
+        };
+    }
 }
