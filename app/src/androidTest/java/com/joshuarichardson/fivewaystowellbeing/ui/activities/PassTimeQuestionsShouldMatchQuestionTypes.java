@@ -4,10 +4,13 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.concurrent.TimeUnit;
 
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.matcher.RootMatchers;
@@ -39,8 +42,9 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
     public ActivityScenarioRule<CreatePassTimeActivity> answerSurveyActivity = new ActivityScenarioRule<>(CreatePassTimeActivity.class);
 
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         hiltTest.inject();
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

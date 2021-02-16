@@ -17,6 +17,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
@@ -104,6 +106,12 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
 
             return mockWellbeingDatabase;
         }
+    }
+
+    @Before
+    public void setUp() throws InterruptedException {
+        hiltTest.inject();
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

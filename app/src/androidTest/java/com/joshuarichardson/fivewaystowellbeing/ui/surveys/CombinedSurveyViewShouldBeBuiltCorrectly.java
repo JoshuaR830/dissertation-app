@@ -24,6 +24,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
@@ -116,8 +117,9 @@ public class CombinedSurveyViewShouldBeBuiltCorrectly {
     }
 
     @Before
-    public void setup() {
+    public void setUp() throws InterruptedException {
         hiltTest.inject();
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

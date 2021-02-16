@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
@@ -92,8 +93,9 @@ public class GraphShouldBeDisplayed {
     }
 
     @Before
-    public void setup() {
+    public void setUp() throws InterruptedException {
         hiltTest.inject();
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

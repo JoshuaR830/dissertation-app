@@ -21,6 +21,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -133,6 +134,12 @@ public class WellbeingRecordInsertionTests {
             when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activitiesDao);
             return mockWellbeingDatabase;
         }
+    }
+
+    @Before
+    public void setUp() throws InterruptedException {
+        hiltTest.inject();
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test
