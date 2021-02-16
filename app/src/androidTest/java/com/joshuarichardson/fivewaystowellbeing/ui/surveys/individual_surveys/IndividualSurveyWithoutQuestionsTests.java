@@ -109,7 +109,7 @@ public class IndividualSurveyWithoutQuestionsTests {
 
     @Test
     public void whenOnIndividualSurveyPage_ASummaryShouldBeDisplayed() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(withId(R.id.survey_summary))
             .check(matches(isDisplayed()));
@@ -132,7 +132,7 @@ public class IndividualSurveyWithoutQuestionsTests {
 
     @Test
     public void whenOnIndividualSurveyPage_AllActivitiesShouldBeDisplayed() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .perform(scrollTo())
