@@ -34,8 +34,6 @@ public class WellbeingRecordTests {
     private WellbeingRecordDao wellbeingRecordDao;
     private WellbeingQuestionDao questionsDao;
 
-    @Rule
-    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
     private long recordId1;
     private long recordId2;
     private long recordId3;
@@ -44,6 +42,9 @@ public class WellbeingRecordTests {
     private long surveyActivityId1;
     private long surveyActivityId2;
     private long surveyActivityId3;
+
+    @Rule
+    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
     @Before
     public void setup() {

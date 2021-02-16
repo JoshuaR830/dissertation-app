@@ -24,4 +24,34 @@ public class TimeFormatterTests {
         String time = TimeFormatter.formatTimeAsDayMonthYearString(new GregorianCalendar(3100, 0, 19, 3, 15).getTimeInMillis());
         assertThat(time).isEqualTo("19 Jan 3100");
     }
+
+    @Test
+    public void timeStampToHourMinuteString() {
+        String time = TimeFormatter.formatTimeAsHourMinuteString(36660000);
+        assertThat(time).isEqualTo("10:11");
+    }
+
+    @Test
+    public void checkCorrectPadding() {
+        String time = TimeFormatter.formatTimeAsHourMinuteString(36060000);
+        assertThat(time).isEqualTo("10:01");
+    }
+
+    @Test
+    public void lessThanZero() {
+        String time = TimeFormatter.formatTimeAsHourMinuteString(-1);
+        assertThat(time).isEqualTo(null);
+    }
+
+    @Test
+    public void exactlyOneDay() {
+        String time = TimeFormatter.formatTimeAsHourMinuteString(86400000);
+        assertThat(time).isEqualTo("24:00");
+    }
+
+    @Test
+    public void moreThanToday() {
+        String time = TimeFormatter.formatTimeAsHourMinuteString(86400001);
+        assertThat(time).isEqualTo(null);
+    }
 }
