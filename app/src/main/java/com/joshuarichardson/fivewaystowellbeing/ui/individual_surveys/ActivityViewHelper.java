@@ -21,8 +21,13 @@ import com.joshuarichardson.fivewaystowellbeing.ActivityTypeImageHelper;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
+import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
@@ -32,7 +37,7 @@ import java.util.Date;
 import androidx.fragment.app.FragmentManager;
 
 public class ActivityViewHelper {
-    public static void displaySurveyItems(Activity activity, SurveyDay surveyData, WellbeingDatabase db, FragmentManager fragmentManager) {
+    public static void displaySurveyItems(Activity activity, SurveyDay surveyData, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper) {
         if(surveyData == null) {
             return;
         }
@@ -44,7 +49,7 @@ public class ActivityViewHelper {
                 continue;
             }
 
-            createPasstimeItem(activity, layout, passtime, db, fragmentManager);
+            createPasstimeItem(activity, layout, passtime, db, fragmentManager, analyticsHelper);
         }
 
         // This only needs to run once, after everything else
@@ -64,7 +69,7 @@ public class ActivityViewHelper {
         });
     }
 
-    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime, WellbeingDatabase db, FragmentManager fragmentManager) {
+    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper) {
         // Get the passtime template
         View view = LayoutInflater.from(activity).inflate(R.layout.pass_time_item, layout, false);
         TextView title = view.findViewById(R.id.activity_text);
@@ -208,6 +213,9 @@ public class ActivityViewHelper {
                 checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                         db.wellbeingRecordDao().checkItem(question.getWellbeingRecordId(), isChecked);
+                        WellbeingRecord wellbeingRecord = db.wellbeingRecordDao().getWellbeingRecordById(question.getWellbeingRecordId());
+                        WellbeingQuestion wellbeingQuestion = db.wellbeingQuestionDao().getQuestionById(wellbeingRecord.getQuestionId());
+                        analyticsHelper.logWayToWellbeingChecked(activity, WaysToWellbeing.valueOf(wellbeingQuestion.getWayToWellbeing()), isChecked);
                     });
                 });
                 checkboxContainer.addView(checkBox);

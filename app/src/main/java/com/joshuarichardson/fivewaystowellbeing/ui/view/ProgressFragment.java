@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
@@ -49,6 +51,9 @@ public class ProgressFragment extends Fragment {
     private static final int ACTIVITY_REQUEST_CODE = 1;
     @Inject
     WellbeingDatabase db;
+
+    @Inject
+    public LogAnalyticEventHelper analyticsHelper;
 
     private Observer<List<SurveyResponse>> surveyResponsesObserver;
     private LiveData<List<SurveyResponse>> surveyResponseItems;
@@ -111,7 +116,7 @@ public class ProgressFragment extends Fragment {
                 }
 
                 SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
-                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db, getParentFragmentManager());
+                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db, getParentFragmentManager(), analyticsHelper);
             });
         };
 
@@ -146,6 +151,8 @@ public class ProgressFragment extends Fragment {
                 return;
             }
 
+            analyticsHelper.logWayToWellbeingActivity(this, WaysToWellbeing.valueOf(wayToWellbeing));
+
             // Sequence number based on number of children in the linear layout
             LinearLayout passtimeContainer = requireActivity().findViewById(R.id.survey_item_container);
 
@@ -156,7 +163,7 @@ public class ProgressFragment extends Fragment {
                 Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
 
-                ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager());
+                ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper);
             });
         }
     }
