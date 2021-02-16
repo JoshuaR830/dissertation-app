@@ -207,7 +207,8 @@ public class ActionButtonTests {
     }
 
     @Test
-    public void timeText() {
+    public void timeText() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         onView(allOf(withId(R.id.activity_time_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
             .check(matches(withText("")));
@@ -248,7 +249,8 @@ public class ActionButtonTests {
     }
 
     @Test
-    public void onEndTimeTextClicked_ShouldUpdateDatabase() {
+    public void onEndTimeTextClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
             .check(matches(isDisplayed()))
