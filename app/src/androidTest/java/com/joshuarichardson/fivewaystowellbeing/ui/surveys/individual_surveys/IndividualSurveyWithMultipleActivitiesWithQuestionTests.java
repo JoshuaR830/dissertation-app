@@ -220,8 +220,8 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
             .perform(click());
 
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()));
+            .perform(scrollTo())
+            .check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.checkbox), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1)), nthChildOf(withId(R.id.check_box_container), 0)))
             .perform(scrollTo())
@@ -246,13 +246,13 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
             .check(matches(withText("Activity note 3")));
 
         onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2))))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-                .perform(click());
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click());
 
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2))))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()));
+            .perform(scrollTo())
+            .check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.checkbox), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2)), nthChildOf(withId(R.id.check_box_container), 0)))
             .perform(scrollTo())
