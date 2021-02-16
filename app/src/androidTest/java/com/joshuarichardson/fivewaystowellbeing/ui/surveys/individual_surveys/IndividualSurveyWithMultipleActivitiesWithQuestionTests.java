@@ -117,7 +117,7 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
     @Test
     public void whenOnIndividualSurveyPage_ASummaryShouldBeDisplayed() throws InterruptedException {
         // Wait a few seconds for the database to sort itself out
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(1000, TimeUnit.MILLISECONDS);
 
         onView(withId(R.id.survey_summary))
             .perform(scrollTo())
@@ -151,7 +151,7 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
     @Test
     public void whenOnIndividualSurveyPageAndMultipleActivities_AllQuestionsShouldBeDisplayed() throws InterruptedException {
         // Wait a few seconds for the database to sort itself out
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(1000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .perform(scrollTo())
