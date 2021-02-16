@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.core.app.ApplicationProvider;
@@ -108,7 +109,9 @@ public class IndividualSurveyWithOneActivityWithQuestionsTests {
     }
 
     @Test
-    public void whenOnIndividualSurveyPage_ASummaryShouldBeDisplayed() {
+    public void whenOnIndividualSurveyPage_ASummaryShouldBeDisplayed() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+
         onView(withId(R.id.survey_summary))
             .check(matches(isDisplayed()));
 
@@ -129,7 +132,9 @@ public class IndividualSurveyWithOneActivityWithQuestionsTests {
     }
 
     @Test
-    public void whenOnIndividualSurveyPageAndASingleActivity_AllQuestionsShouldBeDisplayed() {
+    public void whenOnIndividualSurveyPageAndASingleActivity_AllQuestionsShouldBeDisplayed() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+
         onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .perform(scrollTo())
             .check(matches(withText("29 Mar 1999")));
