@@ -38,7 +38,6 @@ import dagger.hilt.android.testing.HiltAndroidRule;
 import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
-import static android.text.InputType.TYPE_CLASS_TEXT;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -47,7 +46,6 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.BASIC_SURVEY;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.MaterialComponentTestUtil.withMaterialHint;
@@ -137,7 +135,6 @@ public class BasicSurveyViewBuiltCorrectly {
             .perform(scrollTo())
             .check(matches(isDisplayed()))
             .check(matches(withText("")))
-            .check(matches(withInputType(TYPE_CLASS_TEXT)))
             .perform(typeText("Title"))
             .check(matches(withText("Title")));
     }
@@ -151,7 +148,6 @@ public class BasicSurveyViewBuiltCorrectly {
             .perform(scrollTo())
             .check(matches(isDisplayed()))
             .check(matches(withText("")))
-            .check(matches(withInputType(TYPE_CLASS_TEXT)))
             .perform(typeText("Description"))
             .check(matches(withText("Description")));
     }
