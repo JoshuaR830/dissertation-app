@@ -3,6 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +79,15 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
         public void onBind(HistoryPageData response) {
             this.surveyTitle.setText(TimeFormatter.formatTimeAsDayMonthYearString(response.getSurveyResponseTimestamp()));
             this.surveyDescription.setText(response.getDescription());
+
+            // ToDo - an incompatibility with the old version of the app caused issues here
+            try {
+                WaysToWellbeing.valueOf(response.getSurveyResponseWayToWellbeing());
+            } catch (Exception e) {
+                Log.e("Survey Response", e.toString());
+                response.setSurveyResponseWayToWellbeing(UNASSIGNED);
+                Log.d("Survey Response", "Handled it");
+            }
 
             if(response.getSurveyResponseWayToWellbeing() != null && WaysToWellbeing.valueOf(response.getSurveyResponseWayToWellbeing()) != UNASSIGNED) {
                 this.image = new ImageView(SurveyResponseAdapter.this.context);
