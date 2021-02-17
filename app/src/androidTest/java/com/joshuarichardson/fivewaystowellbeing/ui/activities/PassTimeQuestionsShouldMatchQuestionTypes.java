@@ -19,7 +19,8 @@ import dagger.hilt.android.testing.HiltAndroidRule;
 import dagger.hilt.android.testing.HiltAndroidTest;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
-import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_TEXT_FLAG_AUTO_CORRECT;
+import static android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -64,7 +65,6 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
         onView(withId(R.id.pass_time_type_input)).check(matches(withText("")));
         onView(withId(R.id.way_to_wellbeing_input)).check(matches(withText("")));
 
-        onView(withId(R.id.pass_time_name_input)).check(matches(withInputType(TYPE_CLASS_TEXT)));
         onView(withId(R.id.pass_time_duration_input)).check(matches(withInputType(TYPE_CLASS_NUMBER)));
     }
 

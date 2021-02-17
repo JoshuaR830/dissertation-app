@@ -36,6 +36,7 @@
                 android:id="@+id/passtime_search_box"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textCapSentences|textAutoCorrect"
                 android:hint="@string/passtime_search_hint" />
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.cardview.widget.CardView>
