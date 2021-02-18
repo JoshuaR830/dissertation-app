@@ -32,6 +32,8 @@ public class ActivityTypeImageHelper {
                     return R.drawable.activity_type_exercise;
                 case RELAXATION:
                     return R.drawable.activity_type_relaxation;
+                case PEOPLE:
+                    return R.drawable.activity_type_people;
                 default:
                     return 0;
             }

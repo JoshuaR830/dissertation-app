@@ -27,6 +27,7 @@ public class WellbeingHelper {
                 wayToWellbeing = WaysToWellbeing.KEEP_LEARNING;
                 break;
             case PET:
+            case PEOPLE:
                 wayToWellbeing = WaysToWellbeing.CONNECT;
                 break;
             case SPORT:

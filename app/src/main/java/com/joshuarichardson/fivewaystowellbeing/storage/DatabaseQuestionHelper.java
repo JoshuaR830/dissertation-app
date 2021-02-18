@@ -7,7 +7,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
 public class DatabaseQuestionHelper {
 
-    public static final int VERSION_NUMBER = 2;
+    public static final int VERSION_NUMBER = 3;
 
     public static final int ACTIVITY_OF_TYPE_VALUE = 50;
 
@@ -87,6 +87,13 @@ public class DatabaseQuestionHelper {
             new WellbeingQuestion(48, "Did it enhance your knowledge?", "", "", WaysToWellbeing.KEEP_LEARNING.toString(), MEDIUM_VALUE, ActivityType.RELAXATION.toString(), SurveyItemTypes.CHECKBOX.toString()),
             new WellbeingQuestion(49, "Did you have a new experience?", "", "", WaysToWellbeing.TAKE_NOTICE.toString(), MEDIUM_VALUE, ActivityType.RELAXATION.toString(), SurveyItemTypes.CHECKBOX.toString()),
             new WellbeingQuestion(50, "Did you create a calming environment?", "", "", WaysToWellbeing.GIVE.toString(), LOW_VALUE, ActivityType.RELAXATION.toString(), SurveyItemTypes.CHECKBOX.toString()),
+
+            // People
+            new WellbeingQuestion(51, "Did you have a deep chat?", "", "", WaysToWellbeing.CONNECT.toString(), HIGH_VALUE, ActivityType.PEOPLE.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(52, "Did you go out and about?", "", "", WaysToWellbeing.BE_ACTIVE.toString(), MEDIUM_VALUE, ActivityType.PEOPLE.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(53, "Did you learn something new about them?", "", "", WaysToWellbeing.KEEP_LEARNING.toString(), MEDIUM_VALUE, ActivityType.PEOPLE.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(54, "Did you notice anything different about them?", "", "", WaysToWellbeing.TAKE_NOTICE.toString(), MEDIUM_VALUE, ActivityType.PEOPLE.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(55, "Did you share knowledge or give them advice?", "", "", WaysToWellbeing.GIVE.toString(), HIGH_VALUE, ActivityType.PEOPLE.toString(), SurveyItemTypes.CHECKBOX.toString()),
         };
     }
 }
