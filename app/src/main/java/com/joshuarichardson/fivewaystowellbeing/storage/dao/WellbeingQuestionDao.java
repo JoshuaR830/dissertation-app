@@ -9,13 +9,14 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import static com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper.ACTIVITY_OF_TYPE_VALUE;
 
 @Dao
 public interface WellbeingQuestionDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(WellbeingQuestion wellbeingQuestion);
 
     @Query("SELECT * FROM wellbeing_questions WHERE wellbeing_question_id == :id")

@@ -10,5 +10,6 @@ public enum ActivityType {
     CHORES,
     COOKING,
     EXERCISE,
-    RELAXATION
+    RELAXATION,
+    PEOPLE
 }

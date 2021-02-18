@@ -58,6 +58,9 @@ public class WellbeingHelperWayToWellbeingFormatTests {
 
         wayToWellbeing = WellbeingHelper.getDefaultWayToWellbeingFromActivityType("Relaxation");
         assertThat(wayToWellbeing).isEqualTo(WaysToWellbeing.TAKE_NOTICE);
+
+        wayToWellbeing = WellbeingHelper.getDefaultWayToWellbeingFromActivityType("People");
+        assertThat(wayToWellbeing).isEqualTo(WaysToWellbeing.CONNECT);
     }
     
     @Test
