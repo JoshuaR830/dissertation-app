@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.joshuarichardson.fivewaystowellbeing.LearnMoreAboutFiveWaysActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
@@ -133,5 +134,10 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                 date.setText(TimeFormatter.formatTimeAsDayMonthYearString(surveyResponse.getSurveyResponseTimestamp()));
             });
         });
+    }
+
+    public void onLearnMoreButtonClicked(View v) {
+        Intent learnMoreIntent = new Intent(this, LearnMoreAboutFiveWaysActivity.class);
+        startActivity(learnMoreIntent);
     }
 }

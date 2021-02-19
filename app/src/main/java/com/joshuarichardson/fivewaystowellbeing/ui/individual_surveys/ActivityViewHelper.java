@@ -23,7 +23,6 @@ import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
-import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
@@ -76,6 +75,7 @@ public class ActivityViewHelper {
         TextView note = view.findViewById(R.id.activity_note_text);
         ImageView image = view.findViewById(R.id.activity_image);
 
+        View topLevelDetails = view.findViewById(R.id.activity_top_level_details);
         ImageButton expandButton = view.findViewById(R.id.expand_options_button);
         View checkboxView = view.findViewById(R.id.pass_time_checkbox_container);
 
@@ -221,10 +221,9 @@ public class ActivityViewHelper {
                 checkboxContainer.addView(checkBox);
             }
 
-            expandButton.setOnClickListener(v -> {
+            View.OnClickListener expandClickListener = (v -> {
                 if (checkboxView.getVisibility() == View.GONE) {
                     checkboxView.setVisibility(View.VISIBLE);
-                    checkboxView.getVisibility();
                     expandButton.setImageResource(R.drawable.button_collapse);
                 } else {
                     checkboxView.setVisibility(View.GONE);
@@ -232,14 +231,19 @@ public class ActivityViewHelper {
                 }
             });
 
+            expandButton.setOnClickListener(expandClickListener);
+
+            if (passtime.getQuestions().size() == 0) {
+                expandButton.setVisibility(View.GONE);
+            } else {
+                topLevelDetails.setOnClickListener(expandClickListener);
+            }
+
             // Display details
             noteTextInput.setText(passtime.getNote());
             TextView timeText = view.findViewById(R.id.activity_time_text);
             displayTimes(timeText, passtime.getStartTime(), passtime.getEndTime());
 
-            if (passtime.getQuestions().size() == 0) {
-                expandButton.setVisibility(View.GONE);
-            }
 
             title.setText(passtime.getName());
 
