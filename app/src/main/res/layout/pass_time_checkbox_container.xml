@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -49,7 +48,6 @@
             app:icon="@drawable/icon_save"
             android:text="@string/button_save_note" />
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <LinearLayout
             android:id="@+id/action_buttons"
