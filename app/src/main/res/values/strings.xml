@@ -5,6 +5,7 @@
     <string name="launch_view_pass_time">View activities</string>
     <string name="launch_create_activity">Record activity</string>
     <string name="launch_answer_survey">Complete log</string>
+    <string name="wellbeing_logs_title">Wellbeing logs</string>
     <string name="learn_more_title">Learn more</string>
     <string name="view_more">View more</string>
     <string name="wellbeing_graph_title">Your ways to wellbeing</string>

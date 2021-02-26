@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_view_survey_responses"
-        android:label="@string/launch_view_surveys"
+        android:label="@string/navigation_surveys"
         android:name="com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragment"
         tools:layout="@layout/fragment_view_surveys" />
 

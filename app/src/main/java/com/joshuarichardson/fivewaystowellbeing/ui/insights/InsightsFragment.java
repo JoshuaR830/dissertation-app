@@ -82,7 +82,6 @@ public class InsightsFragment extends Fragment {
             }
 
             List<InsightsItem> insights = Arrays.asList(
-                new InsightsItem(getString(R.string.wellbeing_insight_activities), getString(R.string.wellbeing_insight_activities_description), 2, activityButton),
                 new InsightsItem(getString(R.string.title_weekly_insights_overview), getString(R.string.description_weekly_insights_overview), 2, null),
                 new InsightsItem(getString(R.string.wellbeing_connect), String.format(Locale.getDefault(), "%d", connect)),
                 new InsightsItem(getString(R.string.wellbeing_be_active), String.format(Locale.getDefault(), "%d", beActive)),
