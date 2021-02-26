@@ -35,7 +35,7 @@
             android:name=".ui.wellbeing_support.WellbeingSupportActivity"
             android:label="@string/get_wellbeing_support"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme.Launcher">
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.Launcher" android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
