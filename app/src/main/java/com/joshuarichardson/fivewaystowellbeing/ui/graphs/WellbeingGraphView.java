@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -143,7 +142,6 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
     }
 
     public void resetColors() {
-        Log.d("Reset", "Reset");
         this.connect.updateColor(getResources().getColor(R.color.way_to_wellbeing_connect, getContext().getTheme()));
         this.beActive.updateColor(getResources().getColor(R.color.way_to_wellbeing_be_active, getContext().getTheme()));
         this.keepLearning.updateColor(getResources().getColor(R.color.way_to_wellbeing_keep_learning, getContext().getTheme()));

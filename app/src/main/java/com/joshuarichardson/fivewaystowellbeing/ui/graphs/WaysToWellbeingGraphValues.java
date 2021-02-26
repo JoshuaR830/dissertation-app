@@ -2,7 +2,6 @@ package com.joshuarichardson.fivewaystowellbeing.ui.graphs;
 
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
 
 public class WaysToWellbeingGraphValues {
 
@@ -66,7 +65,6 @@ public class WaysToWellbeingGraphValues {
     }
 
     public Paint getPaint() {
-        Log.d("Paint", String.valueOf(this.paint.getColor()));
         return this.paint;
     }
 }
