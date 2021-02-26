@@ -11,11 +11,11 @@
     <color name="white12Percent">#1FFFFFFF</color>
     <color name="white">#FFFFFF</color>
 
-    <color name="way_to_wellbeing_be_active">#f693a7</color>
-    <color name="way_to_wellbeing_connect">#ffd176</color>
-    <color name="way_to_wellbeing_give">#79dc9d</color>
-    <color name="way_to_wellbeing_keep_learning">#6ac8df</color>
-    <color name="way_to_wellbeing_take_notice">#c994e9</color>
+    <color name="way_to_wellbeing_be_active">#fff693a7</color>
+    <color name="way_to_wellbeing_connect">#ffffd176</color>
+    <color name="way_to_wellbeing_give">#ff79dc9d</color>
+    <color name="way_to_wellbeing_keep_learning">#ff6ac8df</color>
+    <color name="way_to_wellbeing_take_notice">#ffc994e9</color>
 
     <color name="translucent_way_to_wellbeing_be_active">#55f693a7</color>
     <color name="translucent_way_to_wellbeing_connect">#55ffd176</color>

@@ -11,6 +11,8 @@
 
         <item name="textAllCaps">false</item>
 
+        <item name="chipStyle">@style/Widget.App.ChipStyle</item>
+
         <item name="android:windowBackground">@drawable/gradient_background</item>
 
         <item name="materialTextButton">@style/Widget.MaterialComponents.Button.TextButton</item>
@@ -22,6 +24,10 @@
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:background">@color/white12Percent</item>
+    </style>
+
+    <style name="Widget.App.ChipStyle" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@android:color/transparent</item>
     </style>
 
     <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">

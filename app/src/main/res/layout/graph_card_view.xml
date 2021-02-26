@@ -9,7 +9,10 @@
         android:id="@+id/graph_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
         app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,13 +56,94 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/graph_title">
 
             </FrameLayout>
+
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/graph_card_container">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/wellbeing_chip_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_connect"
+                            android:checkable="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wellbeing_connect"
+                            app:chipStrokeColor="@color/way_to_wellbeing_connect"
+                            app:chipStrokeWidth="1dp"
+                            app:chipIconTint="@color/way_to_wellbeing_connect"
+                            app:chipIcon="@drawable/frame_circle"/>
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_be_active"
+                            android:checkable="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wellbeing_be_active"
+                            app:chipStrokeColor="@color/way_to_wellbeing_be_active"
+                            app:chipStrokeWidth="1dp"
+                            app:chipIconTint="@color/way_to_wellbeing_be_active"
+                            app:chipIcon="@drawable/frame_circle"/>
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_keep_learning"
+                            android:checkable="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wellbeing_keep_learning"
+                            app:chipStrokeColor="@color/way_to_wellbeing_keep_learning"
+                            app:chipStrokeWidth="1dp"
+                            app:chipIconTint="@color/way_to_wellbeing_keep_learning"
+                            app:chipIcon="@drawable/frame_circle"/>
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_take_notice"
+                            android:checkable="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wellbeing_take_notice"
+                            app:chipStrokeColor="@color/way_to_wellbeing_take_notice"
+                            app:chipStrokeWidth="1dp"
+                            app:chipIconTint="@color/way_to_wellbeing_take_notice"
+                            app:chipIcon="@drawable/frame_circle"/>
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_give"
+                            android:checkable="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wellbeing_give"
+                            app:chipStrokeColor="@color/way_to_wellbeing_give"
+                            app:chipStrokeWidth="1dp"
+                            app:chipIconTint="@color/way_to_wellbeing_give"
+                            app:chipIcon="@drawable/frame_circle"/>
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </HorizontalScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.google.android.material.chip.ChipGroup;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
@@ -121,6 +122,42 @@ public class ProgressFragment extends Fragment {
                 ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db, getParentFragmentManager(), analyticsHelper);
             });
         };
+
+        ChipGroup group = view.findViewById(R.id.wellbeing_chip_group);
+        LinearLayout helpContainer = view.findViewById(R.id.way_to_wellbeing_help_container);
+        group.setOnCheckedChangeListener((groupId, checkedId) -> {
+            helpContainer.removeAllViews();
+            switch (checkedId) {
+                case R.id.chip_connect:
+                    graphView.highlightBar(WaysToWellbeing.CONNECT);
+                    LayoutInflater.from(getContext()).inflate(R.layout.card_connect, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.chip_be_active:
+                    graphView.highlightBar(WaysToWellbeing.BE_ACTIVE);
+                    LayoutInflater.from(getContext()).inflate(R.layout.card_be_active, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.chip_keep_learning:
+                    graphView.highlightBar(WaysToWellbeing.KEEP_LEARNING);
+                    LayoutInflater.from(getContext()).inflate(R.layout.card_keep_learning, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.chip_take_notice:
+                    graphView.highlightBar(WaysToWellbeing.TAKE_NOTICE);
+                    LayoutInflater.from(getContext()).inflate(R.layout.card_take_notice, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.chip_give:
+                    graphView.highlightBar(WaysToWellbeing.GIVE);
+                    LayoutInflater.from(getContext()).inflate(R.layout.card_give, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    helpContainer.setVisibility(View.GONE);
+                    graphView.resetColors();
+            }
+        });
 
         // Epoch seconds give a 24 hour time frame - any new surveys added will get updated live (using now meant that future surveys today didn't get shown)
         this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(thisMorning, tonight);

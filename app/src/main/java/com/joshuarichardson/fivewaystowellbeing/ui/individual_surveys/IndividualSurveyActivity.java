@@ -2,12 +2,15 @@ package com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.chip.ChipGroup;
 import com.joshuarichardson.fivewaystowellbeing.LearnMoreAboutFiveWaysActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
@@ -75,6 +78,42 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
         };
+
+        ChipGroup group = findViewById(R.id.wellbeing_chip_group);
+        LinearLayout helpContainer = findViewById(R.id.way_to_wellbeing_help_container);
+        group.setOnCheckedChangeListener((groupId, checkedId) -> {
+            helpContainer.removeAllViews();
+            switch (checkedId) {
+                case R.id.chip_connect:
+                    graphView.highlightBar(WaysToWellbeing.CONNECT);
+                    LayoutInflater.from(this).inflate(R.layout.card_connect, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.chip_be_active:
+                    graphView.highlightBar(WaysToWellbeing.BE_ACTIVE);
+                    LayoutInflater.from(this).inflate(R.layout.card_be_active, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.chip_keep_learning:
+                    graphView.highlightBar(WaysToWellbeing.KEEP_LEARNING);
+                    LayoutInflater.from(this).inflate(R.layout.card_keep_learning, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.chip_take_notice:
+                    graphView.highlightBar(WaysToWellbeing.TAKE_NOTICE);
+                    LayoutInflater.from(this).inflate(R.layout.card_take_notice, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.chip_give:
+                    graphView.highlightBar(WaysToWellbeing.GIVE);
+                    LayoutInflater.from(this).inflate(R.layout.card_give, helpContainer);
+                    helpContainer.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    helpContainer.setVisibility(View.GONE);
+                    graphView.resetColors();
+            }
+        });
 
         // ToDo - at some point make this visible and allow it to be edited
         Button addActivityButton = findViewById(R.id.add_activity_button);

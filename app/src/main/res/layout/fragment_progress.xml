@@ -32,7 +32,19 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/way_to_wellbeing_help_container"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/include_graph" />
 
                 <include
                     android:id="@+id/include_survey"
@@ -40,10 +52,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/include_graph" />
+                    app:layout_constraintTop_toBottomOf="@+id/way_to_wellbeing_help_container" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
