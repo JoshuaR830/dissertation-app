@@ -12,6 +12,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 
 public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUpdateListener {
@@ -105,6 +106,47 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.keepLearning.updateValue(updatedGraphValues.getKeepLearningValue(), this.multiplier, this.height, this.width);
         this.takeNotice.updateValue(updatedGraphValues.getTakeNoticeValue(), this.multiplier, this.height, this.width);
         animator.start();
+
+        this.invalidate();
+    }
+
+    public void highlightBar(WaysToWellbeing itemToHighlight) {
+
+        this.connect.updateColor(getResources().getColor(R.color.translucent_way_to_wellbeing_connect, getContext().getTheme()));
+        this.beActive.updateColor(getResources().getColor(R.color.translucent_way_to_wellbeing_be_active, getContext().getTheme()));
+        this.keepLearning.updateColor(getResources().getColor(R.color.translucent_way_to_wellbeing_keep_learning, getContext().getTheme()));
+        this.takeNotice.updateColor(getResources().getColor(R.color.translucent_way_to_wellbeing_take_notice, getContext().getTheme()));
+        this.give.updateColor(getResources().getColor(R.color.translucent_way_to_wellbeing_give, getContext().getTheme()));
+
+        switch(itemToHighlight) {
+            case CONNECT:
+                this.connect.updateColor(getResources().getColor(R.color.way_to_wellbeing_connect, getContext().getTheme()));
+                break;
+            case BE_ACTIVE:
+                this.beActive.updateColor(getResources().getColor(R.color.way_to_wellbeing_be_active, getContext().getTheme()));
+                break;
+            case KEEP_LEARNING:
+                this.keepLearning.updateColor(getResources().getColor(R.color.way_to_wellbeing_keep_learning, getContext().getTheme()));
+                break;
+            case TAKE_NOTICE:
+                this.takeNotice.updateColor(getResources().getColor(R.color.way_to_wellbeing_take_notice, getContext().getTheme()));
+                break;
+            case GIVE:
+                this.give.updateColor(getResources().getColor(R.color.way_to_wellbeing_give, getContext().getTheme()));
+                break;
+            default:
+                return;
+        }
+
+        this.invalidate();
+    }
+
+    public void resetColors() {
+        this.connect.updateColor(getResources().getColor(R.color.way_to_wellbeing_connect, getContext().getTheme()));
+        this.beActive.updateColor(getResources().getColor(R.color.way_to_wellbeing_be_active, getContext().getTheme()));
+        this.keepLearning.updateColor(getResources().getColor(R.color.way_to_wellbeing_keep_learning, getContext().getTheme()));
+        this.takeNotice.updateColor(getResources().getColor(R.color.way_to_wellbeing_take_notice, getContext().getTheme()));
+        this.give.updateColor(getResources().getColor(R.color.way_to_wellbeing_give, getContext().getTheme()));
 
         this.invalidate();
     }

@@ -44,6 +44,10 @@ public class WaysToWellbeingGraphValues {
         this.updateSize(multiplier, height, width);
     }
 
+    public void updateColor(int color) {
+        this.paint.setColor(color);
+    }
+
     public RectF getShape() {
         return this.shape;
     }

@@ -19,15 +19,20 @@
 
         <item name="materialButtonStyle">@style/Widget.App.ButtonStyle</item>
 
+        <item name="chipStyle">@style/Widget.App.ChipStyle</item>
+
         <item name="floatingActionButtonStyle">@style/Widget.App.FloatingActionButton</item>
 
         <item name="materialTextButton">@style/Widget.MaterialComponents.Button.TextButton</item>
-
-
     </style>
+
 
     <style name="AppTheme.Launcher">
         <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+
+    <style name="Widget.App.ChipStyle" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@android:color/transparent</item>
     </style>
 
     <style name="Widget.App.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">

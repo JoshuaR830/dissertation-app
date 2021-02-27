@@ -113,16 +113,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/survey_summary" />
 
+                <LinearLayout
+                    android:id="@+id/way_to_wellbeing_help_container"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/include_graph" />
+
                 <include
                     android:id="@+id/include_survey"
                     layout="@layout/survey_card"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/include_graph" />
+                    app:layout_constraintTop_toBottomOf="@+id/way_to_wellbeing_help_container" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
