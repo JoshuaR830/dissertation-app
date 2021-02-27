@@ -3,10 +3,13 @@ package com.joshuarichardson.fivewaystowellbeing;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
@@ -63,6 +66,48 @@ public class CreatePassTimeActivity extends AppCompatActivity {
 
                 AutoCompleteTextView wayToWellbeingInput = findViewById(R.id.way_to_wellbeing_input);
                 wayToWellbeingInput.setText(WellbeingHelper.getStringFromWayToWellbeing(wayToWellbeing), false);
+            }
+        });
+
+        LinearLayout helpContainer = findViewById(R.id.wellbeing_card_help_container);
+
+        wayToWellbeingInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String wayToWellbeingSelected = wayToWellbeingInput.getText().toString();
+                Log.d("Which", wayToWellbeingSelected);
+                helpContainer.removeAllViews();
+                switch (wayToWellbeingSelected) {
+                    case "Connect":
+                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_connect, helpContainer);
+                        helpContainer.setVisibility(View.VISIBLE);
+                        break;
+                    case "Be active":
+                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_be_active, helpContainer);
+                        helpContainer.setVisibility(View.VISIBLE);
+                        break;
+                    case "Keep learning":
+                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_keep_learning, helpContainer);
+                        helpContainer.setVisibility(View.VISIBLE);
+                        break;
+                    case "Take notice":
+                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_take_notice, helpContainer);
+                        helpContainer.setVisibility(View.VISIBLE);
+                        break;
+                    case "Give":
+                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_give, helpContainer);
+                        helpContainer.setVisibility(View.VISIBLE);
+                        break;
+                    case "None":
+                        helpContainer.setVisibility(View.GONE);
+                        break;
+                }
             }
         });
 
