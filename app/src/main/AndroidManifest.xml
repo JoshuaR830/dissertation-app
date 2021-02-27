@@ -10,6 +10,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <receiver android:name=".notifications.SendCompleteSurveyNotificationBroadcastReceiver" android:enabled="true" android:process=":remote"/>
+        <!-- References https://stackoverflow.com/a/12034402/13496270 , https://developer.android.com/guide/components/broadcast-exceptions -->
+        <receiver android:name=".notifications.DeviceBootedBroadcastReceiver" android:enabled="true" android:exported="true" android:process=":remote">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
         <activity android:name=".LearnMoreAboutFiveWaysActivity" android:parentActivityName=".MainActivity" android:label="@string/learn_more_title"/>
         <activity android:name=".ui.individual_surveys.IndividualSurveyActivity" android:parentActivityName=".MainActivity" android:label="@string/launch_view_surveys" />
         <activity
@@ -47,12 +55,12 @@
             android:name="firebase_analytics_collection_deactivated"
             android:value="${analytics_deactivated}" />
     </application>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <permission android:name="android.permission.WAKE_LOCK" />
 
     <permission android:name="android.permission.INTERNET" />
     <permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

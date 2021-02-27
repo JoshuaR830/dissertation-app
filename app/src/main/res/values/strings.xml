@@ -94,4 +94,10 @@
     <string name="error_no_name_entered">Please enter a name</string>
     <string name="error_no_type_selected">Please choose a type</string>
     <string name="error_no_way_to_wellbeing_selected">Please choose a way to wellbeing</string>
+
+    <!-- Notifications -->
+    <string name="notification_morning">Good morning! Are you ready to log some activities?</string>
+    <string name="notification_noon">Remember to log your activities so far!</string>
+    <string name="notification_night">Good evening, remember to log your activities</string>
+    <string name="channel_name">Wellbeing log reminders</string>
 </resources>
