@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
@@ -41,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         // Switch to the theme chosen in settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor preferenceEditor = preferences.edit();
         if(!preferences.contains("theme_settings_list")) {
             // Reference https://stackoverflow.com/a/552380/13496270
             // Now before selecting a preference an options will be selected automatically
-            SharedPreferences.Editor preferenceEditor = preferences.edit();
             preferenceEditor.putString("theme_settings_list", "SYSTEM");
             preferenceEditor.apply();
         }
@@ -55,9 +56,29 @@ public class MainActivity extends AppCompatActivity {
         }
         ThemeHelper.setTheme(theme);
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Schedule default notification and set values if not set
+        if (!preferences.contains("notification_morning_time") || !preferences.contains("notification_morning_switch")) {
+            preferenceEditor.putLong("notification_morning_time", 30600000); // 8:30
+            preferenceEditor.putBoolean("notification_morning_switch", true);
+            AlarmHelper.getInstance().scheduleNotification(getApplicationContext(), 8, 30, "morning", true);
+        }
+
+        if (!preferences.contains("notification_noon_time") || !preferences.contains("notification_noon_switch")) {
+            preferenceEditor.putLong("notification_noon_time", 43200000); // 12:00
+            preferenceEditor.putBoolean("notification_noon_switch", true);
+            AlarmHelper.getInstance().scheduleNotification(getApplicationContext(), 12, 0, "noon", true);
+        }
+
+        if (!preferences.contains("notification_night_time") || !preferences.contains("notification_night_switch")) {
+            preferenceEditor.putLong("notification_night_time", 73800000); // 20:30
+            preferenceEditor.putBoolean("notification_night_switch", true);
+            AlarmHelper.getInstance().scheduleNotification(getApplicationContext(), 20, 30, "night", true);
+        }
+
+        preferenceEditor.apply();
 
         // Put the questions in the database whenever the questions are updated
         int hasAddedQuestions = preferences.getInt("added_question_version", 0);
@@ -68,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
                     questionDao.insert(question);
                 }
             });
-            SharedPreferences.Editor preferenceEditor = preferences.edit();
             preferenceEditor.putInt("added_question_version", DatabaseQuestionHelper.VERSION_NUMBER);
             preferenceEditor.apply();
         }
