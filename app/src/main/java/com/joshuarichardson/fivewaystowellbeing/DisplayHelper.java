@@ -8,4 +8,19 @@ public class DisplayHelper {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (dp * density);
     }
+
+    public static int getDisplayWidth(Context context) {
+        return context.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getDisplayHeight(Context context) {
+        return context.getResources().getDisplayMetrics().heightPixels;
+    }
+
+    public static int getSmallestMaxDimension(Context context) {
+        int height = getDisplayHeight(context);
+        int width = getDisplayWidth(context);
+
+        return Math.min(height, width);
+    }
 }

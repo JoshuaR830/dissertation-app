@@ -6,7 +6,7 @@ import android.graphics.RectF;
 public class WaysToWellbeingGraphValues {
 
     private final int FULL_CIRCLE = 360;
-
+    private int totalSegments;
     private RectF shape;
     private int arcStart;
     private int arcLength;
@@ -17,11 +17,13 @@ public class WaysToWellbeingGraphValues {
         if(segment < 0 || totalSegments <= 0 || segment >= totalSegments) {
             return;
         }
-
+        this.totalSegments = totalSegments;
         this.value = value;
         this.arcLength = calculateArcLength(totalSegments);
         this.arcStart = calculateArcStart(segment);
         this.paint.setColor(paintColor);
+        this.paint.setTextSize(45);
+        this.paint.setStrokeWidth(4);
     }
 
     private int calculateArcLength(int totalSegments) {
@@ -62,6 +64,22 @@ public class WaysToWellbeingGraphValues {
 
     public boolean getUseCenter() {
         return true;
+    }
+
+    public int getCirclePointX(int centerX, int radius) {
+        // Calculate x coord of point on circle
+        int pointOfAngle = getStartAngle() + ((FULL_CIRCLE / this.totalSegments)/2);
+        return centerX + (int)(radius*Math.cos(pointOfAngle*(Math.PI/180)));
+    }
+
+    public int getCirclePointY(int centerY, int radius) {
+        // Calculate y coord of point on circle
+        int pointOfAngle = getStartAngle() + ((FULL_CIRCLE / this.totalSegments)/2);
+        return centerY + (int)(radius*Math.sin(pointOfAngle * (Math.PI/180)));
+    }
+
+    public int getValue() {
+        return this.value;
     }
 
     public Paint getPaint() {

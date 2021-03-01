@@ -40,6 +40,8 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import dagger.hilt.android.AndroidEntryPoint;
 
+import static com.joshuarichardson.fivewaystowellbeing.DisplayHelper.getSmallestMaxDimension;
+
 @AndroidEntryPoint
 public class IndividualSurveyActivity extends AppCompatActivity {
 
@@ -71,7 +73,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         CardView container = findViewById(R.id.graph_card);
         FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
 
-        WellbeingGraphView graphView = new WellbeingGraphView(this, 600, new WellbeingGraphValueHelper(0, 0, 0, 0, 0));
+        WellbeingGraphView graphView = new WellbeingGraphView(this, (int)(getSmallestMaxDimension(this)/1.5), new WellbeingGraphValueHelper(0, 0, 0, 0, 0), true);
         canvasContainer.addView(graphView);
 
         Observer<List<WellbeingGraphItem>> wholeGraphUpdate  = graphValues -> {
