@@ -91,14 +91,14 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
 
             when(wellbeingRecordDao.getDataBySurvey(123))
                 .thenReturn(Arrays.asList(
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 2, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 3", 3, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 4", 4, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 5", 5, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 6", 6, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 7", 7, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 8", 8, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1)
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 2, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 3", 3, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 4", 4, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 5", 5, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 6", 6, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 7", 7, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 8", 8, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0)
                 )
             );
 

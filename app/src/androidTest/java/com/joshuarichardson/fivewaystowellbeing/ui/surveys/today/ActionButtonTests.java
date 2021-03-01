@@ -55,6 +55,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -101,10 +102,10 @@ public class ActionButtonTests {
 
 
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Arrays.asList(
-                new RawSurveyData(now, "Survey note", "", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), -1, -1),
-                new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, -1),
-                new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), -1, 14460000),
-                new RawSurveyData(now, "Survey note", "", "Activity name 4", 4, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, 14460000)
+                new RawSurveyData(now, "Survey note", "", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), -1, -1, 0),
+                new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, -1, 0),
+                new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), -1, 14460000, 0),
+                new RawSurveyData(now, "Survey note", "", "Activity name 4", 4, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, 14460000, 0)
             ));
 
 
@@ -269,5 +270,75 @@ public class ActionButtonTests {
             .check(matches(withText("12:00")));
 
         verify(this.surveyActivity, times(1)).updateEndTime(anyLong(), anyLong());
+    }
+
+    @Test
+    public void onWorstEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click());
+
+        onView(allOf(withId(R.id.sentiment_worst), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(1));
+    }
+
+    @Test
+    public void onBadEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click());
+
+        onView(allOf(withId(R.id.sentiment_bad), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(2));
+    }
+
+    @Test
+    public void onNeutralEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click());
+
+        onView(allOf(withId(R.id.sentiment_neutral), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(3));
+    }
+
+    @Test
+    public void onGoodEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click());
+
+        onView(allOf(withId(R.id.sentiment_good), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(4));
+    }
+
+    @Test
+    public void onBestEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click());
+
+        onView(allOf(withId(R.id.sentiment_best), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(5));
     }
 }

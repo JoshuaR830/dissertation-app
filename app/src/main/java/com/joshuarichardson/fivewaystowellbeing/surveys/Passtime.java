@@ -12,10 +12,11 @@ public class Passtime {
     private long endTime;
     private final long activitySurveyId;
     private final String wayToWellbeing;
+    private int emotion;
 
     ArrayList<Question> questions;
 
-    public Passtime(String name, String note, String type, String wayToWellbeing, long activitySurveyId, long startTime, long endTime) {
+    public Passtime(String name, String note, String type, String wayToWellbeing, long activitySurveyId, long startTime, long endTime, int emotion) {
         this.questions = new ArrayList<>();
         this.name = name;
         this.note = note;
@@ -24,6 +25,7 @@ public class Passtime {
         this.endTime = endTime;
         this.activitySurveyId = activitySurveyId;
         this.wayToWellbeing = wayToWellbeing;
+        this.emotion = emotion;
     }
 
     public void addQuestionToList(Question question) {
@@ -68,5 +70,9 @@ public class Passtime {
 
     public void setEndTime(long endTimeMillis) {
         this.endTime = endTimeMillis;
+    }
+
+    public int getEmotion() {
+        return this.emotion;
     }
 }

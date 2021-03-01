@@ -61,14 +61,14 @@ public class GetLimitedDataForSurvey {
         long activityRecordId1 = this.activityRecordDao.insert(activityRecord1);
 
 
-        SurveyResponseActivityRecord surveyResponseActivityRecord1_1 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId1, 0, null, 0, 0);
+        SurveyResponseActivityRecord surveyResponseActivityRecord1_1 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId1, 0, null, 0, 0, 1);
 
-        SurveyResponseActivityRecord surveyResponseActivityRecord2_1 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId1, 0, null, 0, 0);
-        SurveyResponseActivityRecord surveyResponseActivityRecord2_2 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId2, 0, null, 0, 0);
-        SurveyResponseActivityRecord surveyResponseActivityRecord2_3 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId3, 0, null, 0, 0);
+        SurveyResponseActivityRecord surveyResponseActivityRecord2_1 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId1, 0, null, 0, 0, 1);
+        SurveyResponseActivityRecord surveyResponseActivityRecord2_2 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId2, 0, null, 0, 0, 1);
+        SurveyResponseActivityRecord surveyResponseActivityRecord2_3 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId3, 0, null, 0, 0, 1);
 
         // This has the same activity id so that the question order can be tested
-        SurveyResponseActivityRecord surveyResponseActivityRecord3_1 = new SurveyResponseActivityRecord(surveyResponseId3, activityRecordId3, 0, null, 0, 0);
+        SurveyResponseActivityRecord surveyResponseActivityRecord3_1 = new SurveyResponseActivityRecord(surveyResponseId3, activityRecordId3, 0, null, 0, 0, 1);
 
         // sA1 is for testing that correct response is provided
         this.surveyResponseActivityRecordDao.insert(surveyResponseActivityRecord1_1);

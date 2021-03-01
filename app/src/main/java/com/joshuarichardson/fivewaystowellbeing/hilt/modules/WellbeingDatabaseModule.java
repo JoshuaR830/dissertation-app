@@ -105,11 +105,18 @@ public class WellbeingDatabaseModule {
         }
     };
 
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE survey_activity ADD COLUMN emotion INTEGER DEFAULT 0 NOT NULL");
+        }
+    };
+
     @Provides
     @Singleton
     public static WellbeingDatabase getWellbeingDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .addCallback(new RoomDatabase.Callback() {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -131,7 +138,7 @@ public class WellbeingDatabaseModule {
                     });
                 }
             })
-            .fallbackToDestructiveMigration()
+//            .fallbackToDestructiveMigration()
             .build();
         }
 }

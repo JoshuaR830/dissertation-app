@@ -69,14 +69,14 @@ public class GetDataBySurveyTests {
         ActivityRecord activityRecord3 = new ActivityRecord("Activity name 3", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE);
         long activityRecordId3 = this.activityRecordDao.insert(activityRecord3);
 
-        SurveyResponseActivityRecord surveyResponseActivityRecord1_1 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId1, 0, "Activity note 1_1", 123456, 234567);
+        SurveyResponseActivityRecord surveyResponseActivityRecord1_1 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId1, 0, "Activity note 1_1", 123456, 234567, 1);
 
-        SurveyResponseActivityRecord surveyResponseActivityRecord2_1 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId1, 0, "Activity note 2_1", 123456, 234567);
-        SurveyResponseActivityRecord surveyResponseActivityRecord2_2 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId2, 1, "Activity note 2_2", 123456, 234567);
-        SurveyResponseActivityRecord surveyResponseActivityRecord2_3 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId3, 2, "Activity note 2_3", 123456, 234567);
+        SurveyResponseActivityRecord surveyResponseActivityRecord2_1 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId1, 0, "Activity note 2_1", 123456, 234567, 1);
+        SurveyResponseActivityRecord surveyResponseActivityRecord2_2 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId2, 1, "Activity note 2_2", 123456, 234567, 1);
+        SurveyResponseActivityRecord surveyResponseActivityRecord2_3 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId3, 2, "Activity note 2_3", 123456, 234567, 1);
 
         // This has the same activity id so that the question order can be tested
-        SurveyResponseActivityRecord surveyResponseActivityRecord3_1 = new SurveyResponseActivityRecord(surveyResponseId3, activityRecordId3, 1, "Activity note 3_1", 123456, 234567);
+        SurveyResponseActivityRecord surveyResponseActivityRecord3_1 = new SurveyResponseActivityRecord(surveyResponseId3, activityRecordId3, 1, "Activity note 3_1", 123456, 234567, 1);
 
         // sA1 is for testing that correct response is provided
         this.surveyActivityId1_1 = this.surveyResponseActivityRecordDao.insert(surveyResponseActivityRecord1_1);

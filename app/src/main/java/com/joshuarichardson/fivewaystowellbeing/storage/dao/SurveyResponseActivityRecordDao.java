@@ -34,14 +34,17 @@ public interface SurveyResponseActivityRecordDao {
     @Query("SELECT * FROM survey_activity WHERE survey_activity_id = :surveyActivityId")
     SurveyResponseActivityRecord getSurveyActivityById(long surveyActivityId);
 
-    @Query("UPDATE survey_activity SET note = :noteText WHERE survey_activity_id = :activitySurveyId")
-    void updateNote(long activitySurveyId, String noteText);
+    @Query("UPDATE survey_activity SET note = :noteText WHERE survey_activity_id = :surveyActivityId")
+    void updateNote(long surveyActivityId, String noteText);
 
-    @Query("UPDATE survey_activity SET start_time = :startTime WHERE survey_activity_id = :activitySurveyId")
-    void updateStartTime(long activitySurveyId, long startTime);
+    @Query("UPDATE survey_activity SET start_time = :startTime WHERE survey_activity_id = :surveyActivityId")
+    void updateStartTime(long surveyActivityId, long startTime);
 
-    @Query("UPDATE survey_activity SET end_time = :endTime WHERE survey_activity_id = :activitySurveyId")
-    void updateEndTime(long activitySurveyId, long endTime);
+    @Query("UPDATE survey_activity SET end_time = :endTime WHERE survey_activity_id = :surveyActivityId")
+    void updateEndTime(long surveyActivityId, long endTime);
+
+    @Query("UPDATE survey_activity SET emotion = :emotion WHERE survey_activity_id = :surveyActivityId")
+    void updateEmotion(long surveyActivityId, int emotion);
 
     // ToDo Need a delete method
 }

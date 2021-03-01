@@ -25,7 +25,7 @@ public class LimitedRawSurveyData {
         ArrayList<RawSurveyData> rawData = new ArrayList<>();
 
         for (LimitedRawSurveyData listItem : limitedList) {
-            rawData.add(new RawSurveyData(listItem.getDate(), listItem.getSurveyNote(), listItem.getActivityNote(), listItem.getActivityName(), listItem.getSurveyActivityId(), listItem.getQuestion(), listItem.getWellbeingRecordId(), listItem.getUserInput(), listItem.getActivityType(), listItem.getWayToWellbeing(), listItem.getStartTime(), listItem.getEndTime()));
+            rawData.add(new RawSurveyData(listItem.getDate(), listItem.getSurveyNote(), listItem.getActivityNote(), listItem.getActivityName(), listItem.getSurveyActivityId(), listItem.getQuestion(), listItem.getWellbeingRecordId(), listItem.getUserInput(), listItem.getActivityType(), listItem.getWayToWellbeing(), listItem.getStartTime(), listItem.getEndTime(), listItem.getEmotion()));
         }
 
         return rawData;
@@ -77,5 +77,9 @@ public class LimitedRawSurveyData {
 
     public long getEndTime() {
         return -1;
+    }
+
+    public int getEmotion() {
+        return 0;
     }
 }
