@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <SwitchPreference
         android:key="notification_night_switch"
-        android:title="Evening"
-        app:summary="Set evening notification"
+        android:title="@string/night"
+        app:summary="@string/night_preference_switch_title"
         app:useSimpleSummaryProvider="true"
         app:icon="@drawable/icon_notification_night">
     </SwitchPreference>
 
     <Preference
-        android:title="Time"
+        android:title="@string/preference_time_title"
         android:key="notification_night_time"
-        app:summary="Set evening notification time"
+        app:summary="@string/night_preference_time_title"
         app:useSimpleSummaryProvider="true">
     </Preference>
 </PreferenceScreen>

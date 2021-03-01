@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import com.joshuarichardson.fivewaystowellbeing.R;
 
 import java.util.Locale;
 
@@ -30,7 +31,7 @@ public class NotificationSettingsHelper {
 
             // Create a time picker that will display the time for users to pick
             final MaterialTimePicker startTimePicker = new MaterialTimePicker.Builder()
-                .setTitleText("Title")
+                .setTitleText(R.string.notification_time_title)
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .setHour(localHours)
                 .setMinute(localMinutes)

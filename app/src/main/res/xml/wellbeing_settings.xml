@@ -17,8 +17,7 @@
         <Preference
             android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.notifications.MorningSettingsFragment"
             android:key="notification_morning_page"
-            android:title="Morning"
-            app:summary="Schedule a morning notification"
+            android:title="@string/morning"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/icon_notification_morning">
         </Preference>
@@ -26,8 +25,7 @@
         <Preference
             android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.notifications.NoonSettingsFragment"
             android:key="notification_noon_page"
-            android:title="Noon"
-            app:summary="Schedule a noon notification"
+            android:title="@string/noon"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/icon_notification_noon">
         </Preference>
@@ -35,8 +33,7 @@
         <Preference
             android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.notifications.NightSettingsFragment"
             android:key="notification_night_page"
-            android:title="Evening"
-            app:summary="Schedule an evening notification"
+            android:title="@string/night"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/icon_notification_night">
         </Preference>
