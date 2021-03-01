@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreference
+        android:key="notification_night_switch"
+        android:title="Evening"
+        app:summary="Set evening notification"
+        app:useSimpleSummaryProvider="true"
+        app:icon="@drawable/icon_notification_night">
+    </SwitchPreference>
+
+    <Preference
+        android:title="Time"
+        android:key="notification_night_time"
+        app:summary="Set evening notification time"
+        app:useSimpleSummaryProvider="true">
+    </Preference>
+</PreferenceScreen>

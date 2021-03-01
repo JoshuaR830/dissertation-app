@@ -100,4 +100,6 @@
     <string name="notification_noon">Remember to log your activities so far!</string>
     <string name="notification_night">Good evening, remember to log your activities</string>
     <string name="channel_name">Wellbeing log reminders</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
 </resources>

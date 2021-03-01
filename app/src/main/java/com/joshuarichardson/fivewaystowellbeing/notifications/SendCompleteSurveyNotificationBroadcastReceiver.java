@@ -43,6 +43,7 @@ public class SendCompleteSurveyNotificationBroadcastReceiver extends BroadcastRe
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID_SURVEYS)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
             .setContentIntent(dailyPendingIntent);
 
         switch(intent.getExtras().getString("time", "")) {
