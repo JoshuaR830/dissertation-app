@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,13 +16,18 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 
+import java.util.Locale;
+
 public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUpdateListener {
-    private final Bitmap bitmap;
-    private final Canvas canvas;
+    private Bitmap bitmap;
+    private Canvas canvas;
     private float multiplier;
     private int width;
     private int height;
     private int graphSize;
+    private int canvasSize;
+    private boolean shouldShowNumbers;
+    private final Rect textBounds = new Rect();
     Paint outline = new Paint();
     ValueAnimator animator;
 
@@ -31,10 +37,20 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
     WaysToWellbeingGraphValues keepLearning;
     WaysToWellbeingGraphValues takeNotice;
 
+    public WellbeingGraphView(Context context, int graphSize, WellbeingGraphValueHelper wayToWellbeingValues, boolean shouldShowNumbers) {
+        super(context);
+        setWellbeingGraphView(context, graphSize, wayToWellbeingValues, shouldShowNumbers);
+    }
+
     public WellbeingGraphView(Context context, int graphSize, WellbeingGraphValueHelper wayToWellbeingValues) {
         super(context);
+        setWellbeingGraphView(context, graphSize, wayToWellbeingValues, false);
+    }
 
-        this.graphSize = graphSize;
+    private void setWellbeingGraphView(Context context, int canvasSize, WellbeingGraphValueHelper wayToWellbeingValues, boolean shouldShowNumbers) {
+        this.shouldShowNumbers = shouldShowNumbers;
+        this.canvasSize = canvasSize;
+        this.graphSize = this.canvasSize - 200;
 
         // Instantiate each segment for the graph
         this.give = new WaysToWellbeingGraphValues(wayToWellbeingValues.getGiveValue(), getResources().getColor(R.color.way_to_wellbeing_give, context.getTheme()), 5, 0);
@@ -44,10 +60,10 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.takeNotice = new WaysToWellbeingGraphValues(wayToWellbeingValues.getTakeNoticeValue(), getResources().getColor(R.color.way_to_wellbeing_take_notice, context.getTheme()), 5, 4);
 
         // Set the correct size for the layout
-        this.setLayoutParams(new FrameLayout.LayoutParams(graphSize, graphSize, Gravity.CENTER));
+        this.setLayoutParams(new FrameLayout.LayoutParams(canvasSize, canvasSize, Gravity.CENTER));
 
         // Create the bitmap
-        bitmap = Bitmap.createBitmap(graphSize, graphSize, Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(canvasSize, canvasSize, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
 
         // Prepare an outline for the circle
@@ -66,9 +82,38 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         animator.start();
     }
 
+
+    // Reference: https://stackoverflow.com/a/24969713/13496270
+    public void drawTextCentered(Canvas canvas, WaysToWellbeingGraphValues graph, int centerX, int centerY, int radius) {
+        String text = String.format(Locale.getDefault(), "%d%%", graph.getValue());
+
+        graph.getPaint().getTextBounds(text, 0, text.length(), textBounds);
+        canvas.drawText(text, graph.getCirclePointX(centerX, radius) - textBounds.exactCenterX(), graph.getCirclePointY(centerY, radius) - textBounds.exactCenterY(), graph.getPaint());
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if (this.shouldShowNumbers) {
+            int centerX = (int) (this.canvasSize/2f);
+            int centerY = (int) (this.canvasSize/2f);
+            int radius = this.graphSize/2;
+
+            canvas.drawLine(centerX, centerY, this.give.getCirclePointX(centerX, radius), this.give.getCirclePointY(centerY, radius), this.give.getPaint());
+            canvas.drawLine(centerX, centerY, this.connect.getCirclePointX(centerX, radius), this.connect.getCirclePointY(centerY, radius), this.connect.getPaint());
+            canvas.drawLine(centerX, centerY, this.beActive.getCirclePointX(centerX, radius), this.beActive.getCirclePointY(centerY, radius), this.beActive.getPaint());
+            canvas.drawLine(centerX, centerY, this.keepLearning.getCirclePointX(centerX, radius), this.keepLearning.getCirclePointY(centerY, radius), this.keepLearning.getPaint());
+            canvas.drawLine(centerX, centerY, this.takeNotice.getCirclePointX(centerX, radius), this.takeNotice.getCirclePointY(centerY, radius), this.takeNotice.getPaint());
+
+            radius = (this.canvasSize/2) - 40;
+
+            drawTextCentered(canvas, this.give, centerX, centerY, radius);
+            drawTextCentered(canvas, this.connect, centerX, centerY, radius);
+            drawTextCentered(canvas, this.beActive, centerX, centerY, radius);
+            drawTextCentered(canvas, this.keepLearning, centerX, centerY, radius);
+            drawTextCentered(canvas, this.takeNotice, centerX, centerY, radius);
+        }
 
         // Create the arcs on the canvas
         canvas.drawArc(this.give.getShape(), this.give.getStartAngle(), this.give.getArcLength(), this.give.getUseCenter(), this.give.getPaint());

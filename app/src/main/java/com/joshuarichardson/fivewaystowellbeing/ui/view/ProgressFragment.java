@@ -44,6 +44,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import dagger.hilt.android.AndroidEntryPoint;
 
+import static com.joshuarichardson.fivewaystowellbeing.DisplayHelper.getSmallestMaxDimension;
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
 
 @AndroidEntryPoint
@@ -87,7 +88,7 @@ public class ProgressFragment extends Fragment {
         CardView container = view.findViewById(R.id.graph_card);
         FrameLayout canvasContainer = container.findViewById(R.id.graph_card_container);
 
-        WellbeingGraphView  graphView = new WellbeingGraphView(getActivity(), 600, new WellbeingGraphValueHelper(0, 0,0 ,0, 0));
+        WellbeingGraphView  graphView = new WellbeingGraphView(getActivity(), (int)(getSmallestMaxDimension(requireContext())/1.5), new WellbeingGraphValueHelper(0, 0,0 ,0, 0), true);
 
         this.wholeGraphUpdate = graphValues -> {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
