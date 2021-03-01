@@ -32,6 +32,7 @@ public class AlarmHelper {
         int hours = 0;
         int minutes = 0;
 
+        // Get the time and enablement
         boolean isEnabled = sharedPreferences.getBoolean("notification_" + timeOfDay + "_switch", true);
         long time = sharedPreferences.getLong("notification_" + timeOfDay + "_time", -1);
 
@@ -39,11 +40,12 @@ public class AlarmHelper {
             return;
         }
 
+        // If there is a time set, find out the hours and minutes
         if(time > 0) {
             hours = (int) time / 60 / 60 / 1000;
             minutes = (int) (time / 60 / 1000) - (hours * 60);
         }
-        PreferenceManager.getDefaultSharedPreferences(context);
+
         scheduleNotification(context, hours, minutes, timeOfDay, isEnabled);
     }
 
@@ -87,6 +89,7 @@ public class AlarmHelper {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
+        // Get the current time before setting the time requested
         long startTime = calendar.getTimeInMillis();
 
         calendar.set(Calendar.HOUR_OF_DAY, hour);

@@ -100,4 +100,18 @@
     <string name="notification_noon">Remember to log your activities so far!</string>
     <string name="notification_night">Good evening, remember to log your activities</string>
     <string name="channel_name">Wellbeing log reminders</string>
+    <string name="notification_time_title">Select notification time</string>
+    <string name="morning_preference_time_title">When do you want your morning notification</string>
+    <string name="noon_preference_time_title">When do you want your noon notification</string>
+    <string name="night_preference_time_title">When do you want your evening notification</string>
+    <string name="morning_preference_switch_title">Do you want an morning notification</string>
+    <string name="noon_preference_switch_title">Do you want a noon notification</string>
+    <string name="night_preference_switch_title">Do you want an evening notification</string>
+    <string name="morning">Morning</string>
+    <string name="noon">Noon</string>
+    <string name="night">Evening</string>
+    <string name="preference_time_title">Time</string>
+    <string name="preference_switch_title">Enable</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
 </resources>

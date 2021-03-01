@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ListPreference
-        android:key="theme_settings_list"
-        android:title="@string/settings_theme_title"
-        android:dialogTitle="@string/settings_theme_title"
-        android:entries="@array/settings_theme_titles"
-        android:entryValues="@array/settings_theme_values"
-        app:useSimpleSummaryProvider="true"
-        android:icon="@drawable/icon_theme_switcher"/>
+    <PreferenceCategory android:title="Theme">
+        <ListPreference
+            android:key="theme_settings_list"
+            android:title="@string/settings_theme_title"
+            android:dialogTitle="@string/settings_theme_title"
+            android:entries="@array/settings_theme_titles"
+            android:entryValues="@array/settings_theme_values"
+            app:useSimpleSummaryProvider="true"
+            android:icon="@drawable/icon_theme_switcher"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Survey notifications">
+        <Preference
+            android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.notifications.MorningSettingsFragment"
+            android:key="notification_morning_page"
+            android:title="@string/morning"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/icon_notification_morning">
+        </Preference>
+
+        <Preference
+            android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.notifications.NoonSettingsFragment"
+            android:key="notification_noon_page"
+            android:title="@string/noon"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/icon_notification_noon">
+        </Preference>
+
+        <Preference
+            android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.notifications.NightSettingsFragment"
+            android:key="notification_night_page"
+            android:title="@string/night"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/icon_notification_night">
+        </Preference>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreference
+        android:key="notification_morning_switch"
+        android:title="@string/morning"
+        app:summary="@string/morning_preference_switch_title"
+        app:useSimpleSummaryProvider="true"
+        app:icon="@drawable/icon_notification_morning">
+    </SwitchPreference>
+
+    <Preference
+        android:title="@string/preference_time_title"
+        android:key="notification_morning_time"
+        app:summary="@string/morning_preference_time_title"
+        app:useSimpleSummaryProvider="true">
+    </Preference>
+</PreferenceScreen>
