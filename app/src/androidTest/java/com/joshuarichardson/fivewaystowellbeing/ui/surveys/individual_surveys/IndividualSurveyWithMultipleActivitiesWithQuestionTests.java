@@ -10,6 +10,7 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
@@ -24,6 +25,7 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.Module;
@@ -36,7 +38,6 @@ import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
@@ -47,6 +48,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.LinearLayoutTestUtil.nthChildOf;
 import static org.hamcrest.Matchers.allOf;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -80,6 +82,7 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
             SurveyResponseDao surveyResponseDao = mock(SurveyResponseDao.class);
             WellbeingRecordDao wellbeingRecordDao = mock(WellbeingRecordDao.class);
+            SurveyResponseActivityRecordDao surveyActivityResponseDao = mock(SurveyResponseActivityRecordDao.class);
 
             long time = new GregorianCalendar(1999, 2, 29, 15, 10, 0).getTimeInMillis();
 
@@ -91,19 +94,22 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
 
             when(wellbeingRecordDao.getDataBySurvey(123))
                 .thenReturn(Arrays.asList(
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 2, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 3", 3, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 4", 4, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 5", 5, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 6", 6, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 7", 7, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 8", 8, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1)
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 2, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 3", 3, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 4", 4, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 5", 5, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 2", "Activity name 2", 2, "Question 6", 6, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 7", 7, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 3", "Activity name 3", 3, "Question 8", 8, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)
                 )
             );
 
+            when(surveyActivityResponseDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
+
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyResponseDao);
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingRecordDao);
+            when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(surveyActivityResponseDao);
 
             return mockWellbeingDatabase;
         }
@@ -172,11 +178,6 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
             .check(matches(isDisplayed()))
             .check(matches(withText("Activity note 1")));
 
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-            .perform(click());
-
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
@@ -215,11 +216,6 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
             .check(matches(isDisplayed()))
             .check(matches(withText("Activity note 2")));
 
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
-            .check(matches(isDisplayed()))
-            .perform(scrollTo())
-            .perform(click());
-
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
@@ -245,11 +241,6 @@ public class IndividualSurveyWithMultipleActivitiesWithQuestionTests {
             .perform(scrollTo())
             .check(matches(isDisplayed()))
             .check(matches(withText("Activity note 3")));
-
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2))))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-            .perform(click());
 
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2))))
             .perform(scrollTo())

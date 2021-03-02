@@ -53,9 +53,9 @@ public class GetGraphDataNotLiveTests {
         long surveyResponseId2 = surveyResponseDao.insert(new SurveyResponse(500, WaysToWellbeing.CONNECT, "Title 2", "Survey note 2"));
         long activityRecordId1 = activityRecordDao.insert(new ActivityRecord("Activity name 1", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE));
         long activityRecordId2 = activityRecordDao.insert(new ActivityRecord("Activity name 2", 2000, 34625476, ActivityType.LEARNING, WaysToWellbeing.KEEP_LEARNING));
-        SurveyResponseActivityRecord surveyResponseActivityRecord1 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId1, 0, "Activity note", 123456, 234567);
-        SurveyResponseActivityRecord surveyResponseActivityRecord2 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId2, 0, "Activity note", 123456, 234567);
-        SurveyResponseActivityRecord surveyResponseActivityRecord3 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId2, 0, "Activity note", 123456, 234567);
+        SurveyResponseActivityRecord surveyResponseActivityRecord1 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId1, 0, "Activity note", 123456, 234567, 1, false);
+        SurveyResponseActivityRecord surveyResponseActivityRecord2 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId2, 0, "Activity note", 123456, 234567, 1, false);
+        SurveyResponseActivityRecord surveyResponseActivityRecord3 = new SurveyResponseActivityRecord(surveyResponseId2, activityRecordId2, 0, "Activity note", 123456, 234567, 1, false);
         this.surveyActivityId1 = surveyResponseActivityRecordDao.insert(surveyResponseActivityRecord1);
         this.surveyActivityId2 = surveyResponseActivityRecordDao.insert(surveyResponseActivityRecord2);
         this.surveyActivityId3 = surveyResponseActivityRecordDao.insert(surveyResponseActivityRecord3);

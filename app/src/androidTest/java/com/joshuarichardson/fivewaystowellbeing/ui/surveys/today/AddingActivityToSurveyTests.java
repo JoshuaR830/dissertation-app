@@ -94,6 +94,7 @@ public class AddingActivityToSurveyTests {
             AddingActivityToSurveyTests.this.questionDao = mock(WellbeingQuestionDao.class);
             AddingActivityToSurveyTests.this.wellbeingDao = mock(WellbeingRecordDao.class);
             AddingActivityToSurveyTests.this.surveyResponseActivityDao = mock(SurveyResponseActivityRecordDao.class);
+
             ActivityRecordDao activitiesDao = mock(ActivityRecordDao.class);
 
             LiveData<List<ActivityRecord>> activityData = new MutableLiveData<>(
@@ -129,6 +130,8 @@ public class AddingActivityToSurveyTests {
                     .thenReturn(wayToWellbeing);
 
             when(AddingActivityToSurveyTests.this.wellbeingDao.getDataBySurvey(anyLong())).thenReturn(new ArrayList<>());
+
+            when(AddingActivityToSurveyTests.this.surveyResponseActivityDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
 
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(AddingActivityToSurveyTests.this.wellbeingDao);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(AddingActivityToSurveyTests.this.questionDao);
@@ -169,11 +172,6 @@ public class AddingActivityToSurveyTests {
         onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 0)))
             .perform(scrollTo())
             .check(matches(withTagValue(is((Object) "BE_ACTIVE"))));
-
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-            .perform(click());
 
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())

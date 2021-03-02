@@ -113,6 +113,9 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests {
             when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyResponseActivityDao.insert(any(SurveyResponseActivityRecord.class)))
                 .thenReturn(1L);
 
+            when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyResponseActivityDao.getEmotions(anyLong()))
+                .thenReturn(new MutableLiveData<>());
+
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(AddingActivityToSurveyWhenNoSurveyExistsTests.this.wellbeingDao);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(AddingActivityToSurveyWhenNoSurveyExistsTests.this.questionDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyDao);

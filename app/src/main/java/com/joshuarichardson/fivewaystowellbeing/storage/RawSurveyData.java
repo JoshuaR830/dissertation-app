@@ -14,8 +14,10 @@ public class RawSurveyData {
     private long startTime;
     private long endTime;
     private String wayToWellbeing;
+    private int emotion;
+    private boolean isDone;
 
-    public RawSurveyData(long date, String surveyNote, String activityNote, String activityName, long surveyActivityId, String question, long wellbeingRecordId, Boolean userInput, String activityType, String wayToWellbeing, long startTime, long endTime) {
+    public RawSurveyData(long date, String surveyNote, String activityNote, String activityName, long surveyActivityId, String question, long wellbeingRecordId, Boolean userInput, String activityType, String wayToWellbeing, long startTime, long endTime, int emotion, boolean isDone) {
         this.date = date;
         this.surveyNote = surveyNote;
         this.activityNote = activityNote;
@@ -28,6 +30,8 @@ public class RawSurveyData {
         this.wayToWellbeing = wayToWellbeing;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.emotion = emotion;
+        this.isDone = isDone;
     }
 
     public long getSurveyActivityId() {
@@ -76,5 +80,13 @@ public class RawSurveyData {
 
     public long getEndTime() {
         return this.endTime;
+    }
+
+    public int getEmotion() {
+        return this.emotion;
+    }
+
+    public boolean getIsDone() {
+        return this.isDone;
     }
 }

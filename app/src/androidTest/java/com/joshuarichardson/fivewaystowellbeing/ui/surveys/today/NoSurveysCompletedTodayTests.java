@@ -7,6 +7,7 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
@@ -71,6 +72,7 @@ public class NoSurveysCompletedTodayTests {
             SurveyResponseDao surveyDao = mock(SurveyResponseDao.class);
             WellbeingQuestionDao questionDao = mock(WellbeingQuestionDao.class);
             WellbeingRecordDao wellbeingDao = mock(WellbeingRecordDao.class);
+            SurveyResponseActivityRecordDao surveyActivityResponseDao = mock(SurveyResponseActivityRecordDao.class);
 
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList());
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
@@ -83,8 +85,11 @@ public class NoSurveysCompletedTodayTests {
             when(surveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
 
+            when(surveyActivityResponseDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
+
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(new ArrayList<>());
 
+            when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(surveyActivityResponseDao);
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingDao);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(questionDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);

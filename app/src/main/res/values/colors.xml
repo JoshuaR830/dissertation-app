@@ -22,4 +22,16 @@
     <color name="translucent_way_to_wellbeing_give">#5579dc9d</color>
     <color name="translucent_way_to_wellbeing_keep_learning">#556ac8df</color>
     <color name="translucent_way_to_wellbeing_take_notice">#55c994e9</color>
+
+    <color name="sentiment_worst">#ff7878</color>
+    <color name="sentiment_bad">#ffa378</color>
+    <color name="sentiment_neutral">#ffdb78</color>
+    <color name="sentiment_good">#8FE181</color>
+    <color name="sentiment_best">#45BD51</color>
+
+    <color name="translucent_sentiment_worst">#55ff7878</color>
+    <color name="translucent_sentiment_bad">#55ffa378</color>
+    <color name="translucent_sentiment_neutral">#55ffdb78</color>
+    <color name="translucent_sentiment_good">#558FE181</color>
+    <color name="translucent_sentiment_best">#5545BD51</color>
 </resources>

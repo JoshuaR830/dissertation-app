@@ -55,6 +55,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -101,13 +102,13 @@ public class ActionButtonTests {
 
 
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Arrays.asList(
-                new RawSurveyData(now, "Survey note", "", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), -1, -1),
-                new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, -1),
-                new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), -1, 14460000),
-                new RawSurveyData(now, "Survey note", "", "Activity name 4", 4, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, 14460000)
+                new RawSurveyData(now, "Survey note", "", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), -1, -1, 0, false),
+                new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, -1, 0, false),
+                new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), -1, 14460000, 0, false),
+                new RawSurveyData(now, "Survey note", "", "Activity name 4", 4, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, 14460000, 0, false)
             ));
 
-
+            when(ActionButtonTests.this.surveyActivity.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                     .thenReturn(new MutableLiveData<>(list));
             when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(ActionButtonTests.this.surveyActivity);
@@ -131,11 +132,6 @@ public class ActionButtonTests {
         onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 0)))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
-
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-            .perform(click());
 
         onView(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
@@ -163,16 +159,18 @@ public class ActionButtonTests {
         onView(allOf(withId(R.id.note_input_container), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withMaterialHint("Enter a note"))))
-            .check(matches(withMaterialHelper("Unsaved changes")));
+            .check(matches(withMaterialHelper("Press done to save changes")));
 
-        onView(allOf(withId(R.id.save_note_button), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
+        // The done button now saves the note
+        onView(allOf(withId(R.id.done_button), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
             .perform(scrollTo(), click());
 
-        onView(allOf(withId(R.id.note_input_container), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
-            .perform(scrollTo())
-            .check(matches(withMaterialHelper("Saved")));
-
         verify(this.surveyActivity, times(1)).updateNote(anyLong(), anyString());
+
+        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click());
 
         onView(allOf(withId(R.id.activity_note_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
@@ -192,11 +190,6 @@ public class ActionButtonTests {
 
         onView(allOf(withId(R.id.note_input_container), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
             .check(matches(not(isDisplayed())));
-
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-                .perform(click());
 
         onView(allOf(withId(R.id.add_note_button), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))))
                 .perform(scrollTo())
@@ -232,11 +225,6 @@ public class ActionButtonTests {
     public void onStartTimeTextClicked_ShouldUpdateDatabase() throws InterruptedException {
         WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-            .perform(click());
-
         onView(allOf(withId(R.id.add_start_time), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
             .perform(scrollTo(), click());
 
@@ -253,10 +241,6 @@ public class ActionButtonTests {
     @Test
     public void onEndTimeTextClicked_ShouldUpdateDatabase() throws InterruptedException {
         WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-            .perform(click());
 
         onView(allOf(withId(R.id.add_end_time), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
             .perform(scrollTo(), click());
@@ -269,5 +253,65 @@ public class ActionButtonTests {
             .check(matches(withText("12:00")));
 
         verify(this.surveyActivity, times(1)).updateEndTime(anyLong(), anyLong());
+    }
+
+    @Test
+    public void onWorstEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
+        onView(allOf(withId(R.id.sentiment_worst), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(1));
+    }
+
+    @Test
+    public void onBadEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
+        onView(allOf(withId(R.id.sentiment_bad), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(2));
+    }
+
+    @Test
+    public void onNeutralEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
+        onView(allOf(withId(R.id.sentiment_neutral), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(3));
+    }
+
+    @Test
+    public void onGoodEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
+        onView(allOf(withId(R.id.sentiment_good), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(4));
+    }
+
+    @Test
+    public void onBestEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
+        onView(allOf(withId(R.id.sentiment_best), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(5));
+    }
+
+    @Test
+    public void onIsDoneClicked_ShouldUpdateDatabase() throws InterruptedException {
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+
+        onView(allOf(withId(R.id.done_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
+            .perform(scrollTo(), click());
+
+        verify(this.surveyActivity, times(1)).updateIsDone(anyLong(), eq(true));
     }
 }

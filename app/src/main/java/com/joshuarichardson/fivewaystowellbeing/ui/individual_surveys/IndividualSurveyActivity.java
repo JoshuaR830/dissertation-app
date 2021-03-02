@@ -1,6 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
+import com.joshuarichardson.fivewaystowellbeing.storage.SentimentItem;
+import com.joshuarichardson.fivewaystowellbeing.storage.SurveyCountItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
@@ -80,6 +83,17 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
         };
+
+        // Respond to changes in emotion for the survey
+        Observer<SurveyCountItem> emotionUpdateObserver = sentiment -> {
+            SentimentItem emotionValues = sentiment.getResourcesForAverage();
+            int color = getColor(emotionValues.getColorResource());
+            ImageView image = findViewById(R.id.surveys_completed_image);
+            image.setImageResource(emotionValues.getImageResource());
+            image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        };
+
+        this.db.surveyResponseActivityRecordDao().getEmotions(surveyId).observe(this, emotionUpdateObserver);
 
         ChipGroup group = findViewById(R.id.wellbeing_chip_group);
         LinearLayout helpContainer = findViewById(R.id.way_to_wellbeing_help_container);

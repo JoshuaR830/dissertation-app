@@ -59,9 +59,9 @@ public class WellbeingRecordTests {
         long surveyId = surveyResponseDao.insert(new SurveyResponse(1607960245, "Be active", "title", "description"));
         long activityId = activityRecordDao.insert(new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED"));
 
-        this.surveyActivityId1 = surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 1",  1612427791, 1612427795));
-        this.surveyActivityId2 = surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 2, "note 2",  1712427792, 1712427796));
-        this.surveyActivityId3 = surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 3",  1812427793, 1812427797));
+        this.surveyActivityId1 = surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 1",  1612427791, 1612427795, 1, false));
+        this.surveyActivityId2 = surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 2, "note 2",  1712427792, 1712427796, 1, false));
+        this.surveyActivityId3 = surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 3",  1812427793, 1812427797, 1, false));
 
         this.questionsDao.insert(new WellbeingQuestion(123, "Question", "Positive", "Negative", WaysToWellbeing.GIVE.toString(), 1, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()));
         this.questionsDao.insert(new WellbeingQuestion(234, "Question", "Positive", "Negative", WaysToWellbeing.GIVE.toString(), 1, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString() ));

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -39,15 +40,92 @@
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences|textAutoCorrect|textMultiLine"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_note_button"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:icon="@drawable/icon_save"
-            android:text="@string/button_save_note" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/emotions_container"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/sentiment_worst_frame"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/invisible_circle">
+
+                <ImageView
+                    android:id="@+id/sentiment_worst"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:tint="@color/sentiment_worst"
+                    android:src="@drawable/sentiment_worst" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/sentiment_bad_frame"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/invisible_circle">
+
+            <ImageView
+                android:id="@+id/sentiment_bad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:tint="@color/sentiment_bad"
+                android:src="@drawable/sentiment_bad" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/sentiment_neutral_frame"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/invisible_circle">
+
+            <ImageView
+                android:id="@+id/sentiment_neutral"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:tint="@color/sentiment_neutral"
+                android:src="@drawable/sentiment_neutral" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/sentiment_good_frame"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/invisible_circle">
+
+            <ImageView
+                android:id="@+id/sentiment_good"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:tint="@color/sentiment_good"
+                android:src="@drawable/sentiment_good"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/sentiment_best_frame"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/invisible_circle">
+
+            <ImageView
+                android:id="@+id/sentiment_best"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:tint="@color/sentiment_best"
+                android:src="@drawable/sentiment_best" />
+            </FrameLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/action_buttons"
@@ -84,5 +162,13 @@
                 app:icon="@drawable/icon_time"
                 android:text="@string/button_end_time" />
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/done_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/button_done"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

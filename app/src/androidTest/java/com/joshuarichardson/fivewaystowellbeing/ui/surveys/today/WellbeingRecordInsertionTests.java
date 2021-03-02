@@ -126,6 +126,7 @@ public class WellbeingRecordInsertionTests {
             when(WellbeingRecordInsertionTests.this.questionDao.insert(any(WellbeingQuestion.class))).thenReturn(1L);
 
             when(WellbeingRecordInsertionTests.this.wellbeingDao.getDataBySurvey(anyLong())).thenReturn(new ArrayList<>());
+            when(WellbeingRecordInsertionTests.this.surveyResponseActivityDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
 
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(WellbeingRecordInsertionTests.this.wellbeingDao);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(WellbeingRecordInsertionTests.this.questionDao);
@@ -169,7 +170,7 @@ public class WellbeingRecordInsertionTests {
 
     @Test
     public void testInsertingWhereNoQuestionsOfType_ShouldInsertNoQuestionsAndPasstimeShouldHaveNoQuestions() throws InterruptedException {
-        Passtime passtime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.mockWellbeingDatabase, 1, ActivityType.SPORT.toString(), new Passtime("name", "note", "SPORT", WaysToWellbeing.BE_ACTIVE.toString(), 1, -1, -1));
+        Passtime passtime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.mockWellbeingDatabase, 1, ActivityType.SPORT.toString(), new Passtime("name", "note", "SPORT", WaysToWellbeing.BE_ACTIVE.toString(), 1, -1, -1, 0, false));
         WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         verify(this.questionDao, times(1)).getQuestionsByActivityType(ActivityType.SPORT.toString());
@@ -180,7 +181,7 @@ public class WellbeingRecordInsertionTests {
 
     @Test
     public void testInsertingOneQuestionOfType_ShouldInsertOneQuestionAndPasstimeShouldHaveOneQuestion() throws InterruptedException {
-        Passtime passtime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.mockWellbeingDatabase, 2, ActivityType.LEARNING.toString(), new Passtime("name", "note", "LEARNING", WaysToWellbeing.KEEP_LEARNING.toString(), 1, -1, -1));
+        Passtime passtime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.mockWellbeingDatabase, 2, ActivityType.LEARNING.toString(), new Passtime("name", "note", "LEARNING", WaysToWellbeing.KEEP_LEARNING.toString(), 1, -1, -1, 0, false));
         WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         verify(this.questionDao, times(1)).getQuestionsByActivityType(ActivityType.LEARNING.toString());
         verify(this.wellbeingDao, times(1)).insert(any(WellbeingRecord.class));
@@ -190,7 +191,7 @@ public class WellbeingRecordInsertionTests {
 
     @Test
     public void testInsertingFourQuestionsOfType_ShouldInsertFourQuestionsAndPasstimeShouldHaveFourQuestions() throws InterruptedException {
-        Passtime passtime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.mockWellbeingDatabase, 3, ActivityType.HOBBY.toString(), new Passtime("name", "note", "HOBBY", WaysToWellbeing.KEEP_LEARNING.toString(), 1, -1, -1));
+        Passtime passtime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.mockWellbeingDatabase, 3, ActivityType.HOBBY.toString(), new Passtime("name", "note", "HOBBY", WaysToWellbeing.KEEP_LEARNING.toString(), 1, -1, -1, 0, false));
         verify(this.questionDao, times(1)).getQuestionsByActivityType(ActivityType.HOBBY.toString());
         verify(this.wellbeingDao, times(4)).insert(any(WellbeingRecord.class));
 

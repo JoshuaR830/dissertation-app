@@ -1,12 +1,14 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys;
 
 import android.app.Activity;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +33,9 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import androidx.fragment.app.FragmentManager;
 
@@ -170,8 +174,33 @@ public class ActivityViewHelper {
             });
         });
 
+        List<Integer> colorList = Arrays.asList(R.color.translucent_sentiment_worst, R.color.translucent_sentiment_bad, R.color.translucent_sentiment_neutral, R.color.translucent_sentiment_good, R.color.translucent_sentiment_best);
 
-        MaterialButton saveNoteButton = view.findViewById(R.id.save_note_button);
+        LinearLayout emotionsContainer = view.findViewById(R.id.emotions_container);
+
+        // Set all to transparent so it doesn't end up the colour of the last background
+        removeSelection(view, activity);
+
+        if (passtime.getEmotion() != 0) {
+            // Remember to -1 because index is the value - 1
+            int index = passtime.getEmotion() - 1;
+            View sentimentItem = emotionsContainer.getChildAt(index);
+            sentimentItem.getBackground().setTint(activity.getColor(colorList.get(index)));
+        }
+
+        for (int i = 0; i < emotionsContainer.getChildCount(); i++) {
+            View sentimentItem = emotionsContainer.getChildAt(i);
+            final int index = i;
+            sentimentItem.setOnClickListener(v -> {
+                removeSelection(view, activity);
+                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                    db.surveyResponseActivityRecordDao().updateEmotion(passtime.getActivitySurveyId(), index + 1);
+                });
+                sentimentItem.getBackground().setTint(activity.getColor(colorList.get(index)));
+            });
+        }
+
+        MaterialButton doneButton = view.findViewById(R.id.done_button);
         EditText noteTextInput = view.findViewById(R.id.note_input);
 
         noteTextInput.addTextChangedListener(new TextWatcher() {
@@ -185,21 +214,6 @@ public class ActivityViewHelper {
 
             @Override
             public void afterTextChanged(Editable s) {}
-        });
-
-        saveNoteButton.setOnClickListener(v -> {
-            String noteText = noteTextInput.getText().toString();
-            if(noteText.equals("")) {
-                return;
-            }
-
-            note.setText(noteText);
-            note.setVisibility(View.VISIBLE);
-
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                db.surveyResponseActivityRecordDao().updateNote(passtime.getActivitySurveyId(), noteText);
-                noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
-            });
         });
 
         // Start to populate the template
@@ -226,12 +240,34 @@ public class ActivityViewHelper {
                     checkboxView.setVisibility(View.VISIBLE);
                     expandButton.setImageResource(R.drawable.button_collapse);
                 } else {
+                    String noteText = noteTextInput.getText().toString();
+                    if(!noteText.equals("")) {
+                        note.setText(noteText);
+                        note.setVisibility(View.VISIBLE);
+
+                        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                            db.surveyResponseActivityRecordDao().updateNote(passtime.getActivitySurveyId(), noteText);
+                            noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
+                        });
+                    }
+
+                    // Remember that the activity details have been filled in
+                    WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                        db.surveyResponseActivityRecordDao().updateIsDone(passtime.getActivitySurveyId(), true);
+                    });
+
                     checkboxView.setVisibility(View.GONE);
                     expandButton.setImageResource(R.drawable.button_expand);
                 }
             });
 
             expandButton.setOnClickListener(expandClickListener);
+            doneButton.setOnClickListener(expandClickListener);
+
+            // Hide the checkboxes if they have been hidden before
+            if(passtime.getIsDone()) {
+                checkboxView.setVisibility(View.GONE);
+            }
 
             if (passtime.getQuestions().size() == 0) {
                 expandButton.setVisibility(View.GONE);
@@ -258,6 +294,20 @@ public class ActivityViewHelper {
 
             layout.addView(view);
         });
+    }
+
+    private static void removeSelection(View view, Context context) {
+        FrameLayout layoutWorst = view.findViewById(R.id.sentiment_worst_frame);
+        FrameLayout layoutBad = view.findViewById(R.id.sentiment_bad_frame);
+        FrameLayout layoutNeutral = view.findViewById(R.id.sentiment_neutral_frame);
+        FrameLayout layoutGood = view.findViewById(R.id.sentiment_good_frame);
+        FrameLayout layoutBest = view.findViewById(R.id.sentiment_best_frame);
+
+        layoutWorst.getBackground().setTint(context.getColor(android.R.color.transparent));
+        layoutBad.getBackground().setTint(context.getColor(android.R.color.transparent));
+        layoutNeutral.getBackground().setTint(context.getColor(android.R.color.transparent));
+        layoutGood.getBackground().setTint(context.getColor(android.R.color.transparent));
+        layoutBest.getBackground().setTint(context.getColor(android.R.color.transparent));
     }
 
     private static void displayTimes(TextView timeText, long startTimeMillis, long endTimeMillis) {
