@@ -13,10 +13,11 @@ public class Passtime {
     private final long activitySurveyId;
     private final String wayToWellbeing;
     private int emotion;
+    private boolean isDone;
 
     ArrayList<Question> questions;
 
-    public Passtime(String name, String note, String type, String wayToWellbeing, long activitySurveyId, long startTime, long endTime, int emotion) {
+    public Passtime(String name, String note, String type, String wayToWellbeing, long activitySurveyId, long startTime, long endTime, int emotion, boolean isDone) {
         this.questions = new ArrayList<>();
         this.name = name;
         this.note = note;
@@ -26,6 +27,7 @@ public class Passtime {
         this.activitySurveyId = activitySurveyId;
         this.wayToWellbeing = wayToWellbeing;
         this.emotion = emotion;
+        this.isDone = isDone;
     }
 
     public void addQuestionToList(Question question) {
@@ -74,5 +76,9 @@ public class Passtime {
 
     public int getEmotion() {
         return this.emotion;
+    }
+
+    public boolean getIsDone() {
+        return this.isDone;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteConstraintException;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
+import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
@@ -71,9 +72,9 @@ public class SurveyResponseActivityRecordTests {
         long activityId2 = this.activityRecordDao.insert(activityRecord2);
         long activityId3 = this.activityRecordDao.insert(activityRecord3);
 
-        SurveyResponseActivityRecord record1 = new SurveyResponseActivityRecord(surveyId1, activityId1, 1, "note 1",  1612427791, 1612427795, 1);
-        SurveyResponseActivityRecord record2 = new SurveyResponseActivityRecord(surveyId2, activityId2, 2, "note 2",  1712427792, 1712427796, 1);
-        SurveyResponseActivityRecord record3 = new SurveyResponseActivityRecord(surveyId2, activityId3, 1, "note 3",  1812427793, 1812427797, 1);
+        SurveyResponseActivityRecord record1 = new SurveyResponseActivityRecord(surveyId1, activityId1, 1, "note 1",  1612427791, 1612427795, 1, false);
+        SurveyResponseActivityRecord record2 = new SurveyResponseActivityRecord(surveyId2, activityId2, 2, "note 2",  1712427792, 1712427796, 1, false);
+        SurveyResponseActivityRecord record3 = new SurveyResponseActivityRecord(surveyId2, activityId3, 1, "note 3",  1812427793, 1812427797, 1, false);
 
         this.surveyActivityDao.insert(record1);
         this.surveyActivityDao.insert(record2);
@@ -134,9 +135,9 @@ public class SurveyResponseActivityRecordTests {
         long activityId2 = this.activityRecordDao.insert(activityRecord2);
         long activityId3 = this.activityRecordDao.insert(activityRecord3);
 
-        SurveyResponseActivityRecord record1 = new SurveyResponseActivityRecord(surveyId1, activityId1, 1, "note 1",  1612427791, 1612427795, 1);
-        SurveyResponseActivityRecord record2 = new SurveyResponseActivityRecord(surveyId2, activityId2, 2, "note 2",  1712427792, 1712427796, 1);
-        SurveyResponseActivityRecord record3 = new SurveyResponseActivityRecord(surveyId2, activityId3, 1, "note 3",  1812427793, 1812427797, 1);
+        SurveyResponseActivityRecord record1 = new SurveyResponseActivityRecord(surveyId1, activityId1, 1, "note 1",  1612427791, 1612427795, 1, false);
+        SurveyResponseActivityRecord record2 = new SurveyResponseActivityRecord(surveyId2, activityId2, 2, "note 2",  1712427792, 1712427796, 1, false);
+        SurveyResponseActivityRecord record3 = new SurveyResponseActivityRecord(surveyId2, activityId3, 1, "note 3",  1812427793, 1812427797, 1, false);
 
         this.surveyActivityDao.insert(record1);
         this.surveyActivityDao.insert(record2);
@@ -182,11 +183,11 @@ public class SurveyResponseActivityRecordTests {
         long activityId1 = this.activityRecordDao.insert(activityRecord1);
         long activityId2 = this.activityRecordDao.insert(activityRecord2);
 
-        SurveyResponseActivityRecord record1 = new SurveyResponseActivityRecord(surveyId1, activityId1, 1, "note 1",  1612427791, 1612427795, 1);
-        SurveyResponseActivityRecord record2 = new SurveyResponseActivityRecord(surveyId2, activityId1, 1, "note 1",  1612427791, 1612427795, 1);
-        SurveyResponseActivityRecord record3 = new SurveyResponseActivityRecord(surveyId3, activityId2, 1, "note 1",  1612427791, 1612427795, 1);
-        SurveyResponseActivityRecord record4 = new SurveyResponseActivityRecord(surveyId4, activityId2, 1, "note 1",  1612427791, 1612427795, 1);
-        SurveyResponseActivityRecord record5 = new SurveyResponseActivityRecord(surveyId5, activityId2, 1, "note 1",  1612427791, 1612427795, 1);
+        SurveyResponseActivityRecord record1 = new SurveyResponseActivityRecord(surveyId1, activityId1, 1, "note 1",  1612427791, 1612427795, 1, false);
+        SurveyResponseActivityRecord record2 = new SurveyResponseActivityRecord(surveyId2, activityId1, 1, "note 1",  1612427791, 1612427795, 1, false);
+        SurveyResponseActivityRecord record3 = new SurveyResponseActivityRecord(surveyId3, activityId2, 1, "note 1",  1612427791, 1612427795, 1, false);
+        SurveyResponseActivityRecord record4 = new SurveyResponseActivityRecord(surveyId4, activityId2, 1, "note 1",  1612427791, 1612427795, 1, false);
+        SurveyResponseActivityRecord record5 = new SurveyResponseActivityRecord(surveyId5, activityId2, 1, "note 1",  1612427791, 1612427795, 1, false);
 
         this.surveyActivityDao.insert(record1);
         this.surveyActivityDao.insert(record2);
@@ -232,7 +233,7 @@ public class SurveyResponseActivityRecordTests {
         ActivityRecord activityRecord = new ActivityRecord("Throwing", 1200, 1607960240, "Sport", "UNASSIGNED");
         long activityId = this.activityRecordDao.insert(activityRecord);
 
-        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 1",  1612427791, 1612427795, 1);
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 1",  1612427791, 1612427795, 1, false);
 
         // As both surveyResponse and activityRecord exist it should not throw an exception
         try {
@@ -244,7 +245,7 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void insertingASurveyIdAndActivityIdWhereNeitherExist_ShouldThrowAConstraintException() {
-        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, 33221, 1, "note 1",  1612427791, 1612427795, 1);
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, 33221, 1, "note 1",  1612427791, 1612427795, 1, false);
 
         Exception exception = new Exception();
 
@@ -267,7 +268,7 @@ public class SurveyResponseActivityRecordTests {
         ActivityRecord activityResult = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
         long activityRecordId = this.activityRecordDao.insert(activityResult);
 
-        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, activityRecordId, 1, "note 1",  1612427791, 1612427795, 1);
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(112233, activityRecordId, 1, "note 1",  1612427791, 1612427795, 1, false);
 
         // Test that exception is thrown if no activity exists
         Exception exception = new Exception();
@@ -284,12 +285,12 @@ public class SurveyResponseActivityRecordTests {
     }
 
     @Test
-    public void insertingAnActionIdWhichDoesNotExist_ShouldThrowAConstraintException() {
+    public void insertingAnActivityIdWhichDoesNotExist_ShouldThrowAConstraintException() {
         // Add a survey to the database
         SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
         long surveyResponseId = this.surveyResponseDao.insert(surveyResponse);
 
-        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyResponseId, 332211, 1, "note 1",  1612427791, 1612427795, 1);
+        SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyResponseId, 332211, 1, "note 1",  1612427791, 1612427795, 1, false);
 
         // Check that an exception is raised when inserting - constraints should be set
         Exception exception = new Exception();
@@ -304,5 +305,135 @@ public class SurveyResponseActivityRecordTests {
         assertWithMessage("Inserting an activity Id of a activity record that doesn't exist should violate constraints")
             .that(exception)
             .isInstanceOf(SQLiteConstraintException.class);
+    }
+
+    @Test
+    public void whenAllEmotionsAreZero_ThenTheCalendarItemShouldBeReturned() throws TimeoutException, InterruptedException {
+        // Add a survey to the database
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
+        long surveyResponseId = this.surveyResponseDao.insert(surveyResponse);
+
+        ActivityRecord activityRecord1 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED");
+        long activityId1 = this.activityRecordDao.insert(activityRecord1);
+
+        ActivityRecord activityRecord2 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED");
+        long activityId2 = this.activityRecordDao.insert(activityRecord2);
+
+        ActivityRecord activityRecord3 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED");
+        long activityId3 = this.activityRecordDao.insert(activityRecord3);
+
+        // No emotions
+        SurveyResponseActivityRecord record1 = new SurveyResponseActivityRecord(surveyResponseId, activityId1, 1, "note 1",  1612427791, 1612427795, 0, false);
+        SurveyResponseActivityRecord record2 = new SurveyResponseActivityRecord(surveyResponseId, activityId2, 1, "note 1",  1612427791, 1612427795, 0, false);
+        SurveyResponseActivityRecord record3 = new SurveyResponseActivityRecord(surveyResponseId, activityId3, 1, "note 1",  1612427791, 1612427795, 0, false);
+
+        this.surveyActivityDao.insert(record1);
+        this.surveyActivityDao.insert(record2);
+        this.surveyActivityDao.insert(record3);
+
+        SurveyCountItem surveyCountItem = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getEmotions(surveyResponseId));
+        SentimentItem resource = surveyCountItem.getResourcesForAverage();
+        assertThat(resource.getColorResource()).isEqualTo(R.color.colorSilver);
+        assertThat(resource.getImageResource()).isEqualTo(R.drawable.progress_survey_today);
+    }
+
+    @Test
+    public void whenNoActivitiesExist_ThenTheCalendarItemShouldBeReturned() throws TimeoutException, InterruptedException {
+        // Add a survey to the database
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
+        long surveyResponseId = this.surveyResponseDao.insert(surveyResponse);
+
+        SurveyCountItem surveyCountItem = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getEmotions(surveyResponseId));
+
+        SentimentItem resource = surveyCountItem.getResourcesForAverage();
+        assertThat(resource.getColorResource()).isEqualTo(R.color.colorSilver);
+        assertThat(resource.getImageResource()).isEqualTo(R.drawable.progress_survey_today);
+    }
+
+    @Test
+    public void whenEmotionsExist_ThenTheCorrectDrawableShouldBeReturned() throws TimeoutException, InterruptedException {
+        // Add a survey to the database
+        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse3 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse4 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse5 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        long surveyResponseId1 = this.surveyResponseDao.insert(surveyResponse1);
+        long surveyResponseId2 = this.surveyResponseDao.insert(surveyResponse2);
+        long surveyResponseId3 = this.surveyResponseDao.insert(surveyResponse3);
+        long surveyResponseId4 = this.surveyResponseDao.insert(surveyResponse4);
+        long surveyResponseId5 = this.surveyResponseDao.insert(surveyResponse5);
+
+        ActivityRecord activityRecord1 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED");
+        long activityId1 = this.activityRecordDao.insert(activityRecord1);
+
+        ActivityRecord activityRecord2 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED");
+        long activityId2 = this.activityRecordDao.insert(activityRecord2);
+
+        ActivityRecord activityRecord3 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED");
+        long activityId3 = this.activityRecordDao.insert(activityRecord3);
+
+        // No emotions
+        SurveyResponseActivityRecord record1_1 = new SurveyResponseActivityRecord(surveyResponseId1, activityId1, 1, "note 1",  1612427791, 1612427795, 1, false);
+        SurveyResponseActivityRecord record1_2 = new SurveyResponseActivityRecord(surveyResponseId1, activityId2, 1, "note 1",  1612427791, 1612427795, 3, false);
+        SurveyResponseActivityRecord record1_3 = new SurveyResponseActivityRecord(surveyResponseId1, activityId3, 1, "note 1",  1612427791, 1612427795, 5, false);
+
+        SurveyResponseActivityRecord record2_1 = new SurveyResponseActivityRecord(surveyResponseId2, activityId1, 1, "note 1",  1612427791, 1612427795, 5, false);
+        SurveyResponseActivityRecord record2_2 = new SurveyResponseActivityRecord(surveyResponseId2, activityId2, 1, "note 1",  1612427791, 1612427795, 4, false);
+        SurveyResponseActivityRecord record2_3 = new SurveyResponseActivityRecord(surveyResponseId2, activityId3, 1, "note 1",  1612427791, 1612427795, 5, false);
+
+        SurveyResponseActivityRecord record3_1 = new SurveyResponseActivityRecord(surveyResponseId3, activityId1, 1, "note 1",  1612427791, 1612427795, 4, false);
+        SurveyResponseActivityRecord record3_2 = new SurveyResponseActivityRecord(surveyResponseId3, activityId2, 1, "note 1",  1612427791, 1612427795, 4, false);
+        SurveyResponseActivityRecord record3_3 = new SurveyResponseActivityRecord(surveyResponseId3, activityId3, 1, "note 1",  1612427791, 1612427795, 4, false);
+
+        SurveyResponseActivityRecord record4_1 = new SurveyResponseActivityRecord(surveyResponseId4, activityId1, 1, "note 1",  1612427791, 1612427795, 3, false);
+        SurveyResponseActivityRecord record4_2 = new SurveyResponseActivityRecord(surveyResponseId4, activityId2, 1, "note 1",  1612427791, 1612427795, 2, false);
+        SurveyResponseActivityRecord record4_3 = new SurveyResponseActivityRecord(surveyResponseId4, activityId3, 1, "note 1",  1612427791, 1612427795, 1, false);
+
+        SurveyResponseActivityRecord record5_1 = new SurveyResponseActivityRecord(surveyResponseId5, activityId1, 1, "note 1",  1612427791, 1612427795, 0, false);
+        SurveyResponseActivityRecord record5_2 = new SurveyResponseActivityRecord(surveyResponseId5, activityId2, 1, "note 1",  1612427791, 1612427795, 1, false);
+        SurveyResponseActivityRecord record5_3 = new SurveyResponseActivityRecord(surveyResponseId5, activityId3, 1, "note 1",  1612427791, 1612427795, 1, false);
+
+        this.surveyActivityDao.insert(record1_1);
+        this.surveyActivityDao.insert(record1_2);
+        this.surveyActivityDao.insert(record1_3);
+        this.surveyActivityDao.insert(record2_1);
+        this.surveyActivityDao.insert(record2_2);
+        this.surveyActivityDao.insert(record2_3);
+        this.surveyActivityDao.insert(record3_1);
+        this.surveyActivityDao.insert(record3_2);
+        this.surveyActivityDao.insert(record3_3);
+        this.surveyActivityDao.insert(record4_1);
+        this.surveyActivityDao.insert(record4_2);
+        this.surveyActivityDao.insert(record4_3);
+        this.surveyActivityDao.insert(record5_1);
+        this.surveyActivityDao.insert(record5_2);
+        this.surveyActivityDao.insert(record5_3);
+
+        SurveyCountItem surveyCountItem1 = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getEmotions(surveyResponseId1));
+        SurveyCountItem surveyCountItem2 = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getEmotions(surveyResponseId2));
+        SurveyCountItem surveyCountItem3 = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getEmotions(surveyResponseId3));
+        SurveyCountItem surveyCountItem4 = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getEmotions(surveyResponseId4));
+        SurveyCountItem surveyCountItem5 = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getEmotions(surveyResponseId5));
+
+        SentimentItem resource1 = surveyCountItem1.getResourcesForAverage();
+        assertThat(resource1.getColorResource()).isEqualTo(R.color.sentiment_neutral);
+        assertThat(resource1.getImageResource()).isEqualTo(R.drawable.sentiment_neutral);
+
+        SentimentItem resource2 = surveyCountItem2.getResourcesForAverage();
+        assertThat(resource2.getColorResource()).isEqualTo(R.color.sentiment_best);
+        assertThat(resource2.getImageResource()).isEqualTo(R.drawable.sentiment_best);
+
+        SentimentItem resource3 = surveyCountItem3.getResourcesForAverage();
+        assertThat(resource3.getColorResource()).isEqualTo(R.color.sentiment_good);
+        assertThat(resource3.getImageResource()).isEqualTo(R.drawable.sentiment_good);
+
+        SentimentItem resource4 = surveyCountItem4.getResourcesForAverage();
+        assertThat(resource4.getColorResource()).isEqualTo(R.color.sentiment_bad);
+        assertThat(resource4.getImageResource()).isEqualTo(R.drawable.sentiment_bad);
+
+        SentimentItem resource5 = surveyCountItem5.getResourcesForAverage();
+        assertThat(resource5.getColorResource()).isEqualTo(R.color.sentiment_worst);
+        assertThat(resource5.getImageResource()).isEqualTo(R.drawable.sentiment_worst);
     }
 }

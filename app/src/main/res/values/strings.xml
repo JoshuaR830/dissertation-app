@@ -71,7 +71,7 @@
     <string name="button_save_note">Save note</string>
     <string name="hint_add_note">Enter a note</string>
     <string name="helper_saved_note">Saved</string>
-    <string name="helper_unsaved_note">Unsaved changes</string>
+    <string name="helper_unsaved_note">Press done to save changes</string>
 
     <string name="title_start_time">Start time</string>
     <string name="title_end_time">End time</string>

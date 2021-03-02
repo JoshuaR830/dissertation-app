@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -187,7 +186,6 @@ public class ActivityViewHelper {
             int index = passtime.getEmotion() - 1;
             View sentimentItem = emotionsContainer.getChildAt(index);
             sentimentItem.getBackground().setTint(activity.getColor(colorList.get(index)));
-            Log.d("Index", String.valueOf(index));
         }
 
         for (int i = 0; i < emotionsContainer.getChildCount(); i++) {
@@ -199,11 +197,10 @@ public class ActivityViewHelper {
                     db.surveyResponseActivityRecordDao().updateEmotion(passtime.getActivitySurveyId(), index + 1);
                 });
                 sentimentItem.getBackground().setTint(activity.getColor(colorList.get(index)));
-                Log.d("Hello", "Hmm");
             });
         }
 
-        MaterialButton saveNoteButton = view.findViewById(R.id.save_note_button);
+        MaterialButton doneButton = view.findViewById(R.id.done_button);
         EditText noteTextInput = view.findViewById(R.id.note_input);
 
         noteTextInput.addTextChangedListener(new TextWatcher() {
@@ -217,21 +214,6 @@ public class ActivityViewHelper {
 
             @Override
             public void afterTextChanged(Editable s) {}
-        });
-
-        saveNoteButton.setOnClickListener(v -> {
-            String noteText = noteTextInput.getText().toString();
-            if(noteText.equals("")) {
-                return;
-            }
-
-            note.setText(noteText);
-            note.setVisibility(View.VISIBLE);
-
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                db.surveyResponseActivityRecordDao().updateNote(passtime.getActivitySurveyId(), noteText);
-                noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
-            });
         });
 
         // Start to populate the template
@@ -258,12 +240,34 @@ public class ActivityViewHelper {
                     checkboxView.setVisibility(View.VISIBLE);
                     expandButton.setImageResource(R.drawable.button_collapse);
                 } else {
+                    String noteText = noteTextInput.getText().toString();
+                    if(!noteText.equals("")) {
+                        note.setText(noteText);
+                        note.setVisibility(View.VISIBLE);
+
+                        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                            db.surveyResponseActivityRecordDao().updateNote(passtime.getActivitySurveyId(), noteText);
+                            noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
+                        });
+                    }
+
+                    // Remember that the activity details have been filled in
+                    WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                        db.surveyResponseActivityRecordDao().updateIsDone(passtime.getActivitySurveyId(), true);
+                    });
+
                     checkboxView.setVisibility(View.GONE);
                     expandButton.setImageResource(R.drawable.button_expand);
                 }
             });
 
             expandButton.setOnClickListener(expandClickListener);
+            doneButton.setOnClickListener(expandClickListener);
+
+            // Hide the checkboxes if they have been hidden before
+            if(passtime.getIsDone()) {
+                checkboxView.setVisibility(View.GONE);
+            }
 
             if (passtime.getQuestions().size() == 0) {
                 expandButton.setVisibility(View.GONE);

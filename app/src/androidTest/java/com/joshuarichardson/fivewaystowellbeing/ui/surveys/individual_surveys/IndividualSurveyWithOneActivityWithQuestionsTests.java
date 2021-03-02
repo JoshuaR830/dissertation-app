@@ -10,6 +10,7 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
@@ -24,6 +25,7 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.Module;
@@ -36,7 +38,6 @@ import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -46,6 +47,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.LinearLayoutTestUtil.nthChildOf;
 import static org.hamcrest.Matchers.allOf;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -79,6 +81,7 @@ public class IndividualSurveyWithOneActivityWithQuestionsTests {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
             SurveyResponseDao surveyResponseDao = mock(SurveyResponseDao.class);
             WellbeingRecordDao wellbeingRecordDao = mock(WellbeingRecordDao.class);
+            SurveyResponseActivityRecordDao surveyActivityResponseDao = mock(SurveyResponseActivityRecordDao.class);
 
             long time = new GregorianCalendar(1999, 2, 29, 15, 10, 0).getTimeInMillis();
 
@@ -90,12 +93,14 @@ public class IndividualSurveyWithOneActivityWithQuestionsTests {
 
             when(wellbeingRecordDao.getDataBySurvey(123))
                 .thenReturn(Arrays.asList(
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0),
-                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0)
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
+                    new RawSurveyData(time, "Survey description 1", "Activity note 1", "Activity name 1", 1, "Question 2", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)
                 )
             );
 
+            when(surveyActivityResponseDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
             // Ensure that the database returns the DAOs
+            when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(surveyActivityResponseDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyResponseDao);
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingRecordDao);
 
@@ -153,10 +158,6 @@ public class IndividualSurveyWithOneActivityWithQuestionsTests {
             .perform(scrollTo())
             .check(matches(isDisplayed()))
             .check(matches(withText("Activity note 1")));
-
-        onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-            .check(matches(isDisplayed()))
-            .perform(click());
 
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())

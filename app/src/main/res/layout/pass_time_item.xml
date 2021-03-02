@@ -99,7 +99,6 @@
     <include
         android:id="@+id/pass_time_checkbox_container"
         layout="@layout/pass_time_checkbox_container"
-        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

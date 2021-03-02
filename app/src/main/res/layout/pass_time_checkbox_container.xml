@@ -40,14 +40,6 @@
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences|textAutoCorrect|textMultiLine"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_note_button"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:icon="@drawable/icon_save"
-            android:text="@string/button_save_note" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -171,5 +163,13 @@
                 app:icon="@drawable/icon_time"
                 android:text="@string/button_end_time" />
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/done_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Done"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

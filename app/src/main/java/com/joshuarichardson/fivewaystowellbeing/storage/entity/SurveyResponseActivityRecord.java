@@ -10,6 +10,7 @@ import static androidx.room.ForeignKey.CASCADE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_EMOTION;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_END_TIME;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_IS_DONE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_NOTE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_SEQUENCE_NUMBER;
@@ -22,8 +23,8 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 @Entity(
         tableName = SURVEY_RESPONSE_ACTIVITY_RECORD_TABLE_NAME,
         foreignKeys = {
-                @ForeignKey(entity = ActivityRecord.class, parentColumns = ACTIVITY_RECORD_ID, childColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID, onDelete = CASCADE),
-                @ForeignKey(entity = SurveyResponse.class, parentColumns = SURVEY_RESPONSE_ID, childColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID, onDelete = CASCADE)
+            @ForeignKey(entity = ActivityRecord.class, parentColumns = ACTIVITY_RECORD_ID, childColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_RECORD_ID, onDelete = CASCADE),
+            @ForeignKey(entity = SurveyResponse.class, parentColumns = SURVEY_RESPONSE_ID, childColumns = SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID, onDelete = CASCADE)
         })
 public class SurveyResponseActivityRecord {
 
@@ -57,7 +58,10 @@ public class SurveyResponseActivityRecord {
     @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_EMOTION)
     private int emotion;
 
-    public SurveyResponseActivityRecord(long surveyResponseId, long activityRecordId, int sequenceNumber, String note, long startTime, long endTime, int emotion) {
+    @ColumnInfo(name = SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_IS_DONE)
+    private boolean isDone;
+
+    public SurveyResponseActivityRecord(long surveyResponseId, long activityRecordId, int sequenceNumber, String note, long startTime, long endTime, int emotion, boolean isDone) {
         this.setSurveyResponseId(surveyResponseId);
         this.setActivityRecordId(activityRecordId);
         this.setSequenceNumber(sequenceNumber);
@@ -65,6 +69,11 @@ public class SurveyResponseActivityRecord {
         this.setStartTime(startTime);
         this.setEndTime(endTime);
         this.setEmotion(emotion);
+        this.isDone(isDone);
+    }
+
+    private void isDone(boolean isDone) {
+        this.isDone = isDone;
     }
 
     private void setEmotion(int emotion) {
@@ -129,5 +138,9 @@ public class SurveyResponseActivityRecord {
 
     public int getEmotion() {
         return this.emotion;
+    }
+
+    public boolean getIsDone() {
+        return this.isDone;
     }
 }

@@ -211,7 +211,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
 
             // Link activity to a survey
             if(finalActivityId != -1) {
-                this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, finalActivityId, 1, "note 1",  1612427791, 1612427795, 0));
+                this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, finalActivityId, 1, "note 1",  1612427791, 1612427795, 0, false));
             }
 
             // ToDo - this is right - but not yet - because I can't auto generate questions

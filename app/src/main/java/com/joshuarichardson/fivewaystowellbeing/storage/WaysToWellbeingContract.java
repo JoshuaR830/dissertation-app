@@ -42,6 +42,7 @@ public class WaysToWellbeingContract {
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_START_TIME = "start_time";
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_END_TIME = "end_time";
     public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_EMOTION = "emotion";
+    public static final String SURVEY_RESPONSE_ACTIVITY_RECORD_ACTIVITY_IS_DONE = "is_done";
 
     // Questions to ask
     public static final String QUESTIONS_TO_ASK_TABLE_NAME = "questions_to_ask";

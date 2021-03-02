@@ -1,5 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing.storage.dao;
 
+import com.joshuarichardson.fivewaystowellbeing.storage.SurveyCountItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
@@ -45,6 +46,13 @@ public interface SurveyResponseActivityRecordDao {
 
     @Query("UPDATE survey_activity SET emotion = :emotion WHERE survey_activity_id = :surveyActivityId")
     void updateEmotion(long surveyActivityId, int emotion);
+
+    @Query("UPDATE survey_activity SET is_done = :isDone WHERE survey_activity_id = :surveyActivityId")
+    void updateIsDone(long surveyActivityId, boolean isDone);
+
+    // Count the number of emotion items and the cumulative emotion score
+    @Query("SELECT COUNT(*) AS emotionCount, SUM(emotion) AS totalValue FROM survey_activity WHERE survey_response_id = :surveyId AND emotion != 0")
+    LiveData<SurveyCountItem> getEmotions(long surveyId);
 
     // ToDo Need a delete method
 }

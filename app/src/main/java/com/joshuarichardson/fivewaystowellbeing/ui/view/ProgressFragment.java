@@ -2,12 +2,14 @@ package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.android.material.chip.ChipGroup;
@@ -18,6 +20,8 @@ import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
+import com.joshuarichardson.fivewaystowellbeing.storage.SentimentItem;
+import com.joshuarichardson.fivewaystowellbeing.storage.SurveyCountItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
@@ -61,7 +65,9 @@ public class ProgressFragment extends Fragment {
     private LiveData<List<SurveyResponse>> surveyResponseItems;
     private Observer<List<WellbeingGraphItem>> wholeGraphUpdate;
     private LiveData<List<WellbeingGraphItem>> graphUpdateValues;
+    private LiveData<SurveyCountItem> emotionUpdateValues;
     private long surveyId;
+    private Observer<SurveyCountItem> emotionUpdateObserver;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -99,6 +105,14 @@ public class ProgressFragment extends Fragment {
         this.graphUpdateValues.observe(requireActivity(), this.wholeGraphUpdate);
         canvasContainer.addView(graphView);
 
+        this.emotionUpdateObserver = sentiment -> {
+            SentimentItem emotionValues = sentiment.getResourcesForAverage();
+            int color = requireContext().getColor(emotionValues.getColorResource());
+            ImageView image = requireActivity().findViewById(R.id.surveys_completed_image);
+            image.setImageResource(emotionValues.getImageResource());
+            image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        };
+
         this.surveyResponsesObserver = surveys -> {
             if (surveys.size() == 0) {
                 long startTime = TimeHelper.getStartOfDay(new Date().getTime());
@@ -111,6 +125,8 @@ public class ProgressFragment extends Fragment {
             }
 
             this.surveyId = surveys.get(0).getSurveyResponseId();
+            this.emotionUpdateValues = this.db.surveyResponseActivityRecordDao().getEmotions(this.surveyId);
+            this.emotionUpdateValues.observe(requireActivity(), this.emotionUpdateObserver);
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(this.surveyId);
                 if (rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
@@ -199,8 +215,8 @@ public class ProgressFragment extends Fragment {
             int sequenceNumber = passtimeContainer.getChildCount() + 1;
 
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0));
-                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0);
+                long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
+                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
 
                 ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper);
@@ -211,6 +227,9 @@ public class ProgressFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if(this.emotionUpdateValues != null) {
+            this.emotionUpdateValues.removeObserver(this.emotionUpdateObserver);
+        }
         this.surveyResponseItems.removeObserver(this.surveyResponsesObserver);
         this.graphUpdateValues.removeObserver(this.wholeGraphUpdate);
     }

@@ -19,11 +19,11 @@ public class SurveyDataTests {
     @Before
     public void setup() {
         this.data = Arrays.asList(
-            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 1", "Activity name 1", 1, "Question 1_1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0),
-            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 1", "Activity name 1", 1, "Question 1_2", 2, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0),
-            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 1", "Activity name 1", 1, "Question 1_3", 3, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0),
-            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 2", "Activity name 2", 2, "Question 2_1", 4, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0),
-            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 2", "Activity name 2", 2, "Question 2_2", 5, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0)
+            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 1", "Activity name 1", 1, "Question 1_1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0, false),
+            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 1", "Activity name 1", 1, "Question 1_2", 2, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0, false),
+            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 1", "Activity name 1", 1, "Question 1_3", 3, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0, false),
+            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 2", "Activity name 2", 2, "Question 2_1", 4, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0, false),
+            new RawSurveyData(new GregorianCalendar(1999, 2, 29, 15, 10).getTime().getTime(), "Survey note 1", "Activity note 2", "Activity name 2", 2, "Question 2_2", 5, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), 1, 1, 0, false)
         );
     }
 

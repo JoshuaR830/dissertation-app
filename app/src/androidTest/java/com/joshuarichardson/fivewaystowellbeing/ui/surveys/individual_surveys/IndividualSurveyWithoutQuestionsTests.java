@@ -10,6 +10,7 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
@@ -24,6 +25,7 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.Module;
@@ -45,6 +47,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.LinearLayoutTestUtil.nthChildOf;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -78,6 +81,7 @@ public class IndividualSurveyWithoutQuestionsTests {
             WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
             SurveyResponseDao surveyResponseDao = mock(SurveyResponseDao.class);
             WellbeingRecordDao wellbeingRecordDao = mock(WellbeingRecordDao.class);
+            SurveyResponseActivityRecordDao surveyActivityResponseDao = mock(SurveyResponseActivityRecordDao.class);
 
             long time = new GregorianCalendar(1999, 2, 29, 15, 10, 0).getTimeInMillis();
 
@@ -93,8 +97,10 @@ public class IndividualSurveyWithoutQuestionsTests {
                     new LimitedRawSurveyData(time, "Description 1", "Activity 2", ActivityType.HOBBY.toString())
                 )
             );
+            when(surveyActivityResponseDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
 
             // Ensure that the database returns the DAOs
+            when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(surveyActivityResponseDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyResponseDao);
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingRecordDao);
 

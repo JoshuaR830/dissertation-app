@@ -109,6 +109,7 @@ public class WellbeingDatabaseModule {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE survey_activity ADD COLUMN emotion INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("ALTER TABLE survey_activity ADD COLUMN is_done INTEGER DEFAULT 0 NOT NULL");
         }
     };
 

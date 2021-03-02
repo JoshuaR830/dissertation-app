@@ -36,7 +36,7 @@ public class UpdateSurveyActivityTests {
         long surveyId = surveyResponseDao.insert(new SurveyResponse(1607960245, "Be active", "title", "description"));
         long activityId = activityRecordDao.insert(new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED"));
 
-        this.surveyActivityId = this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 1", 1612427791, 1612427795, 0));
+        this.surveyActivityId = this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 1", 1612427791, 1612427795, 0, false));
     }
 
     @After
@@ -86,5 +86,16 @@ public class UpdateSurveyActivityTests {
 
         response = this.surveyActivityDao.getSurveyActivityById(this.surveyActivityId);
         assertThat(response.getEmotion()).isEqualTo(1);
+    }
+
+    @Test
+    public void updateIsDone_ShouldUpdateIsDone() {
+        SurveyResponseActivityRecord response = this.surveyActivityDao.getSurveyActivityById(this.surveyActivityId);
+        assertThat(response.getIsDone()).isEqualTo(false);
+
+        this.surveyActivityDao.updateIsDone(this.surveyActivityId, true);
+
+        response = this.surveyActivityDao.getSurveyActivityById(this.surveyActivityId);
+        assertThat(response.getIsDone()).isEqualTo(true);
     }
 }
