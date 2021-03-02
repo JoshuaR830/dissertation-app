@@ -373,7 +373,7 @@ public class SurveyResponseActivityRecordTests {
         ActivityRecord activityRecord3 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED");
         long activityId3 = this.activityRecordDao.insert(activityRecord3);
 
-        // No emotions
+        // All emotion ranges
         SurveyResponseActivityRecord record1_1 = new SurveyResponseActivityRecord(surveyResponseId1, activityId1, 1, "note 1",  1612427791, 1612427795, 1, false);
         SurveyResponseActivityRecord record1_2 = new SurveyResponseActivityRecord(surveyResponseId1, activityId2, 1, "note 1",  1612427791, 1612427795, 3, false);
         SurveyResponseActivityRecord record1_3 = new SurveyResponseActivityRecord(surveyResponseId1, activityId3, 1, "note 1",  1612427791, 1612427795, 5, false);

@@ -79,6 +79,7 @@
     <string name="body_delete_note">Your note will be permanently deleted</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
+    <string name="button_done">Done</string>
 
     <string name="minutes">mins</string>
     <string name="hours">hrs</string>

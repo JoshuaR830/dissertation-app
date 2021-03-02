@@ -12,7 +12,7 @@ public class SurveyCountItem {
     }
 
     private int calculateAverage() {
-        if(totalValue == 0 ||emotionCount == 0) {
+        if(totalValue == 0 || emotionCount == 0) {
             return 0;
         }
 

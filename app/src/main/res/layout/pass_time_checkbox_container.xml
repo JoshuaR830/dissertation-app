@@ -51,7 +51,6 @@
             android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
-<!--                android:backgroundTint="@color/translucent_sentiment_worst"-->
             <FrameLayout
                 android:id="@+id/sentiment_worst_frame"
                 android:layout_width="48dp"
@@ -169,7 +168,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Done"/>
+            android:text="@string/button_done"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

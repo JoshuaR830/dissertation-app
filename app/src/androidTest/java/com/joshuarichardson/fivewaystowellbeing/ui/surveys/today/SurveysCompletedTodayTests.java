@@ -172,10 +172,10 @@ public class SurveysCompletedTodayTests {
             .check(doesNotExist());
 
         onView(allOf(withId(R.id.done_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-                .perform(scrollTo(), click());
+            .perform(scrollTo(), click());
 
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-                .check(matches(not(isDisplayed())));
+            .check(matches(not(isDisplayed())));
 
         onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 1)))
             .perform(scrollTo())
