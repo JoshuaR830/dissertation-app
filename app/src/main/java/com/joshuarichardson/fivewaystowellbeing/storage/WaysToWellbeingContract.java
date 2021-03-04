@@ -13,6 +13,7 @@ public class WaysToWellbeingContract {
     public static final String ACTIVITY_RECORD_TIMESTAMP = "timestamp";
     public static final String ACTIVITY_RECORD_DURATION = "duration";
     public static final String ACTIVITY_RECORD_WAY_TO_WELLBEING = "way_to_wellbeing";
+    public static final String ACTIVITY_RECORD_IS_HIDDEN = "is_hidden";
 
     // Survey response
     public static final String SURVEY_RESPONSE_TABLE_NAME = "survey_response";

@@ -34,7 +34,7 @@ public class UpdateSurveyActivityTests {
         ActivityRecordDao activityRecordDao = wellbeingDb.activityRecordDao();
 
         long surveyId = surveyResponseDao.insert(new SurveyResponse(1607960245, "Be active", "title", "description"));
-        long activityId = activityRecordDao.insert(new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED"));
+        long activityId = activityRecordDao.insert(new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED", false));
 
         this.surveyActivityId = this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 1", 1612427791, 1612427795, 0, false));
     }

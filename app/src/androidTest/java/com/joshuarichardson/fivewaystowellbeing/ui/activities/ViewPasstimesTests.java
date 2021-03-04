@@ -9,7 +9,7 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewPassTimesActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -78,9 +78,9 @@ public class ViewPasstimesTests {
             ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
 
             List<ActivityRecord> data = Arrays.asList(
-                    new ActivityRecord("Activity name 1", 0, 587468, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE),
-                    new ActivityRecord("Activity name 2", 0, 587468, ActivityType.LEARNING, WaysToWellbeing.KEEP_LEARNING),
-                    new ActivityRecord("Activity name 3", 0, 587468, ActivityType.HOBBY, WaysToWellbeing.KEEP_LEARNING)
+                    new ActivityRecord("Activity name 1", 0, 587468, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE, false),
+                    new ActivityRecord("Activity name 2", 0, 587468, ActivityType.LEARNING, WaysToWellbeing.KEEP_LEARNING, false),
+                    new ActivityRecord("Activity name 3", 0, 587468, ActivityType.HOBBY, WaysToWellbeing.KEEP_LEARNING, false)
             );
             LiveData<List<ActivityRecord>> liveData = new MutableLiveData<>(data);
 

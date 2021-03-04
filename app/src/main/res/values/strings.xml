@@ -77,9 +77,14 @@
     <string name="title_end_time">End time</string>
     <string name="title_delete_note">Delete your note</string>
     <string name="body_delete_note">Your note will be permanently deleted</string>
+    <string name="title_delete_activity">Delete activity</string>
+    <string name="body_delete_activity">Your activity will get removed from the activity list but will remain in previous wellbeing logs</string>
+    <string name="body_delete_from_survey">Your activity will get removed from the activity list but will remain in previous wellbeing logs</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
     <string name="button_done">Done</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_change">Change</string>
 
     <string name="minutes">mins</string>
     <string name="hours">hrs</string>
@@ -115,4 +120,6 @@
     <string name="preference_switch_title">Enable</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
+
+    <string name="old_activity_warning">Edit recommended</string>
 </resources>

@@ -13,7 +13,7 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
-import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewPassTimesActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
 import java.util.Arrays;
 import java.util.Date;

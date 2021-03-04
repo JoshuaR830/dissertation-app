@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing;
+package com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +12,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.joshuarichardson.fivewaystowellbeing.ActivityType;
+import com.joshuarichardson.fivewaystowellbeing.DropDownHelper;
+import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
@@ -27,8 +32,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class CreatePassTimeActivity extends AppCompatActivity {
+public class CreateOrUpdatePassTimeActivity extends AppCompatActivity {
     ActivityRecordDao passTimeDao;
+    private long activityId;
+    private boolean isEditing;
 
     @Inject
     WellbeingDatabase db;
@@ -41,15 +48,10 @@ public class CreatePassTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_pass_time);
 
-        if(getIntent() != null && getIntent().getExtras() != null) {
-            EditText textBox = findViewById(R.id.pass_time_name_input);
-            textBox.setText(getIntent().getExtras().getString("new_activity_name", ""));
-        }
-
         AutoCompleteTextView dropDownInput = findViewById(R.id.pass_time_type_input);
 
         AutoCompleteTextView wayToWellbeingInput = findViewById(R.id.way_to_wellbeing_input);
-        ArrayAdapter<String> waysToWellbeingAdapter = new ArrayAdapter<>(CreatePassTimeActivity.this, R.layout.item_list_text, Arrays.asList("Connect", "Be active", "Keep learning", "Take notice", "Give", "None"));
+        ArrayAdapter<String> waysToWellbeingAdapter = new ArrayAdapter<>(CreateOrUpdatePassTimeActivity.this, R.layout.item_list_text, Arrays.asList("Connect", "Be active", "Keep learning", "Take notice", "Give", "None"));
         wayToWellbeingInput.setAdapter(waysToWellbeingAdapter);
 
         dropDownInput.addTextChangedListener(new TextWatcher() {
@@ -81,27 +83,26 @@ public class CreatePassTimeActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String wayToWellbeingSelected = wayToWellbeingInput.getText().toString();
-                Log.d("Which", wayToWellbeingSelected);
                 helpContainer.removeAllViews();
                 switch (wayToWellbeingSelected) {
                     case "Connect":
-                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_connect, helpContainer);
+                        LayoutInflater.from(CreateOrUpdatePassTimeActivity.this).inflate(R.layout.card_connect, helpContainer);
                         helpContainer.setVisibility(View.VISIBLE);
                         break;
                     case "Be active":
-                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_be_active, helpContainer);
+                        LayoutInflater.from(CreateOrUpdatePassTimeActivity.this).inflate(R.layout.card_be_active, helpContainer);
                         helpContainer.setVisibility(View.VISIBLE);
                         break;
                     case "Keep learning":
-                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_keep_learning, helpContainer);
+                        LayoutInflater.from(CreateOrUpdatePassTimeActivity.this).inflate(R.layout.card_keep_learning, helpContainer);
                         helpContainer.setVisibility(View.VISIBLE);
                         break;
                     case "Take notice":
-                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_take_notice, helpContainer);
+                        LayoutInflater.from(CreateOrUpdatePassTimeActivity.this).inflate(R.layout.card_take_notice, helpContainer);
                         helpContainer.setVisibility(View.VISIBLE);
                         break;
                     case "Give":
-                        LayoutInflater.from(CreatePassTimeActivity.this).inflate(R.layout.card_give, helpContainer);
+                        LayoutInflater.from(CreateOrUpdatePassTimeActivity.this).inflate(R.layout.card_give, helpContainer);
                         helpContainer.setVisibility(View.VISIBLE);
                         break;
                     case "None":
@@ -111,10 +112,28 @@ public class CreatePassTimeActivity extends AppCompatActivity {
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(CreatePassTimeActivity.this, R.layout.item_list_text, DropDownHelper.getEnumStrings(ActivityType.values()));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(CreateOrUpdatePassTimeActivity.this, R.layout.item_list_text, DropDownHelper.getEnumStrings(ActivityType.values()));
         dropDownInput.setAdapter(adapter);
 
         this.passTimeDao = this.db.activityRecordDao();
+
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            if(getIntent().hasExtra("new_activity_name")) {
+                EditText textBox = findViewById(R.id.pass_time_name_input);
+                textBox.setText(getIntent().getExtras().getString("new_activity_name", ""));
+            }
+
+            if (getIntent().hasExtra("activity_id")) {
+                this.isEditing = true;
+                EditText textBox = findViewById(R.id.pass_time_name_input);
+                AutoCompleteTextView passTimeType = findViewById(R.id.pass_time_type_input);
+                AutoCompleteTextView wellbeingType = findViewById(R.id.way_to_wellbeing_input);
+                this.activityId = getIntent().getExtras().getLong("activity_id");
+                textBox.setText(getIntent().getExtras().getString("activity_name", ""));
+                wellbeingType.setText(getIntent().getExtras().getString("activity_way_to_wellbeing", WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.UNASSIGNED)), false);
+                passTimeType.setText(getIntent().getExtras().getString("activity_type", ""), false);
+            }
+        }
     }
 
     public void onSubmit(View v) {
@@ -168,7 +187,19 @@ public class CreatePassTimeActivity extends AppCompatActivity {
 
         final String wayToWellbeingString = WellbeingHelper.getWayToWellbeingFromString(wayToWellbeing).toString();
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            this.passTimeDao.insert(new ActivityRecord(name, duration, unixTime, type, wayToWellbeingString));
+            if (this.activityId != 0 && this.isEditing) {
+                Log.d("edit name", name);
+                Log.d("edit type", type);
+                Log.d("edit wellbeing", wayToWellbeingString);
+                Log.d("edit id", String.valueOf(this.activityId));
+                this.passTimeDao.update(this.activityId, name, type, wayToWellbeingString, unixTime);
+            } else {
+                Log.d("create name", name);
+                Log.d("create type", type);
+                Log.d("create wellbeing", wayToWellbeingString);
+                Log.d("create id", String.valueOf(this.activityId));
+                this.passTimeDao.insert(new ActivityRecord(name, duration, unixTime, type, wayToWellbeingString, false));
+            }
             finish();
         });
     }

@@ -1,6 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.activities;
 
-import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 

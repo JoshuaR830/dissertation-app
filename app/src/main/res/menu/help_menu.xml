@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_wellbeing_support"
         android:title="@string/get_wellbeing_support" />
@@ -10,6 +11,19 @@
 
     <item
         android:id="@+id/menu_settings"
-        android:title="@string/settings"
-        />
+        android:title="@string/settings" />
+
+    <item
+        android:id="@+id/action_edit"
+        android:title="@string/button_change"
+        android:icon="@drawable/action_edit"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_delete"
+        android:title="@string/button_delete"
+        android:icon="@drawable/icon_delete"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
 </menu>

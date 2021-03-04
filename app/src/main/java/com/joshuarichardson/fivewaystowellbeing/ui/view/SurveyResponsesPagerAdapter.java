@@ -1,5 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesFragment;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;

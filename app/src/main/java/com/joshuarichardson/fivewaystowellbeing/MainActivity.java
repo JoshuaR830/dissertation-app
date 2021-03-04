@@ -3,7 +3,6 @@ package com.joshuarichardson.fivewaystowellbeing;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,14 +15,16 @@ import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
-import com.joshuarichardson.fivewaystowellbeing.ui.settings.SettingsActivity;
-import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewPassTimesActivity;
-import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.view.ProgressFragment;
+import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragment;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -33,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
+    private Menu optionsMenu;
 
     @Inject
     WellbeingDatabase db;
@@ -105,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.optionsMenu = menu;
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.help_menu, menu);
         return true;
@@ -113,29 +116,49 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
-            // I want to launch activities - wouldn't expect that the bottom bar would still show and it isn't top level
-            case R.id.menu_settings:
-                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                break;
-            case R.id.menu_wellbeing_support:
-                Intent wellbeingIntent = new Intent(MainActivity.this, WellbeingSupportActivity.class);
-                startActivity(wellbeingIntent);
-                break;
-            case R.id.menu_learn_more:
-                Intent learnMoreIntent = new Intent(MainActivity.this, LearnMoreAboutFiveWaysActivity.class);
-                startActivity(learnMoreIntent);
-                break;
-            default:
-                Log.d("Menu", "Menu");
+
+        if (item.getItemId() == R.id.action_delete) {
+            Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+
+            if(navHostFragment == null) {
+                return false;
+            }
+
+            if(navHostFragment.getChildFragmentManager().getFragments().get(0).getClass() == ProgressFragment.class) {
+                ProgressFragment progressFragment = (ProgressFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+                progressFragment.toggleDeletable();
+            }
+
+            return true;
         }
 
+        if (item.getItemId() == R.id.action_edit) {
+            Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+
+            if(navHostFragment == null) {
+                return false;
+            }
+
+            if(navHostFragment.getChildFragmentManager().getFragments().get(0).getClass() == ViewSurveyResponsesFragment.class) {
+                ViewSurveyResponsesFragment viewSurveyResponseFragment = (ViewSurveyResponsesFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+                viewSurveyResponseFragment.instantiateEditable();
+            }
+            return true;
+        }
+
+        Intent intent = MenuItemHelper.handleMenuClick(this, item);
+
+        if(intent == null) {
+            return false;
+        }
+
+        // This only runs if an intent was set
+        startActivity(intent);
         return true;
     }
 
     public void onCreatePassTimeButtonClicked(View v) {
-        Intent answerSurveyIntent = new Intent(MainActivity.this, CreatePassTimeActivity.class);
+        Intent answerSurveyIntent = new Intent(MainActivity.this, CreateOrUpdatePassTimeActivity.class);
         startActivity(answerSurveyIntent);
     }
 

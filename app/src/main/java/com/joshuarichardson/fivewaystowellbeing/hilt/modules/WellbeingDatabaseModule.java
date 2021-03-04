@@ -113,11 +113,18 @@ public class WellbeingDatabaseModule {
         }
     };
 
+    static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE activity_records ADD COLUMN is_hidden INTEGER DEFAULT 0 NOT NULL");
+        }
+    };
+
     @Provides
     @Singleton
     public static WellbeingDatabase getWellbeingDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
             .addCallback(new RoomDatabase.Callback() {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
