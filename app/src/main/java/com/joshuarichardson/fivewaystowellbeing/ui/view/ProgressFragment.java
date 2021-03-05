@@ -168,7 +168,7 @@ public class ProgressFragment extends Fragment {
             boolean doesExist;
 
             do {
-                // Add all activities tha were missed between now and the last added one
+                // Add all activities that were missed between now and the last added one
                 doesExist = true;
                 cal.add(Calendar.DATE, -1);
 

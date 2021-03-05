@@ -38,28 +38,6 @@ public class AddMissedDayActivity extends AppCompatActivity {
         RecyclerView recycler = findViewById(R.id.missing_item_recycler_view);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-//        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-//            List<SurveyResponse> historyPageData = this.db.surveyResponseDao().getEmptyHistoryPageData();
-//            ArrayList<HistoryPageData> historyList = new ArrayList<>();
-//
-//            for(SurveyResponse pageItem : historyPageData) {
-//                Date now = new Date(pageItem.getSurveyResponseTimestamp());
-//                long morning = TimeHelper.getStartOfDay(now.getTime());
-//                long night = TimeHelper.getEndOfDay(now.getTime());
-//
-//                List<WellbeingGraphItem> graphItems = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(morning, night);
-//                WellbeingGraphValueHelper wellbeingGraphValues = WellbeingGraphValueHelper.getWellbeingGraphValues(graphItems);
-//                historyList.add(new HistoryPageData(pageItem, wellbeingGraphValues));
-//            }
-//
-//            runOnUiThread(() -> {
-//                SurveyResponseAdapter adapter = new SurveyResponseAdapter(this, historyList);
-//                recycler.setAdapter(adapter);
-//            });
-//
-//        });
-
-
         SurveyResponseDao surveyResponseDao = this.db.surveyResponseDao();
         SurveyResponseAdapter adapter = new SurveyResponseAdapter(this, new ArrayList<>());
         recycler.setAdapter(adapter);
@@ -86,6 +64,5 @@ public class AddMissedDayActivity extends AppCompatActivity {
         };
 
         surveyResponseDao.getEmptyHistoryPageData().observe(this, historyObserver);
-
     }
 }

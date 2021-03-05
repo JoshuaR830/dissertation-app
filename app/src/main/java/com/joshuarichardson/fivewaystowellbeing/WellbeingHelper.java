@@ -1,7 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
 import android.content.Context;
-import android.util.Log;
 
 public class WellbeingHelper {
     public static int getImage(WaysToWellbeing surveyResponseWayToWellbeing) {
@@ -107,8 +106,6 @@ public class WellbeingHelper {
 
     public static int getColor(Context context, String wayToWellbeing) {
         WaysToWellbeing wayToWellbeingType = getWayToWellbeingFromString(wayToWellbeing.replace('_', ' '));
-
-        Log.d("WtW", wayToWellbeingType.toString());
 
         switch (wayToWellbeingType) {
             case CONNECT:

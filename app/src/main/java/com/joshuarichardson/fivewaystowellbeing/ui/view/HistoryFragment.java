@@ -62,7 +62,6 @@ public class HistoryFragment extends Fragment {
                     historyList.add(new HistoryPageData(pageItem, wellbeingGraphValues));
                 }
 
-
                 requireActivity().runOnUiThread(() -> {
                     adapter.setValues(historyList);
                 });
