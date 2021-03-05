@@ -132,6 +132,32 @@ public class ViewPasstimesTests {
     }
 
     @Test
+    public void onSearchForPartialKnownPasstime_TheItemShouldBeDisplayedFirst() {
+        onView(withId(R.id.passtime_search_box))
+            .perform(typeText("3"), closeSoftKeyboard());
+
+        onView(withId(R.id.passTimeRecyclerView))
+            .perform(scrollToPosition(0))
+            .check(matches(atRecyclerPosition(0, hasDescendant(withText("Activity name 3")))));
+
+        onView(withId(R.id.create_from_search_button))
+            .check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void onSearchForMultiPartialKnownPasstime_TheItemShouldBeDisplayedFirst() {
+        onView(withId(R.id.passtime_search_box))
+            .perform(typeText("name 3"), closeSoftKeyboard());
+
+        onView(withId(R.id.passTimeRecyclerView))
+            .perform(scrollToPosition(0))
+            .check(matches(atRecyclerPosition(0, hasDescendant(withText("Activity name 3")))));
+
+        onView(withId(R.id.create_from_search_button))
+            .check(matches(not(isDisplayed())));
+    }
+
+    @Test
     public void onSearchForUnknownPasstime_ACreateButtonShouldBeDisplayed() throws InterruptedException {
         onView(withId(R.id.passtime_search_box))
             .perform(typeText("New activity"));
