@@ -18,7 +18,7 @@
     <!-- ToDo change this to before activities -->
     <string name="no_surveys_title">No wellbeing logs today</string>
     <string name="no_surveys_description">Do you want to complete one?</string>
-    
+
     <string name="expand_button">Expand</string>
     <string name="add_activity_button">Activity</string>
 
@@ -32,6 +32,7 @@
     <string name="survey_input_description">Enter a description</string>
     <string name="survey_input_activity">Select an activity</string>
     <string name="way_to_wellbeing_input">Select way to wellbeing</string>
+    <string name="missed_days_title">Recover missed days</string>
 
     <string name="submit_button">Submit</string>
     <string name="navigation_home">Progress</string>
@@ -85,6 +86,7 @@
     <string name="button_done">Done</string>
     <string name="button_edit">Edit</string>
     <string name="button_change">Change</string>
+    <string name="button_missing_day">Add missed</string>
 
     <string name="minutes">mins</string>
     <string name="hours">hrs</string>
@@ -122,4 +124,5 @@
     <string name="disabled">Disabled</string>
 
     <string name="old_activity_warning">Edit recommended</string>
+    <string name="old_activity_warning_snackbar">Some activities don\'t have ways to wellbeing assigned edit recommended</string>
 </resources>

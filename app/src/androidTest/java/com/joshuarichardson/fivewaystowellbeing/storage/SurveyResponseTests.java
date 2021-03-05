@@ -2,10 +2,13 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
 
+import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.utilities.LiveDataTestUtil;
 
 import org.junit.After;
@@ -85,18 +88,41 @@ public class SurveyResponseTests {
 
     @Test
     public void insertingMultipleSurveys_ThenGettingAllNonLiveSurveys_ShouldReturnAllAddedSurveyResponses() throws TimeoutException, InterruptedException {
-        DatabaseInsertionHelper.insert(new SurveyResponse[] {
-            new SurveyResponse(0, WaysToWellbeing.KEEP_LEARNING, "title", "description"),
-            new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description"),
-            new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description"),
-            new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description"),
-            new SurveyResponse(2147483647, WaysToWellbeing.TAKE_NOTICE, "title", "description")
-        }, this.surveyResponseDao);
+        long surveyId1 = this.surveyResponseDao.insert(new SurveyResponse(922720200, WaysToWellbeing.KEEP_LEARNING, "title", "description"));
+        long surveyId2 = this.surveyResponseDao.insert(new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description"));
+        long surveyId3 = this.surveyResponseDao.insert(new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description"));
+        this.surveyResponseDao.insert(new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description"));
 
-        List<SurveyResponse> surveyResponses = this.surveyResponseDao.getHistoryPageData();
+        long activityRecord = this.wellbeingDb.activityRecordDao().insert(new ActivityRecord("Name", 325768, 54389798, ActivityType.CHORES, WaysToWellbeing.GIVE, false));
+
+        this.wellbeingDb.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId1, activityRecord, 1, "note", -1, -1, 1, false));
+        this.wellbeingDb.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId2, activityRecord, 1, "note", -1, -1, 1, false));
+        this.wellbeingDb.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId3, activityRecord, 1, "note", -1, -1, 1, false));
+
+        List<SurveyResponse> surveyResponses = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseDao.getNonEmptyHistoryPageData());
 
         assertThat(surveyResponses).isNotNull();
-        assertThat(surveyResponses.size()).isEqualTo(5);
+        assertThat(surveyResponses.size()).isEqualTo(3);
+    }
+
+    @Test
+    public void insertingMultipleSurveys_ThenGettingAllEmptySurveys_ShouldReturnAllEmptySurveys() throws TimeoutException, InterruptedException {
+        long surveyId1 = this.surveyResponseDao.insert(new SurveyResponse(922720200, WaysToWellbeing.KEEP_LEARNING, "title", "description"));
+        long surveyId2 = this.surveyResponseDao.insert(new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description"));
+        long surveyId3 = this.surveyResponseDao.insert(new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description"));
+        long surveyId4 = this.surveyResponseDao.insert(new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description"));
+
+        long activityRecord = this.wellbeingDb.activityRecordDao().insert(new ActivityRecord("Name", 325768, 54389798, ActivityType.CHORES, WaysToWellbeing.GIVE, false));
+
+        this.wellbeingDb.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId1, activityRecord, 1, "note", -1, -1, 1, false));
+        this.wellbeingDb.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId2, activityRecord, 1, "note", -1, -1, 1, false));
+        this.wellbeingDb.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId3, activityRecord, 1, "note", -1, -1, 1, false));
+
+        List<SurveyResponse> surveyResponses = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseDao.getEmptyHistoryPageData());
+
+        assertThat(surveyResponses).isNotNull();
+        assertThat(surveyResponses.size()).isEqualTo(1);
+        assertThat(surveyResponses.get(0).getSurveyResponseId()).isEqualTo(surveyId4);
     }
 
     @Test

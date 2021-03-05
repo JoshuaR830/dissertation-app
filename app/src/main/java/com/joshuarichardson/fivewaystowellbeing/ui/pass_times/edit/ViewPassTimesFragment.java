@@ -63,7 +63,7 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
             // Only show the button if there are old items
             boolean shouldShowSnackbar = false;
             for(ActivityRecord activity : oldActivities) {
-                if(activity.getActivityWayToWellbeing().equals(WaysToWellbeing.UNASSIGNED.toString())) {
+                if(activity.getActivityWayToWellbeing().equals(WaysToWellbeing.UNASSIGNED.toString()) && !activity.getIsHidden()) {
                     shouldShowSnackbar = true;
                     break;
                 }
@@ -72,7 +72,7 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
             if(shouldShowSnackbar) {
                 requireActivity().runOnUiThread(() -> {
                     // Reference https://developer.android.com/training/snackbar/showing#java
-                    Snackbar snackbar = Snackbar.make(root, getText(R.string.old_activity_warning), Snackbar.LENGTH_LONG)
+                    Snackbar snackbar = Snackbar.make(root, getText(R.string.old_activity_warning_snackbar), 10000)
                         .setAnchorView(root.findViewById(R.id.create_activity_button))
                         .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
                         .setAction(R.string.button_edit, v -> {

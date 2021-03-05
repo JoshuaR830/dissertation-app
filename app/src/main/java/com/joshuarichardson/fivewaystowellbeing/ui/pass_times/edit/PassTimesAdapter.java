@@ -81,8 +81,9 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             // If there is a search pattern this will find all of the items
             String filterPattern = constraint.toString().toLowerCase().trim();
             for(ActivityRecord record : PassTimesAdapter.this.originalPasstimeItems) {
-                if(record.getActivityName().toLowerCase().startsWith(filterPattern)) {
-                    // Adds items that match the filter
+                String listItemName = record.getActivityName().toLowerCase();
+
+                if(listItemName.matches("([\\s\\w]*\\s" + filterPattern + "[\\s\\w]*)|(^" + filterPattern + "[\\s\\w]*)")) {
                     filteredActivityRecords.add(record);
                 }
             }

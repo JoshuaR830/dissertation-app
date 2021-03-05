@@ -21,6 +21,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseAct
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -136,7 +137,7 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests {
         // When no survey exists there should be an insertion
         WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         verify(this.surveyDao, times(1)).getSurveyResponsesByTimestampRange(anyLong(), anyLong());
-        verify(this.surveyDao, times(1)).insert(any(SurveyResponse.class));
+        verify(this.surveyDao, Mockito.atLeast(1)).insert(any(SurveyResponse.class));
 
         // Start on main activity - this should launch the passtime view
         onView(withId(R.id.add_activity_button))

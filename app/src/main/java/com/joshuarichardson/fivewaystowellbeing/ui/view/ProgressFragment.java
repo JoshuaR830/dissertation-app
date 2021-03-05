@@ -40,6 +40,7 @@ import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityVi
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -162,7 +163,31 @@ public class ProgressFragment extends Fragment {
             image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         };
 
-        updateSurveyItems();
+        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            Calendar cal = Calendar.getInstance();
+            boolean doesExist;
+
+            do {
+                // Add all activities that were missed between now and the last added one
+                doesExist = true;
+                cal.add(Calendar.DATE, -1);
+
+                long morning = TimeHelper.getStartOfDay(cal.getTimeInMillis());
+                long night = TimeHelper.getEndOfDay(cal.getTimeInMillis());
+
+                List<SurveyResponse> surveyResponsesNotLive = this.db.surveyResponseDao().getSurveyResponsesByTimestampRangeNotLive(morning, night);
+
+                if (surveyResponsesNotLive.size() == 0) {
+                    doesExist = false;
+                    // If missed - add it
+                    this.db.surveyResponseDao().insert(new SurveyResponse(morning, UNASSIGNED, "", ""));
+                }
+            } while(!doesExist && cal.getTimeInMillis() > 1613509560000L);
+
+            // Call this after creating the others to ensure that everything goes to plan
+            updateSurveyItems();
+        });
+
 
         ChipGroup group = view.findViewById(R.id.wellbeing_chip_group);
         LinearLayout helpContainer = view.findViewById(R.id.way_to_wellbeing_help_container);

@@ -26,4 +26,11 @@
         android:icon="@drawable/icon_delete"
         android:visible="false"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_missing_day"
+        android:title="@string/button_missing_day"
+        android:icon="@drawable/icon_missing_day"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
 </menu>

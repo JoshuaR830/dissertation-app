@@ -2,6 +2,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,10 +21,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import com.joshuarichardson.fivewaystowellbeing.ActivityTypeImageHelper;
+import com.joshuarichardson.fivewaystowellbeing.DisplayHelper;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
@@ -37,6 +40,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 public class ActivityViewHelper {
@@ -80,6 +84,14 @@ public class ActivityViewHelper {
         TextView title = view.findViewById(R.id.activity_text);
         TextView note = view.findViewById(R.id.activity_note_text);
         ImageView image = view.findViewById(R.id.activity_image);
+        FrameLayout imageFrame = view.findViewById(R.id.activity_image_frame);
+
+        GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(activity, R.drawable.frame_circle);
+        if (drawable != null) {
+            drawable = (GradientDrawable) drawable.mutate();
+            drawable.setStroke(DisplayHelper.dpToPx(activity, 4), WellbeingHelper.getColor(activity, passtime.getWayToWellbeing()));
+            imageFrame.setBackground(drawable);
+        }
 
         View topLevelDetails = view.findViewById(R.id.activity_top_level_details);
         ImageButton expandButton = view.findViewById(R.id.expand_options_button);

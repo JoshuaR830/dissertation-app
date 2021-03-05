@@ -56,6 +56,12 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
         return this.historyPageData.size();
     }
 
+    public void setValues(List<HistoryPageData> historyData) {
+        this.historyPageData.clear();
+        this.historyPageData.addAll(historyData);
+        notifyDataSetChanged();
+    }
+
     public class SurveyResponseViewHolder extends RecyclerView.ViewHolder {
 
         private final WellbeingGraphView graphView;
