@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.MenuItem;
 
 import com.joshuarichardson.fivewaystowellbeing.ui.settings.SettingsActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.view.AddMissedDayActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support.WellbeingSupportActivity;
 
 public class MenuItemHelper {
@@ -17,6 +18,8 @@ public class MenuItemHelper {
                 return new Intent(activity, WellbeingSupportActivity.class);
             case R.id.menu_learn_more:
                 return new Intent(activity, LearnMoreAboutFiveWaysActivity.class);
+            case R.id.menu_missing_day:
+                return new Intent(activity, AddMissedDayActivity.class);
             default:
                 return null;
         }

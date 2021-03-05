@@ -101,7 +101,7 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             when(surveyActivityDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
 
             when(mockSurveyDao.getAllSurveyResponses()).thenReturn(data);
-            when(mockSurveyDao.getHistoryPageData()).thenReturn(Arrays.asList(responses));
+            when(mockSurveyDao.getNonEmptyHistoryPageData()).thenReturn(new MutableLiveData<>(Arrays.asList(responses)));
             when(mockSurveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong())).thenReturn(data);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(mockQuestionDao);
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(mockWellbeingDao);

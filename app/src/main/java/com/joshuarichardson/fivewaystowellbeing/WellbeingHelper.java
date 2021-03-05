@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
+import android.content.Context;
+import android.util.Log;
+
 public class WellbeingHelper {
     public static int getImage(WaysToWellbeing surveyResponseWayToWellbeing) {
         switch(surveyResponseWayToWellbeing) {
@@ -100,5 +103,27 @@ public class WellbeingHelper {
         }
 
         return wayToWellbeing;
+    }
+
+    public static int getColor(Context context, String wayToWellbeing) {
+        WaysToWellbeing wayToWellbeingType = getWayToWellbeingFromString(wayToWellbeing.replace('_', ' '));
+
+        Log.d("WtW", wayToWellbeingType.toString());
+
+        switch (wayToWellbeingType) {
+            case CONNECT:
+                return context.getColor(R.color.way_to_wellbeing_connect);
+            case BE_ACTIVE:
+                return context.getColor(R.color.way_to_wellbeing_be_active);
+            case KEEP_LEARNING:
+                return context.getColor(R.color.way_to_wellbeing_keep_learning);
+            case TAKE_NOTICE:
+                return context.getColor(R.color.way_to_wellbeing_take_notice);
+            case GIVE:
+                return context.getColor(R.color.way_to_wellbeing_give);
+            case UNASSIGNED:
+            default:
+                return context.getColor(R.color.colorSilver);
+        }
     }
 }

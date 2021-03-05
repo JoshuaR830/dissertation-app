@@ -1,20 +1,28 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.ChipGroup;
 import com.joshuarichardson.fivewaystowellbeing.LearnMoreAboutFiveWaysActivity;
+import com.joshuarichardson.fivewaystowellbeing.MenuItemHelper;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
+import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
@@ -27,17 +35,20 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
@@ -47,12 +58,15 @@ import static com.joshuarichardson.fivewaystowellbeing.DisplayHelper.getSmallest
 
 @AndroidEntryPoint
 public class IndividualSurveyActivity extends AppCompatActivity {
+    private static final int ACTIVITY_REQUEST_CODE = 1;
 
     @Inject
     public WellbeingDatabase db;
 
     @Inject
     public LogAnalyticEventHelper analyticsHelper;
+    private long surveyId;
+    private boolean isDeletable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +79,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             return;
         }
 
-        long surveyId = surveyIntent.getExtras().getLong("survey_id", -1);
+        this.surveyId = surveyIntent.getExtras().getLong("survey_id", -1);
         long startTime = surveyIntent.getExtras().getLong("start_time", -1);
 
         if(surveyId < 0) {
@@ -83,17 +97,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
         };
-
-        // Respond to changes in emotion for the survey
-        Observer<SurveyCountItem> emotionUpdateObserver = sentiment -> {
-            SentimentItem emotionValues = sentiment.getResourcesForAverage();
-            int color = getColor(emotionValues.getColorResource());
-            ImageView image = findViewById(R.id.surveys_completed_image);
-            image.setImageResource(emotionValues.getImageResource());
-            image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        };
-
-        this.db.surveyResponseActivityRecordDao().getEmotions(surveyId).observe(this, emotionUpdateObserver);
 
         ChipGroup group = findViewById(R.id.wellbeing_chip_group);
         LinearLayout helpContainer = findViewById(R.id.way_to_wellbeing_help_container);
@@ -133,23 +136,85 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
         // ToDo - at some point make this visible and allow it to be edited
         Button addActivityButton = findViewById(R.id.add_activity_button);
-        addActivityButton.setVisibility(View.GONE);
+        addActivityButton.setOnClickListener(v -> {
+            Intent activityIntent = new Intent(this, ViewPassTimesActivity.class);
+            startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
+        });
 
         if(startTime > -1) {
-            Date date = new Date(startTime);
-            Calendar morning = new GregorianCalendar();
-            Calendar night = new GregorianCalendar();
-            morning.setTime(date);
-            night.setTime(date);
+            long time = new Date(startTime).getTime();
 
-            night.set(Calendar.HOUR_OF_DAY, 23);
-            night.set(Calendar.MINUTE, 59);
-            night.set(Calendar.SECOND, 59);
-            night.set(Calendar.MILLISECOND, 999);
-            this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(morning.getTimeInMillis(), night.getTimeInMillis()).observe(this, wholeGraphUpdate);
+            long morning = TimeHelper.getStartOfDay(time);
+            long night = TimeHelper.getEndOfDay(time);
+            this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(morning, night).observe(this, wholeGraphUpdate);
         }
 
-        // ToDo: should probably turn this to live data at some point
+        // Respond to changes in emotion for the survey
+        Observer<SurveyCountItem> emotionUpdateObserver = sentiment -> {
+            SentimentItem emotionValues = sentiment.getResourcesForAverage();
+            int color = getColor(emotionValues.getColorResource());
+            ImageView image = findViewById(R.id.surveys_completed_image);
+            image.setImageResource(emotionValues.getImageResource());
+            image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        };
+
+        this.db.surveyResponseActivityRecordDao().getEmotions(surveyId).observe(this, emotionUpdateObserver);
+
+        // Update items will reload everything
+        updateSurveyItems();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != Activity.RESULT_OK) {
+            updateSurveyItems();
+            return;
+        }
+
+        if (data == null) {
+            return;
+        }
+
+        if (requestCode == ACTIVITY_REQUEST_CODE) {
+            if (data.getExtras() == null || !data.hasExtra("activity_id")) {
+                return;
+            }
+
+            long activityId = data.getExtras().getLong("activity_id", -1);
+            String activityType = data.getExtras().getString("activity_type", "");
+            String activityName = data.getExtras().getString("activity_name", "");
+            String wayToWellbeing = data.getExtras().getString("activity_way_to_wellbeing", "UNASSIGNED");
+
+            if (activityId == -1) {
+                return;
+            }
+
+            analyticsHelper.logWayToWellbeingActivity(this, WaysToWellbeing.valueOf(wayToWellbeing));
+
+            // Sequence number based on number of children in the linear layout
+            LinearLayout passtimeContainer = this.findViewById(R.id.survey_item_container);
+
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
+                long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
+                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
+                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
+
+                // If it has been edited, the page will reload everything
+                boolean isEdited = data.getExtras().getBoolean("is_edited", false);
+                if(isEdited) {
+                    updateSurveyItems();
+                } else {
+                    ActivityViewHelper.createPasstimeItem(this, passtimeContainer, updatedPasstime, this.db, getSupportFragmentManager(), analyticsHelper);
+                }
+            });
+        }
+    }
+
+    // Whenever something needs to be updated - do this
+    public void updateSurveyItems() {
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(surveyId);
 
@@ -189,6 +254,62 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                 date.setText(TimeFormatter.formatTimeAsDayMonthYearString(surveyResponse.getSurveyResponseTimestamp()));
             });
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.help_menu, menu);
+        menu.findItem(R.id.action_delete).setVisible(true);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.action_delete) {
+            toggleDeletable();
+            return true;
+        }
+
+        Intent intent = MenuItemHelper.handleMenuClick(this, item);
+
+        if(intent == null) {
+            return false;
+        }
+
+        // This only runs if an intent was set
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    // ToDo - copied from progress fragment - should merge
+    public void onResume() {
+        super.onResume();
+        if (this.isDeletable) {
+            toggleDeletable();
+        }
+    }
+
+    // ToDo - copied from progress fragment - should merge
+    public void toggleDeletable() {
+        LinearLayout layout = this.findViewById(R.id.survey_item_container);
+        int counter = layout.getChildCount();
+        this.isDeletable = !this.isDeletable;
+        for (int i = 0; i < counter; i++) {
+            View child = layout.getChildAt(i);
+            ImageButton expandButton = child.findViewById(R.id.expand_options_button);
+            MaterialButton deleteButton = child.findViewById(R.id.delete_options_button);
+            if (this.isDeletable) {
+                expandButton.setVisibility(View.GONE);
+                deleteButton.setVisibility(View.VISIBLE);
+            } else{
+                expandButton.setVisibility(View.VISIBLE);
+                deleteButton.setVisibility(View.GONE);
+            }
+        }
     }
 
     public void onLearnMoreButtonClicked(View v) {
