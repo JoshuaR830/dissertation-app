@@ -2,12 +2,12 @@ package com.joshuarichardson.fivewaystowellbeing.ui.activities;
 
 import android.content.Context;
 
-import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -49,7 +49,7 @@ public class TestActivityRecordingsGetSaved {
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
 
     @Rule
-    public ActivityScenarioRule<CreatePassTimeActivity> answerSurveyActivity = new ActivityScenarioRule<>(CreatePassTimeActivity.class);
+    public ActivityScenarioRule<CreateOrUpdatePassTimeActivity> answerSurveyActivity = new ActivityScenarioRule<>(CreateOrUpdatePassTimeActivity.class);
 
     @Before
     public void setUp() throws InterruptedException {

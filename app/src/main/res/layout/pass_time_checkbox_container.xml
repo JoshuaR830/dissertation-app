@@ -55,7 +55,7 @@
                 android:id="@+id/sentiment_worst_frame"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:background="@drawable/invisible_circle">
 
                 <ImageView
@@ -70,7 +70,7 @@
                 android:id="@+id/sentiment_bad_frame"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:background="@drawable/invisible_circle">
 
             <ImageView
@@ -85,7 +85,7 @@
                 android:id="@+id/sentiment_neutral_frame"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:background="@drawable/invisible_circle">
 
             <ImageView
@@ -100,7 +100,7 @@
                 android:id="@+id/sentiment_good_frame"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:background="@drawable/invisible_circle">
 
             <ImageView
@@ -115,7 +115,7 @@
                 android:id="@+id/sentiment_best_frame"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:background="@drawable/invisible_circle">
 
             <ImageView

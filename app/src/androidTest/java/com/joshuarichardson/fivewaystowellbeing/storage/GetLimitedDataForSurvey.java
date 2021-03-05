@@ -52,9 +52,9 @@ public class GetLimitedDataForSurvey {
         this.surveyResponseId2 = this.surveyResponseDao.insert(surveyResponse);
         this.surveyResponseId3 = this.surveyResponseDao.insert(surveyResponse);
 
-        ActivityRecord activityRecord1 = new ActivityRecord("Activity name 1", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE);
-        ActivityRecord activityRecord2 = new ActivityRecord("Activity name 2", 2000, 34625477, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE);
-        ActivityRecord activityRecord3 = new ActivityRecord("Activity name 3", 2000, 34625478, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE);
+        ActivityRecord activityRecord1 = new ActivityRecord("Activity name 1", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE, false);
+        ActivityRecord activityRecord2 = new ActivityRecord("Activity name 2", 2000, 34625477, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE, false);
+        ActivityRecord activityRecord3 = new ActivityRecord("Activity name 3", 2000, 34625478, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE, false);
 
         long activityRecordId2 = this.activityRecordDao.insert(activityRecord2);
         long activityRecordId3 = this.activityRecordDao.insert(activityRecord3);

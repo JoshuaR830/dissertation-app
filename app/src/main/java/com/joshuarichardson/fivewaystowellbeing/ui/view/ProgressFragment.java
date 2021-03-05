@@ -5,13 +5,17 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.ChipGroup;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
@@ -34,6 +38,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
 import java.util.Date;
 import java.util.List;
@@ -53,8 +58,8 @@ import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNE
 
 @AndroidEntryPoint
 public class ProgressFragment extends Fragment {
-
     private static final int ACTIVITY_REQUEST_CODE = 1;
+
     @Inject
     WellbeingDatabase db;
 
@@ -68,6 +73,7 @@ public class ProgressFragment extends Fragment {
     private LiveData<SurveyCountItem> emotionUpdateValues;
     private long surveyId;
     private Observer<SurveyCountItem> emotionUpdateObserver;
+    private boolean isDeletable;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -78,14 +84,57 @@ public class ProgressFragment extends Fragment {
             startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
         });
 
+        // Reference https://stackoverflow.com/a/47531110/13496270
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    // Whenever something needs to be updated - do this
+    public void updateSurveyItems() {
+        super.onResume();
+        SurveyResponseDao surveyDao = db.surveyResponseDao();
+        this.surveyResponsesObserver = surveys -> {
+            if (surveys.size() == 0) {
+                long startTime = TimeHelper.getStartOfDay(new Date().getTime());
+                // Adding the new survey should trigger the live data to update
+                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                    this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", ""));
+                });
+
+                return;
+            }
+
+            this.surveyId = surveys.get(0).getSurveyResponseId();
+            this.emotionUpdateValues = this.db.surveyResponseActivityRecordDao().getEmotions(this.surveyId);
+            this.emotionUpdateValues.observe(requireActivity(), this.emotionUpdateObserver);
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(this.surveyId);
+                if (rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
+                    // This converts a limited response to an entire RawSurveyData response
+                    List<LimitedRawSurveyData> limitedData = this.db.wellbeingRecordDao().getLimitedDataBySurvey(this.surveyId);
+                    rawSurveyDataList = LimitedRawSurveyData.convertToRawSurveyDataList(limitedData);
+                }
+
+                SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
+                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db, getParentFragmentManager(), analyticsHelper);
+            });
+        };
+
+        long time = new Date().getTime();
+        long thisMorning = TimeHelper.getStartOfDay(time);
+        long tonight = TimeHelper.getEndOfDay(time);
+
+        requireActivity().runOnUiThread(() -> {
+            // Epoch seconds give a 24 hour time frame - any new surveys added will get updated live (using now meant that future surveys today didn't get shown)
+            this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(thisMorning, tonight);
+            this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
+        });
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        SurveyResponseDao surveyDao = db.surveyResponseDao();
 
         long time = new Date().getTime();
         long thisMorning = TimeHelper.getStartOfDay(time);
@@ -113,32 +162,7 @@ public class ProgressFragment extends Fragment {
             image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         };
 
-        this.surveyResponsesObserver = surveys -> {
-            if (surveys.size() == 0) {
-                long startTime = TimeHelper.getStartOfDay(new Date().getTime());
-                // Adding the new survey should trigger the live data to update
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", ""));
-                });
-
-                return;
-            }
-
-            this.surveyId = surveys.get(0).getSurveyResponseId();
-            this.emotionUpdateValues = this.db.surveyResponseActivityRecordDao().getEmotions(this.surveyId);
-            this.emotionUpdateValues.observe(requireActivity(), this.emotionUpdateObserver);
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(this.surveyId);
-                if (rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
-                    // This converts a limited response to an entire RawSurveyData response
-                    List<LimitedRawSurveyData> limitedData = this.db.wellbeingRecordDao().getLimitedDataBySurvey(this.surveyId);
-                    rawSurveyDataList = LimitedRawSurveyData.convertToRawSurveyDataList(limitedData);
-                }
-
-                SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
-                ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db, getParentFragmentManager(), analyticsHelper);
-            });
-        };
+        updateSurveyItems();
 
         ChipGroup group = view.findViewById(R.id.wellbeing_chip_group);
         LinearLayout helpContainer = view.findViewById(R.id.way_to_wellbeing_help_container);
@@ -175,10 +199,6 @@ public class ProgressFragment extends Fragment {
                     graphView.resetColors();
             }
         });
-
-        // Epoch seconds give a 24 hour time frame - any new surveys added will get updated live (using now meant that future surveys today didn't get shown)
-        this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(thisMorning, tonight);
-        this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
     }
 
     @Override
@@ -186,6 +206,7 @@ public class ProgressFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != Activity.RESULT_OK) {
+            updateSurveyItems();
             return;
         }
 
@@ -212,15 +233,44 @@ public class ProgressFragment extends Fragment {
             // Sequence number based on number of children in the linear layout
             LinearLayout passtimeContainer = requireActivity().findViewById(R.id.survey_item_container);
 
-            int sequenceNumber = passtimeContainer.getChildCount() + 1;
-
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
                 Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
 
-                ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper);
+                // If it has been edited, the page will reload everything
+                boolean isEdited = data.getExtras().getBoolean("is_edited", false);
+                if(isEdited) {
+                    updateSurveyItems();
+                } else {
+                    ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper);
+                }
             });
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    // Reference: https://stackoverflow.com/a/47531110/13496270
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_delete).setVisible(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (this.surveyResponseItems != null) {
+            this.surveyResponseItems.removeObserver(this.surveyResponsesObserver);
+        }
+
+        if(this.emotionUpdateValues != null) {
+            this.emotionUpdateValues.removeObserver(this.emotionUpdateObserver);
         }
     }
 
@@ -230,7 +280,32 @@ public class ProgressFragment extends Fragment {
         if(this.emotionUpdateValues != null) {
             this.emotionUpdateValues.removeObserver(this.emotionUpdateObserver);
         }
-        this.surveyResponseItems.removeObserver(this.surveyResponsesObserver);
         this.graphUpdateValues.removeObserver(this.wholeGraphUpdate);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (this.isDeletable) {
+            toggleDeletable();
+        }
+    }
+
+    public void toggleDeletable() {
+        LinearLayout layout = requireActivity().findViewById(R.id.survey_item_container);
+        int counter = layout.getChildCount();
+        this.isDeletable = !this.isDeletable;
+        for (int i = 0; i < counter; i++) {
+            View child = layout.getChildAt(i);
+            ImageButton expandButton = child.findViewById(R.id.expand_options_button);
+            MaterialButton deleteButton = child.findViewById(R.id.delete_options_button);
+            if (this.isDeletable) {
+                expandButton.setVisibility(View.GONE);
+                deleteButton.setVisibility(View.VISIBLE);
+            } else{
+                expandButton.setVisibility(View.VISIBLE);
+                deleteButton.setVisibility(View.GONE);
+            }
+        }
     }
 }

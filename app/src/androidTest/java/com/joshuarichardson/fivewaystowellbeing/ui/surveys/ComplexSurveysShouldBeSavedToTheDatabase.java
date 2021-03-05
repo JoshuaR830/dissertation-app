@@ -119,7 +119,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
             ComplexSurveysShouldBeSavedToTheDatabase.this.surveyDao = mock(SurveyResponseDao.class);
             when(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyDao.insert(any(SurveyResponse.class))).thenReturn(3L);
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
-            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED));
+            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false));
             when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
             when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyDao);

@@ -49,7 +49,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withInputType;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.DROP_DOWN_LIST;
 import static com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes.TEXT;
@@ -108,9 +107,9 @@ public class ComplexSurveyViewBuiltCorrectly {
             MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 
             ArrayList<ActivityRecord> array = new ArrayList<>();
-            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
-            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
-            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
+            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false));
+            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false));
+            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false));
 
             data.setValue(array);
 

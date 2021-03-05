@@ -1,8 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.activities;
 
-import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,7 +34,7 @@ public class PassTimeErrorValidationTests {
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
 
     @Rule
-    public ActivityScenarioRule<CreatePassTimeActivity> createPasstimeActivity = new ActivityScenarioRule<>(CreatePassTimeActivity.class);
+    public ActivityScenarioRule<CreateOrUpdatePassTimeActivity> createPasstimeActivity = new ActivityScenarioRule<>(CreateOrUpdatePassTimeActivity.class);
 
     @Before
     public void setUp() throws InterruptedException {

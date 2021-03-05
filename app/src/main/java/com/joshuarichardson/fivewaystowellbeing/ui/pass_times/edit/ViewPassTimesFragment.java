@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.ui.view;
+package com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,14 +6,19 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.joshuarichardson.fivewaystowellbeing.CreatePassTimeActivity;
-import com.joshuarichardson.fivewaystowellbeing.PassTimesAdapter;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
@@ -44,12 +49,39 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
     private Observer<List<ActivityRecord>> passTimeObserver;
     private PassTimesAdapter passtimeAdapter;
     private View root;
+    private boolean isEditable;
+    private boolean isEdited;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         this.root = inflater.inflate(R.layout.fragment_view_pass_times, container, false);
+
+        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            List<ActivityRecord> oldActivities = db.activityRecordDao().getActivitiesInTimeRange(0, 1613509560000L);
+
+            // Only show the button if there are old items
+            boolean shouldShowSnackbar = false;
+            for(ActivityRecord activity : oldActivities) {
+                if(activity.getActivityWayToWellbeing().equals(WaysToWellbeing.UNASSIGNED.toString())) {
+                    shouldShowSnackbar = true;
+                    break;
+                }
+            }
+
+            if(shouldShowSnackbar) {
+                requireActivity().runOnUiThread(() -> {
+                    // Reference https://developer.android.com/training/snackbar/showing#java
+                    Snackbar snackbar = Snackbar.make(root, getText(R.string.old_activity_warning), Snackbar.LENGTH_LONG)
+                        .setAnchorView(root.findViewById(R.id.create_activity_button))
+                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                        .setAction(R.string.button_edit, v -> {
+                            makeEditable();
+                        });
+                    snackbar.show();
+                });
+            }
+        });
 
         ActivityRecordDao passTimeDao = this.db.activityRecordDao();
 
@@ -87,13 +119,22 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
         button.setOnClickListener(v -> {
             onCreateFromSearchButtonClicked(v);
         });
+
+        // Reference https://stackoverflow.com/a/47531110/13496270
+        setHasOptionsMenu(true);
+
         return this.root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     public void onCreateFromSearchButtonClicked(View v) {
         EditText searchText = this.root.findViewById(R.id.passtime_search_box);
         String searchQuery = searchText.getText().toString();
-        Intent createActivityIntent = new Intent(getContext(), CreatePassTimeActivity.class);
+        Intent createActivityIntent = new Intent(getContext(), CreateOrUpdatePassTimeActivity.class);
 
         Bundle activityBundle = new Bundle();
         activityBundle.putString("new_activity_name", searchQuery);
@@ -125,9 +166,64 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
             passtimeBundle.putString("activity_type", passtime.getActivityType());
             passtimeBundle.putString("activity_name", passtime.getActivityName());
             passtimeBundle.putString("activity_way_to_wellbeing", passtime.getActivityWayToWellbeing());
+            passtimeBundle.putBoolean("is_edited", this.isEdited);
             passtimeResult.putExtras(passtimeBundle);
             getActivity().setResult(Activity.RESULT_OK, passtimeResult);
             getActivity().finish();
         }
+    }
+
+    @Override
+    public void onEditClick(View view, ActivityRecord passtime) {
+
+        this.isEdited = true;
+        // Launch activity to update a passtime
+        Intent editActivityIntent = new Intent(getActivity(), CreateOrUpdatePassTimeActivity.class);
+        Bundle editBundle = new Bundle();
+        editBundle.putLong("activity_id", passtime.getActivityRecordId());
+        editBundle.putString("activity_name", passtime.getActivityName());
+        editBundle.putString("activity_type", passtime.getActivityType());
+        editBundle.putString("activity_way_to_wellbeing", passtime.getActivityWayToWellbeing());
+        editActivityIntent.putExtras(editBundle);
+        startActivity(editActivityIntent);
+    }
+
+    @Override
+    public void onDeleteClick(View view, ActivityRecord passtime) {
+        new MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(R.string.title_delete_activity)
+            .setMessage(R.string.body_delete_activity)
+            .setIcon(R.drawable.icon_close)
+            .setPositiveButton(R.string.button_delete, (dialog, which) -> {
+                // Set the pass time to hidden
+                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                    this.db.activityRecordDao().flagHidden(passtime.getActivityRecordId(), true);
+                });
+            })
+            .setNegativeButton(R.string.button_cancel, (dialog, which) -> {})
+            .create()
+            .show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    // Reference: https://stackoverflow.com/a/47531110/13496270
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_edit).setVisible(true);
+    }
+
+    public void makeEditable() {
+        if (this.isEditable) {
+            this.isEditable = false;
+        } else {
+            this.isEditable = true;
+        }
+        // This updates the recycler view and filters it by the search term for better navigation
+        this.passtimeAdapter.editableList(this.isEditable);
     }
 }

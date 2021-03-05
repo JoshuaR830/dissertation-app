@@ -69,7 +69,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <View
-                    android:id="@+id/view"
+                    android:id="@+id/button_divider"
                     style="@style/Divider"
                     android:layout_marginBottom="0dp"
                     android:layout_marginStart="16dp"

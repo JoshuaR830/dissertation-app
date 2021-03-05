@@ -20,7 +20,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {ActivityRecord.class, SurveyResponse.class, SurveyResponseActivityRecord.class, SurveyResponseElement.class, QuestionsToAsk.class, SurveyQuestionSet.class, WellbeingQuestion.class, WellbeingRecord.class}, exportSchema = false, version = 4)
+@Database(entities = {ActivityRecord.class, SurveyResponse.class, SurveyResponseActivityRecord.class, SurveyResponseElement.class, QuestionsToAsk.class, SurveyQuestionSet.class, WellbeingQuestion.class, WellbeingRecord.class}, exportSchema = false, version = 5)
 public abstract class WellbeingDatabase extends RoomDatabase {
 
     public abstract ActivityRecordDao activityRecordDao();

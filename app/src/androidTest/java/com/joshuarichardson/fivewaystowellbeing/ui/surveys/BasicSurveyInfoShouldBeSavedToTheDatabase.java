@@ -97,7 +97,7 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
             when(mockWellbeingDatabase.surveyQuestionSetDao()).thenReturn(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyQuestionsDao);
 
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
-            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED));
+            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false));
             when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
 
             BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyDao = mock(SurveyResponseDao.class);

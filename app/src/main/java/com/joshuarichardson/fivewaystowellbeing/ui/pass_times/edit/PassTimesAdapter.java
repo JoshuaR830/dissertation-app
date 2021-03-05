@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing;
+package com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,11 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+import com.joshuarichardson.fivewaystowellbeing.ActivityTypeImageHelper;
+import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
 import java.util.ArrayList;
@@ -25,6 +30,7 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
     LayoutInflater inflater;
     private PasstimeClickListener clickListener;
     private ItemCountUpdateListener itemUpdateCallback;
+    private boolean isEditable;
 
     public PassTimesAdapter (Context context, List<ActivityRecord> passTimeItems, PasstimeClickListener clickListener, ItemCountUpdateListener itemUpdateCallback) {
         this.inflater = LayoutInflater.from(context);
@@ -103,11 +109,20 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
         getFilter().filter(searchTerm);
     }
 
+    public void editableList(boolean isEditable) {
+        this.isEditable = isEditable;
+        notifyDataSetChanged();
+    }
+
     public class PassTimeViewHolder extends RecyclerView.ViewHolder {
+        private MaterialButton deleteButton;
+        private MaterialButton editButton;
         private TextView nameTextView;
         private TextView wayToWellbeingTextView;
         private TextView typeTextView;
         private ImageView image;
+        private View editContainer;
+        private TextView errorMessage;
 
         public PassTimeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -116,20 +131,43 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             this.wayToWellbeingTextView = itemView.findViewById(R.id.wayToWellbeingTextView);
             this.typeTextView = itemView.findViewById(R.id.typeTextView);
             this.image = itemView.findViewById(R.id.list_item_image);
+            this.editContainer = itemView.findViewById(R.id.update_pass_time);
+            this.editButton = itemView.findViewById(R.id.edit_button);
+            this.deleteButton = itemView.findViewById(R.id.delete_button);
+            this.errorMessage = itemView.findViewById(R.id.error_message);
         }
 
         public void onBind(ActivityRecord passtime, PasstimeClickListener clickListener) {
             this.nameTextView.setText(passtime.getActivityName());
             this.typeTextView.setText(passtime.getActivityType());
 
+            this.errorMessage.setVisibility(View.GONE);
             if(passtime.getActivityWayToWellbeing().equals("UNASSIGNED")) {
                 this.wayToWellbeingTextView.setVisibility(View.GONE);
+                if (passtime.getActivityTimestamp() < 1613509560000L) {
+                    this.errorMessage.setVisibility(View.VISIBLE);
+                }
             } else {
                 this.wayToWellbeingTextView.setText(WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.valueOf(passtime.getActivityWayToWellbeing())));
                 this.wayToWellbeingTextView.setVisibility(View.VISIBLE);
             }
 
             this.image.setImageResource(ActivityTypeImageHelper.getActivityImage(passtime.getActivityType()));
+
+            // Toggle between editable and non-editable
+            if(PassTimesAdapter.this.isEditable) {
+                this.editContainer.setVisibility(View.VISIBLE);
+            } else {
+                this.editContainer.setVisibility(View.GONE);
+            }
+
+            this.editButton.setOnClickListener(v -> {
+                clickListener.onEditClick(v, passtime);
+            });
+
+            this.deleteButton.setOnClickListener(v -> {
+                clickListener.onDeleteClick(v, passtime);
+            });
 
             // Reference https://medium.com/android-gate/recyclerview-item-click-listener-the-right-way-daecc838fbb9
             itemView.setOnClickListener((v) -> {
@@ -140,6 +178,8 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
 
     public interface PasstimeClickListener {
         void onItemClick(View view, ActivityRecord passtime);
+        void onEditClick(View view, ActivityRecord passtime);
+        void onDeleteClick(View view, ActivityRecord passtime);
     }
 
     public interface ItemCountUpdateListener {

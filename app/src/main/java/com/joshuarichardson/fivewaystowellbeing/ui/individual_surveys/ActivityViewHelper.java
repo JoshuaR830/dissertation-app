@@ -46,6 +46,8 @@ public class ActivityViewHelper {
         }
 
         LinearLayout layout = activity.findViewById(R.id.survey_item_container);
+        activity.runOnUiThread(layout::removeAllViews);
+
         for(long key : surveyData.getPasstimeMap().keySet()) {
             Passtime passtime = surveyData.getPasstimeMap().get(key);
             if(passtime == null) {
@@ -81,6 +83,7 @@ public class ActivityViewHelper {
 
         View topLevelDetails = view.findViewById(R.id.activity_top_level_details);
         ImageButton expandButton = view.findViewById(R.id.expand_options_button);
+        MaterialButton deleteButton = view.findViewById(R.id.delete_options_button);
         View checkboxView = view.findViewById(R.id.pass_time_checkbox_container);
 
         view.setTag(passtime.getWayToWellbeing());
@@ -267,6 +270,9 @@ public class ActivityViewHelper {
             // Hide the checkboxes if they have been hidden before
             if(passtime.getIsDone()) {
                 checkboxView.setVisibility(View.GONE);
+                expandButton.setImageResource(R.drawable.button_expand);
+            } else {
+                expandButton.setImageResource(R.drawable.button_collapse);
             }
 
             if (passtime.getQuestions().size() == 0) {
@@ -274,6 +280,24 @@ public class ActivityViewHelper {
             } else {
                 topLevelDetails.setOnClickListener(expandClickListener);
             }
+
+            deleteButton.setVisibility(View.GONE);
+            deleteButton.setOnClickListener((v) -> {
+                new MaterialAlertDialogBuilder(activity)
+                    .setTitle(R.string.title_delete_activity)
+                    .setMessage(R.string.body_delete_from_survey)
+                    .setIcon(R.drawable.icon_close)
+                    .setPositiveButton(R.string.button_delete, (dialog, which) -> {
+                        // Delete the pass time from the survey
+                        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                            db.surveyResponseActivityRecordDao().deleteById(passtime.getActivitySurveyId());
+                        });
+                        layout.removeView(view);
+                    })
+                    .setNegativeButton(R.string.button_cancel, (dialog, which) -> {})
+                    .create()
+                    .show();
+            });
 
             // Display details
             noteTextInput.setText(passtime.getNote());

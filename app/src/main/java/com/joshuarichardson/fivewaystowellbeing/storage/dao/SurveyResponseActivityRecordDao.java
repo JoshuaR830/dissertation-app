@@ -54,5 +54,9 @@ public interface SurveyResponseActivityRecordDao {
     @Query("SELECT COUNT(*) AS emotionCount, SUM(emotion) AS totalValue FROM survey_activity WHERE survey_response_id = :surveyId AND emotion != 0")
     LiveData<SurveyCountItem> getEmotions(long surveyId);
 
-    // ToDo Need a delete method
+    @Query("SELECT COUNT(*) AS activityCount FROM survey_activity WHERE survey_response_id = :surveyId")
+    int getItemCount(long surveyId);
+
+    @Query("DELETE FROM survey_activity WHERE survey_activity_id = :activitySurveyId")
+    void deleteById(long activitySurveyId);
 }

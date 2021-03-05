@@ -60,13 +60,13 @@ public class GetDataBySurveyTests {
         this.surveyResponseId2 = this.surveyResponseDao.insert(surveyResponse);
         this.surveyResponseId3 = this.surveyResponseDao.insert(surveyResponse);
 
-        ActivityRecord activityRecord1 = new ActivityRecord("Activity name 1", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE);
+        ActivityRecord activityRecord1 = new ActivityRecord("Activity name 1", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE, false);
         long activityRecordId1 = this.activityRecordDao.insert(activityRecord1);
 
-        ActivityRecord activityRecord2 = new ActivityRecord("Activity name 2", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE);
+        ActivityRecord activityRecord2 = new ActivityRecord("Activity name 2", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE, false);
         long activityRecordId2 = this.activityRecordDao.insert(activityRecord2);
 
-        ActivityRecord activityRecord3 = new ActivityRecord("Activity name 3", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE);
+        ActivityRecord activityRecord3 = new ActivityRecord("Activity name 3", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE, false);
         long activityRecordId3 = this.activityRecordDao.insert(activityRecord3);
 
         SurveyResponseActivityRecord surveyResponseActivityRecord1_1 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId1, 0, "Activity note 1_1", 123456, 234567, 1, false);

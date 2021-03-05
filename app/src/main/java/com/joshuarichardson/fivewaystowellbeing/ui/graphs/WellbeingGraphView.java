@@ -50,7 +50,12 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
     private void setWellbeingGraphView(Context context, int canvasSize, WellbeingGraphValueHelper wayToWellbeingValues, boolean shouldShowNumbers) {
         this.shouldShowNumbers = shouldShowNumbers;
         this.canvasSize = canvasSize;
-        this.graphSize = this.canvasSize - 200;
+
+        if(shouldShowNumbers) {
+            this.graphSize = this.canvasSize - 200;
+        } else {
+            this.graphSize = this.canvasSize;
+        }
 
         // Instantiate each segment for the graph
         this.give = new WaysToWellbeingGraphValues(wayToWellbeingValues.getGiveValue(), getResources().getColor(R.color.way_to_wellbeing_give, context.getTheme()), 5, 0);

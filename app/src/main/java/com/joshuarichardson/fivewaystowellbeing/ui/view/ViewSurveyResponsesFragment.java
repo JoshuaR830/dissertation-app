@@ -9,6 +9,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesFragment;
 
 import javax.inject.Inject;
 
@@ -47,5 +48,24 @@ public class ViewSurveyResponsesFragment extends Fragment {
                 tab.setText(R.string.navigation_pass_times);
             }
         })).attach();
+    }
+
+    public void instantiateEditable() {
+        TabLayout tabLayout = requireActivity().findViewById(R.id.history_tabs);
+
+        if (tabLayout.getSelectedTabPosition() == 1) {
+            // Reference https://stackoverflow.com/a/61178226/13496270
+            Fragment activeFragment = getChildFragmentManager().findFragmentByTag("f1");
+            if (activeFragment == null) {
+                return;
+            }
+
+            if (activeFragment.getClass() != ViewPassTimesFragment.class) {
+                return;
+            }
+
+            ViewPassTimesFragment passtimeFragment = (ViewPassTimesFragment) activeFragment;
+            passtimeFragment.makeEditable();
+        }
     }
 }

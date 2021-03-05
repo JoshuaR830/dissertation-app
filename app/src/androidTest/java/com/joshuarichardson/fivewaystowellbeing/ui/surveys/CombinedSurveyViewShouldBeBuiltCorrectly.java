@@ -101,9 +101,9 @@ public class CombinedSurveyViewShouldBeBuiltCorrectly {
             MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 
             ArrayList<ActivityRecord> array = new ArrayList<>();
-            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
-            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
-            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED));
+            array.add(new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false));
+            array.add(new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false));
+            array.add(new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false));
 
             data.setValue(array);
 

@@ -91,14 +91,14 @@ public class BasicSurveyViewBuiltCorrectly {
 
             // Set up the activities for the list
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
-            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED));
+            activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false));
             when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
 
             MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 
-            ActivityRecord activity1 = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
-            ActivityRecord activity2 = new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
-            ActivityRecord activity3 = new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED);
+            ActivityRecord activity1 = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false);
+            ActivityRecord activity2 = new ActivityRecord("Jumping", 1201, 1607960241, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false);
+            ActivityRecord activity3 = new ActivityRecord("Fishing", 1202, 1607960242, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false);
 
             activity1.setActivityRecordId(0);
             activity2.setActivityRecordId(1);

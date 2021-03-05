@@ -57,7 +57,7 @@ public class WellbeingRecordTests {
         ActivityRecordDao activityRecordDao = wellbeingDb.activityRecordDao();
 
         long surveyId = surveyResponseDao.insert(new SurveyResponse(1607960245, "Be active", "title", "description"));
-        long activityId = activityRecordDao.insert(new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED"));
+        long activityId = activityRecordDao.insert(new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED", false));
 
         this.surveyActivityId1 = surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 1, "note 1",  1612427791, 1612427795, 1, false));
         this.surveyActivityId2 = surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyId, activityId, 2, "note 2",  1712427792, 1712427796, 1, false));

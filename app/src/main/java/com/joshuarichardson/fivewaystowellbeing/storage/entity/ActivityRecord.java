@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey;
 
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_DURATION;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_IS_HIDDEN;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_NAME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_TABLE_NAME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_TIMESTAMP;
@@ -41,24 +42,33 @@ public class ActivityRecord {
     @ColumnInfo(name = ACTIVITY_RECORD_WAY_TO_WELLBEING)
     private String activityWayToWellbeing;
 
-    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, String activityType, String activityWayToWellbeing) {
+    @ColumnInfo(name = ACTIVITY_RECORD_IS_HIDDEN)
+    private boolean isHidden;
+
+    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, String activityType, String activityWayToWellbeing, boolean isHidden) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
         this.setActivityType(activityType);
         this.setWayToWellbeing(activityWayToWellbeing);
+        this.setIsHidden(isHidden);
+    }
+
+    private void setIsHidden(boolean isHidden) {
+        this.isHidden = isHidden;
     }
 
     private void setWayToWellbeing(String wayToWellbeing) {
         this.activityWayToWellbeing = wayToWellbeing;
     }
 
-    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, ActivityType activityType, WaysToWellbeing activityWayToWellbeing) {
+    public ActivityRecord(String activityName, long activityDuration, long activityTimestamp, ActivityType activityType, WaysToWellbeing activityWayToWellbeing, boolean isHidden) {
         this.setActivityName(activityName);
         this.setActivityDuration(activityDuration);
         this.setActivityTimestamp(activityTimestamp);
         this.setActivityType(activityType.toString());
         this.setWayToWellbeing(activityWayToWellbeing.toString());
+        this.setIsHidden(isHidden);
     }
 
     public void setActivityRecordId(@NonNull long recordId) {
@@ -104,5 +114,9 @@ public class ActivityRecord {
 
     public String getActivityWayToWellbeing() {
         return this.activityWayToWellbeing;
+    }
+
+    public boolean getIsHidden() {
+        return this.isHidden;
     }
 }
