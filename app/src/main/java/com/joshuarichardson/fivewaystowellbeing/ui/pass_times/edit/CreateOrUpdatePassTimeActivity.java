@@ -159,7 +159,9 @@ public class CreateOrUpdatePassTimeActivity extends AppCompatActivity {
         TextInputLayout nameContainer = findViewById(R.id.pass_time_name_input_container);
         TextInputLayout typeContainer = findViewById(R.id.pass_time_type_input_container);
         TextInputLayout wellbeingContainer = findViewById(R.id.way_to_wellbeing_input_container);
+
         boolean hasError = false;
+
         if(name.length() == 0) {
             nameContainer.setError(getString(R.string.error_no_name_entered));
             hasError = true;

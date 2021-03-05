@@ -153,7 +153,6 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
             }
 
             this.image.setImageResource(ActivityTypeImageHelper.getActivityImage(passtime.getActivityType()));
-//            this.image.setVisibility(View.VISIBLE);
 
             // Toggle between editable and non-editable
             if(PassTimesAdapter.this.isEditable) {

@@ -79,7 +79,7 @@
     <string name="body_delete_note">Your note will be permanently deleted</string>
     <string name="title_delete_activity">Delete activity</string>
     <string name="body_delete_activity">Your activity will get removed from the activity list but will remain in previous wellbeing logs</string>
-    <string name="body_delete_from_survey">Your activity will get removed from the activity list but will remain in previous wellbeing logs</string>
+    <string name="body_delete_from_survey">Your activity will get removed from the survey but will still be available in the activity list</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
     <string name="button_done">Done</string>

@@ -2,9 +2,9 @@ package com.joshuarichardson.fivewaystowellbeing.ui.activities;
 
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,7 +42,7 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
 
     @Rule
-    public ActivityScenarioRule<CreatePassTimeActivity> answerSurveyActivity = new ActivityScenarioRule<>(CreatePassTimeActivity.class);
+    public ActivityScenarioRule<CreateOrUpdatePassTimeActivity> answerSurveyActivity = new ActivityScenarioRule<>(CreateOrUpdatePassTimeActivity.class);
 
     @Before
     public void setUp() throws InterruptedException {

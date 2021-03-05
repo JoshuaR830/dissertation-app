@@ -48,15 +48,13 @@ public class ActivityViewHelper {
         LinearLayout layout = activity.findViewById(R.id.survey_item_container);
         activity.runOnUiThread(layout::removeAllViews);
 
-        int counter = 0;
         for(long key : surveyData.getPasstimeMap().keySet()) {
-            counter ++;
             Passtime passtime = surveyData.getPasstimeMap().get(key);
             if(passtime == null) {
                 continue;
             }
 
-            createPasstimeItem(activity, layout, passtime, db, fragmentManager, analyticsHelper, counter);
+            createPasstimeItem(activity, layout, passtime, db, fragmentManager, analyticsHelper);
         }
 
         // This only needs to run once, after everything else
@@ -76,7 +74,7 @@ public class ActivityViewHelper {
         });
     }
 
-    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper, int sequenceNumber) {
+    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper) {
         // Get the passtime template
         View view = LayoutInflater.from(activity).inflate(R.layout.pass_time_item, layout, false);
         TextView title = view.findViewById(R.id.activity_text);

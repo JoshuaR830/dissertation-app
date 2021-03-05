@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -94,7 +93,6 @@ public class ProgressFragment extends Fragment {
     // Whenever something needs to be updated - do this
     public void updateSurveyItems() {
         super.onResume();
-        Log.d("Fragment", "Resumed");
         SurveyResponseDao surveyDao = db.surveyResponseDao();
         this.surveyResponsesObserver = surveys -> {
             if (surveys.size() == 0) {
@@ -132,14 +130,11 @@ public class ProgressFragment extends Fragment {
             this.surveyResponseItems = surveyDao.getSurveyResponsesByTimestampRange(thisMorning, tonight);
             this.surveyResponseItems.observe(requireActivity(), this.surveyResponsesObserver);
         });
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Log.d("Fragment", "Created");
 
         long time = new Date().getTime();
         long thisMorning = TimeHelper.getStartOfDay(time);
@@ -238,12 +233,8 @@ public class ProgressFragment extends Fragment {
             // Sequence number based on number of children in the linear layout
             LinearLayout passtimeContainer = requireActivity().findViewById(R.id.survey_item_container);
 
-//            int sequenceNumber = passtimeContainer.getChildCount() + 1;
-
-
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
-                Log.d("Sequence number", String.valueOf(sequenceNumber));
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
                 Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
@@ -253,7 +244,7 @@ public class ProgressFragment extends Fragment {
                 if(isEdited) {
                     updateSurveyItems();
                 } else {
-                    ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper, sequenceNumber);
+                    ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper);
                 }
             });
         }
@@ -274,16 +265,13 @@ public class ProgressFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("Fragment", "Paused");
         if (this.surveyResponseItems != null) {
             this.surveyResponseItems.removeObserver(this.surveyResponsesObserver);
         }
 
-
         if(this.emotionUpdateValues != null) {
             this.emotionUpdateValues.removeObserver(this.emotionUpdateObserver);
         }
-
     }
 
     @Override

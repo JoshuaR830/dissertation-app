@@ -119,8 +119,4 @@ public class ActivityRecord {
     public boolean getIsHidden() {
         return this.isHidden;
     }
-
-    public void setIsEditable() {
-
-    }
 }

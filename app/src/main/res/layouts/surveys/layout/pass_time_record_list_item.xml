@@ -40,24 +40,7 @@
                     android:layout_marginTop="0dp"
                     android:padding="16dp"
                     tools:srcCompat="@tools:sample/avatars" />
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/edit_button"-->
-<!--                    android:layout_width="80dp"-->
-<!--                    android:layout_height="80dp"-->
-<!--                    android:visibility="gone"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:src="@drawable/icon_edit"/>-->
             </FrameLayout>
-
-<!--            <com.google.android.material.button.MaterialButton-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:icon="@drawable/icon_edit"-->
-<!--                android:text="@string/button_edit"/>-->
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -100,7 +83,7 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/view2"
+                android:id="@+id/spacer"
                 android:layout_width="0dp"
                 android:layout_height="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,10 +98,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2">
+                app:layout_constraintTop_toBottomOf="@+id/spacer">
 
                 <View
-                    android:id="@+id/view"
+                    android:id="@+id/button_divider"
                     style="@style/Divider"
                     android:layout_marginTop="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -134,7 +117,7 @@
                     app:icon="@drawable/icon_edit"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view" />
+                    app:layout_constraintTop_toBottomOf="@+id/button_divider" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/delete_button"
@@ -145,11 +128,9 @@
                     android:text="@string/button_delete"
                     app:icon="@drawable/icon_delete"
                     app:layout_constraintStart_toEndOf="@+id/edit_button"
-                    app:layout_constraintTop_toBottomOf="@+id/view" />
+                    app:layout_constraintTop_toBottomOf="@+id/button_divider" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

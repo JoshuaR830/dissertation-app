@@ -55,8 +55,6 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         this.root = inflater.inflate(R.layout.fragment_view_pass_times, container, false);
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
@@ -73,6 +71,7 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
 
             if(shouldShowSnackbar) {
                 requireActivity().runOnUiThread(() -> {
+                    // Reference https://developer.android.com/training/snackbar/showing#java
                     Snackbar snackbar = Snackbar.make(root, getText(R.string.old_activity_warning), Snackbar.LENGTH_LONG)
                         .setAnchorView(root.findViewById(R.id.create_activity_button))
                         .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
@@ -130,8 +129,6 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        View view2 = requireActivity().findViewById(R.id.snackbar_layout);
-
     }
 
     public void onCreateFromSearchButtonClicked(View v) {
@@ -221,7 +218,6 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
     }
 
     public void makeEditable() {
-
         if (this.isEditable) {
             this.isEditable = false;
         } else {

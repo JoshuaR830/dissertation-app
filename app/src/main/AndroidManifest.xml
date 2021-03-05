@@ -21,10 +21,6 @@
         <activity android:name=".LearnMoreAboutFiveWaysActivity" android:parentActivityName=".MainActivity" android:label="@string/learn_more_title"/>
         <activity android:name=".ui.individual_surveys.IndividualSurveyActivity" android:parentActivityName=".MainActivity" android:label="@string/launch_view_surveys" />
         <activity
-            android:name=".ui.pass_times.edit.CreatePassTimeActivity"
-            android:label="@string/launch_create_activity"
-            android:parentActivityName=".MainActivity"/>
-        <activity
             android:name=".ui.pass_times.edit.CreateOrUpdatePassTimeActivity"
             android:label="@string/launch_create_activity"
             android:parentActivityName=".MainActivity"/>
