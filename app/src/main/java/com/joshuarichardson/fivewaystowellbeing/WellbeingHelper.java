@@ -41,6 +41,7 @@ public class WellbeingHelper {
                 wayToWellbeing = WaysToWellbeing.GIVE;
                 break;
             case RELAXATION:
+            case JOURNALING:
                 wayToWellbeing = WaysToWellbeing.TAKE_NOTICE;
                 break;
             case APP:

@@ -58,11 +58,11 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         }
 
         // Instantiate each segment for the graph
-        this.give = new WaysToWellbeingGraphValues(wayToWellbeingValues.getGiveValue(), getResources().getColor(R.color.way_to_wellbeing_give, context.getTheme()), 5, 0);
-        this.connect = new WaysToWellbeingGraphValues(wayToWellbeingValues.getConnectValue(), getResources().getColor(R.color.way_to_wellbeing_connect, context.getTheme()), 5, 1);
-        this.beActive = new WaysToWellbeingGraphValues(wayToWellbeingValues.getBeActiveValue(), getResources().getColor(R.color.way_to_wellbeing_be_active, context.getTheme()), 5, 2);
-        this.keepLearning = new WaysToWellbeingGraphValues(wayToWellbeingValues.getKeepLearningValue(), getResources().getColor(R.color.way_to_wellbeing_keep_learning, context.getTheme()), 5, 3);
-        this.takeNotice = new WaysToWellbeingGraphValues(wayToWellbeingValues.getTakeNoticeValue(), getResources().getColor(R.color.way_to_wellbeing_take_notice, context.getTheme()), 5, 4);
+        this.connect = new WaysToWellbeingGraphValues(wayToWellbeingValues.getConnectValue(), getResources().getColor(R.color.way_to_wellbeing_connect, context.getTheme()), 5, 0);
+        this.beActive = new WaysToWellbeingGraphValues(wayToWellbeingValues.getBeActiveValue(), getResources().getColor(R.color.way_to_wellbeing_be_active, context.getTheme()), 5, 1);
+        this.keepLearning = new WaysToWellbeingGraphValues(wayToWellbeingValues.getKeepLearningValue(), getResources().getColor(R.color.way_to_wellbeing_keep_learning, context.getTheme()), 5, 2);
+        this.takeNotice = new WaysToWellbeingGraphValues(wayToWellbeingValues.getTakeNoticeValue(), getResources().getColor(R.color.way_to_wellbeing_take_notice, context.getTheme()), 5, 3);
+        this.give = new WaysToWellbeingGraphValues(wayToWellbeingValues.getGiveValue(), getResources().getColor(R.color.way_to_wellbeing_give, context.getTheme()), 5, 4);
 
         // Set the correct size for the layout
         this.setLayoutParams(new FrameLayout.LayoutParams(canvasSize, canvasSize, Gravity.CENTER));

@@ -17,6 +17,7 @@ public class WellbeingRecordInsertionHelper {
             int counter = 0;
             long timeNow = new Date().getTime();
             for(WellbeingQuestion question : questions) {
+                // ToDo - change time now to be the time of the survey if after the day - not actually now
                 db.wellbeingRecordDao().insert(new WellbeingRecord(false, timeNow, activitySurveyId, counter, question.getId()));
                 counter ++;
             }
@@ -24,12 +25,13 @@ public class WellbeingRecordInsertionHelper {
     }
 
     // Must be called from within a write executor
-    public static Passtime addPasstimeQuestions(WellbeingDatabase db, long activitySurveyId, String activityType, Passtime passtime) {
+    public static Passtime addPasstimeQuestions(WellbeingDatabase db, long activitySurveyId, String activityType, Passtime passtime, long time) {
         List<WellbeingQuestion> questions = db.wellbeingQuestionDao().getQuestionsByActivityType(activityType.toUpperCase());
         int counter = 0;
-        long timeNow = new Date().getTime();
+//        long timeNow = new Date().getTime();
         for(WellbeingQuestion question : questions) {
-            long wellbeingRecordId = db.wellbeingRecordDao().insert(new WellbeingRecord(false, timeNow, activitySurveyId, counter, question.getId()));
+            // ToDo - change time now to be the time of the survey if after the day - not actually now
+            long wellbeingRecordId = db.wellbeingRecordDao().insert(new WellbeingRecord(false, time, activitySurveyId, counter, question.getId()));
             passtime.addQuestionToList(new Question(question.getQuestion(), wellbeingRecordId, false));
             counter ++;
         }

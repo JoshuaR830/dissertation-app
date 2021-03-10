@@ -16,14 +16,14 @@
     <item
         android:id="@+id/action_edit"
         android:title="@string/button_change"
-        android:icon="@drawable/action_edit"
+        android:icon="@drawable/icon_edit"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_delete"
         android:title="@string/button_delete"
-        android:icon="@drawable/icon_delete"
+        android:icon="@drawable/icon_edit"
         android:visible="false"
         app:showAsAction="ifRoom" />
 

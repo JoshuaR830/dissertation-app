@@ -67,6 +67,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
     public LogAnalyticEventHelper analyticsHelper;
     private long surveyId;
     private boolean isDeletable;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         }
 
         this.surveyId = surveyIntent.getExtras().getLong("survey_id", -1);
-        long startTime = surveyIntent.getExtras().getLong("start_time", -1);
+        this.startTime = surveyIntent.getExtras().getLong("start_time", -1);
 
         if(surveyId < 0) {
             finish();
@@ -200,14 +201,17 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
                 Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
-                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
+
+                long time = new Date(startTime).getTime();
+                long night = TimeHelper.getEndOfDay(time);
+                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime, night);
 
                 // If it has been edited, the page will reload everything
                 boolean isEdited = data.getExtras().getBoolean("is_edited", false);
                 if(isEdited) {
                     updateSurveyItems();
                 } else {
-                    ActivityViewHelper.createPasstimeItem(this, passtimeContainer, updatedPasstime, this.db, getSupportFragmentManager(), analyticsHelper);
+                    ActivityViewHelper.createPasstimeItem(this, passtimeContainer, updatedPasstime, this.db, getSupportFragmentManager(), analyticsHelper, true);
                 }
             });
         }

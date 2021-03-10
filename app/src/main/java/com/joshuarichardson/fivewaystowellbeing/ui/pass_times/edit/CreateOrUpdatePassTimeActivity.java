@@ -3,7 +3,6 @@ package com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -130,8 +129,9 @@ public class CreateOrUpdatePassTimeActivity extends AppCompatActivity {
                 AutoCompleteTextView wellbeingType = findViewById(R.id.way_to_wellbeing_input);
                 this.activityId = getIntent().getExtras().getLong("activity_id");
                 textBox.setText(getIntent().getExtras().getString("activity_name", ""));
-                wellbeingType.setText(getIntent().getExtras().getString("activity_way_to_wellbeing", WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.UNASSIGNED)), false);
                 passTimeType.setText(getIntent().getExtras().getString("activity_type", ""), false);
+                String wayToWellbeing = getIntent().getExtras().getString("activity_way_to_wellbeing", WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.UNASSIGNED));
+                wellbeingType.setText(WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.valueOf(wayToWellbeing)), false);
             }
         }
     }
@@ -190,16 +190,8 @@ public class CreateOrUpdatePassTimeActivity extends AppCompatActivity {
         final String wayToWellbeingString = WellbeingHelper.getWayToWellbeingFromString(wayToWellbeing).toString();
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             if (this.activityId != 0 && this.isEditing) {
-                Log.d("edit name", name);
-                Log.d("edit type", type);
-                Log.d("edit wellbeing", wayToWellbeingString);
-                Log.d("edit id", String.valueOf(this.activityId));
                 this.passTimeDao.update(this.activityId, name, type, wayToWellbeingString, unixTime);
             } else {
-                Log.d("create name", name);
-                Log.d("create type", type);
-                Log.d("create wellbeing", wayToWellbeingString);
-                Log.d("create id", String.valueOf(this.activityId));
                 this.passTimeDao.insert(new ActivityRecord(name, duration, unixTime, type, wayToWellbeingString, false));
             }
             finish();

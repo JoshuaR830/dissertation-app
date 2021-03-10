@@ -85,6 +85,14 @@ public class ProgressFragment extends Fragment {
             startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
         });
 
+        this.emotionUpdateObserver = sentiment -> {
+            SentimentItem emotionValues = sentiment.getResourcesForAverage();
+            int color = requireContext().getColor(emotionValues.getColorResource());
+            ImageView image = requireActivity().findViewById(R.id.surveys_completed_image);
+            image.setImageResource(emotionValues.getImageResource());
+            image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        };
+
         // Reference https://stackoverflow.com/a/47531110/13496270
         setHasOptionsMenu(true);
 
@@ -154,14 +162,6 @@ public class ProgressFragment extends Fragment {
         this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning, tonight);
         this.graphUpdateValues.observe(requireActivity(), this.wholeGraphUpdate);
         canvasContainer.addView(graphView);
-
-        this.emotionUpdateObserver = sentiment -> {
-            SentimentItem emotionValues = sentiment.getResourcesForAverage();
-            int color = requireContext().getColor(emotionValues.getColorResource());
-            ImageView image = requireActivity().findViewById(R.id.surveys_completed_image);
-            image.setImageResource(emotionValues.getImageResource());
-            image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        };
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             Calendar cal = Calendar.getInstance();
@@ -262,14 +262,14 @@ public class ProgressFragment extends Fragment {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
                 Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
-                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime);
+                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime, new Date().getTime());
 
                 // If it has been edited, the page will reload everything
                 boolean isEdited = data.getExtras().getBoolean("is_edited", false);
                 if(isEdited) {
                     updateSurveyItems();
                 } else {
-                    ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper);
+                    ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper, true);
                 }
             });
         }
@@ -313,6 +313,11 @@ public class ProgressFragment extends Fragment {
         super.onResume();
         if (this.isDeletable) {
             toggleDeletable();
+        }
+
+        // This starts observing again so that after adding an activity the emotions still update
+        if(this.emotionUpdateValues != null) {
+            this.emotionUpdateValues.observe(requireActivity(), this.emotionUpdateObserver);
         }
     }
 
