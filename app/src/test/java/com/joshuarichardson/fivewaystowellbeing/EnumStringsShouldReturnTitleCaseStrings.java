@@ -24,6 +24,6 @@ public class EnumStringsShouldReturnTitleCaseStrings {
         assertThat(enumList.get(8)).isEqualTo("Exercise");
         assertThat(enumList.get(9)).isEqualTo("Relaxation");
         assertThat(enumList.get(10)).isEqualTo("People");
-        assertThat(enumList.get(10)).isEqualTo("Journaling");
+        assertThat(enumList.get(11)).isEqualTo("Journaling");
     }
 }

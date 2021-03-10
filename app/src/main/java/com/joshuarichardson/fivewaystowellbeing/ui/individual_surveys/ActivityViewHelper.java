@@ -317,7 +317,6 @@ public class ActivityViewHelper {
             TextView timeText = view.findViewById(R.id.activity_time_text);
             displayTimes(timeText, passtime.getStartTime(), passtime.getEndTime());
 
-
             title.setText(passtime.getName());
 
             if (passtime.getNote() == null || passtime.getNote().length() == 0) {
@@ -339,7 +338,6 @@ public class ActivityViewHelper {
                 });
             }
         });
-
     }
 
     private static void removeSelection(View view, Context context) {
