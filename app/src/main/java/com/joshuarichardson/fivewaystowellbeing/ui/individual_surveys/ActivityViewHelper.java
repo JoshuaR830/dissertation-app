@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -58,7 +59,7 @@ public class ActivityViewHelper {
                 continue;
             }
 
-            createPasstimeItem(activity, layout, passtime, db, fragmentManager, analyticsHelper);
+            createPasstimeItem(activity, layout, passtime, db, fragmentManager, analyticsHelper, false);
         }
 
         // This only needs to run once, after everything else
@@ -78,7 +79,7 @@ public class ActivityViewHelper {
         });
     }
 
-    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper) {
+    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper, boolean isAddedIn) {
         // Get the passtime template
         View view = LayoutInflater.from(activity).inflate(R.layout.pass_time_item, layout, false);
         TextView title = view.findViewById(R.id.activity_text);
@@ -316,7 +317,6 @@ public class ActivityViewHelper {
             TextView timeText = view.findViewById(R.id.activity_time_text);
             displayTimes(timeText, passtime.getStartTime(), passtime.getEndTime());
 
-
             title.setText(passtime.getName());
 
             if (passtime.getNote() == null || passtime.getNote().length() == 0) {
@@ -329,6 +329,14 @@ public class ActivityViewHelper {
             image.setImageResource(ActivityTypeImageHelper.getActivityImage(passtime.getType()));
 
             layout.addView(view);
+
+            if(isAddedIn) {
+                ScrollView scrollView = activity.findViewById(R.id.progress_scroll_view);
+                // Reference: https://stackoverflow.com/a/6831790/13496270
+                scrollView.post(() -> {
+                   scrollView.smoothScrollTo(0, view.getBottom());
+                });
+            }
         });
     }
 

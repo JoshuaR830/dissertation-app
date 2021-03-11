@@ -7,7 +7,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
 public class DatabaseQuestionHelper {
 
-    public static final int VERSION_NUMBER = 3;
+    public static final int VERSION_NUMBER = 4;
 
     public static final int ACTIVITY_OF_TYPE_VALUE = 50;
 
@@ -94,6 +94,13 @@ public class DatabaseQuestionHelper {
             new WellbeingQuestion(53, "Did you learn something new about them?", "", "", WaysToWellbeing.KEEP_LEARNING.toString(), MEDIUM_VALUE, ActivityType.PEOPLE.toString(), SurveyItemTypes.CHECKBOX.toString()),
             new WellbeingQuestion(54, "Did you notice anything different about them?", "", "", WaysToWellbeing.TAKE_NOTICE.toString(), MEDIUM_VALUE, ActivityType.PEOPLE.toString(), SurveyItemTypes.CHECKBOX.toString()),
             new WellbeingQuestion(55, "Did you share knowledge or give them advice?", "", "", WaysToWellbeing.GIVE.toString(), HIGH_VALUE, ActivityType.PEOPLE.toString(), SurveyItemTypes.CHECKBOX.toString()),
+
+            // Journaling
+            new WellbeingQuestion(56, "Did you talk to someone else about your day?", "", "", WaysToWellbeing.CONNECT.toString(), MEDIUM_VALUE, ActivityType.JOURNALING.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(57, "Did you wander around while considering what to write?", "", "", WaysToWellbeing.BE_ACTIVE.toString(), LOW_VALUE, ActivityType.JOURNALING.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(58, "Did you learn anything about yourself as you journaled?", "", "", WaysToWellbeing.KEEP_LEARNING.toString(), MEDIUM_VALUE, ActivityType.JOURNALING.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(59, "Did you consider anything in depth?", "", "", WaysToWellbeing.TAKE_NOTICE.toString(), HIGH_VALUE, ActivityType.JOURNALING.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(60, "Did you take time to think about how you helped other people?", "", "", WaysToWellbeing.GIVE.toString(), LOW_VALUE, ActivityType.JOURNALING.toString(), SurveyItemTypes.CHECKBOX.toString()),
         };
     }
 }

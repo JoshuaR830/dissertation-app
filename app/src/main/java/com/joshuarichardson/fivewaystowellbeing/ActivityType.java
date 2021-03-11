@@ -11,5 +11,6 @@ public enum ActivityType {
     COOKING,
     EXERCISE,
     RELAXATION,
-    PEOPLE
+    PEOPLE,
+    JOURNALING
 }
