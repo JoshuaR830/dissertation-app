@@ -25,8 +25,6 @@ public class GetWaysToWellbeingAchievedTests {
 
     @Before
     public void setup() {
-        // ToDo - need  in memory database stuff in here
-        // ToDo - Set up a whole thing to do a whole bunch of stuff
         // Reference: https://developer.android.com/training/data-storage/room/testing-db
         Context context = ApplicationProvider.getApplicationContext();
         this.wellbeingDatabase = Room.inMemoryDatabaseBuilder(context, WellbeingDatabase.class).build();
@@ -46,8 +44,6 @@ public class GetWaysToWellbeingAchievedTests {
         assertThat(originalResponse.getGiveValue()).isEqualTo(40);
 
         this.wellbeingDatabase.wellbeingResultsDao().updateWaysToWellbeing(surveyId, 10, 20, 50, 80, 100);
-
-        // ToDo - by checking before and after update should give possibility to cause some celebration when you achieve
 
         WellbeingResult newResponse = this.wellbeingDatabase.wellbeingResultsDao().getResultsBySurveyId(surveyId);
         assertThat(newResponse.getConnectValue()).isEqualTo(10);
@@ -100,7 +96,7 @@ public class GetWaysToWellbeingAchievedTests {
             new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
         );
 
-        WellbeingValues values = WellbeingAverageValueHelper.processResults(input);
+        WellbeingValues values = new WellbeingValues(input);
         assertThat(values.getAverageConnectValue()).isEqualTo(61);
         assertThat(values.getAverageBeActiveValue()).isEqualTo(100);
         assertThat(values.getAverageKeepLearningValue()).isEqualTo(60);
@@ -118,7 +114,7 @@ public class GetWaysToWellbeingAchievedTests {
             new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
         );
 
-        WellbeingValues values = WellbeingAverageValueHelper.processResults(input);
+        WellbeingValues values = new WellbeingValues(input);
 
         int connectNumber = values.getAchievedConnectNumber();
         int beActiveNumber = values.getAchievedBeActiveNumber();

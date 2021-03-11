@@ -123,7 +123,7 @@ public class WellbeingDatabaseModule {
     static final Migration MIGRATION_5_6 = new Migration(5, 6) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            // Create the new questions table
+            // Create the new wellbeing result table
             database.execSQL("CREATE TABLE wellbeing_result (" +
                 "id INTEGER NOT NULL PRIMARY KEY, " +
                 "timestamp INTEGER NOT NULL, " +

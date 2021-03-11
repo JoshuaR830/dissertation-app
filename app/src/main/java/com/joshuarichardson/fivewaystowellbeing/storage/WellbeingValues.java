@@ -1,7 +1,5 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
-import android.util.Log;
-
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
 import java.util.ArrayList;
@@ -26,7 +24,6 @@ public class WellbeingValues {
             keepLearningValues.add(result.getKeepLearningValue());
             takeNoticeValues.add(result.getTakeNoticeValue());
             giveValues.add(result.getGiveValue());
-            Log.d("Be active", String.valueOf(result.getBeActiveValue()));
         }
     }
 

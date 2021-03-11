@@ -15,6 +15,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyQuestionSetDao
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseElementDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
@@ -98,6 +99,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
             QuestionsToAskDao questionsToAskDao = mock(QuestionsToAskDao.class);
             ComplexSurveysShouldBeSavedToTheDatabase.this.surveyQuestionsDao = mock(SurveyQuestionSetDao.class);
             ComplexSurveysShouldBeSavedToTheDatabase.this.surveyActivityDao = mock(SurveyResponseActivityRecordDao.class);
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
 
             // Set the data for the questions to ask
             List<QuestionsToAsk> questionsToAsk = Arrays.asList(
@@ -129,7 +131,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
             when(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyResponseElementDao.insert(any(SurveyResponseElement.class))).thenReturn(0L);
             when(mockWellbeingDatabase.surveyResponseElementDao()).thenReturn(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyResponseElementDao);
             when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(ComplexSurveysShouldBeSavedToTheDatabase.this.surveyActivityDao);
-
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
             return mockWellbeingDatabase;
         }
     }
@@ -145,7 +147,7 @@ public class ComplexSurveysShouldBeSavedToTheDatabase {
         onView(allOf(withId(R.id.text_input), isDescendantOfA(withId(0)))).perform(scrollTo(), typeText("Question 1 response"), closeSoftKeyboard());
 
         onView(withId(R.id.submitButton))
-                .perform(click());
+            .perform(click());
 
         verify(this.surveyResponseElementDao, times(1))
             .insert(this.surveyResponseElementCaptor.capture());
