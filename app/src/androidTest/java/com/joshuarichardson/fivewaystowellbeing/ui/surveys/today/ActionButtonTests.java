@@ -14,6 +14,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivi
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Before;
@@ -21,6 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -88,8 +90,8 @@ public class ActionButtonTests {
             long now = new Date().getTime();
 
             List<SurveyResponse> list = Arrays.asList(
-                    new SurveyResponse(now, WaysToWellbeing.CONNECT.name(), "title 1", "description 1", 0, 0, 0, 0, 0),
-                    new SurveyResponse(now, WaysToWellbeing.BE_ACTIVE.name(), "title 2", "description 2", 0, 0, 0, 0, 0));
+                new SurveyResponse(now, WaysToWellbeing.CONNECT.name(), "title 1", "description 1"),
+                new SurveyResponse(now, WaysToWellbeing.BE_ACTIVE.name(), "title 2", "description 2"));
 
             LiveData<List<WellbeingGraphItem>> graphData = new MutableLiveData<>(Arrays.asList());
             when(questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong())).thenReturn(graphData);
@@ -100,6 +102,7 @@ public class ActionButtonTests {
             when(surveyDao.getLiveInsights(anyString()))
                 .thenReturn(wayToWellbeing);
 
+            when(surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
 
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Arrays.asList(
                 new RawSurveyData(now, "Survey note", "", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), -1, -1, 0, false),
@@ -107,6 +110,9 @@ public class ActionButtonTests {
                 new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), -1, 14460000, 0, false),
                 new RawSurveyData(now, "Survey note", "", "Activity name 4", 4, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, 14460000, 0, false)
             ));
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(ActionButtonTests.this.surveyActivity.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))

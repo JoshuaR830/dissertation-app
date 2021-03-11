@@ -2,9 +2,7 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
 
-import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
-import com.joshuarichardson.fivewaystowellbeing.utilities.LiveDataTestUtil;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,7 +10,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
@@ -34,13 +31,13 @@ public class GetWaysToWellbeingAchievedTests {
         Context context = ApplicationProvider.getApplicationContext();
         this.wellbeingDatabase = Room.inMemoryDatabaseBuilder(context, WellbeingDatabase.class).build();
 
-        this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(2345678, WaysToWellbeing.UNASSIGNED, "", "Description", 5, 10, 25, 80, 110));
+        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(1, 2345678, 5, 10, 25, 80, 110));
     }
 
     @Test
     public void updatingWaysToWellbeing_ShouldUpdateSurveyResponse() {
-        long surveyId = this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(1234567, WaysToWellbeing.UNASSIGNED, "", "Description", 45, 50, 85, 30, 40));
-        SurveyResponse originalResponse = this.wellbeingDatabase.surveyResponseDao().getSurveyResponseById(surveyId);
+        long surveyId = this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(2, 1234567, 45, 50, 85, 30, 40));
+        WellbeingResult originalResponse = this.wellbeingDatabase.wellbeingResultsDao().getResultsBySurveyId(surveyId);
 
         assertThat(originalResponse.getConnectValue()).isEqualTo(45);
         assertThat(originalResponse.getBeActiveValue()).isEqualTo(50);
@@ -48,11 +45,11 @@ public class GetWaysToWellbeingAchievedTests {
         assertThat(originalResponse.getTakeNoticeValue()).isEqualTo(30);
         assertThat(originalResponse.getGiveValue()).isEqualTo(40);
 
-        this.wellbeingDatabase.surveyResponseDao().updateWaysToWellbeing(surveyId, 10, 20, 50, 80, 100);
+        this.wellbeingDatabase.wellbeingResultsDao().updateWaysToWellbeing(surveyId, 10, 20, 50, 80, 100);
 
         // ToDo - by checking before and after update should give possibility to cause some celebration when you achieve
 
-        SurveyResponse newResponse = this.wellbeingDatabase.surveyResponseDao().getSurveyResponseById(surveyId);
+        WellbeingResult newResponse = this.wellbeingDatabase.wellbeingResultsDao().getResultsBySurveyId(surveyId);
         assertThat(newResponse.getConnectValue()).isEqualTo(10);
         assertThat(newResponse.getBeActiveValue()).isEqualTo(20);
         assertThat(newResponse.getKeepLearningValue()).isEqualTo(50);
@@ -61,12 +58,12 @@ public class GetWaysToWellbeingAchievedTests {
     }
 
     @Test
-    public void whenGettingByTimes_ShouldReturnAListOfTheCorrectWaysToWellbeingInOrder() throws TimeoutException, InterruptedException {
-        this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(4389598, WaysToWellbeing.UNASSIGNED, "", "Description", 35, 40, 50, 20, 10));
-        this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(1234567, WaysToWellbeing.UNASSIGNED, "", "Description", 20, 25, 80, 40, 20));
-        this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(2437654, WaysToWellbeing.UNASSIGNED, "", "Description", 10, 10, 70, 60, 30));
+    public void whenGettingByTimes_ShouldReturnAListOfTheCorrectWaysToWellbeingInOrder() {
+        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(2, 4389598, 35, 40, 50, 20, 10));
+        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(3, 1234567, 20, 25, 80, 40, 20));
+        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(4, 2437654, 10, 10, 70, 60, 30));
 
-        List<SurveyResponse> values = LiveDataTestUtil.getOrAwaitValue(this.wellbeingDatabase.surveyResponseDao().getSurveyResponsesByTimestampRange(1234567, 4389598));
+        List<WellbeingResult> values = this.wellbeingDatabase.wellbeingResultsDao().getResultsByTimestampRange(1234567, 4389598);
 
         assertThat(values.get(0).getConnectValue()).isEqualTo(20);
         assertThat(values.get(0).getBeActiveValue()).isEqualTo(25);
@@ -95,15 +92,15 @@ public class GetWaysToWellbeingAchievedTests {
 
     @Test
     public void whenGettingAverageValue_ShouldReturnCorrectValues() {
-        List<SurveyResponse> input = Arrays.asList(
-            new SurveyResponse(1389598, WaysToWellbeing.UNASSIGNED, "", "Description", 100, 100, 100, 100, 100),
-            new SurveyResponse(2389598, WaysToWellbeing.UNASSIGNED, "", "Description", 35, 100, 50, 100, 100),
-            new SurveyResponse(3389598, WaysToWellbeing.UNASSIGNED, "", "Description", 35, 100, 50, 100, 10),
-            new SurveyResponse(4389598, WaysToWellbeing.UNASSIGNED, "", "Description", 35, 100, 50, 20, 100),
-            new SurveyResponse(5389598, WaysToWellbeing.UNASSIGNED, "", "Description", 100, 100, 50, 20, 100)
+        List<WellbeingResult> input = Arrays.asList(
+            new WellbeingResult(2, 2389598, 35, 100, 50, 100, 100),
+            new WellbeingResult(3, 3389598, 35, 100, 50, 100, 10),
+            new WellbeingResult(4, 4389598, 35, 100, 50, 20, 100),
+            new WellbeingResult(5, 5389598, 100, 100, 50, 20, 100),
+            new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
         );
 
-        WellbeingValues values = WellbeingAverageValueHelper.getAverageConnectValue(input);
+        WellbeingValues values = WellbeingAverageValueHelper.processResults(input);
         assertThat(values.getAverageConnectValue()).isEqualTo(61);
         assertThat(values.getAverageBeActiveValue()).isEqualTo(100);
         assertThat(values.getAverageKeepLearningValue()).isEqualTo(60);
@@ -113,15 +110,15 @@ public class GetWaysToWellbeingAchievedTests {
 
     @Test
     public void whenGettingNumberOfWaysToWellbeingAchieved_ShouldOnlyCountDaysWhereUnique() {
-        List<SurveyResponse> input = Arrays.asList(
-            new SurveyResponse(1389598, WaysToWellbeing.UNASSIGNED, "", "Description", 100, 100, 100, 100, 100),
-            new SurveyResponse(2389598, WaysToWellbeing.UNASSIGNED, "", "Description", 35, 100, 50, 100, 100),
-            new SurveyResponse(3389598, WaysToWellbeing.UNASSIGNED, "", "Description", 35, 100, 50, 100, 10),
-            new SurveyResponse(4389598, WaysToWellbeing.UNASSIGNED, "", "Description", 35, 100, 50, 20, 100),
-            new SurveyResponse(5389598, WaysToWellbeing.UNASSIGNED, "", "Description", 100, 100, 50, 20, 100)
+        List<WellbeingResult> input = Arrays.asList(
+            new WellbeingResult(2, 2389598, 35, 100, 50, 100, 100),
+            new WellbeingResult(3, 3389598, 35, 100, 50, 100, 10),
+            new WellbeingResult(4, 4389598, 35, 100, 50, 20, 100),
+            new WellbeingResult(5, 5389598, 100, 100, 50, 20, 100),
+            new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
         );
 
-        WellbeingValues values = WellbeingAverageValueHelper.getAverageConnectValue(input);
+        WellbeingValues values = WellbeingAverageValueHelper.processResults(input);
 
         int connectNumber = values.getAchievedConnectNumber();
         int beActiveNumber = values.getAchievedBeActiveNumber();

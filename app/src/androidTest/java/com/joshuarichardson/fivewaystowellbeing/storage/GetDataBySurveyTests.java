@@ -55,7 +55,7 @@ public class GetDataBySurveyTests {
         this.wellbeingQuestionDao = this.wellbeingDb.wellbeingQuestionDao();
         this.surveyResponseActivityRecordDao = this.wellbeingDb.surveyResponseActivityRecordDao();
 
-        SurveyResponse surveyResponse = new SurveyResponse(5146253, WaysToWellbeing.CONNECT, "Title", "Survey note 1", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(5146253, WaysToWellbeing.CONNECT, "Title", "Survey note 1");
         this.surveyResponseId1 = this.surveyResponseDao.insert(surveyResponse);
         this.surveyResponseId2 = this.surveyResponseDao.insert(surveyResponse);
         this.surveyResponseId3 = this.surveyResponseDao.insert(surveyResponse);

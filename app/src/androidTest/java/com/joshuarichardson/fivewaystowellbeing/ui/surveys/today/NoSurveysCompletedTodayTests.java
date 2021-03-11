@@ -11,6 +11,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivi
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Before;
@@ -19,6 +20,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -84,6 +86,11 @@ public class NoSurveysCompletedTodayTests {
             LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
             when(surveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
+
+            when(surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(surveyActivityResponseDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
 

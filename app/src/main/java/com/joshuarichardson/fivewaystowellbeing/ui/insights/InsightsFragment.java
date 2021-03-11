@@ -11,8 +11,8 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
-import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
-import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingValues;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
 import java.util.Arrays;
@@ -47,47 +47,24 @@ public class InsightsFragment extends Fragment {
 
         // ToDo - could this use live data
         long millisPerDay = 86400000;
+        int days = 7;
         Date now = new Date();
         long startTime = TimeHelper.getStartOfDay(now.getTime());
         long endTime = TimeHelper.getEndOfDay(now.getTime());
 
+        long finalEndTime = startTime - (millisPerDay * days - 1);
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-
-            int connect = 0;
-            int beActive = 0;
-            int keepLearning = 0;
-            int takeNotice = 0;
-            int give = 0;
-
-            for(int i = 0; i < 7; i++) {
-                List<WellbeingGraphItem> response = db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(startTime - (millisPerDay * i), endTime - (millisPerDay * i));
-                WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(response);
-
-                if(values.getConnectValue() >= 100) {
-                    connect ++;
-                }
-                if(values.getBeActiveValue() >= 100) {
-                    beActive ++;
-                }
-                if(values.getKeepLearningValue() >= 100) {
-                    keepLearning ++;
-                }
-                if(values.getTakeNoticeValue() >= 100) {
-                    takeNotice ++;
-                }
-                if(values.getGiveValue() >= 100) {
-                    give ++;
-                }
-            }
+            List<WellbeingResult> wellbeingResults = db.wellbeingResultsDao().getResultsByTimestampRange(finalEndTime, endTime);
+            WellbeingValues values = new WellbeingValues(wellbeingResults);
 
             List<InsightsItem> insights = Arrays.asList(
                 new InsightsItem(getString(R.string.title_weekly_insights_overview), getString(R.string.description_weekly_insights_overview), 2, null),
-                new InsightsItem(getString(R.string.wellbeing_connect), String.format(Locale.getDefault(), "%d", connect)),
-                new InsightsItem(getString(R.string.wellbeing_be_active), String.format(Locale.getDefault(), "%d", beActive)),
-                new InsightsItem(getString(R.string.wellbeing_keep_learning), String.format(Locale.getDefault(), "%d", keepLearning)),
-                new InsightsItem(getString(R.string.wellbeing_take_notice), String.format(Locale.getDefault(), "%d", takeNotice)),
-                new InsightsItem(getString(R.string.wellbeing_give), String.format(Locale.getDefault(), "%d", give))
+                new InsightsItem(getString(R.string.wellbeing_connect), String.format(Locale.getDefault(), "%d", values.getAchievedConnectNumber())),
+                new InsightsItem(getString(R.string.wellbeing_be_active), String.format(Locale.getDefault(), "%d", values.getAchievedBeActiveNumber())),
+                new InsightsItem(getString(R.string.wellbeing_keep_learning), String.format(Locale.getDefault(), "%d", values.getAchievedKeepLearningNumber())),
+                new InsightsItem(getString(R.string.wellbeing_take_notice), String.format(Locale.getDefault(), "%d", values.getAchievedTakeNoticeNumber())),
+                new InsightsItem(getString(R.string.wellbeing_give), String.format(Locale.getDefault(), "%d", values.getAchievedGiveNumber()))
             );
 
             getActivity().runOnUiThread(() -> {
@@ -96,7 +73,7 @@ public class InsightsFragment extends Fragment {
                 layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                     @Override
                     public int getSpanSize(int position) {
-                    return insights.get(position).getColumnWidth();
+                        return insights.get(position).getColumnWidth();
                     }
                 });
 
@@ -108,7 +85,6 @@ public class InsightsFragment extends Fragment {
 
             });
         });
-
         return root;
     }
 }

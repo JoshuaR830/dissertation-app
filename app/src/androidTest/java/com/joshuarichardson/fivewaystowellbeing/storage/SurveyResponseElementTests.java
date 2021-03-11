@@ -74,7 +74,7 @@ public class SurveyResponseElementTests {
 
     @Test
     public void insertingMultipleSurveyResponseElementsIndividually_ThenRetrievingBySurveyId_ShouldReturnTheCorrectNumberOfSurveys() {
-        SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE, "title", "description");
         long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseElement surveyResponseElement1 = new SurveyResponseElement(surveyId, "", "");
@@ -99,7 +99,7 @@ public class SurveyResponseElementTests {
 
     @Test
     public void insertingMultipleSurveyResponseElementsFromAList_ThenRetrievingBySurveyId_ShouldReturnTheCorrectNumberOfSurveys() throws TimeoutException, InterruptedException {
-        SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(6378568, WaysToWellbeing.BE_ACTIVE, "title", "description");
         long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseElement[] surveyResponseElements = new SurveyResponseElement[] {

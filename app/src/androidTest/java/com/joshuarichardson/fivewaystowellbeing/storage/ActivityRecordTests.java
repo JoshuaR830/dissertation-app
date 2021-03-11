@@ -190,7 +190,7 @@ public class ActivityRecordTests {
     @Test
     public void hiddenActivityRecords_shouldStillBeReturnedFromActivityRecords() {
         long activityId = this.activityDao.insert(new ActivityRecord("Activity 1", 1201, 1608076799, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false));
-        long surveyResponseId = this.surveyResponseDao.insert(new SurveyResponse(734586743, WaysToWellbeing.BE_ACTIVE, "Title", "Description", 0, 0, 0, 0, 0));
+        long surveyResponseId = this.surveyResponseDao.insert(new SurveyResponse(734586743, WaysToWellbeing.BE_ACTIVE, "Title", "Description"));
         this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId, activityId, 1, "Note", -1, -1, 5, false));
 
         this.activityDao.flagHidden(activityId, true);

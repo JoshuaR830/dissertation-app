@@ -33,21 +33,21 @@ public class InsightsAboutSurveyTests {
         this.surveyResponseElementDao = this.wellbeingDb.surveyResponseElementDao();
         this.surveyResponseDao = this.wellbeingDb.surveyResponseDao();
 
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.CONNECT, "Title 1", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.BE_ACTIVE, "Title 2", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.BE_ACTIVE, "Title 3", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.TAKE_NOTICE, "Title 4", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.TAKE_NOTICE, "Title 5", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.TAKE_NOTICE, "Title 6", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.KEEP_LEARNING, "Title 7", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.KEEP_LEARNING, "Title 8", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.KEEP_LEARNING, "Title 9", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.KEEP_LEARNING, "Title 10", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 11", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 12", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 13", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 14", "Description", 0, 0, 0, 0, 0));
-        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 15", "Description", 0, 0, 0, 0, 0));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.CONNECT, "Title 1", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.BE_ACTIVE, "Title 2", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.BE_ACTIVE, "Title 3", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.TAKE_NOTICE, "Title 4", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.TAKE_NOTICE, "Title 5", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.TAKE_NOTICE, "Title 6", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.KEEP_LEARNING, "Title 7", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.KEEP_LEARNING, "Title 8", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.KEEP_LEARNING, "Title 9", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.KEEP_LEARNING, "Title 10", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 11", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 12", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 13", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 14", "Description"));
+        this.surveyResponseDao.insert(new SurveyResponse(534789473, WaysToWellbeing.GIVE, "Title 15", "Description"));
     }
 
 

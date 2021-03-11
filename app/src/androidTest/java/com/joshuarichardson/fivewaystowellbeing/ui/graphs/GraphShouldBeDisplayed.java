@@ -13,6 +13,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Before;
@@ -58,7 +59,6 @@ public class GraphShouldBeDisplayed {
     @Rule(order = 2)
     public ActivityScenarioRule<MainActivity> mainActivity = new ActivityScenarioRule<>(MainActivity.class);
 
-
     @Module
     @InstallIn(ApplicationComponent.class)
     public class TestWellbeingDatabaseModule {
@@ -74,6 +74,8 @@ public class GraphShouldBeDisplayed {
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                     .thenReturn(data);
 
+            when(surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
+
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(questionDao);
 
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
@@ -84,6 +86,9 @@ public class GraphShouldBeDisplayed {
             LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
             when(surveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingDao);

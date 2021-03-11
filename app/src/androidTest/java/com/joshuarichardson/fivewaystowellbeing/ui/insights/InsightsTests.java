@@ -13,7 +13,9 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -63,7 +65,6 @@ public class InsightsTests {
     @Rule(order = 2)
     public ActivityScenarioRule<MainActivity> mainActivity = new ActivityScenarioRule<>(MainActivity.class);
 
-
     @Module
     @InstallIn(ApplicationComponent.class)
     public class TestWellbeingDatabaseModule {
@@ -79,6 +80,8 @@ public class InsightsTests {
             when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                     .thenReturn(data);
 
+            when(surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
+
             LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
             when(surveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
@@ -91,6 +94,14 @@ public class InsightsTests {
 
             when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
 
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(resultsDao.getResultsByTimestampRange(anyLong(), anyLong())).thenReturn(Arrays.asList(
+                    new WellbeingResult(1, 12345, 100, 100, 100, 10, 20),
+                    new WellbeingResult(2, 23456, 100, 100, 30, 100, 20),
+                    new WellbeingResult(3, 34567, 100, 20, 30, 10, 20)
+            ));
+
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingDao);
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
             return mockWellbeingDatabase;
@@ -115,25 +126,25 @@ public class InsightsTests {
             .perform(scrollToPosition(1))
             .check(matches(atRecyclerPosition(1, hasDescendant(withText("Times achieved:")))))
             .check(matches(atRecyclerPosition(1, hasDescendant(withText("Connect")))))
-            .check(matches(atRecyclerPosition(1, hasDescendant(withText("7")))));
+            .check(matches(atRecyclerPosition(1, hasDescendant(withText("3")))));
 
         onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(2))
             .check(matches(atRecyclerPosition(2, hasDescendant(withText("Times achieved:")))))
             .check(matches(atRecyclerPosition(2, hasDescendant(withText("Be active")))))
-            .check(matches(atRecyclerPosition(2, hasDescendant(withText("0")))));
+            .check(matches(atRecyclerPosition(2, hasDescendant(withText("2")))));
 
         onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(3))
             .check(matches(atRecyclerPosition(3, hasDescendant(withText("Times achieved:")))))
             .check(matches(atRecyclerPosition(3, hasDescendant(withText("Keep learning")))))
-            .check(matches(atRecyclerPosition(3, hasDescendant(withText("7")))));
+            .check(matches(atRecyclerPosition(3, hasDescendant(withText("1")))));
 
         onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(4))
             .check(matches(atRecyclerPosition(4, hasDescendant(withText("Times achieved:")))))
             .check(matches(atRecyclerPosition(4, hasDescendant(withText("Take notice")))))
-            .check(matches(atRecyclerPosition(4, hasDescendant(withText("7")))));
+            .check(matches(atRecyclerPosition(4, hasDescendant(withText("1")))));
 
         onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(5))

@@ -15,6 +15,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivi
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 
@@ -81,8 +82,8 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             SurveyResponseActivityRecordDao surveyActivityDao = mock(SurveyResponseActivityRecordDao.class);
 
             SurveyResponse[] responses = new SurveyResponse[] {
-                new SurveyResponse(new GregorianCalendar(1972, 3, 29).getTimeInMillis(), WaysToWellbeing.CONNECT, "A survey title", "A survey description", 0, 0, 0, 0, 0),
-                new SurveyResponse(new GregorianCalendar(1999, 2, 29).getTimeInMillis(), WaysToWellbeing.UNASSIGNED, "A survey title", "Another survey description", 0, 0, 0, 0, 0)
+                new SurveyResponse(new GregorianCalendar(1972, 3, 29).getTimeInMillis(), WaysToWellbeing.CONNECT, "A survey title", "A survey description"),
+                new SurveyResponse(new GregorianCalendar(1999, 2, 29).getTimeInMillis(), WaysToWellbeing.UNASSIGNED, "A survey title", "Another survey description")
             };
 
             when(mockWellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
@@ -96,9 +97,14 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             when(mockSurveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
 
+            when(mockSurveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
+
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList(responses));
 
             when(surveyActivityDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(mockSurveyDao.getAllSurveyResponses()).thenReturn(data);
             when(mockSurveyDao.getNonEmptyHistoryPageData()).thenReturn(new MutableLiveData<>(Arrays.asList(responses)));

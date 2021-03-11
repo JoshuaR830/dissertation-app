@@ -8,6 +8,7 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
@@ -83,6 +84,10 @@ public class ViewPasstimesTests {
                     new ActivityRecord("Activity name 3", 0, 587468, ActivityType.HOBBY, WaysToWellbeing.KEEP_LEARNING, false)
             );
             LiveData<List<ActivityRecord>> liveData = new MutableLiveData<>(data);
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+
+            when(db.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(activityDao.getAllActivities()).thenReturn(liveData);
             when(db.activityRecordDao()).thenReturn(activityDao);

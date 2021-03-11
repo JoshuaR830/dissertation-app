@@ -32,6 +32,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelpe
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
@@ -108,7 +109,8 @@ public class ProgressFragment extends Fragment {
                 long startTime = TimeHelper.getStartOfDay(new Date().getTime());
                 // Adding the new survey should trigger the live data to update
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", "", 0, 0, 0, 0, 0));
+                    long newSurveyId = this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", ""));
+                    this.db.wellbeingResultsDao().insert(new WellbeingResult(newSurveyId, startTime, 0, 0, 0, 0, 0));
                 });
 
                 return;
@@ -155,8 +157,12 @@ public class ProgressFragment extends Fragment {
         WellbeingGraphView  graphView = new WellbeingGraphView(getActivity(), (int)(getSmallestMaxDimension(requireContext())/1.5), new WellbeingGraphValueHelper(0, 0,0 ,0, 0), true);
 
         this.wholeGraphUpdate = graphValues -> {
+            // ToDo - get the values on fragment launch - save them - compare them to the new ones - is a new 100% - then you have achieved!
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                db.wellbeingResultsDao().updateWaysToWellbeing(this.surveyId, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue());
+            });
         };
 
         this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning, tonight);
@@ -180,7 +186,8 @@ public class ProgressFragment extends Fragment {
                 if (surveyResponsesNotLive.size() == 0) {
                     doesExist = false;
                     // If missed - add it
-                    this.db.surveyResponseDao().insert(new SurveyResponse(morning, UNASSIGNED, "", "", 0, 0, 0, 0, 0));
+                    long newSurveyId = this.db.surveyResponseDao().insert(new SurveyResponse(morning, UNASSIGNED, "", ""));
+                    this.db.wellbeingResultsDao().insert(new WellbeingResult(newSurveyId, morning, 0, 0, 0, 0, 0));
                 }
             } while(!doesExist && cal.getTimeInMillis() > 1613509560000L);
 

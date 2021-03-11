@@ -23,11 +23,18 @@ public class WaysToWellbeingContract {
     public static final String SURVEY_RESPONSE_WAY_TO_WELLBEING = "way_to_wellbeing";
     public static final String SURVEY_RESPONSE_TITLE = "title";
     public static final String SURVEY_RESPONSE_DESCRIPTION = "description";
-    public static final String SURVEY_RESPONSE_CONNECT = "connect";
-    public static final String SURVEY_RESPONSE_BE_ACTIVE = "be_active";
-    public static final String SURVEY_RESPONSE_KEEP_LEARNING = "keep_learning";
-    public static final String SURVEY_RESPONSE_TAKE_NOTICE = "take_notice";
-    public static final String SURVEY_RESPONSE_GIVE = "give";
+
+
+    //Wellbeing result
+    public static final String WELLBEING_RESULT_TABLE_NAME = "wellbeing_result";
+
+    public static final String WELLBEING_RESULT_ID = "id";
+    public static final String WELLBEING_RESULT_CONNECT = "connect";
+    public static final String WELLBEING_RESULT_BE_ACTIVE = "be_active";
+    public static final String WELLBEING_RESULT_KEEP_LEARNING = "keep_learning";
+    public static final String WELLBEING_RESULT_TAKE_NOTICE = "take_notice";
+    public static final String WELLBEING_RESULT_GIVE = "give";
+    public static final String WELLBEING_RESULT_TIMESTAMP = "timestamp";
 
     // Survey response element
     public static final String SURVEY_RESPONSE_ELEMENT_TABLE_NAME = "survey_response_element";

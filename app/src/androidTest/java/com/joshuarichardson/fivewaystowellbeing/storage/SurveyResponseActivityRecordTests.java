@@ -60,8 +60,8 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void insertionOfActivitySurvey_ThenGettingBySurveyId_ShouldReturnAllDetails() {
-        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description");
         ActivityRecord activityRecord1 = new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED", false);
         ActivityRecord activityRecord2 = new ActivityRecord("Sprinting", 1200, 1607960240, "Sport", "UNASSIGNED", false);
         ActivityRecord activityRecord3 = new ActivityRecord("Boating", 1200, 1607960240, "Sport", "UNASSIGNED", false);
@@ -123,8 +123,8 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetActivitiesForSurvey_ShouldReturnTheActivitiesInSequenceOrder() throws TimeoutException, InterruptedException {
-        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description");
         ActivityRecord activityRecord1 = new ActivityRecord("Running", 1200, 1607960240, "Sport", "UNASSIGNED", false);
         ActivityRecord activityRecord2 = new ActivityRecord("Sprinting", 1200, 1607960240, "Sport", "UNASSIGNED", false);
         ActivityRecord activityRecord3 = new ActivityRecord("Boating", 1200, 1607960240, "Sport", "UNASSIGNED", false);
@@ -164,11 +164,11 @@ public class SurveyResponseActivityRecordTests {
     @Test
     public void insertionOfActivityRecordIdAndSurveyResponseId_AndGetSurveyForActivity_ShouldReturnTheSurvey() throws TimeoutException, InterruptedException {
         // Create an insert a survey response
-        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE, "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse2 = new SurveyResponse(1607960246, WaysToWellbeing.KEEP_LEARNING, "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse3 = new SurveyResponse(1607960247, WaysToWellbeing.GIVE, "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse4 = new SurveyResponse(1607960248, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse5 = new SurveyResponse(1607960249, WaysToWellbeing.CONNECT, "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE, "title", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(1607960246, WaysToWellbeing.KEEP_LEARNING, "title", "description");
+        SurveyResponse surveyResponse3 = new SurveyResponse(1607960247, WaysToWellbeing.GIVE, "title", "description");
+        SurveyResponse surveyResponse4 = new SurveyResponse(1607960248, WaysToWellbeing.BE_ACTIVE, "title", "description");
+        SurveyResponse surveyResponse5 = new SurveyResponse(1607960249, WaysToWellbeing.CONNECT, "title", "description");
 
         long surveyId1 = this.surveyResponseDao.insert(surveyResponse1);
         long surveyId2 = this.surveyResponseDao.insert(surveyResponse2);
@@ -227,7 +227,7 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void whenBothSurveyResponseAndActivityExist_NoExceptionShouldBeThrown() {
-        SurveyResponse surveyResponse = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE, "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, WaysToWellbeing.TAKE_NOTICE, "title", "description");
         long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
         ActivityRecord activityRecord = new ActivityRecord("Throwing", 1200, 1607960240, "Sport", "UNASSIGNED", false);
@@ -287,7 +287,7 @@ public class SurveyResponseActivityRecordTests {
     @Test
     public void insertingAnActivityIdWhichDoesNotExist_ShouldThrowAConstraintException() {
         // Add a survey to the database
-        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
         long surveyResponseId = this.surveyResponseDao.insert(surveyResponse);
 
         SurveyResponseActivityRecord record = new SurveyResponseActivityRecord(surveyResponseId, 332211, 1, "note 1",  1612427791, 1612427795, 1, false);
@@ -310,7 +310,7 @@ public class SurveyResponseActivityRecordTests {
     @Test
     public void whenAllEmotionsAreZero_ThenTheCalendarItemShouldBeReturned() throws TimeoutException, InterruptedException {
         // Add a survey to the database
-        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
         long surveyResponseId = this.surveyResponseDao.insert(surveyResponse);
 
         ActivityRecord activityRecord1 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED", false);
@@ -340,7 +340,7 @@ public class SurveyResponseActivityRecordTests {
     @Test
     public void whenNoActivitiesExist_ThenTheCalendarItemShouldBeReturned() throws TimeoutException, InterruptedException {
         // Add a survey to the database
-        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
         long surveyResponseId = this.surveyResponseDao.insert(surveyResponse);
 
         SurveyCountItem surveyCountItem = LiveDataTestUtil.getOrAwaitValue(this.surveyActivityDao.getEmotions(surveyResponseId));
@@ -353,11 +353,11 @@ public class SurveyResponseActivityRecordTests {
     @Test
     public void whenEmotionsExist_ThenTheCorrectDrawableShouldBeReturned() throws TimeoutException, InterruptedException {
         // Add a survey to the database
-        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse3 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse4 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
-        SurveyResponse surveyResponse5 = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse1 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse3 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse4 = new SurveyResponse(1607960245, "Be active", "title", "description");
+        SurveyResponse surveyResponse5 = new SurveyResponse(1607960245, "Be active", "title", "description");
         long surveyResponseId1 = this.surveyResponseDao.insert(surveyResponse1);
         long surveyResponseId2 = this.surveyResponseDao.insert(surveyResponse2);
         long surveyResponseId3 = this.surveyResponseDao.insert(surveyResponse3);
@@ -439,7 +439,7 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void testGetItemCount_ShouldReturnNumberOfItems() {
-        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
         long surveyResponseId = this.surveyResponseDao.insert(surveyResponse);
 
         ActivityRecord activityRecord1 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED", false);
@@ -462,7 +462,7 @@ public class SurveyResponseActivityRecordTests {
 
     @Test
     public void deletingAnItem_ShouldDeleteIt() {
-        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description", 0, 0, 0, 0, 0);
+        SurveyResponse surveyResponse = new SurveyResponse(1607960245, "Be active", "title", "description");
         long surveyResponseId = this.surveyResponseDao.insert(surveyResponse);
 
         ActivityRecord activityRecord1 = new ActivityRecord("Emotionless", 1200, 1607960240, "Sport", "UNASSIGNED", false);
