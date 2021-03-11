@@ -13,12 +13,19 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.view.ProgressFragment;
 import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragment;
+
+import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,6 +38,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
+
+import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase.DATABASE_VERSION_CODE;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
@@ -59,6 +68,23 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // The database version will only be updated after this so when migrating from 5 to 6 this will run
+        if (preferences.getInt("database_version", 0) < 6) {
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                // Get all surveys since time of the update that made it work
+                List<SurveyResponse> surveyResponses = this.db.surveyResponseDao().getSurveyResponsesByTimestampRangeNotLive(1613509560000L, new Date().getTime());
+
+                // For each survey update the database
+                for(SurveyResponse response : surveyResponses) {
+                    List<WellbeingGraphItem> wellbeingValues = db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(TimeHelper.getStartOfDay(response.getSurveyResponseTimestamp()), TimeHelper.getEndOfDay(response.getSurveyResponseTimestamp()));
+                    WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(wellbeingValues);
+                    db.wellbeingResultsDao().insert(new WellbeingResult(response.getSurveyResponseId(), response.getSurveyResponseTimestamp(), values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue()));
+                }
+            });
+        }
+
+        preferenceEditor.putInt("database_version", DATABASE_VERSION_CODE);
 
         // Schedule default notification and set values if not set
         if (!preferences.contains("notification_morning_time") || !preferences.contains("notification_morning_switch")) {

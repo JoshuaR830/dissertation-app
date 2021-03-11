@@ -19,6 +19,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseElement;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyBuilder;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
@@ -203,6 +204,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         long finalActivityId = activityId;
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             long surveyId = this.surveyResponseDao.insert(surveyResponse);
+            this.db.wellbeingResultsDao().insert(new WellbeingResult(surveyId, now.getTime(), 0, 0, 0, 0, 0));
 
             for(int i = 0; i < questionAnswers.size(); i++) {
                 SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, questionTitles.get(i), questionAnswers.get(i));

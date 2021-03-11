@@ -13,6 +13,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.QuestionsToAskDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyQuestionSetDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
@@ -101,6 +102,9 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
             when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
 
             BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyDao = mock(SurveyResponseDao.class);
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyDao);
             when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);

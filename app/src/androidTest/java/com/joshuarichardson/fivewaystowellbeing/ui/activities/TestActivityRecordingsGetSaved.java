@@ -6,6 +6,7 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
 
@@ -64,9 +65,11 @@ public class TestActivityRecordingsGetSaved {
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
             TestActivityRecordingsGetSaved.this.mockWellbeingDatabase = mock(WellbeingDatabase.class);
             TestActivityRecordingsGetSaved.this.activityDao = mock(ActivityRecordDao.class);
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
             when(TestActivityRecordingsGetSaved.this.activityDao.insert(any(ActivityRecord.class))).thenReturn(0L);
             when(TestActivityRecordingsGetSaved.this.mockWellbeingDatabase.activityRecordDao()).thenReturn(TestActivityRecordingsGetSaved.this.activityDao);
-
             return TestActivityRecordingsGetSaved.this.mockWellbeingDatabase;
         }
     }

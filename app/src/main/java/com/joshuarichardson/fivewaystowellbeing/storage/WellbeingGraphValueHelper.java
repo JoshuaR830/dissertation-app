@@ -30,7 +30,6 @@ public class WellbeingGraphValueHelper {
 
     public int getBeActiveValue() {
         return Math.min((this.beActiveValue + this.beActiveActivityValues), 100);
-
     }
 
     public int getConnectValue() {

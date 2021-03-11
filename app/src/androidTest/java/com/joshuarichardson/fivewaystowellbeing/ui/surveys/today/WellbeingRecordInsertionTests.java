@@ -13,6 +13,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivi
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
@@ -99,6 +100,8 @@ public class WellbeingRecordInsertionTests {
             when(WellbeingRecordInsertionTests.this.surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                 .thenReturn(data);
 
+            when(WellbeingRecordInsertionTests.this.surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
+
             LiveData<List<WellbeingGraphItem>> graphData = new MutableLiveData<>(Arrays.asList());
             when(WellbeingRecordInsertionTests.this.questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong()))
                 .thenReturn(graphData);
@@ -127,6 +130,9 @@ public class WellbeingRecordInsertionTests {
 
             when(WellbeingRecordInsertionTests.this.wellbeingDao.getDataBySurvey(anyLong())).thenReturn(new ArrayList<>());
             when(WellbeingRecordInsertionTests.this.surveyResponseActivityDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(WellbeingRecordInsertionTests.this.wellbeingDao);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(WellbeingRecordInsertionTests.this.questionDao);

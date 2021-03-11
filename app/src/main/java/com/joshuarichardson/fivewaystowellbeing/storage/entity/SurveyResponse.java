@@ -85,7 +85,6 @@ public class SurveyResponse {
         return this.title;
     }
 
-
     public String getDescription() {
         return this.description;
     }

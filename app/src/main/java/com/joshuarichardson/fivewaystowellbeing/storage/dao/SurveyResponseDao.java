@@ -22,10 +22,10 @@ public interface SurveyResponseDao {
     @Query("SELECT * FROM survey_response")
     LiveData<List<SurveyResponse>> getAllSurveyResponses();
 
-    @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp")
+    @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp ORDER BY timestamp")
     LiveData<List<SurveyResponse>> getSurveyResponsesByTimestampRange(long startTimestamp, long endTimestamp);
 
-    @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp")
+    @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp ORDER BY timestamp")
     List<SurveyResponse> getSurveyResponsesByTimestampRangeNotLive(long startTimestamp, long endTimestamp);
 
     @Query("SELECT COUNT(way_to_wellbeing) FROM survey_response WHERE way_to_wellbeing = :wayToWellbeing")

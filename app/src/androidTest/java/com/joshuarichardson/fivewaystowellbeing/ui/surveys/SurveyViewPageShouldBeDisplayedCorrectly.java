@@ -15,6 +15,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivi
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 
@@ -96,9 +97,14 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             when(mockSurveyDao.getLiveInsights(anyString()))
                     .thenReturn(wayToWellbeing);
 
+            when(mockSurveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
+
             LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList(responses));
 
             when(surveyActivityDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(mockSurveyDao.getAllSurveyResponses()).thenReturn(data);
             when(mockSurveyDao.getNonEmptyHistoryPageData()).thenReturn(new MutableLiveData<>(Arrays.asList(responses)));

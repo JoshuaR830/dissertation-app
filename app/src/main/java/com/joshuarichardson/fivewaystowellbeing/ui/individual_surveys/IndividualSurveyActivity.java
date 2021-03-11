@@ -97,6 +97,9 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         Observer<List<WellbeingGraphItem>> wholeGraphUpdate  = graphValues -> {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                db.wellbeingResultsDao().updateWaysToWellbeing(this.surveyId, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue());
+            });
         };
 
         ChipGroup group = findViewById(R.id.wellbeing_chip_group);

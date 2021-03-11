@@ -14,6 +14,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivi
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
@@ -25,6 +26,7 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -101,6 +103,8 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests {
             when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                 .thenReturn(data);
 
+            when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
+
             LiveData<List<WellbeingGraphItem>> graphData = new MutableLiveData<>(Arrays.asList());
             when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong()))
                 .thenReturn(graphData);
@@ -116,6 +120,9 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests {
 
             when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyResponseActivityDao.getEmotions(anyLong()))
                 .thenReturn(new MutableLiveData<>());
+
+            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
+            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
 
             when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(AddingActivityToSurveyWhenNoSurveyExistsTests.this.wellbeingDao);
             when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(AddingActivityToSurveyWhenNoSurveyExistsTests.this.questionDao);
