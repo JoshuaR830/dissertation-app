@@ -84,8 +84,8 @@ public class SurveysCompletedTodayTests {
             long now = new Date().getTime();
 
             List<SurveyResponse> list = Arrays.asList(
-                new SurveyResponse(now, WaysToWellbeing.CONNECT.name(), "title 1", "description 1"),
-                new SurveyResponse(now, WaysToWellbeing.BE_ACTIVE.name(), "title 2", "description 2"));
+                new SurveyResponse(now, WaysToWellbeing.CONNECT.name(), "title 1", "description 1", 0, 0, 0, 0, 0),
+                new SurveyResponse(now, WaysToWellbeing.BE_ACTIVE.name(), "title 2", "description 2", 0, 0, 0, 0, 0));
 
             LiveData<List<WellbeingGraphItem>> graphData = new MutableLiveData<>(Arrays.asList());
             when(questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong())).thenReturn(graphData);

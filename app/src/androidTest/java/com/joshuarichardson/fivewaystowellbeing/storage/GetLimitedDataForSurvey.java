@@ -47,7 +47,7 @@ public class GetLimitedDataForSurvey {
         this.wellbeingRecordDao = this.wellbeingDb.wellbeingRecordDao();
         this.surveyResponseActivityRecordDao = this.wellbeingDb.surveyResponseActivityRecordDao();
 
-        SurveyResponse surveyResponse = new SurveyResponse(5146253, WaysToWellbeing.CONNECT, "Title", "Survey note 1");
+        SurveyResponse surveyResponse = new SurveyResponse(5146253, WaysToWellbeing.CONNECT, "Title", "Survey note 1", 0, 0, 0, 0, 0);
         this.surveyResponseId1 = this.surveyResponseDao.insert(surveyResponse);
         this.surveyResponseId2 = this.surveyResponseDao.insert(surveyResponse);
         this.surveyResponseId3 = this.surveyResponseDao.insert(surveyResponse);

@@ -86,7 +86,7 @@ public class IndividualSurveyWithoutQuestionsTests {
             long time = new GregorianCalendar(1999, 2, 29, 15, 10, 0).getTimeInMillis();
 
             // Return a survey response
-            SurveyResponse surveyResponse = new SurveyResponse(time, WaysToWellbeing.CONNECT, "Title 1", "Description 1");
+            SurveyResponse surveyResponse = new SurveyResponse(time, WaysToWellbeing.CONNECT, "Title 1", "Description 1", 0, 0, 0, 0, 0);
             surveyResponse.setSurveyResponseId(123);
             when(surveyResponseDao.getSurveyResponseById(123))
                     .thenReturn(surveyResponse);

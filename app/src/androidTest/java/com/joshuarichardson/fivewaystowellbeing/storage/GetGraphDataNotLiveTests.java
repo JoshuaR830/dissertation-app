@@ -49,8 +49,8 @@ public class GetGraphDataNotLiveTests {
         this.wellbeingQuestionDao = wellbeingDb.wellbeingQuestionDao();
         SurveyResponseActivityRecordDao surveyResponseActivityRecordDao = wellbeingDb.surveyResponseActivityRecordDao();
 
-        long surveyResponseId1 = surveyResponseDao.insert(new SurveyResponse(467356, WaysToWellbeing.CONNECT, "Title 1", "Survey note 1"));
-        long surveyResponseId2 = surveyResponseDao.insert(new SurveyResponse(500, WaysToWellbeing.CONNECT, "Title 2", "Survey note 2"));
+        long surveyResponseId1 = surveyResponseDao.insert(new SurveyResponse(467356, WaysToWellbeing.CONNECT, "Title 1", "Survey note 1", 0, 0, 0, 0, 0));
+        long surveyResponseId2 = surveyResponseDao.insert(new SurveyResponse(500, WaysToWellbeing.CONNECT, "Title 2", "Survey note 2", 0, 0, 0, 0, 0));
         long activityRecordId1 = activityRecordDao.insert(new ActivityRecord("Activity name 1", 2000, 34625476, ActivityType.SPORT, WaysToWellbeing.BE_ACTIVE, false));
         long activityRecordId2 = activityRecordDao.insert(new ActivityRecord("Activity name 2", 2000, 34625476, ActivityType.LEARNING, WaysToWellbeing.KEEP_LEARNING, false));
         SurveyResponseActivityRecord surveyResponseActivityRecord1 = new SurveyResponseActivityRecord(surveyResponseId1, activityRecordId1, 0, "Activity note", 123456, 234567, 1, false);

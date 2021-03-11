@@ -108,7 +108,7 @@ public class ProgressFragment extends Fragment {
                 long startTime = TimeHelper.getStartOfDay(new Date().getTime());
                 // Adding the new survey should trigger the live data to update
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", ""));
+                    this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", "", 0, 0, 0, 0, 0));
                 });
 
                 return;
@@ -180,7 +180,7 @@ public class ProgressFragment extends Fragment {
                 if (surveyResponsesNotLive.size() == 0) {
                     doesExist = false;
                     // If missed - add it
-                    this.db.surveyResponseDao().insert(new SurveyResponse(morning, UNASSIGNED, "", ""));
+                    this.db.surveyResponseDao().insert(new SurveyResponse(morning, UNASSIGNED, "", "", 0, 0, 0, 0, 0));
                 }
             } while(!doesExist && cal.getTimeInMillis() > 1613509560000L);
 

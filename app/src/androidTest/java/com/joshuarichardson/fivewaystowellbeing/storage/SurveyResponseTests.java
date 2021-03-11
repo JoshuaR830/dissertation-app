@@ -49,7 +49,7 @@ public class SurveyResponseTests {
     @Test
     public void InsertingASurvey_ThenGettingTheSurveyById_ShouldReturnTheCorrectSurveyResponse() throws TimeoutException, InterruptedException {
 
-        SurveyResponse surveyResponse = new SurveyResponse(1607960240, WaysToWellbeing.BE_ACTIVE, "title", "description");
+        SurveyResponse surveyResponse = new SurveyResponse(1607960240, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0);
 
         long surveyId = this.surveyResponseDao.insert(surveyResponse);
 
@@ -73,11 +73,11 @@ public class SurveyResponseTests {
     @Test
     public void insertingMultipleSurveys_ThenGettingAllSurveys_ShouldReturnAllAddedSurveyResponses() throws TimeoutException, InterruptedException {
         DatabaseInsertionHelper.insert(new SurveyResponse[] {
-                new SurveyResponse(0, WaysToWellbeing.KEEP_LEARNING, "title", "description"),
-                new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description"),
-                new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description"),
-                new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description"),
-                new SurveyResponse(2147483647, WaysToWellbeing.TAKE_NOTICE, "title", "description")
+                new SurveyResponse(0, WaysToWellbeing.KEEP_LEARNING, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(2147483647, WaysToWellbeing.TAKE_NOTICE, "title", "description", 0, 0, 0, 0, 0)
         }, this.surveyResponseDao);
 
         List<SurveyResponse> surveyResponses = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseDao.getAllSurveyResponses());
@@ -88,10 +88,10 @@ public class SurveyResponseTests {
 
     @Test
     public void insertingMultipleSurveys_ThenGettingAllNonLiveSurveys_ShouldReturnAllAddedSurveyResponses() throws TimeoutException, InterruptedException {
-        long surveyId1 = this.surveyResponseDao.insert(new SurveyResponse(922720200, WaysToWellbeing.KEEP_LEARNING, "title", "description"));
-        long surveyId2 = this.surveyResponseDao.insert(new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description"));
-        long surveyId3 = this.surveyResponseDao.insert(new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description"));
-        this.surveyResponseDao.insert(new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description"));
+        long surveyId1 = this.surveyResponseDao.insert(new SurveyResponse(922720200, WaysToWellbeing.KEEP_LEARNING, "title", "description", 0, 0, 0, 0, 0));
+        long surveyId2 = this.surveyResponseDao.insert(new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0));
+        long surveyId3 = this.surveyResponseDao.insert(new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description", 0, 0, 0, 0, 0));
+        this.surveyResponseDao.insert(new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description", 0, 0, 0, 0, 0));
 
         long activityRecord = this.wellbeingDb.activityRecordDao().insert(new ActivityRecord("Name", 325768, 54389798, ActivityType.CHORES, WaysToWellbeing.GIVE, false));
 
@@ -107,10 +107,10 @@ public class SurveyResponseTests {
 
     @Test
     public void insertingMultipleSurveys_ThenGettingAllEmptySurveys_ShouldReturnAllEmptySurveys() throws TimeoutException, InterruptedException {
-        long surveyId1 = this.surveyResponseDao.insert(new SurveyResponse(922720200, WaysToWellbeing.KEEP_LEARNING, "title", "description"));
-        long surveyId2 = this.surveyResponseDao.insert(new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description"));
-        long surveyId3 = this.surveyResponseDao.insert(new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description"));
-        long surveyId4 = this.surveyResponseDao.insert(new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description"));
+        long surveyId1 = this.surveyResponseDao.insert(new SurveyResponse(922720200, WaysToWellbeing.KEEP_LEARNING, "title", "description", 0, 0, 0, 0, 0));
+        long surveyId2 = this.surveyResponseDao.insert(new SurveyResponse(922720201, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0));
+        long surveyId3 = this.surveyResponseDao.insert(new SurveyResponse(922720202, WaysToWellbeing.CONNECT, "title", "description", 0, 0, 0, 0, 0));
+        long surveyId4 = this.surveyResponseDao.insert(new SurveyResponse(922720203, WaysToWellbeing.GIVE, "title", "description", 0, 0, 0, 0, 0));
 
         long activityRecord = this.wellbeingDb.activityRecordDao().insert(new ActivityRecord("Name", 325768, 54389798, ActivityType.CHORES, WaysToWellbeing.GIVE, false));
 
@@ -128,15 +128,15 @@ public class SurveyResponseTests {
     @Test
     public void gettingSurveyResponsesBetweenTimes_ShouldReturnTheCorrectSurveyResponses() throws TimeoutException, InterruptedException {
         DatabaseInsertionHelper.insert(new SurveyResponse[] {
-                new SurveyResponse(1608076799, WaysToWellbeing.BE_ACTIVE, "title", "description"),
-                new SurveyResponse(1608076800, WaysToWellbeing.CONNECT, "title", "description"),
-                new SurveyResponse(1608076801, WaysToWellbeing.BE_ACTIVE, "title", "description"),
-                new SurveyResponse(1608163100, WaysToWellbeing.GIVE, "title", "description"),
-                new SurveyResponse(1608163199, WaysToWellbeing.GIVE, "title", "description"),
-                new SurveyResponse(1608163200, WaysToWellbeing.TAKE_NOTICE, "title", "description"),
-                new SurveyResponse(1608163201, WaysToWellbeing.KEEP_LEARNING, "title", "description"),
-                new SurveyResponse(0, WaysToWellbeing.TAKE_NOTICE, "title", "description"),
-                new SurveyResponse(2147483647, WaysToWellbeing.KEEP_LEARNING, "title", "description")
+                new SurveyResponse(1608076799, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(1608076800, WaysToWellbeing.CONNECT, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(1608076801, WaysToWellbeing.BE_ACTIVE, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(1608163100, WaysToWellbeing.GIVE, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(1608163199, WaysToWellbeing.GIVE, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(1608163200, WaysToWellbeing.TAKE_NOTICE, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(1608163201, WaysToWellbeing.KEEP_LEARNING, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(0, WaysToWellbeing.TAKE_NOTICE, "title", "description", 0, 0, 0, 0, 0),
+                new SurveyResponse(2147483647, WaysToWellbeing.KEEP_LEARNING, "title", "description", 0, 0, 0, 0, 0)
         }, this.surveyResponseDao);
 
         List<SurveyResponse> surveyResponses = LiveDataTestUtil.getOrAwaitValue(this.surveyResponseDao.getSurveyResponsesByTimestampRange(1608076800, 1608163201));

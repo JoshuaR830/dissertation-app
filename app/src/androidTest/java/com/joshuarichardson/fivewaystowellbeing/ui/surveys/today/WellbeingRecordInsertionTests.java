@@ -95,7 +95,7 @@ public class WellbeingRecordInsertionTests {
 
             when(activitiesDao.getAllActivities()).thenReturn(activityData);
 
-            LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Collections.singletonList(new SurveyResponse(12345, WaysToWellbeing.UNASSIGNED, "Title", "Note")));
+            LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Collections.singletonList(new SurveyResponse(12345, WaysToWellbeing.UNASSIGNED, "Title", "Note", 0, 0, 0, 0, 0)));
             when(WellbeingRecordInsertionTests.this.surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
                 .thenReturn(data);
 

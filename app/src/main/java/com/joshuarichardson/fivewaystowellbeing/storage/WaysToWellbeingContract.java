@@ -23,6 +23,11 @@ public class WaysToWellbeingContract {
     public static final String SURVEY_RESPONSE_WAY_TO_WELLBEING = "way_to_wellbeing";
     public static final String SURVEY_RESPONSE_TITLE = "title";
     public static final String SURVEY_RESPONSE_DESCRIPTION = "description";
+    public static final String SURVEY_RESPONSE_CONNECT = "connect";
+    public static final String SURVEY_RESPONSE_BE_ACTIVE = "be_active";
+    public static final String SURVEY_RESPONSE_KEEP_LEARNING = "keep_learning";
+    public static final String SURVEY_RESPONSE_TAKE_NOTICE = "take_notice";
+    public static final String SURVEY_RESPONSE_GIVE = "give";
 
     // Survey response element
     public static final String SURVEY_RESPONSE_ELEMENT_TABLE_NAME = "survey_response_element";

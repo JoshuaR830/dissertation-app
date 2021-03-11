@@ -114,7 +114,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
     Date now = new Date();
 
     // ToDo - what to do about this if there is no basic survey?
-    SurveyResponse surveyResponse = new SurveyResponse(now.getTime(), WaysToWellbeing.UNASSIGNED, "", "");
+    SurveyResponse surveyResponse = new SurveyResponse(now.getTime(), WaysToWellbeing.UNASSIGNED, "", "", 0, 0, 0, 0, 0);
 
     public void onSubmit(View v) {
         // Log the survey completion

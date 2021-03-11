@@ -22,10 +22,10 @@ public interface SurveyResponseDao {
     @Query("SELECT * FROM survey_response")
     LiveData<List<SurveyResponse>> getAllSurveyResponses();
 
-    @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp")
+    @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp ORDER BY timestamp")
     LiveData<List<SurveyResponse>> getSurveyResponsesByTimestampRange(long startTimestamp, long endTimestamp);
 
-    @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp")
+    @Query("SELECT * FROM survey_response WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp ORDER BY timestamp")
     List<SurveyResponse> getSurveyResponsesByTimestampRangeNotLive(long startTimestamp, long endTimestamp);
 
     @Query("SELECT COUNT(way_to_wellbeing) FROM survey_response WHERE way_to_wellbeing = :wayToWellbeing")
@@ -39,7 +39,7 @@ public interface SurveyResponseDao {
     List<SurveyResponse> getHistoryPageData();
 
     // Select only surveys that have data in them
-    @Query("SELECT DISTINCT survey_response.id, survey_response.description, survey_response.timestamp, survey_response.title, survey_response.way_to_wellbeing " +
+    @Query("SELECT DISTINCT survey_response.id, survey_response.description, survey_response.timestamp, survey_response.title, survey_response.way_to_wellbeing, survey_response.connect, survey_response.be_active, survey_response.keep_learning, survey_response.take_notice, survey_response.give " +
             "FROM survey_response " +
             "INNER JOIN survey_activity ON survey_response.id = survey_activity.survey_response_id " +
             "ORDER BY timestamp DESC")
@@ -51,6 +51,9 @@ public interface SurveyResponseDao {
             "INNER JOIN survey_activity ON survey_response.id = survey_activity.survey_response_id) " +
             "ORDER BY timestamp DESC")
     LiveData<List<SurveyResponse>> getEmptyHistoryPageData();
+
+    @Query("SELECT * FROM survey_response WHERE connect = :connectValue AND be_active = :beActiveValue AND keep_learning = :keepLearningValue AND take_notice = :takeNoticeValue AND give = :giveValue AND id = :surveyId")
+    SurveyResponse updateWaysToWellbeing(long surveyId, int connectValue, int beActiveValue, int keepLearningValue, int takeNoticeValue, int giveValue);
 
     // ToDo Will need to add a delete
 }
