@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingValues;
@@ -18,7 +21,6 @@ import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimes
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -49,22 +51,34 @@ public class InsightsFragment extends Fragment {
         long millisPerDay = 86400000;
         int days = 7;
         Date now = new Date();
-        long startTime = TimeHelper.getStartOfDay(now.getTime());
-        long endTime = TimeHelper.getEndOfDay(now.getTime());
+        long thisMorning = TimeHelper.getStartOfDay(now.getTime());
+        long tonight = TimeHelper.getEndOfDay(now.getTime());
 
-        long finalEndTime = startTime - (millisPerDay * days - 1);
+        long finalStartTime = thisMorning - (millisPerDay * (days - 1));
+
+        // End of previous period
+        long previousPeriodEndTime = tonight - (millisPerDay * days);
+        // Number of days earlier
+        long previousPeriodStartTime = finalStartTime - (millisPerDay * days);
+
+        TextView startDayText = root.findViewById(R.id.start_day);
+        TextView endDayText = root.findViewById(R.id.end_day);
+        startDayText.setText(TimeFormatter.formatTimeAsDayMonthString(finalStartTime));
+        endDayText.setText(TimeFormatter.formatTimeAsDayMonthString(tonight));
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            List<WellbeingResult> wellbeingResults = db.wellbeingResultsDao().getResultsByTimestampRange(finalEndTime, endTime);
-            WellbeingValues values = new WellbeingValues(wellbeingResults);
+            List<WellbeingResult> currentWellbeingResults = db.wellbeingResultsDao().getResultsByTimestampRange(finalStartTime, tonight);
+            List<WellbeingResult> previousWellbeingResults = db.wellbeingResultsDao().getResultsByTimestampRange(previousPeriodStartTime, previousPeriodEndTime);
+            WellbeingValues currentValues = new WellbeingValues(currentWellbeingResults);
+            WellbeingValues previousValues = new WellbeingValues(previousWellbeingResults);
 
             List<InsightsItem> insights = Arrays.asList(
                 new InsightsItem(getString(R.string.title_weekly_insights_overview), getString(R.string.description_weekly_insights_overview), 2, null),
-                new InsightsItem(getString(R.string.wellbeing_connect), String.format(Locale.getDefault(), "%d", values.getAchievedConnectNumber())),
-                new InsightsItem(getString(R.string.wellbeing_be_active), String.format(Locale.getDefault(), "%d", values.getAchievedBeActiveNumber())),
-                new InsightsItem(getString(R.string.wellbeing_keep_learning), String.format(Locale.getDefault(), "%d", values.getAchievedKeepLearningNumber())),
-                new InsightsItem(getString(R.string.wellbeing_take_notice), String.format(Locale.getDefault(), "%d", values.getAchievedTakeNoticeNumber())),
-                new InsightsItem(getString(R.string.wellbeing_give), String.format(Locale.getDefault(), "%d", values.getAchievedGiveNumber()))
+                new InsightsItem(getString(R.string.wellbeing_connect), WaysToWellbeing.CONNECT, currentValues.getAchievedConnectNumber(), previousValues.getAchievedConnectNumber()),
+                new InsightsItem(getString(R.string.wellbeing_be_active), WaysToWellbeing.BE_ACTIVE, currentValues.getAchievedBeActiveNumber(), previousValues.getAchievedBeActiveNumber()),
+                new InsightsItem(getString(R.string.wellbeing_keep_learning), WaysToWellbeing.KEEP_LEARNING, currentValues.getAchievedKeepLearningNumber(), previousValues.getAchievedKeepLearningNumber()),
+                new InsightsItem(getString(R.string.wellbeing_take_notice), WaysToWellbeing.TAKE_NOTICE, currentValues.getAchievedTakeNoticeNumber(), previousValues.getAchievedTakeNoticeNumber()),
+                new InsightsItem(getString(R.string.wellbeing_give), WaysToWellbeing.GIVE, currentValues.getAchievedGiveNumber(), previousValues.getAchievedGiveNumber())
             );
 
             getActivity().runOnUiThread(() -> {
