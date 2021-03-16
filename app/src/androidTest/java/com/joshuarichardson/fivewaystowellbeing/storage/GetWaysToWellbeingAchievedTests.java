@@ -96,7 +96,7 @@ public class GetWaysToWellbeingAchievedTests {
             new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
         );
 
-        WellbeingValues values = new WellbeingValues(input);
+        WellbeingValues values = new WellbeingValues(input, 1, 2);
         assertThat(values.getAverageConnectValue()).isEqualTo(61);
         assertThat(values.getAverageBeActiveValue()).isEqualTo(100);
         assertThat(values.getAverageKeepLearningValue()).isEqualTo(60);
@@ -114,7 +114,7 @@ public class GetWaysToWellbeingAchievedTests {
             new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
         );
 
-        WellbeingValues values = new WellbeingValues(input);
+        WellbeingValues values = new WellbeingValues(input, 1, 2);
 
         int connectNumber = values.getAchievedConnectNumber();
         int beActiveNumber = values.getAchievedBeActiveNumber();

@@ -65,6 +65,12 @@ public class ActivityViewHelper {
         // This only needs to run once, after everything else
         activity.runOnUiThread(() -> {
             View todaySurveyContainer = activity.findViewById(R.id.survey_summary_item_container);
+
+            // If the container tries to populate after navigating away it would be null
+            if(todaySurveyContainer == null) {
+                return;
+            }
+
             TextView surveyNote = todaySurveyContainer.findViewById(R.id.survey_list_description);
 
             long surveyTime = TimeHelper.getStartOfDay(surveyData.getTimestamp());

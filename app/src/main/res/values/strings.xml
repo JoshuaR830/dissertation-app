@@ -9,6 +9,7 @@
     <string name="learn_more_title">Learn more</string>
     <string name="view_more">View more</string>
     <string name="wellbeing_graph_title">Your ways to wellbeing</string>
+    <string name="wellbeing_insights_graph">Daily ways to wellbeing</string>
     <string name="passtime_search_hint">Search for activity</string>
     <string name="create_non_existent_button">Create new</string>
 
@@ -122,6 +123,9 @@
     <string name="preference_switch_title">Enable</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
+
+    <string name="percentage_label">%</string>
+    <string name="date_label">Date</string>
 
     <string name="old_activity_warning">Edit recommended</string>
     <string name="old_activity_warning_snackbar">Some activities don\'t have ways to wellbeing assigned edit recommended</string>
