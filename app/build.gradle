@@ -98,6 +98,9 @@ dependencies {
     testImplementation 'org.mockito:mockito-android:3.7.7'
     testImplementation 'androidx.test:runner:1.3.0'
 
+    // Chart library
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     // ToDo - find out how to move all tests to run in Robolectric instead of runing on the emulator for faster tests
     // Reference https://proandroiddev.com/robolectric-testing-with-androidjunitrunner-86292bceef25
     // Robolectric
@@ -125,4 +128,5 @@ dependencies {
 }
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }

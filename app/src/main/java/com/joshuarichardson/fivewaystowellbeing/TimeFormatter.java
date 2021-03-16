@@ -12,6 +12,14 @@ public class TimeFormatter {
         return dateFormatter.format(time);
     }
 
+    public static String formatTimeAsDayMonthString(long time) {
+        if(time < 0) {
+            return null;
+        }
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM", Locale.getDefault());
+        return dateFormatter.format(time);
+    }
+
     public static String formatTimeAsHourMinuteString(long time) {
         if(time < 0 || time > 86400000) {
             return null;
