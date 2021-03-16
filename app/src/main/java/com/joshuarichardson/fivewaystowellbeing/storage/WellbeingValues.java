@@ -7,23 +7,45 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class WellbeingValues {
+    private long startDay;
+    private long endDay;
+
     List<Integer> connectValues = new ArrayList<>();
     List<Integer> beActiveValues = new ArrayList<>();
     List<Integer> keepLearningValues = new ArrayList<>();
     List<Integer> takeNoticeValues = new ArrayList<>();
     List<Integer> giveValues = new ArrayList<>();
 
-    public WellbeingValues(List<WellbeingResult> surveys) {
+    public WellbeingValues(List<WellbeingResult> surveys, long startDay, long endDay) {
+        this.startDay = startDay;
+        this.endDay = endDay;
         this.processSurveys(surveys);
     }
 
     private void processSurveys(List<WellbeingResult> wellbeingResults) {
+        long previousTimestamp = this.startDay;
         for (WellbeingResult result : wellbeingResults) {
+
+            // Add blanks for any surveys that don't exist
+            while(result.getTimestamp() > previousTimestamp) {
+                connectValues.add(0);
+                beActiveValues.add(0);
+                keepLearningValues.add(0);
+                takeNoticeValues.add(0);
+                giveValues.add(0);
+
+                previousTimestamp += 86400000;
+            }
+
+            // Add real values
             connectValues.add(result.getConnectValue());
             beActiveValues.add(result.getBeActiveValue());
             keepLearningValues.add(result.getKeepLearningValue());
             takeNoticeValues.add(result.getTakeNoticeValue());
             giveValues.add(result.getGiveValue());
+
+            // Increment it so that it is ahead by 1
+            previousTimestamp = result.getTimestamp() + 86400000;
         }
     }
 
@@ -86,5 +108,33 @@ public class WellbeingValues {
         // Reference https://stackoverflow.com/a/17846520/13496270
         int total = giveValues.stream().mapToInt(Integer::intValue).sum();
         return total/giveValues.size();
+    }
+
+    public List<Integer> getConnectValues() {
+        return this.connectValues;
+    }
+
+    public List<Integer> getBeActiveValues() {
+        return this.beActiveValues;
+    }
+
+    public List<Integer> getKeepLearningValues() {
+        return this.keepLearningValues;
+    }
+
+    public List<Integer> getTakeNoticeValues() {
+        return this.takeNoticeValues;
+    }
+
+    public List<Integer> getGiveValues() {
+        return this.giveValues;
+    }
+
+    public long getEndDay() {
+        return this.endDay;
+    }
+
+    public long getStartDay() {
+        return this.startDay;
     }
 }
