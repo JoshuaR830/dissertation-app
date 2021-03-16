@@ -102,6 +102,9 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
     public void updateInsights(View view, long startTime, long endTime) {
         long difference = endTime - startTime;
         int days = (int) (difference/MILLIS_PER_DAY) + 1;
+        if(days == 1) {
+            return;
+        }
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(endTime);
         this.selectedTime = cal.getTime();
