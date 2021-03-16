@@ -89,14 +89,14 @@ public class GetWaysToWellbeingAchievedTests {
     @Test
     public void whenGettingAverageValue_ShouldReturnCorrectValues() {
         List<WellbeingResult> input = Arrays.asList(
+            new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100),
             new WellbeingResult(2, 2389598, 35, 100, 50, 100, 100),
             new WellbeingResult(3, 3389598, 35, 100, 50, 100, 10),
             new WellbeingResult(4, 4389598, 35, 100, 50, 20, 100),
-            new WellbeingResult(5, 5389598, 100, 100, 50, 20, 100),
-            new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
+            new WellbeingResult(5, 5389598, 100, 100, 50, 20, 100)
         );
 
-        WellbeingValues values = new WellbeingValues(input, 1, 2);
+        WellbeingValues values = new WellbeingValues(input, 1389598, 5389598);
         assertThat(values.getAverageConnectValue()).isEqualTo(61);
         assertThat(values.getAverageBeActiveValue()).isEqualTo(100);
         assertThat(values.getAverageKeepLearningValue()).isEqualTo(60);
