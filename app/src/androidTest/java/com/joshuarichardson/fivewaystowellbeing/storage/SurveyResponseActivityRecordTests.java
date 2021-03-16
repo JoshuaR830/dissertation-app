@@ -485,4 +485,94 @@ public class SurveyResponseActivityRecordTests {
         assertThat(surveyActivities.get(0).getActivityRecordId()).isEqualTo(activitySurveyId2);
         assertThat(surveyActivities.get(1).getActivityRecordId()).isEqualTo(activitySurveyId3);
     }
+
+    @Test
+    public void activitiesShouldBeReturnedInOrderOfFrequency() {
+        // create surveys
+        SurveyResponse surveyResponse1 = new SurveyResponse(18400000, "BE_ACTIVE", "Survey 1", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(36800000, "BE_ACTIVE", "Survey 2", "description");
+        SurveyResponse surveyResponse3 = new SurveyResponse(55200000, "BE_ACTIVE", "Survey 3", "description");
+
+        // Insert surveys
+        long surveyResponseId1 = this.surveyResponseDao.insert(surveyResponse1);
+        long surveyResponseId2 = this.surveyResponseDao.insert(surveyResponse2);
+        long surveyResponseId3 = this.surveyResponseDao.insert(surveyResponse3);
+
+        // Create activities
+        ActivityRecord activityRecord1 = new ActivityRecord("Activity 1", 1200, 1607960240, "Sport", "BE_ACTIVE", false);
+        ActivityRecord activityRecord2 = new ActivityRecord("Activity 2", 1300, 1607960240, "People", "CONNECT", false);
+        ActivityRecord activityRecord3 = new ActivityRecord("Activity 3", 1400, 1607960240, "Exercise", "BE_ACTIVE", false);
+        ActivityRecord activityRecord4 = new ActivityRecord("Activity 3", 1400, 1607960240, "Exercise", "BE_ACTIVE", true);
+
+        // Insert activities
+        long activityId1 = this.activityRecordDao.insert(activityRecord1);
+        long activityId2 = this.activityRecordDao.insert(activityRecord2);
+        long activityId3 = this.activityRecordDao.insert(activityRecord3);
+        long activityId4 = this.activityRecordDao.insert(activityRecord4);
+
+        // Insert activity surveys
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId1, activityId1, 1, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId1, activityId2, 2, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId1, activityId3, 3, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId2, activityId3, 1, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId2, activityId2, 2, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId3, activityId2, 1, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId3, activityId4, 1, "note", -1, -1, 5, false));
+
+        List<ActivityStats> stats = this.surveyActivityDao.getActivityFrequencyBetweenTimes(18400000, 55200000);
+
+        assertThat(stats.size()).isEqualTo(3);
+
+        assertThat((stats.get(0).getActivityId())).isEqualTo(activityId2);
+        assertThat((stats.get(1).getActivityId())).isEqualTo(activityId3);
+        assertThat((stats.get(2).getActivityId())).isEqualTo(activityId1);
+
+        assertThat(stats.get(0).getCount()).isEqualTo(3);
+        assertThat(stats.get(1).getCount()).isEqualTo(2);
+        assertThat(stats.get(2).getCount()).isEqualTo(1);
+    }
+
+    @Test
+    public void activitiesByWellbeingType_ShouldBeReturnedInOrderOfFrequency() {
+        // create surveys
+        SurveyResponse surveyResponse1 = new SurveyResponse(18400000, "BE_ACTIVE", "Survey 1", "description");
+        SurveyResponse surveyResponse2 = new SurveyResponse(36800000, "BE_ACTIVE", "Survey 2", "description");
+        SurveyResponse surveyResponse3 = new SurveyResponse(55200000, "BE_ACTIVE", "Survey 3", "description");
+
+        // Insert surveys
+        long surveyResponseId1 = this.surveyResponseDao.insert(surveyResponse1);
+        long surveyResponseId2 = this.surveyResponseDao.insert(surveyResponse2);
+        long surveyResponseId3 = this.surveyResponseDao.insert(surveyResponse3);
+
+        // Create activities
+        ActivityRecord activityRecord1 = new ActivityRecord("Activity 1", 1200, 1607960240, "Sport", "BE_ACTIVE", false);
+        ActivityRecord activityRecord2 = new ActivityRecord("Activity 2", 1300, 1607960240, "People", "CONNECT", false);
+        ActivityRecord activityRecord3 = new ActivityRecord("Activity 3", 1400, 1607960240, "Exercise", "BE_ACTIVE", false);
+        ActivityRecord activityRecord4 = new ActivityRecord("Activity 3", 1400, 1607960240, "Exercise", "BE_ACTIVE", true);
+
+        // Insert activities
+        long activityId1 = this.activityRecordDao.insert(activityRecord1);
+        long activityId2 = this.activityRecordDao.insert(activityRecord2);
+        long activityId3 = this.activityRecordDao.insert(activityRecord3);
+        long activityId4 = this.activityRecordDao.insert(activityRecord4);
+
+        // Insert activity surveys
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId1, activityId1, 1, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId1, activityId2, 2, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId1, activityId3, 3, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId2, activityId3, 1, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId2, activityId2, 2, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId3, activityId2, 1, "note", -1, -1, 5, false));
+        this.surveyActivityDao.insert(new SurveyResponseActivityRecord(surveyResponseId3, activityId4, 1, "note", -1, -1, 5, false));
+
+        List<ActivityStats> stats = this.surveyActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(18400000, 55200000, "BE_ACTIVE");
+
+        assertThat(stats.size()).isEqualTo(2);
+
+        assertThat((stats.get(0).getActivityId())).isEqualTo(activityId3);
+        assertThat((stats.get(1).getActivityId())).isEqualTo(activityId1);
+
+        assertThat(stats.get(0).getCount()).isEqualTo(2);
+        assertThat(stats.get(1).getCount()).isEqualTo(1);
+    }
 }

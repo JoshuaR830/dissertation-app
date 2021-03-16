@@ -1,5 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing.storage.dao;
 
+import com.joshuarichardson.fivewaystowellbeing.storage.ActivityStats;
 import com.joshuarichardson.fivewaystowellbeing.storage.SurveyCountItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
@@ -59,4 +60,20 @@ public interface SurveyResponseActivityRecordDao {
 
     @Query("DELETE FROM survey_activity WHERE survey_activity_id = :activitySurveyId")
     void deleteById(long activitySurveyId);
+
+    @Query("SELECT activity_records.id AS activityId, count(*) AS count FROM activity_records " +
+        "JOIN survey_activity ON survey_activity.activity_record_id = activity_records.id " +
+        "INNER JOIN survey_response ON survey_activity.survey_response_id = survey_response.id " +
+        "WHERE activity_records.is_hidden = 0 AND survey_response.timestamp BETWEEN :startTime AND :endTime " +
+        "GROUP BY activity_records.id " +
+        "ORDER BY count(*) DESC")
+    List<ActivityStats> getActivityFrequencyBetweenTimes(long startTime, long endTime);
+
+    @Query("SELECT activity_records.id AS activityId, count(*) AS count FROM activity_records " +
+        "JOIN survey_activity ON survey_activity.activity_record_id = activity_records.id " +
+        "INNER JOIN survey_response ON survey_activity.survey_response_id = survey_response.id " +
+        "WHERE activity_records.is_hidden = 0 AND survey_response.timestamp BETWEEN :startTime AND :endTime AND activity_records.way_to_wellbeing = :wayToWellbeing " +
+        "GROUP BY activity_records.id " +
+        "ORDER BY count(*) DESC")
+    List<ActivityStats> getActivityFrequencyByWellbeingTypeBetweenTimes(long startTime, long endTime, String wayToWellbeing);
 }
