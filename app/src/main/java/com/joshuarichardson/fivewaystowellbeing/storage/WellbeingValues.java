@@ -1,5 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
 import java.util.ArrayList;
@@ -136,5 +137,13 @@ public class WellbeingValues {
 
     public long getStartDay() {
         return this.startDay;
+    }
+
+    public WaysToWellbeing getLeastAchieved() {
+        return WaysToWellbeing.UNASSIGNED;
+    }
+
+    public WaysToWellbeing getMostAchieved() {
+        return WaysToWellbeing.UNASSIGNED;
     }
 }
