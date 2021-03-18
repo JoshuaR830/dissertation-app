@@ -100,4 +100,18 @@ public class WellbeingHelperWayToWellbeingFormatTests {
         wellbeingType = WellbeingHelper.getWayToWellbeingFromString("TAKE NOTICE");
         assertThat(wellbeingType).isEqualTo(WaysToWellbeing.TAKE_NOTICE);
     }
+
+    @Test
+    public void waysToWellbeingStringResource_ShouldReturnCorrectString() {
+        int stringResourceId = WellbeingHelper.getWellbeingStringResource(WaysToWellbeing.CONNECT);
+        assertThat(stringResourceId).isEqualTo(R.string.wellbeing_connect);
+        stringResourceId = WellbeingHelper.getWellbeingStringResource(WaysToWellbeing.BE_ACTIVE);
+        assertThat(stringResourceId).isEqualTo(R.string.wellbeing_be_active);
+        stringResourceId = WellbeingHelper.getWellbeingStringResource(WaysToWellbeing.KEEP_LEARNING);
+        assertThat(stringResourceId).isEqualTo(R.string.wellbeing_keep_learning);
+        stringResourceId = WellbeingHelper.getWellbeingStringResource(WaysToWellbeing.TAKE_NOTICE);
+        assertThat(stringResourceId).isEqualTo(R.string.wellbeing_take_notice);
+        stringResourceId = WellbeingHelper.getWellbeingStringResource(WaysToWellbeing.GIVE);
+        assertThat(stringResourceId).isEqualTo(R.string.wellbeing_give);
+    }
 }

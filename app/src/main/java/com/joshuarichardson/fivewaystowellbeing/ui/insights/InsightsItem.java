@@ -17,6 +17,8 @@ public class InsightsItem {
     private View specialView;
     private int columnWidth;
     private InsightType insightType;
+    private String activityDescription;
+    private boolean shouldShow;
 
     public InsightsItem(String title, WaysToWellbeing wayToWellbeing, int currentValue, int oldValue, InsightType insightType) {
         this.title = title;
@@ -35,6 +37,18 @@ public class InsightsItem {
         this.columnWidth = columnWidth;
         this.insightType = insightType;
         this.currentValues = currentValues;
+    }
+
+    // Suggestion card
+    public InsightsItem(String wayToWellbeingTitle, String activity, String description, WaysToWellbeing wayToWellbeing, boolean shouldShow) {
+        this.title = wayToWellbeingTitle;
+        this.activityDescription = activity;
+        this.info = description;
+        this.wayToWellbeing = wayToWellbeing;
+        this.specialView = null;
+        this.columnWidth = 2;
+        this.shouldShow = shouldShow;
+        this.insightType = InsightType.SUGGESTION_CARD;
     }
 
     public String getTitle() {
@@ -72,5 +86,13 @@ public class InsightsItem {
 
     public InsightType getType() {
         return this.insightType;
+    }
+
+    public String getActivityDescription() {
+        return this.activityDescription;
+    }
+
+    public boolean isShouldShow() {
+        return shouldShow;
     }
 }

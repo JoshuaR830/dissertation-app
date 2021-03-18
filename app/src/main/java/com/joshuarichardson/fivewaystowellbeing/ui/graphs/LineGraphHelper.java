@@ -18,14 +18,16 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.chip.ChipGroup;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.ui.insights.DayMonthValueFormatter;
+import com.joshuarichardson.fivewaystowellbeing.ui.insights.InsightsAdapter;
 import com.joshuarichardson.fivewaystowellbeing.ui.insights.InsightsItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LineGraphHelper {
-    public static void drawGraph(Context context, View graphCard, InsightsItem insightsItem) {
+    public static void drawGraph(Context context, View graphCard, InsightsItem insightsItem, InsightsAdapter.ChipInfoCallback callback) {
         LineChart dailyAchieved = graphCard.findViewById(R.id.daily_wellbeing_line_chart);
 
         XAxis x = dailyAchieved.getXAxis();
@@ -148,26 +150,31 @@ public class LineGraphHelper {
             switch (checkedId) {
                 case R.id.chip_connect:
                     LayoutInflater.from(context).inflate(R.layout.card_connect, helpContainer);
+                    callback.displaySuggestionChip(graphCard, insightsItem.getCurrentValues().getStartDay(), insightsItem.getCurrentValues().getEndDay(), WaysToWellbeing.CONNECT);
                     helpContainer.setVisibility(View.VISIBLE);
                     waysToWellbeingDataSets.add(connectDataSet);
                     break;
                 case R.id.chip_be_active:
                     LayoutInflater.from(context).inflate(R.layout.card_be_active, helpContainer);
+                    callback.displaySuggestionChip(graphCard, insightsItem.getCurrentValues().getStartDay(), insightsItem.getCurrentValues().getEndDay(), WaysToWellbeing.BE_ACTIVE);
                     helpContainer.setVisibility(View.VISIBLE);
                     waysToWellbeingDataSets.add(beActiveDataSet);
                     break;
                 case R.id.chip_keep_learning:
                     LayoutInflater.from(context).inflate(R.layout.card_keep_learning, helpContainer);
+                    callback.displaySuggestionChip(graphCard, insightsItem.getCurrentValues().getStartDay(), insightsItem.getCurrentValues().getEndDay(), WaysToWellbeing.KEEP_LEARNING);
                     helpContainer.setVisibility(View.VISIBLE);
                     waysToWellbeingDataSets.add(keepLearningDataSet);
                     break;
                 case R.id.chip_take_notice:
                     LayoutInflater.from(context).inflate(R.layout.card_take_notice, helpContainer);
+                    callback.displaySuggestionChip(graphCard, insightsItem.getCurrentValues().getStartDay(), insightsItem.getCurrentValues().getEndDay(), WaysToWellbeing.TAKE_NOTICE);
                     helpContainer.setVisibility(View.VISIBLE);
                     waysToWellbeingDataSets.add(takeNoticeDataSet);
                     break;
                 case R.id.chip_give:
                     LayoutInflater.from(context).inflate(R.layout.card_give, helpContainer);
+                    callback.displaySuggestionChip(graphCard, insightsItem.getCurrentValues().getStartDay(), insightsItem.getCurrentValues().getEndDay(), WaysToWellbeing.GIVE);
                     helpContainer.setVisibility(View.VISIBLE);
                     waysToWellbeingDataSets.add(giveDataSet);
                     break;

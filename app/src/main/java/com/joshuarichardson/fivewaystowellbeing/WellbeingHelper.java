@@ -124,4 +124,21 @@ public class WellbeingHelper {
                 return context.getColor(R.color.colorSilver);
         }
     }
+
+    public static int getWellbeingStringResource(WaysToWellbeing wayToWellbeing) {
+        switch(wayToWellbeing) {
+            case CONNECT:
+                return R.string.wellbeing_connect;
+            case BE_ACTIVE:
+                return R.string.wellbeing_be_active;
+            case KEEP_LEARNING:
+                return R.string.wellbeing_keep_learning;
+            case TAKE_NOTICE:
+                return R.string.wellbeing_take_notice;
+            case GIVE:
+                return R.string.wellbeing_give;
+            default:
+                return 0;
+        }
+    }
 }

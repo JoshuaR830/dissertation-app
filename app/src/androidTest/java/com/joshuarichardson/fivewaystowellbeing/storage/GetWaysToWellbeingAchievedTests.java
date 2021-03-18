@@ -2,6 +2,7 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import android.content.Context;
 
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
 import org.junit.Before;
@@ -127,5 +128,61 @@ public class GetWaysToWellbeingAchievedTests {
         assertThat(keepLearningNumber).isEqualTo(1);
         assertThat(takeNoticeNumber).isEqualTo(3);
         assertThat(giveNumber).isEqualTo(4);
+    }
+
+    @Test
+    public void getLeastAchievedWhenDistinct_ShouldReturnLeastAchievedItem() {
+        List<WellbeingResult> input = Arrays.asList(
+            new WellbeingResult(2, 2389598, 35, 100, 50, 100, 100),
+            new WellbeingResult(3, 3389598, 35, 100, 50, 100, 10),
+            new WellbeingResult(4, 4389598, 35, 100, 50, 20, 100),
+            new WellbeingResult(5, 5389598, 100, 100, 50, 20, 100),
+            new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
+        );
+
+        WellbeingValues values = new WellbeingValues(input, 1, 2);
+        assertThat(values.getLeastAchieved()).isEqualTo(WaysToWellbeing.KEEP_LEARNING);
+    }
+
+    @Test
+    public void getLeastAchievedWhenMultiple_ShouldReturnRandomLeastAchieved() {
+        List<WellbeingResult> input = Arrays.asList(
+            new WellbeingResult(2, 2389598, 35, 100, 50, 100, 100),
+            new WellbeingResult(3, 3389598, 35, 100, 50, 100, 10),
+            new WellbeingResult(4, 4389598, 35, 100, 50, 20, 100),
+            new WellbeingResult(5, 5389598, 50, 100, 50, 20, 100),
+            new WellbeingResult(6, 1389598, 100, 0, 100, 100, 100)
+        );
+
+        WellbeingValues values = new WellbeingValues(input, 1, 2);
+        assertThat(values.getLeastAchieved()).isAnyOf(WaysToWellbeing.CONNECT, WaysToWellbeing.KEEP_LEARNING);
+    }
+
+    @Test
+    public void getMostAchievedWhenDistinct_ShouldReturnMostAchievedItem() {
+        List<WellbeingResult> input = Arrays.asList(
+            new WellbeingResult(2, 2389598, 35, 100, 50, 100, 100),
+            new WellbeingResult(3, 3389598, 35, 100, 50, 100, 10),
+            new WellbeingResult(4, 4389598, 35, 100, 50, 20, 100),
+            new WellbeingResult(5, 5389598, 100, 100, 50, 20, 100),
+            new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
+        );
+
+        WellbeingValues values = new WellbeingValues(input, 1, 2);
+        assertThat(values.getMostAchieved()).isEqualTo(WaysToWellbeing.BE_ACTIVE);
+    }
+
+    @Test
+    public void getMostAchievedWhenMultiple_ShouldReturnRandomMostAchieved() {
+        List<WellbeingResult> input = Arrays.asList(
+            new WellbeingResult(2, 2389598, 100, 100, 50, 100, 100),
+            new WellbeingResult(3, 3389598, 100, 100, 50, 100, 100),
+            new WellbeingResult(4, 4389598, 100, 100, 50, 20, 100),
+            new WellbeingResult(5, 5389598, 100, 100, 50, 20, 100),
+            new WellbeingResult(6, 1389598, 100, 100, 100, 100, 100)
+        );
+
+        WellbeingValues values = new WellbeingValues(input, 1, 2);
+        assertThat(values.getMostAchieved()).isAnyOf(WaysToWellbeing.BE_ACTIVE, WaysToWellbeing.GIVE, WaysToWellbeing.CONNECT);
     }
 }
