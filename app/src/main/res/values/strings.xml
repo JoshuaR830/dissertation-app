@@ -129,4 +129,21 @@
 
     <string name="old_activity_warning">Edit recommended</string>
     <string name="old_activity_warning_snackbar">Some activities don\'t have ways to wellbeing assigned edit recommended</string>
+
+    <string name="suggestions_work_on">You could work on your</string>
+    <string name="suggestions_activity">Suggested activity:</string>
+    <string name="suggestions_best_activity">Most frequent:</string>
+    <string name="suggestions_worst_activity">Suggested activity:</string>
+    <string name="suggestions_improve_description">Doing this more regularly will help to boost your daily</string>
+    <string name="suggestions_score">score</string>
+    <string name="suggestions_best">You are doing best at</string>
+    <string name="suggestions_favourite">Favourite activity:</string>
+    <string name="suggestions_positive_description">You did this regularly over the last week - keep it up!</string>
+
+    <string name="connect_suggestion">Get in touch with a friend</string>
+    <string name="be_active_suggestion">Find a new way to exercise</string>
+    <string name="keep_learning_suggestion">Take up a new hobby</string>
+    <string name="take_notice_suggestion">Start a journal</string>
+    <string name="give_suggestion">Lend a helping hand</string>
+    <string name="default_suggestion">Get to know someone better</string>
 </resources>

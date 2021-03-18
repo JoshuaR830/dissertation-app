@@ -1,7 +1,6 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.insights;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
-import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.LineGraphHelper;
 
 import java.time.LocalDateTime;
@@ -25,7 +24,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,15 +33,17 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
     private final List<InsightsItem> insightsList;
     private final Context context;
     private final DateClickListener clickListener;
+    private final ChipInfoCallback chipInfoCallbackCallback;
     LayoutInflater inflater;
     private FragmentManager fragmentManager;
 
-    public InsightsAdapter(Context context, List<InsightsItem> insights, DateClickListener clickListener, FragmentManager fragmentManager) {
+    public InsightsAdapter(Context context, List<InsightsItem> insights, DateClickListener clickListener, FragmentManager fragmentManager, ChipInfoCallback chipInfoCallback) {
         this.inflater = LayoutInflater.from(context);
         this.insightsList = insights;
         this.context = context;
         this.clickListener = clickListener;
         this.fragmentManager = fragmentManager;
+        this.chipInfoCallbackCallback = chipInfoCallback;
     }
 
     @NonNull
@@ -65,33 +65,54 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
 
     public class InsightsViewHolder extends RecyclerView.ViewHolder {
 
-        View small_card;
-        View large_card;
-        View graph_card;
-        View date_picker_card;
+        View smallCard;
+        View largeCard;
+        View graphCard;
+        View datePickerCard;
+        private View suggestionsCard;
 
         TextView titleType;
         TextView info;
 
         public InsightsViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.small_card = itemView.findViewById(R.id.small_insight);
-            this.large_card = itemView.findViewById(R.id.large_insight);
-            this.graph_card = itemView.findViewById(R.id.graph_insight);
-            this.date_picker_card = itemView.findViewById(R.id.date_picker_insight);
+            this.smallCard = itemView.findViewById(R.id.small_insight);
+            this.largeCard = itemView.findViewById(R.id.large_insight);
+            this.graphCard = itemView.findViewById(R.id.graph_insight);
+            this.datePickerCard = itemView.findViewById(R.id.date_picker_insight);
+            this.suggestionsCard = itemView.findViewById(R.id.suggestion_insight);
 
         }
 
         public void onBind(InsightsItem insightsItem) {
 
-            this.small_card.setVisibility(View.GONE);
-            this.large_card.setVisibility(View.GONE);
-            this.graph_card.setVisibility(View.GONE);
-            this.date_picker_card.setVisibility(View.GONE);
+            this.smallCard.setVisibility(View.GONE);
+            this.largeCard.setVisibility(View.GONE);
+            this.graphCard.setVisibility(View.GONE);
+            this.datePickerCard.setVisibility(View.GONE);
+            this.suggestionsCard.setVisibility(View.GONE);
 
-            if(insightsItem.getType() == InsightType.DATE_PICKER_CARD) {
-                this.titleType = this.date_picker_card.findViewById(R.id.time_chip);
-                Chip chip = this.date_picker_card.findViewById(R.id.time_chip);
+            if(insightsItem.getType() == InsightType.SUGGESTION_CARD) {
+                if(!insightsItem.isShouldShow()) {
+                    return;
+                }
+
+                this.titleType = this.suggestionsCard.findViewById(R.id.way_to_wellbeing);
+                TextView activityHelp = this.suggestionsCard.findViewById(R.id.insight_title_type);
+                TextView description = this.suggestionsCard.findViewById(R.id.insight_description);
+
+                activityHelp.setText(insightsItem.getActivityDescription());
+                description.setText(insightsItem.getInfo());
+
+                // Show correct colour for the item
+                ImageView typeImage = this.suggestionsCard.findViewById(R.id.wellbeing_type_image);
+                WayToWellbeingImageColorizer.colorize(InsightsAdapter.this.context, typeImage, insightsItem.getWayToWellbeing());
+
+                this.suggestionsCard.setVisibility(View.VISIBLE);
+
+            } else if(insightsItem.getType() == InsightType.DATE_PICKER_CARD) {
+                this.titleType = this.datePickerCard.findViewById(R.id.time_chip);
+                Chip chip = this.datePickerCard.findViewById(R.id.time_chip);
 
                 long startTime = 1614556800000L;
                 long endTime = Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis();
@@ -126,26 +147,26 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
                         InsightsAdapter.this.clickListener.updateInsights(InsightsViewHolder.this.itemView, selection.first, second);
                     });
                 });
-                this.date_picker_card.setVisibility(View.VISIBLE);
+                this.datePickerCard.setVisibility(View.VISIBLE);
 
             } else if(insightsItem.getType() == InsightType.DOUBLE_GRAPH) {
                 // Reference https://weeklycoding.com/mpandroidchart-documentation/getting-started/
-                this.titleType = this.graph_card.findViewById(R.id.insight_title_type);
-                LineGraphHelper.drawGraph(InsightsAdapter.this.context, this.graph_card, insightsItem);
+                this.titleType = this.graphCard.findViewById(R.id.insight_title_type);
+                LineGraphHelper.drawGraph(InsightsAdapter.this.context, this.graphCard, insightsItem, chipInfoCallbackCallback);
             } else if(insightsItem.getType() == InsightType.DOUBLE_INFO_CARD) {
-                this.titleType = this.large_card.findViewById(R.id.insight_title_type);
-                this.info = this.large_card.findViewById(R.id.insight_description);
-                this.large_card.setVisibility(View.VISIBLE);
+                this.titleType = this.largeCard.findViewById(R.id.insight_title_type);
+                this.info = this.largeCard.findViewById(R.id.insight_description);
+                this.largeCard.setVisibility(View.VISIBLE);
                 this.info.setText(insightsItem.getInfo());
             } else {
-                this.titleType = this.small_card.findViewById(R.id.insight_title_type);
-                this.info = this.small_card.findViewById(R.id.insight_description);
-                this.small_card.setVisibility(View.VISIBLE);
+                this.titleType = this.smallCard.findViewById(R.id.insight_title_type);
+                this.info = this.smallCard.findViewById(R.id.insight_description);
+                this.smallCard.setVisibility(View.VISIBLE);
                 this.info.setText(String.format(Locale.getDefault(), "%d", insightsItem.getCurrentValue()));
                 int difference = insightsItem.getValueDifference();
 
-                TextView trendIndicator = this.small_card.findViewById(R.id.trend_previous_period);
-                ImageView trendIndicatorImage = this.small_card.findViewById(R.id.trend_indicator);
+                TextView trendIndicator = this.smallCard.findViewById(R.id.trend_previous_period);
+                ImageView trendIndicatorImage = this.smallCard.findViewById(R.id.trend_indicator);
                 if (difference > 0) {
                     trendIndicator.setText(String.format(Locale.getDefault(), "+%d", difference));
                     trendIndicatorImage.setImageResource(R.drawable.icon_trend_up);
@@ -162,13 +183,8 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
                 }
 
                 // Show correct colour for the item
-                ImageView typeImage = this.small_card.findViewById(R.id.wellbeing_type_image);
-                GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(InsightsAdapter.this.context, R.drawable.wellbeing_type_indicator);
-                if (drawable != null) {
-                    drawable = (GradientDrawable) drawable.mutate();
-                    drawable.setColor(WellbeingHelper.getColor(InsightsAdapter.this.context, insightsItem.getWayToWellbeing().toString()));
-                    typeImage.setImageDrawable(drawable);
-                }
+                ImageView typeImage = this.smallCard.findViewById(R.id.wellbeing_type_image);
+                WayToWellbeingImageColorizer.colorize(InsightsAdapter.this.context, typeImage, insightsItem.getWayToWellbeing());
             }
 
             this.titleType.setText(insightsItem.getTitle());
@@ -177,5 +193,9 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
 
     public interface DateClickListener {
         void updateInsights(View itemView, long first, long second);
+    }
+
+    public interface ChipInfoCallback {
+        void displaySuggestionChip(View graphCard, long startTime, long endTime, WaysToWellbeing wayToWellbeing);
     }
 }

@@ -151,7 +151,7 @@ public class GetWaysToWellbeingAchievedTests {
             new WellbeingResult(3, 3389598, 35, 100, 50, 100, 10),
             new WellbeingResult(4, 4389598, 35, 100, 50, 20, 100),
             new WellbeingResult(5, 5389598, 50, 100, 50, 20, 100),
-            new WellbeingResult(6, 1389598, 10 0, 100, 100, 100, 100)
+            new WellbeingResult(6, 1389598, 100, 0, 100, 100, 100)
         );
 
         WellbeingValues values = new WellbeingValues(input, 1, 2);

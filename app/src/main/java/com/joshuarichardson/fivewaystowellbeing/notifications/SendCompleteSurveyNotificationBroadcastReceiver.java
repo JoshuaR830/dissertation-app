@@ -21,6 +21,9 @@ public class SendCompleteSurveyNotificationBroadcastReceiver extends BroadcastRe
     private static final int NOON_REMINDER = 2;
     private static final int NIGHT_REMINDER = 3;
 
+    // This will replace the notification instead of sending a new one
+    public static final int SURVEY_REMINDER = 4;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationManager notification = (NotificationManager) context.getSystemService(Service.NOTIFICATION_SERVICE);
@@ -52,21 +55,21 @@ public class SendCompleteSurveyNotificationBroadcastReceiver extends BroadcastRe
                 builder
                     .setSmallIcon(R.drawable.icon_notification_morning)
                     .setContentTitle(context.getResources().getString(R.string.notification_morning));
-                notification.notify(MORNING_REMINDER, builder.build());
+                notification.notify(SURVEY_REMINDER, builder.build());
                 helper.scheduleNotification(context, "morning");
                 break;
             case "noon":
                 builder
                     .setSmallIcon(R.drawable.icon_notification_noon)
                     .setContentTitle(context.getResources().getString(R.string.notification_noon));
-                notification.notify(NOON_REMINDER, builder.build());
+                notification.notify(SURVEY_REMINDER, builder.build());
                 helper.scheduleNotification(context, "noon");
                 break;
             case "night":
                 builder
                     .setSmallIcon(R.drawable.icon_notification_night)
                     .setContentTitle(context.getResources().getString(R.string.notification_night));
-                notification.notify(NIGHT_REMINDER, builder.build());
+                notification.notify(SURVEY_REMINDER, builder.build());
                 helper.scheduleNotification(context, "night");
                 break;
         }

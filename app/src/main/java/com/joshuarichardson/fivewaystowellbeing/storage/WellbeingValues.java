@@ -4,6 +4,8 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -139,11 +141,47 @@ public class WellbeingValues {
         return this.startDay;
     }
 
+    private HashMap<WaysToWellbeing, Integer> getWellbeingAchievedMap() {
+        HashMap<WaysToWellbeing, Integer> wellbeingAchievedMap = new HashMap<>();
+
+        wellbeingAchievedMap.put(WaysToWellbeing.CONNECT, getAchievedConnectNumber());
+        wellbeingAchievedMap.put(WaysToWellbeing.BE_ACTIVE, getAchievedBeActiveNumber());
+        wellbeingAchievedMap.put(WaysToWellbeing.KEEP_LEARNING, getAchievedKeepLearningNumber());
+        wellbeingAchievedMap.put(WaysToWellbeing.TAKE_NOTICE, getAchievedTakeNoticeNumber());
+        wellbeingAchievedMap.put(WaysToWellbeing.GIVE, getAchievedGiveNumber());
+
+        return wellbeingAchievedMap;
+    }
+
+    private WaysToWellbeing getWayToWellbeingMatchingCondition(int conditionValue, HashMap<WaysToWellbeing, Integer> wellbeingAchievedMap) {
+        List<WaysToWellbeing> wellbeingList = new ArrayList<>();
+        wellbeingAchievedMap.forEach((waysToWellbeing, value) -> {
+            // If the value matches a condition (min or max) then add the item to the list
+            if(value == conditionValue) {
+                wellbeingList.add(waysToWellbeing);
+            }
+        });
+
+        Collections.shuffle(wellbeingList);
+
+        if(wellbeingList.size() == 0) {
+            return WaysToWellbeing.UNASSIGNED;
+        }
+
+        return wellbeingList.get(0);
+    }
+
     public WaysToWellbeing getLeastAchieved() {
-        return WaysToWellbeing.UNASSIGNED;
+        HashMap<WaysToWellbeing, Integer> wellbeingAchievedMap = getWellbeingAchievedMap();
+        int min = Collections.min(wellbeingAchievedMap.values());
+
+        return getWayToWellbeingMatchingCondition(min, wellbeingAchievedMap);
     }
 
     public WaysToWellbeing getMostAchieved() {
-        return WaysToWellbeing.UNASSIGNED;
+        HashMap<WaysToWellbeing, Integer> wellbeingAchievedMap = getWellbeingAchievedMap();
+        int max = Collections.max(wellbeingAchievedMap.values());
+
+        return getWayToWellbeingMatchingCondition(max, wellbeingAchievedMap);
     }
 }

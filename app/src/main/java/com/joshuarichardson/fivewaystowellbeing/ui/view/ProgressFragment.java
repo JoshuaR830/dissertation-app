@@ -1,6 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.view;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.notifications.SendCompleteSurveyNotificationBroadcastReceiver;
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.SentimentItem;
@@ -84,6 +87,10 @@ public class ProgressFragment extends Fragment {
         addActivityButton.setOnClickListener(v -> {
             Intent activityIntent = new Intent(requireActivity(), ViewPassTimesActivity.class);
             startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
+
+            // When activity button clicked, clear pending notifications
+            NotificationManager notification = (NotificationManager) requireContext().getSystemService(Service.NOTIFICATION_SERVICE);
+            notification.cancel(SendCompleteSurveyNotificationBroadcastReceiver.SURVEY_REMINDER);
         });
 
         this.emotionUpdateObserver = sentiment -> {
