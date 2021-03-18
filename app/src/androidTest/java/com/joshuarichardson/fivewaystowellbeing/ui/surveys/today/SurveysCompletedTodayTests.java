@@ -205,9 +205,6 @@ public class SurveysCompletedTodayTests {
             .check(matches(allOf(isDisplayed(), withText("Activity"))));
 
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
-            .check(matches(not(isDisplayed())));
-
-        onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
 

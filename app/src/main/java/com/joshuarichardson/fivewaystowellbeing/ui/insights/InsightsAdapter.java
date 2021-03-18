@@ -33,7 +33,7 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
     private final List<InsightsItem> insightsList;
     private final Context context;
     private final DateClickListener clickListener;
-    private final ChipInfoCallback chipInfoCallbackCallback;
+    private final ChipInfoCallback chipInfoCallback;
     LayoutInflater inflater;
     private FragmentManager fragmentManager;
 
@@ -43,7 +43,7 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
         this.context = context;
         this.clickListener = clickListener;
         this.fragmentManager = fragmentManager;
-        this.chipInfoCallbackCallback = chipInfoCallback;
+        this.chipInfoCallback = chipInfoCallback;
     }
 
     @NonNull
@@ -152,7 +152,7 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
             } else if(insightsItem.getType() == InsightType.DOUBLE_GRAPH) {
                 // Reference https://weeklycoding.com/mpandroidchart-documentation/getting-started/
                 this.titleType = this.graphCard.findViewById(R.id.insight_title_type);
-                LineGraphHelper.drawGraph(InsightsAdapter.this.context, this.graphCard, insightsItem, chipInfoCallbackCallback);
+                LineGraphHelper.drawGraph(InsightsAdapter.this.context, this.graphCard, insightsItem, chipInfoCallback);
             } else if(insightsItem.getType() == InsightType.DOUBLE_INFO_CARD) {
                 this.titleType = this.largeCard.findViewById(R.id.insight_title_type);
                 this.info = this.largeCard.findViewById(R.id.insight_description);

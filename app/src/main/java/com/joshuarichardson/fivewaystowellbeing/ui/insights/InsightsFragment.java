@@ -179,6 +179,29 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
         this.daysLive.postValue(days);
     }
 
+    private void populateInsightCard(ActivityRecord activityRecord, WaysToWellbeing wayToWellbeing, LinearLayout helpContainer) {
+        View insightsCard = LayoutInflater.from(requireContext()).inflate(R.layout.insight_suggestion_card, null);
+
+        ImageView bestImage = insightsCard.findViewById(R.id.wellbeing_type_image);
+        TextView bestTitle = insightsCard.findViewById(R.id.way_to_wellbeing);
+        TextView bestActivity = insightsCard.findViewById(R.id.insight_title_type);
+        TextView bestDescription = insightsCard.findViewById(R.id.insight_description);
+
+        String activityFavourite = String.format(Locale.getDefault(), "%s %s", getString(R.string.suggestions_best_activity), activityRecord.getActivityName());
+        String positiveDescription = getString(R.string.suggestions_positive_description);
+
+        FrameLayout frame = insightsCard.findViewById(R.id.image_view_frame);
+        ImageView activityImage = insightsCard.findViewById(R.id.activity_image);
+        frame.setVisibility(View.VISIBLE);
+        activityImage.setImageResource(ActivityTypeImageHelper.getActivityImage(activityRecord.getActivityType()));
+
+        WayToWellbeingImageColorizer.colorize(requireContext(), bestImage, wayToWellbeing);
+        bestTitle.setText(activityFavourite);
+        bestActivity.setText(positiveDescription);
+        bestDescription.setVisibility(View.GONE);
+        helpContainer.addView(insightsCard);
+    }
+
     // Get the info and display it when the user clicks on a chip
     public void displaySuggestionChip(View graphCard, long startTime, long endTime, WaysToWellbeing wayToWellbeing) {
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
@@ -208,49 +231,11 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
 
                 if(finalBestActivityRecord != null) {
                     // If available show the activity that the user has done most
-                    View best = LayoutInflater.from(requireContext()).inflate(R.layout.insight_suggestion_card, null);
-
-                    ImageView bestImage = best.findViewById(R.id.wellbeing_type_image);
-                    TextView bestTitle = best.findViewById(R.id.way_to_wellbeing);
-                    TextView bestActivity = best.findViewById(R.id.insight_title_type);
-                    TextView bestDescription = best.findViewById(R.id.insight_description);
-
-                    String activityFavourite = String.format(Locale.getDefault(), "%s %s", getString(R.string.suggestions_best_activity), finalBestActivityRecord.getActivityName());
-                    String positiveDescription = getString(R.string.suggestions_positive_description);
-
-                    FrameLayout frame = best.findViewById(R.id.image_view_frame);
-                    ImageView activityImage = best.findViewById(R.id.activity_image);
-                    frame.setVisibility(View.VISIBLE);
-                    activityImage.setImageResource(ActivityTypeImageHelper.getActivityImage(finalBestActivityRecord.getActivityType()));
-
-                    WayToWellbeingImageColorizer.colorize(requireContext(), bestImage, wayToWellbeing);
-                    bestTitle.setText(activityFavourite);
-                    bestActivity.setText(positiveDescription);
-                    bestDescription.setVisibility(View.GONE);
-                    helpContainer.addView(best);
+                    populateInsightCard(finalBestActivityRecord, wayToWellbeing, helpContainer);
                 }
 
                 // Display the activity that could be improved
-                String improvementWellbeingString = getString(WellbeingHelper.getWellbeingStringResource(wayToWellbeing));
-                String activitySuggestion = String.format(Locale.getDefault(), "%s %s", getString(R.string.suggestions_worst_activity), finalWorstActivityRecord.getActivityName());
-                String improvementDescription = String.format(Locale.getDefault(), "%s %s %s", getString(R.string.suggestions_improve_description), improvementWellbeingString, getString(R.string.suggestions_score));
-
-                View worst = LayoutInflater.from(requireContext()).inflate(R.layout.insight_suggestion_card, null);
-                ImageView worstImage = worst.findViewById(R.id.wellbeing_type_image);
-                TextView worstTitle = worst.findViewById(R.id.way_to_wellbeing);
-                TextView worstActivity = worst.findViewById(R.id.insight_title_type);
-                TextView worstDescription = worst.findViewById(R.id.insight_description);
-
-                FrameLayout frame = worst.findViewById(R.id.image_view_frame);
-                ImageView activityImage = worst.findViewById(R.id.activity_image);
-                frame.setVisibility(View.VISIBLE);
-                activityImage.setImageResource(ActivityTypeImageHelper.getActivityImage(finalWorstActivityRecord.getActivityType()));
-
-                WayToWellbeingImageColorizer.colorize(requireContext(), worstImage, wayToWellbeing);
-                worstTitle.setText(activitySuggestion);
-                worstActivity.setText(improvementDescription);
-                worstDescription.setVisibility(View.GONE);
-                helpContainer.addView(worst);
+                populateInsightCard(finalWorstActivityRecord, wayToWellbeing, helpContainer);
             });
         });
     }

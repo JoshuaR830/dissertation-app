@@ -153,15 +153,15 @@ public class InsightsTests {
 
         onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(2))
-            .check(matches(atRecyclerPosition(2, hasDescendant(withText("You are doing best at connect")))))
+            .check(matches(atRecyclerPosition(2, hasDescendant(withText("You are doing best at Connect")))))
             .check(matches(atRecyclerPosition(2, hasDescendant(withText("Favourite activity: Talk")))))
             .check(matches(atRecyclerPosition(2, hasDescendant(withText("You did this regularly over the last week - keep it up!")))));
 
         onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(3))
-            .check(matches(atRecyclerPosition(3, hasDescendant(withText("You could work on your give score")))))
+            .check(matches(atRecyclerPosition(3, hasDescendant(withText("You could work on your Give score")))))
             .check(matches(atRecyclerPosition(3, hasDescendant(withText("Suggested activity: Washing up")))))
-            .check(matches(atRecyclerPosition(3, hasDescendant(withText("Doing this more regularly will help to boost your daily give score")))));
+            .check(matches(atRecyclerPosition(3, hasDescendant(withText("Doing this more regularly will help to boost your daily Give score")))));
 
         onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(4))
