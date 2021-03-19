@@ -4,41 +4,30 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
-import com.joshuarichardson.fivewaystowellbeing.MainActivity;
+import com.joshuarichardson.fivewaystowellbeing.ProgressFragmentTestFixture;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.testing.HiltAndroidRule;
 import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
@@ -54,75 +43,42 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class SurveyViewPageShouldBeDisplayedCorrectly {
-    @Rule
-    public ActivityScenarioRule<MainActivity> answerSurveyActivity = new ActivityScenarioRule<>(MainActivity.class);
-
-    @Rule
-    public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
-
-    @Rule
-    public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
-
+public class SurveyViewPageShouldBeDisplayedCorrectly extends ProgressFragmentTestFixture {
     @Module
     @InstallIn(ApplicationComponent.class)
     public class TestWellbeingDatabaseModule {
         @Provides
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
-            WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
-            SurveyResponseDao mockSurveyDao = mock(SurveyResponseDao.class);
-            WellbeingQuestionDao mockQuestionDao = mock(WellbeingQuestionDao.class);
-            WellbeingRecordDao mockWellbeingDao = mock(WellbeingRecordDao.class);
-            SurveyResponseActivityRecordDao surveyActivityDao = mock(SurveyResponseActivityRecordDao.class);
+            // Set up the default items to return
+            defaultResponses();
 
-            SurveyResponse[] responses = new SurveyResponse[] {
-                new SurveyResponse(new GregorianCalendar(1972, 3, 29).getTimeInMillis(), WaysToWellbeing.CONNECT, "A survey title", "A survey description"),
-                new SurveyResponse(new GregorianCalendar(1999, 2, 29).getTimeInMillis(), WaysToWellbeing.UNASSIGNED, "A survey title", "Another survey description")
-            };
-
-            when(mockWellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
-
-            LiveData<List<WellbeingGraphItem>> graphDataLive = new MutableLiveData<>(Arrays.asList());
-            when(mockQuestionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong())).thenReturn(graphDataLive);
-
-            when(mockQuestionDao.getWaysToWellbeingBetweenTimesNotLive(anyLong(), anyLong())).thenReturn(Arrays.asList(new WellbeingGraphItem("CONNECT", 100), new WellbeingGraphItem("BE_ACTIVE", 50), new WellbeingGraphItem("KEEP_LEARNING", 70), new WellbeingGraphItem("TAKE_NOTICE", 40), new WellbeingGraphItem("GIVE", 20)));
-
-            LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
-            when(mockSurveyDao.getLiveInsights(anyString()))
-                    .thenReturn(wayToWellbeing);
-
-            when(mockSurveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
-
-            LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList(responses));
-
-            when(surveyActivityDao.getEmotions(anyLong())).thenReturn(new MutableLiveData<>());
-
-            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
-            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
-
-            when(mockSurveyDao.getAllSurveyResponses()).thenReturn(data);
-            when(mockSurveyDao.getNonEmptyHistoryPageData()).thenReturn(new MutableLiveData<>(Arrays.asList(responses)));
-            when(mockSurveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong())).thenReturn(data);
-            when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(mockQuestionDao);
-            when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(mockWellbeingDao);
-            when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(surveyActivityDao);
-
-            when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(mockSurveyDao);
+            // Return the DAOs from the DB
+            mockDatabaseResponses();
 
             return mockWellbeingDatabase;
         }
     }
 
-    @Before
+    @Override
     public void setUp() throws InterruptedException {
-        hiltTest.inject();
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        super.setUp();
+
+        SurveyResponse[] responses = new SurveyResponse[] {
+            new SurveyResponse(new GregorianCalendar(1972, 3, 29).getTimeInMillis(), WaysToWellbeing.CONNECT, "A survey title", "A survey description"),
+            new SurveyResponse(new GregorianCalendar(1999, 2, 29).getTimeInMillis(), WaysToWellbeing.UNASSIGNED, "A survey title", "Another survey description")
+        };
+        LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Arrays.asList(responses));
+        when(surveyDao.getNonEmptyHistoryPageData()).thenReturn(new MutableLiveData<>(Arrays.asList(responses)));
+        when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong())).thenReturn(data);
+        when(surveyDao.getAllSurveyResponses()).thenReturn(data);
+
+        when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
+
+        when(questionDao.getWaysToWellbeingBetweenTimesNotLive(anyLong(), anyLong())).thenReturn(Arrays.asList(new WellbeingGraphItem("CONNECT", 100), new WellbeingGraphItem("BE_ACTIVE", 50), new WellbeingGraphItem("KEEP_LEARNING", 70), new WellbeingGraphItem("TAKE_NOTICE", 40), new WellbeingGraphItem("GIVE", 20)));
     }
 
     @Test
@@ -139,7 +95,6 @@ public class SurveyViewPageShouldBeDisplayedCorrectly {
             .check(matches(atRecyclerPosition(0, hasDescendant(instanceOf(ImageView.class)))));
             // The graph always seems to exist, even if it isn't visible
             // The image only exists if it has been created
-
 
         // Check that the graph is displayed and that the image is not
         onView(withId(R.id.surveyRecyclerView))
