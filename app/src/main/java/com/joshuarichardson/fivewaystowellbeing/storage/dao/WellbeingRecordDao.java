@@ -2,10 +2,12 @@ package com.joshuarichardson.fivewaystowellbeing.storage.dao;
 
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -43,4 +45,10 @@ public interface WellbeingRecordDao {
 
     @Delete
     void delete(WellbeingRecord wellbeingRecord);
+
+    @Query("SELECT * FROM wellbeing_records INNER JOIN wellbeing_questions ON wellbeing_records.question_id = wellbeing_questions.wellbeing_question_id WHERE wellbeing_questions.way_to_wellbeing = :wayToWellbeing AND wellbeing_records.user_input = 1 AND wellbeing_records.time BETWEEN :startTime AND :endTime")
+    LiveData<List<WellbeingQuestion>> getTrueWellbeingRecordsByTimestampRange(long startTime, long endTime, String wayToWellbeing);
+
+    @Query("SELECT * FROM wellbeing_records INNER JOIN wellbeing_questions ON wellbeing_records.question_id = wellbeing_questions.wellbeing_question_id WHERE wellbeing_questions.way_to_wellbeing = :wayToWellbeing AND wellbeing_records.user_input = 0 AND wellbeing_records.time BETWEEN :startTime AND :endTime")
+    LiveData<List<WellbeingQuestion>> getFalseWellbeingRecordsByTimestampRange(long startTime, long endTime, String wayToWellbeing);
 }

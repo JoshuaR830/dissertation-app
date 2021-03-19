@@ -81,7 +81,9 @@ public class ActivityViewHelper {
                 surveyTitle.setText(surveyData.getTitle());
             }
 
-            surveyNote.setText(surveyData.getNote());
+            if(surveyData.getNote().length() > 0) {
+                surveyNote.setText(surveyData.getNote());
+            }
         });
     }
 
@@ -109,30 +111,6 @@ public class ActivityViewHelper {
 
         MaterialButton addNoteButton = view.findViewById(R.id.add_note_button);
         TextInputLayout noteTextInputContainer = view.findViewById(R.id.note_input_container);
-        addNoteButton.setOnClickListener(v -> {
-            if(noteTextInputContainer.getVisibility() == View.GONE) {
-                noteTextInputContainer.setVisibility(View.VISIBLE);
-                addNoteButton.setIconResource(R.drawable.icon_close);
-            } else {
-                new MaterialAlertDialogBuilder(activity)
-                    .setTitle(R.string.title_delete_note)
-                    .setMessage(R.string.body_delete_note)
-                    .setIcon(R.drawable.icon_close)
-                    .setPositiveButton(R.string.button_delete, (dialog, which) -> {
-                        note.setText("");
-                        note.setVisibility(View.GONE);
-                        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                            db.surveyResponseActivityRecordDao().updateNote(passtime.getActivitySurveyId(), "");
-                            noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
-                        });
-
-                        noteTextInputContainer.setVisibility(View.GONE);
-                        addNoteButton.setIconResource(R.drawable.icon_add);
-                    })
-                    .setNegativeButton(R.string.button_cancel, (dialog, which) -> {})
-                    .show();
-            }
-        });
 
         MaterialButton startTimeButton = view.findViewById(R.id.add_start_time);
         MaterialButton endTimeButton = view.findViewById(R.id.add_end_time);
@@ -224,6 +202,32 @@ public class ActivityViewHelper {
 
         MaterialButton doneButton = view.findViewById(R.id.done_button);
         EditText noteTextInput = view.findViewById(R.id.note_input);
+
+        addNoteButton.setOnClickListener(v -> {
+            if(noteTextInputContainer.getVisibility() == View.GONE) {
+                noteTextInputContainer.setVisibility(View.VISIBLE);
+                addNoteButton.setIconResource(R.drawable.icon_close);
+            } else {
+                new MaterialAlertDialogBuilder(activity)
+                        .setTitle(R.string.title_delete_note)
+                        .setMessage(R.string.body_delete_note)
+                        .setIcon(R.drawable.icon_close)
+                        .setPositiveButton(R.string.button_delete, (dialog, which) -> {
+                            note.setText("");
+                            noteTextInput.setText("");
+                            note.setVisibility(View.GONE);
+                            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                                db.surveyResponseActivityRecordDao().updateNote(passtime.getActivitySurveyId(), "");
+                                noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
+                            });
+
+                            noteTextInputContainer.setVisibility(View.GONE);
+                            addNoteButton.setIconResource(R.drawable.icon_add);
+                        })
+                        .setNegativeButton(R.string.button_cancel, (dialog, which) -> {})
+                        .show();
+            }
+        });
 
         noteTextInput.addTextChangedListener(new TextWatcher() {
             @Override
