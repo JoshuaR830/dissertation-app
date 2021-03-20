@@ -114,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
                 for (WellbeingQuestion question : DatabaseQuestionHelper.getQuestions()) {
                     WellbeingQuestionDao questionDao = this.db.wellbeingQuestionDao();
                     questionDao.insert(question);
+
+                    questionDao.updateQuestion(question.getId(), question.getQuestion(), question.getPositiveMessage(), question.getNegativeMessage());
                 }
             });
             preferenceEditor.putInt("added_question_version", DatabaseQuestionHelper.VERSION_NUMBER);

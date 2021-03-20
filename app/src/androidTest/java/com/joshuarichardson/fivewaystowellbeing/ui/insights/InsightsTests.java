@@ -3,7 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.insights;
 import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
-import com.joshuarichardson.fivewaystowellbeing.MainActivity;
+import com.joshuarichardson.fivewaystowellbeing.ProgressFragmentTestFixture;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
@@ -11,36 +11,19 @@ import com.joshuarichardson.fivewaystowellbeing.storage.ActivityStats;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingRecordDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
-import dagger.hilt.android.testing.HiltAndroidRule;
 import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
@@ -53,87 +36,53 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.RecyclerViewTestUtil.atRecyclerPosition;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class InsightsTests {
-    @Rule(order = 0)
-    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
-
-    @Rule(order = 1)
-    public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
-
-    @Rule(order = 2)
-    public ActivityScenarioRule<MainActivity> mainActivity = new ActivityScenarioRule<>(MainActivity.class);
-
+public class InsightsTests extends ProgressFragmentTestFixture {
     @Module
     @InstallIn(ApplicationComponent.class)
     public class TestWellbeingDatabaseModule {
         @Provides
         public WellbeingDatabase provideDatabaseService(@ApplicationContext Context context) {
-            WellbeingDatabase mockWellbeingDatabase = mock(WellbeingDatabase.class);
-            WellbeingRecordDao wellbeingDao = mock(WellbeingRecordDao.class);
 
-            SurveyResponseActivityRecordDao surveyActivityDao = mock(SurveyResponseActivityRecordDao.class);
-            ActivityRecordDao activityDao = mock(ActivityRecordDao.class);
+            // Set up the default items to return
+            defaultResponses();
 
-            // Return the activities
-            when(activityDao.getActivityRecordById(1)).thenReturn(new ActivityRecord("Talk", 453876587, 784687, "PEOPLE", "CONNECT", false));
-            when(activityDao.getActivityRecordById(2)).thenReturn(new ActivityRecord("Place holder", 453876587, 784687, "SPORT", "BE_ACTIVE", false));
-            when(activityDao.getActivityRecordById(3)).thenReturn(new ActivityRecord("Washing up", 453876587, 784687, "CHORES", "GIVE", false));
+            // Return the DAOs from the DB
+            mockDatabaseResponses();
 
-            SurveyResponseDao surveyDao = mock(SurveyResponseDao.class);
-            WellbeingQuestionDao questionDao = mock(WellbeingQuestionDao.class);
-
-            LiveData<List<SurveyResponse>> data = new MutableLiveData<>(new ArrayList<>());
-            when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
-                    .thenReturn(data);
-
-            when(surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong())).thenReturn(Collections.emptyList());
-
-            LiveData<Integer> wayToWellbeing = new MutableLiveData<>();
-            when(surveyDao.getLiveInsights(anyString()))
-                    .thenReturn(wayToWellbeing);
-
-            LiveData<List<WellbeingGraphItem>> graphData = new MutableLiveData<>(Arrays.asList());
-            when(questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong())).thenReturn(graphData);
-            when(mockWellbeingDatabase.wellbeingQuestionDao()).thenReturn(questionDao);
-
-            when(questionDao.getWaysToWellbeingBetweenTimesNotLive(anyLong(), anyLong())).thenReturn(Arrays.asList(new WellbeingGraphItem(WaysToWellbeing.CONNECT.toString(), 140), new WellbeingGraphItem(WaysToWellbeing.BE_ACTIVE.toString(), 90), new WellbeingGraphItem(WaysToWellbeing.KEEP_LEARNING.toString(), 120), new WellbeingGraphItem(WaysToWellbeing.TAKE_NOTICE.toString(), 100), new WellbeingGraphItem(WaysToWellbeing.GIVE.toString(), 20)));
-
-            when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
-
-            // Return activities by frequency
-            when(surveyActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("CONNECT"))).thenReturn(Arrays.asList(new ActivityStats(1, 3), new ActivityStats(2, 2), new ActivityStats(2, 1)));
-            when(surveyActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("BE_ACTIVE"))).thenReturn(Arrays.asList(new ActivityStats(2, 3), new ActivityStats(2, 2), new ActivityStats(2, 1)));
-            when(surveyActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("KEEP_LEARNING"))).thenReturn(Arrays.asList(new ActivityStats(2, 9), new ActivityStats(2, 4), new ActivityStats(2, 1)));
-            when(surveyActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("TAKE_NOTICE"))).thenReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 5), new ActivityStats(2, 2)));
-            when(surveyActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("GIVE"))).thenReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 4), new ActivityStats(3, 1)));
-
-            WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
-            when(resultsDao.getResultsByTimestampRange(anyLong(), anyLong())).thenReturn(Arrays.asList(
-                new WellbeingResult(1, 12345, 100, 100, 100, 10, 20),
-                new WellbeingResult(2, 23456, 100, 100, 30, 100, 20),
-                new WellbeingResult(3, 34567, 100, 20, 30, 10, 20)
-            ));
-
-            when(mockWellbeingDatabase.wellbeingResultsDao()).thenReturn(resultsDao);
-            when(mockWellbeingDatabase.surveyResponseActivityRecordDao()).thenReturn(surveyActivityDao);
-            when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
-            when(mockWellbeingDatabase.wellbeingRecordDao()).thenReturn(wellbeingDao);
-            when(mockWellbeingDatabase.surveyResponseDao()).thenReturn(surveyDao);
             return mockWellbeingDatabase;
         }
     }
 
-    @Before
-    public void setUp() throws InterruptedException {
-        hiltTest.inject();
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+    @Override
+    protected void defaultResponses() {
+        super.defaultResponses();
+
+        // Return the activities
+        when(activityRecordDao.getActivityRecordById(1)).thenReturn(new ActivityRecord("Talk", 453876587, 784687, "PEOPLE", "CONNECT", false));
+        when(activityRecordDao.getActivityRecordById(2)).thenReturn(new ActivityRecord("Place holder", 453876587, 784687, "SPORT", "BE_ACTIVE", false));
+        when(activityRecordDao.getActivityRecordById(3)).thenReturn(new ActivityRecord("Washing up", 453876587, 784687, "CHORES", "GIVE", false));
+
+        when(questionDao.getWaysToWellbeingBetweenTimesNotLive(anyLong(), anyLong())).thenReturn(Arrays.asList(new WellbeingGraphItem(WaysToWellbeing.CONNECT.toString(), 140), new WellbeingGraphItem(WaysToWellbeing.BE_ACTIVE.toString(), 90), new WellbeingGraphItem(WaysToWellbeing.KEEP_LEARNING.toString(), 120), new WellbeingGraphItem(WaysToWellbeing.TAKE_NOTICE.toString(), 100), new WellbeingGraphItem(WaysToWellbeing.GIVE.toString(), 20)));
+
+        when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
+
+        // Return activities by frequency
+        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("CONNECT"))).thenReturn(Arrays.asList(new ActivityStats(1, 3), new ActivityStats(2, 2), new ActivityStats(2, 1)));
+        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("BE_ACTIVE"))).thenReturn(Arrays.asList(new ActivityStats(2, 3), new ActivityStats(2, 2), new ActivityStats(2, 1)));
+        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("KEEP_LEARNING"))).thenReturn(Arrays.asList(new ActivityStats(2, 9), new ActivityStats(2, 4), new ActivityStats(2, 1)));
+        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("TAKE_NOTICE"))).thenReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 5), new ActivityStats(2, 2)));
+        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("GIVE"))).thenReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 4), new ActivityStats(3, 1)));
+
+        when(resultsDao.getResultsByTimestampRange(anyLong(), anyLong())).thenReturn(Arrays.asList(
+                new WellbeingResult(1, 12345, 100, 100, 100, 10, 20),
+                new WellbeingResult(2, 23456, 100, 100, 30, 100, 20),
+                new WellbeingResult(3, 34567, 100, 20, 30, 10, 20)
+        ));
     }
 
     @Test

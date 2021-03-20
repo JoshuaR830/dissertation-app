@@ -89,6 +89,7 @@ public class PassTimeQuestionsShouldMatchQuestionTypes {
         popup.atPosition(9).check(matches(withText("Relaxation")));
         popup.atPosition(10).check(matches(withText("People")));
         popup.atPosition(11).check(matches(withText("Journaling")));
+        popup.atPosition(12).check(matches(withText("Faith")));
     }
 
     @Test

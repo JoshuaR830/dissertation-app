@@ -1,13 +1,19 @@
-package com.joshuarichardson.fivewaystowellbeing.ui.surveys.today;
+package com.joshuarichardson.fivewaystowellbeing.ui.graphs;
 
 import android.content.Context;
 
+import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.ProgressFragmentTestFixture;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.utilities.LinearLayoutTestUtil;
 
 import org.junit.Test;
+
+import java.util.Collections;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,18 +24,20 @@ import dagger.hilt.android.testing.HiltAndroidTest;
 import dagger.hilt.android.testing.UninstallModules;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class NoSurveysCompletedTodayTests extends ProgressFragmentTestFixture {
+public class NoInsightsAvailable extends ProgressFragmentTestFixture {
 
     @Module
     @InstallIn(ApplicationComponent.class)
@@ -47,33 +55,20 @@ public class NoSurveysCompletedTodayTests extends ProgressFragmentTestFixture {
         }
     }
 
-    @Test
-    public void WhenNoSurveysCompletedToday_ThenNoSurveysShouldBeDisplayed() {
-        onView(withId(R.id.today_survey_item_title))
-            .check(doesNotExist());
+    @Override
+    protected void defaultResponses() {
+        super.defaultResponses();
 
-        onView(withId(R.id.today_survey_item_description))
-            .check(doesNotExist());
-
-        onView(withId(R.id.today_survey_item_image_button))
-            .check(doesNotExist());
+        when(this.wellbeingDao.getDataBySurvey(anyLong()))
+            .thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
     }
 
     @Test
-    public void WhenNoActivitiesAddedToSurvey_ThenTheCardShouldDisplayAddActivityButton() {
-        onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
-            .perform(scrollTo())
-            .check(matches(allOf(isDisplayed(), withText("Today"))));
+    public void WhenNoMessages_InsightsShouldBeHidden() {
+        onView(withId(R.id.chip_connect))
+            .perform(scrollTo(), click());
 
-        onView(allOf(withId(R.id.survey_list_description), isDescendantOfA(withId(R.id.survey_summary_item_container))))
-            .perform(scrollTo())
-            .check(matches(allOf(isDisplayed(), withText("Here is how your day is looking so far"))));
-
-        onView(allOf(withId(R.id.pass_time_item), isDescendantOfA(withId(R.id.survey_summary_item_container))))
-            .check(doesNotExist());
-
-        onView(allOf(withId(R.id.add_activity_button), isDescendantOfA(withId(R.id.survey_summary_item_container))))
-            .perform(scrollTo())
-            .check(matches(allOf(isDisplayed(), withText("Activity"))));
+        onView(allOf(withId(R.id.insight_card_layout), isDescendantOfA(LinearLayoutTestUtil.nthChildOf(withId(R.id.way_to_wellbeing_help_container), 1))))
+            .check(matches(not(isDisplayed())));
     }
 }

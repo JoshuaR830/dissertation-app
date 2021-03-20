@@ -146,4 +146,6 @@
     <string name="take_notice_suggestion">Start a journal</string>
     <string name="give_suggestion">Lend a helping hand</string>
     <string name="default_suggestion">Get to know someone better</string>
+    <string name="suggestions_insight_title_positive">Great job!</string>
+    <string name="suggestions_insight_title_negative">Suggestions</string>
 </resources>

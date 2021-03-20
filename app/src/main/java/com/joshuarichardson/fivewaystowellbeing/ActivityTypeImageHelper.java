@@ -36,6 +36,8 @@ public class ActivityTypeImageHelper {
                     return R.drawable.activity_type_people;
                 case JOURNALING:
                     return R.drawable.activity_type_journaling;
+                case FAITH:
+                    return R.drawable.activity_type_faith;
                 default:
                     return 0;
             }

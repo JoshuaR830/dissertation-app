@@ -64,4 +64,7 @@ public interface WellbeingQuestionDao {
 
     @Delete
     void delete(WellbeingQuestion wellbeingQuestion);
+
+    @Query("UPDATE wellbeing_questions SET question = :question, positive_message = :positiveMessage , negative_message = :negativeMessage WHERE wellbeing_questions.wellbeing_question_id = :id")
+    void updateQuestion(long id, String question, String positiveMessage, String negativeMessage);
 }

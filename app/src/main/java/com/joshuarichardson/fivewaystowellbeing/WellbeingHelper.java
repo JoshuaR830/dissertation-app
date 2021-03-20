@@ -42,6 +42,7 @@ public class WellbeingHelper {
                 break;
             case RELAXATION:
             case JOURNALING:
+            case FAITH:
                 wayToWellbeing = WaysToWellbeing.TAKE_NOTICE;
                 break;
             case APP:
