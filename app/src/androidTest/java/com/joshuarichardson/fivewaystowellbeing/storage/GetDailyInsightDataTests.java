@@ -106,13 +106,12 @@ public class GetDailyInsightDataTests {
     }
 
     @Test
-    public void whenGetTrueResultsAndMultiple_ShouldBeReturnedInSequenceActivityOrder() throws TimeoutException, InterruptedException {
+    public void whenGetTrueResultsAndMultiple_ShouldBeReturnedInSequenceActivityOrderAndGrouped() throws TimeoutException, InterruptedException {
         // can I just get it between times
         List<WellbeingQuestion> response = LiveDataTestUtil.getOrAwaitValue(this.wellbeingRecordDao.getTrueWellbeingRecordsByTimestampRange(5685861, 5685873, WaysToWellbeing.KEEP_LEARNING.toString()));
 
-        assertThat(response.size()).isEqualTo(2);
+        assertThat(response.size()).isEqualTo(1);
         assertThat(response.get(0).getPositiveMessage()).isEqualTo("Positive message 3");
-        assertThat(response.get(1).getPositiveMessage()).isEqualTo("Positive message 3");
     }
 
     @Test
@@ -125,13 +124,12 @@ public class GetDailyInsightDataTests {
     }
 
     @Test
-    public void whenGetFalseResults_ShouldBeReturnedInSequenceActivityOrder() throws TimeoutException, InterruptedException {
+    public void whenGetFalseResults_ShouldBeReturnedInSequenceActivityOrderAndGrouped() throws TimeoutException, InterruptedException {
         // can I just get it between times
         List<WellbeingQuestion> response = LiveDataTestUtil.getOrAwaitValue(this.wellbeingRecordDao.getFalseWellbeingRecordsByTimestampRange(5685861, 5685873, WaysToWellbeing.BE_ACTIVE.toString()));
 
-        assertThat(response.size()).isEqualTo(2);
+        assertThat(response.size()).isEqualTo(1);
         assertThat(response.get(0).getNegativeMessage()).isEqualTo("Negative message 2");
-        assertThat(response.get(1).getNegativeMessage()).isEqualTo("Negative message 2");
     }
 
     @Test

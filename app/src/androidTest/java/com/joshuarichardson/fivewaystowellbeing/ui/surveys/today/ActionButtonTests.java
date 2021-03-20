@@ -9,7 +9,6 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Test;
@@ -53,7 +52,6 @@ import static org.mockito.Mockito.when;
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
 public class ActionButtonTests extends ProgressFragmentTestFixture {
-    private SurveyResponseActivityRecordDao surveyActivity;
 
     @Module
     @InstallIn(ApplicationComponent.class)
@@ -130,7 +128,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.done_button), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
             .perform(scrollTo(), click());
 
-        verify(this.surveyActivity, times(1)).updateNote(anyLong(), anyString());
+        verify(this.surveyResponseActivityDao, times(1)).updateNote(anyLong(), anyString());
 
         onView(allOf(withId(R.id.expand_options_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
@@ -200,7 +198,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(withText("12:00")));
 
-        verify(this.surveyActivity, times(1)).updateStartTime(anyLong(), anyLong());
+        verify(this.surveyResponseActivityDao, times(1)).updateStartTime(anyLong(), anyLong());
     }
 
     @Test
@@ -217,7 +215,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(withText("12:00")));
 
-        verify(this.surveyActivity, times(1)).updateEndTime(anyLong(), anyLong());
+        verify(this.surveyResponseActivityDao, times(1)).updateEndTime(anyLong(), anyLong());
     }
 
     @Test
@@ -227,7 +225,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.sentiment_worst), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
 
-        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(1));
+        verify(this.surveyResponseActivityDao, times(1)).updateEmotion(anyLong(), eq(1));
     }
 
     @Test
@@ -237,7 +235,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.sentiment_bad), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
 
-        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(2));
+        verify(this.surveyResponseActivityDao, times(1)).updateEmotion(anyLong(), eq(2));
     }
 
     @Test
@@ -247,7 +245,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.sentiment_neutral), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
 
-        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(3));
+        verify(this.surveyResponseActivityDao, times(1)).updateEmotion(anyLong(), eq(3));
     }
 
     @Test
@@ -257,7 +255,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.sentiment_good), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
 
-        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(4));
+        verify(this.surveyResponseActivityDao, times(1)).updateEmotion(anyLong(), eq(4));
     }
 
     @Test
@@ -267,7 +265,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.sentiment_best), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
 
-        verify(this.surveyActivity, times(1)).updateEmotion(anyLong(), eq(5));
+        verify(this.surveyResponseActivityDao, times(1)).updateEmotion(anyLong(), eq(5));
     }
 
     @Test
@@ -277,6 +275,6 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.done_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
 
-        verify(this.surveyActivity, times(1)).updateIsDone(anyLong(), eq(true));
+        verify(this.surveyResponseActivityDao, times(1)).updateIsDone(anyLong(), eq(true));
     }
 }
