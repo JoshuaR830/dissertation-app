@@ -60,6 +60,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.joshuarichardson.fivewaystowellbeing.DisplayHelper.getSmallestMaxDimension;
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
+import static com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper.createInsightCards;
 
 @AndroidEntryPoint
 public class ProgressFragment extends Fragment {
@@ -211,26 +212,31 @@ public class ProgressFragment extends Fragment {
                 case R.id.chip_connect:
                     graphView.highlightBar(WaysToWellbeing.CONNECT);
                     LayoutInflater.from(getContext()).inflate(R.layout.card_connect, helpContainer);
+                    createInsightCards(helpContainer, WaysToWellbeing.CONNECT, thisMorning, tonight, requireActivity(), requireActivity(), this.db);
                     helpContainer.setVisibility(View.VISIBLE);
                     break;
                 case R.id.chip_be_active:
                     graphView.highlightBar(WaysToWellbeing.BE_ACTIVE);
                     LayoutInflater.from(getContext()).inflate(R.layout.card_be_active, helpContainer);
+                    createInsightCards(helpContainer, WaysToWellbeing.BE_ACTIVE, thisMorning, tonight, requireActivity(), requireActivity(), this.db);
                     helpContainer.setVisibility(View.VISIBLE);
                     break;
                 case R.id.chip_keep_learning:
                     graphView.highlightBar(WaysToWellbeing.KEEP_LEARNING);
                     LayoutInflater.from(getContext()).inflate(R.layout.card_keep_learning, helpContainer);
+                    createInsightCards(helpContainer, WaysToWellbeing.KEEP_LEARNING, thisMorning, tonight, requireActivity(), requireActivity(), this.db);
                     helpContainer.setVisibility(View.VISIBLE);
                     break;
                 case R.id.chip_take_notice:
                     graphView.highlightBar(WaysToWellbeing.TAKE_NOTICE);
                     LayoutInflater.from(getContext()).inflate(R.layout.card_take_notice, helpContainer);
+                    createInsightCards(helpContainer, WaysToWellbeing.TAKE_NOTICE, thisMorning, tonight, requireActivity(), requireActivity(), this.db);
                     helpContainer.setVisibility(View.VISIBLE);
                     break;
                 case R.id.chip_give:
                     graphView.highlightBar(WaysToWellbeing.GIVE);
                     LayoutInflater.from(getContext()).inflate(R.layout.card_give, helpContainer);
+                    createInsightCards(helpContainer, WaysToWellbeing.GIVE, thisMorning, tonight, requireActivity(), requireActivity(), this.db);
                     helpContainer.setVisibility(View.VISIBLE);
                     break;
                 default:

@@ -36,13 +36,19 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
+import com.joshuarichardson.fivewaystowellbeing.ui.insights.WayToWellbeingImageColorizer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+
+import static java.lang.Math.min;
 
 public class ActivityViewHelper {
     public static void displaySurveyItems(Activity activity, SurveyDay surveyData, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper) {
@@ -348,6 +354,87 @@ public class ActivityViewHelper {
                 });
             }
         });
+    }
+
+    public static void createInsightCards(LinearLayout helpContainer, WaysToWellbeing wayToWellbeing, long startTime, long endTime, Context context, LifecycleOwner activity, WellbeingDatabase db) {
+
+        View goodInsights = LayoutInflater.from(context).inflate(R.layout.progress_insight_card, null);
+        View suggestionInsights = LayoutInflater.from(context).inflate(R.layout.progress_insight_card, null);
+
+        ImageView goodImage = goodInsights.findViewById(R.id.wellbeing_type_image);
+        WayToWellbeingImageColorizer.colorize(context, goodImage, wayToWellbeing);
+
+        ImageView suggestionImage = suggestionInsights.findViewById(R.id.wellbeing_type_image);
+        WayToWellbeingImageColorizer.colorize(context, suggestionImage, wayToWellbeing);
+
+        TextView goodTitle = goodInsights.findViewById(R.id.progress_insight_title);
+        goodTitle.setText(R.string.suggestions_insight_title_positive);
+
+        TextView suggestionTitle = suggestionInsights.findViewById(R.id.progress_insight_title);
+        suggestionTitle.setText(R.string.suggestions_insight_title_negative);
+
+        LinearLayout goodItems = goodInsights.findViewById(R.id.item_container);
+        LinearLayout suggestionItems = suggestionInsights.findViewById(R.id.item_container);
+
+        Observer<List<WellbeingQuestion>> goodObserver = wellbeingQuestions -> {
+            goodItems.removeAllViews();
+
+            Collections.shuffle(wellbeingQuestions);
+
+            boolean shouldDisplay = false;
+            int counter = 3;
+            for(int i = 0; i < min(counter, wellbeingQuestions.size()); i ++) {
+                if(wellbeingQuestions.get(i).getPositiveMessage().length() == 0) {
+                    counter ++;
+                    continue;
+                }
+                TextView question = new TextView(context);
+                question.setText(wellbeingQuestions.get(i).getPositiveMessage());
+                question.setPadding(0, 16, 0, 0);
+                goodItems.addView(question);
+                shouldDisplay = true;
+            }
+
+            if(wellbeingQuestions.size() == 0 || !shouldDisplay) {
+                goodInsights.setVisibility(View.GONE);
+                return;
+            } else {
+                goodInsights.setVisibility(View.VISIBLE);
+            }
+        };
+
+        Observer<List<WellbeingQuestion>> suggestionObserver = wellbeingQuestions -> {
+            suggestionItems.removeAllViews();
+
+            Collections.shuffle(wellbeingQuestions);
+
+            boolean shouldDisplay = false;
+            int counter = 3;
+            for(int i = 0; i < min(counter, wellbeingQuestions.size()); i ++) {
+                if(wellbeingQuestions.get(i).getNegativeMessage().length() == 0) {
+                    counter ++;
+                    continue;
+                }
+                TextView question = new TextView(context);
+                question.setText(wellbeingQuestions.get(i).getNegativeMessage());
+                question.setPadding(0, 16, 0, 0);
+                suggestionItems.addView(question);
+                shouldDisplay = true;
+            }
+
+            if(wellbeingQuestions.size() == 0 || !shouldDisplay) {
+                suggestionInsights.setVisibility(View.GONE);
+                return;
+            } else {
+                suggestionInsights.setVisibility(View.VISIBLE);
+            }
+        };
+
+        db.wellbeingRecordDao().getTrueWellbeingRecordsByTimestampRange(startTime, endTime, wayToWellbeing.toString()).observe(activity, goodObserver);
+        db.wellbeingRecordDao().getFalseWellbeingRecordsByTimestampRange(startTime, endTime, wayToWellbeing.toString()).observe(activity, suggestionObserver);
+
+        helpContainer.addView(goodInsights);
+        helpContainer.addView(suggestionInsights);
     }
 
     private static void removeSelection(View view, Context context) {

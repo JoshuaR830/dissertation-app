@@ -46,9 +46,9 @@ public interface WellbeingRecordDao {
     @Delete
     void delete(WellbeingRecord wellbeingRecord);
 
-    @Query("SELECT * FROM wellbeing_records INNER JOIN wellbeing_questions ON wellbeing_records.question_id = wellbeing_questions.wellbeing_question_id WHERE wellbeing_questions.way_to_wellbeing = :wayToWellbeing AND wellbeing_records.user_input = 1 AND wellbeing_records.time BETWEEN :startTime AND :endTime")
+    @Query("SELECT * FROM wellbeing_records INNER JOIN wellbeing_questions ON wellbeing_records.question_id = wellbeing_questions.wellbeing_question_id WHERE wellbeing_questions.way_to_wellbeing = :wayToWellbeing AND wellbeing_records.user_input = 1 AND wellbeing_records.time BETWEEN :startTime AND :endTime GROUP BY wellbeing_questions.wellbeing_question_id")
     LiveData<List<WellbeingQuestion>> getTrueWellbeingRecordsByTimestampRange(long startTime, long endTime, String wayToWellbeing);
 
-    @Query("SELECT * FROM wellbeing_records INNER JOIN wellbeing_questions ON wellbeing_records.question_id = wellbeing_questions.wellbeing_question_id WHERE wellbeing_questions.way_to_wellbeing = :wayToWellbeing AND wellbeing_records.user_input = 0 AND wellbeing_records.time BETWEEN :startTime AND :endTime")
+    @Query("SELECT * FROM wellbeing_records INNER JOIN wellbeing_questions ON wellbeing_records.question_id = wellbeing_questions.wellbeing_question_id WHERE wellbeing_questions.way_to_wellbeing = :wayToWellbeing AND wellbeing_records.user_input = 0 AND wellbeing_records.time BETWEEN :startTime AND :endTime GROUP BY wellbeing_questions.wellbeing_question_id")
     LiveData<List<WellbeingQuestion>> getFalseWellbeingRecordsByTimestampRange(long startTime, long endTime, String wayToWellbeing);
 }

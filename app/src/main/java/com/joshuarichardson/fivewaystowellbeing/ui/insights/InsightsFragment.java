@@ -179,7 +179,7 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
         this.daysLive.postValue(days);
     }
 
-    private void populateInsightCard(ActivityRecord activityRecord, WaysToWellbeing wayToWellbeing, LinearLayout helpContainer) {
+    private void populateInsightCard(ActivityRecord activityRecord, WaysToWellbeing wayToWellbeing, LinearLayout helpContainer, String title, String description) {
         View insightsCard = LayoutInflater.from(requireContext()).inflate(R.layout.insight_suggestion_card, null);
 
         ImageView bestImage = insightsCard.findViewById(R.id.wellbeing_type_image);
@@ -187,8 +187,7 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
         TextView bestActivity = insightsCard.findViewById(R.id.insight_title_type);
         TextView bestDescription = insightsCard.findViewById(R.id.insight_description);
 
-        String activityFavourite = String.format(Locale.getDefault(), "%s %s", getString(R.string.suggestions_best_activity), activityRecord.getActivityName());
-        String positiveDescription = getString(R.string.suggestions_positive_description);
+        String activityTitle = String.format(Locale.getDefault(), "%s %s", title, activityRecord.getActivityName());
 
         FrameLayout frame = insightsCard.findViewById(R.id.image_view_frame);
         ImageView activityImage = insightsCard.findViewById(R.id.activity_image);
@@ -196,8 +195,8 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
         activityImage.setImageResource(ActivityTypeImageHelper.getActivityImage(activityRecord.getActivityType()));
 
         WayToWellbeingImageColorizer.colorize(requireContext(), bestImage, wayToWellbeing);
-        bestTitle.setText(activityFavourite);
-        bestActivity.setText(positiveDescription);
+        bestTitle.setText(activityTitle);
+        bestActivity.setText(description);
         bestDescription.setVisibility(View.GONE);
         helpContainer.addView(insightsCard);
     }
@@ -231,11 +230,12 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
 
                 if(finalBestActivityRecord != null) {
                     // If available show the activity that the user has done most
-                    populateInsightCard(finalBestActivityRecord, wayToWellbeing, helpContainer);
+                    populateInsightCard(finalBestActivityRecord, wayToWellbeing, helpContainer, getString(R.string.suggestions_best_activity), getString(R.string.suggestions_positive_description));
                 }
 
                 // Display the activity that could be improved
-                populateInsightCard(finalWorstActivityRecord, wayToWellbeing, helpContainer);
+                String description = getString(R.string.suggestions_improve_description) + " " + getString(WellbeingHelper.getWellbeingStringResource(wayToWellbeing));
+                populateInsightCard(finalWorstActivityRecord, wayToWellbeing, helpContainer, getString(R.string.suggestions_worst_activity), description);
             });
         });
     }

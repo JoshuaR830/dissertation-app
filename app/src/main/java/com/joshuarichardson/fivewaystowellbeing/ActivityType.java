@@ -12,5 +12,6 @@ public enum ActivityType {
     EXERCISE,
     RELAXATION,
     PEOPLE,
-    JOURNALING
+    JOURNALING,
+    FAITH;
 }

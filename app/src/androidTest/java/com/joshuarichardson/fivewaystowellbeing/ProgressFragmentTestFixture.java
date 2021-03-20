@@ -96,6 +96,12 @@ public abstract class ProgressFragmentTestFixture {
 
         when(questionDao.getQuestionsByActivityType(any()))
             .thenReturn(Collections.emptyList());
+
+        when(wellbeingDao.getTrueWellbeingRecordsByTimestampRange(anyLong(), anyLong(), anyString()))
+            .thenReturn(new MutableLiveData<>());
+
+        when(wellbeingDao.getFalseWellbeingRecordsByTimestampRange(anyLong(), anyLong(), anyString()))
+            .thenReturn(new MutableLiveData<>());
     }
 
     @Before
