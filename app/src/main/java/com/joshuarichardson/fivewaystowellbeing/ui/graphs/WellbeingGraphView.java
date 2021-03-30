@@ -105,11 +105,11 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
             int centerY = (int) (this.canvasSize/2f);
             int radius = this.graphSize/2;
 
-            canvas.drawLine(centerX, centerY, this.give.getCirclePointX(centerX, radius), this.give.getCirclePointY(centerY, radius), this.give.getPaint());
-            canvas.drawLine(centerX, centerY, this.connect.getCirclePointX(centerX, radius), this.connect.getCirclePointY(centerY, radius), this.connect.getPaint());
-            canvas.drawLine(centerX, centerY, this.beActive.getCirclePointX(centerX, radius), this.beActive.getCirclePointY(centerY, radius), this.beActive.getPaint());
-            canvas.drawLine(centerX, centerY, this.keepLearning.getCirclePointX(centerX, radius), this.keepLearning.getCirclePointY(centerY, radius), this.keepLearning.getPaint());
-            canvas.drawLine(centerX, centerY, this.takeNotice.getCirclePointX(centerX, radius), this.takeNotice.getCirclePointY(centerY, radius), this.takeNotice.getPaint());
+            canvas.drawLine(this.give.getCirclePointX(centerX, (int)(this.give.getValue() * this.multiplier)), this.give.getCirclePointY(centerY, (int)(this.give.getValue() * this.multiplier)), this.give.getCirclePointX(centerX, radius), this.give.getCirclePointY(centerY, radius), this.give.getPaint());
+            canvas.drawLine(this.connect.getCirclePointX(centerX, (int)(this.connect.getValue() * this.multiplier)), this.connect.getCirclePointY(centerY, (int)(this.connect.getValue() * this.multiplier)), this.connect.getCirclePointX(centerX, radius), this.connect.getCirclePointY(centerY, radius), this.connect.getPaint());
+            canvas.drawLine(this.beActive.getCirclePointX(centerX, (int)(this.beActive.getValue() * this.multiplier)), this.beActive.getCirclePointY(centerY, (int)(this.beActive.getValue() * this.multiplier)), this.beActive.getCirclePointX(centerX, radius), this.beActive.getCirclePointY(centerY, radius), this.beActive.getPaint());
+            canvas.drawLine(this.keepLearning.getCirclePointX(centerX, (int)(this.keepLearning.getValue() * this.multiplier)), this.keepLearning.getCirclePointY(centerY, (int)(this.keepLearning.getValue() * this.multiplier)), this.keepLearning.getCirclePointX(centerX, radius), this.keepLearning.getCirclePointY(centerY, radius), this.keepLearning.getPaint());
+            canvas.drawLine(this.takeNotice.getCirclePointX(centerX, (int)(this.takeNotice.getValue() * this.multiplier)), this.takeNotice.getCirclePointY(centerY, (int)(this.takeNotice.getValue() * this.multiplier)), this.takeNotice.getCirclePointX(centerX, radius), this.takeNotice.getCirclePointY(centerY, radius), this.takeNotice.getPaint());
 
             radius = (this.canvasSize/2) - 40;
 
