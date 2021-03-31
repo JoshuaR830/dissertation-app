@@ -11,23 +11,27 @@ import static com.google.common.truth.Truth.assertThat;
 public class GetTimeToScheduleTests {
 
     private Calendar calendar;
+    private Calendar calendarExpected;
 
     @Before
     public void setup() {
         calendar = GregorianCalendar.getInstance();
+        calendarExpected = GregorianCalendar.getInstance();
     }
 
     @Test
     public void whenGreaterThanCurrentTime_ShouldBeScheduledForTomorrow() {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int date = calendar.get(Calendar.DATE);
+
+        calendarExpected.add(Calendar.DATE, 1);
+
         calendar.add(Calendar.HOUR_OF_DAY, 1);
 
 
         long time = AlarmHelper.getTimeToSchedule(hour, 0);
         calendar.setTimeInMillis(time);
 
-        assertThat(calendar.get(Calendar.DATE)).isEqualTo(date + 1);
+        assertThat(calendar.get(Calendar.DATE)).isEqualTo(calendarExpected.get(Calendar.DATE));
     }
 
     @Test

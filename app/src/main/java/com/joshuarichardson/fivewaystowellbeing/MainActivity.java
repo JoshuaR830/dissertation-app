@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
@@ -130,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNav, navController);
+
+        ActivityTracking activityTracker = new ActivityTracking();
+        activityTracker.initialiseTracking(getApplicationContext());
     }
 
     @Override
