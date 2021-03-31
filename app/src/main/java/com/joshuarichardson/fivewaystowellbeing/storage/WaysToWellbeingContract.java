@@ -98,6 +98,10 @@ public class WaysToWellbeingContract {
     public static final String WELLBEING_QUESTIONS_ACTIVITY_TYPE = "activity_type";
     public static final String WELLBEING_QUESTIONS_INPUT_TYPE = "input_type";
 
+    // Physical activities
+    public static final String PHYSICAL_ACTIVITY_TABLE = "physical_activity";
 
-
+    public static final String PHYSICAL_ACTIVITY_TYPE = "activity_type";
+    public static final String PHYSICAL_ACTIVITY_START_TIME = "start_time";
+    public static final String PHYSICAL_ACTIVITY_ACTIVITY_ID = "activity_id";
 }

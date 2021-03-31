@@ -137,11 +137,32 @@ public class WellbeingDatabaseModule {
         }
     };
 
+    static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Create the new wellbeing result table
+            database.execSQL("CREATE TABLE physical_activity (" +
+                "activity_type TEXT NOT NULL PRIMARY KEY, " +
+                "start_time INTEGER NOT NULL, " +
+                "activity_id INTEGER NOT NULL " +
+                ")"
+            );
+
+            database.execSQL("INSERT INTO physical_activity " +
+                "(activity_type, start_time, activity_id) " +
+                "VALUES ('WALK', 0, 0), " +
+                "('RUN', 0, 0), " +
+                "('CYCLE', 0, 0), " +
+                "('VEHICLE', 0, 0)"
+            );
+        }
+    };
+
     @Provides
     @Singleton
     public static WellbeingDatabase getWellbeingDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
             .addCallback(new RoomDatabase.Callback() {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
