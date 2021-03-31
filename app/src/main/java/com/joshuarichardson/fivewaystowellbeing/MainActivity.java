@@ -133,9 +133,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNav, navController);
 
         ActivityTracking activityTracker = new ActivityTracking();
-        activityTracker.something(getApplicationContext());
-
-
+        activityTracker.initialiseTracking(getApplicationContext());
     }
 
     @Override
