@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking;
+import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.PhysicalActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
@@ -94,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
         if (preferences.getInt("database_version", 0) < 7) {
             PhysicalActivityDao physicalActivityDao = this.db.physicalActivityDao();
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                physicalActivityDao.insert(new PhysicalActivity("WALK", 0, 0, 0, false));
-                physicalActivityDao.insert(new PhysicalActivity("RUN", 0, 0, 0, false));
-                physicalActivityDao.insert(new PhysicalActivity("CYCLE", 0, 0, 0, false));
-                physicalActivityDao.insert(new PhysicalActivity("VEHICLE", 0, 0, 0, false));
+                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.WALK, 0, 0, 0, false));
+                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.RUN, 0, 0, 0, false));
+                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.CYCLE, 0, 0, 0, false));
+                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.VEHICLE, 0, 0, 0, false));
             });
         }
 
@@ -160,6 +161,13 @@ public class MainActivity extends AppCompatActivity {
         // ToDo - delete this and move it to a broadcast receiver
         ActivityTracking tracking = new ActivityTracking();
         tracking.sendActivityNotification(this);
+
+        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.WALK, true);
+            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.RUN, true);
+            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.CYCLE, true);
+            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.VEHICLE, true);
+        });
     }
 
     @Override
