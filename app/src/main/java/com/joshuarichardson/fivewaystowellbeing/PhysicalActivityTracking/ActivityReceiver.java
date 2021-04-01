@@ -63,8 +63,6 @@ public class ActivityReceiver extends BroadcastReceiver {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true);
 
-        context.getString(textResource);
-
         builder
             .setSmallIcon(iconResource)
             .setContentTitle(context.getString(textResource));

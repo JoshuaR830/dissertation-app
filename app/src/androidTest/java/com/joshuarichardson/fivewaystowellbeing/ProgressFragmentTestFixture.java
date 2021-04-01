@@ -3,6 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.PhysicalActivityDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
@@ -46,6 +47,7 @@ public abstract class ProgressFragmentTestFixture {
     public WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
     public SurveyResponseActivityRecordDao surveyResponseActivityDao = mock (SurveyResponseActivityRecordDao.class);
     public ActivityRecordDao activityRecordDao = mock(ActivityRecordDao.class);
+    public PhysicalActivityDao physicalActivityDao = mock(PhysicalActivityDao.class);
 
     // What the mock database should return
     protected void mockDatabaseResponses() {
@@ -69,6 +71,9 @@ public abstract class ProgressFragmentTestFixture {
 
         when(mockWellbeingDatabase.activityRecordDao())
             .thenReturn(activityRecordDao);
+
+        when(mockWellbeingDatabase.physicalActivityDao())
+            .thenReturn(physicalActivityDao);
     }
 
     // The default responses provided by various common methods used on the progress fragment page
@@ -87,6 +92,12 @@ public abstract class ProgressFragmentTestFixture {
 
         when(wellbeingDao.getDataBySurvey(anyLong()))
             .thenReturn(Collections.emptyList());
+
+        when(physicalActivityDao.getPending())
+            .thenReturn(Collections.emptyList());
+
+        when(physicalActivityDao.getPhysicalActivityByType(anyString()))
+            .thenReturn(null);
 
         when(surveyResponseActivityDao.getEmotions(anyLong()))
             .thenReturn(new MutableLiveData<>());

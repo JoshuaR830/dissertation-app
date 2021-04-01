@@ -7,7 +7,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
 public class DatabaseQuestionHelper {
 
-    public static final int VERSION_NUMBER = 6;
+    public static final int VERSION_NUMBER = 7;
 
     public static final int ACTIVITY_OF_TYPE_VALUE = 50;
 

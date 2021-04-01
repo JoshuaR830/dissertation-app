@@ -28,7 +28,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AnswerSurveyActivity"
-            android:label="@string/launch_answer_survey" /> <!-- References https://stackoverflow.com/a/12034402/13496270 , https://developer.android.com/guide/components/broadcast-exceptions -->
+            android:label="@string/launch_answer_survey" />
         <activity
             android:name=".ui.pass_times.edit.ViewPassTimesActivity"
             android:label="@string/launch_view_pass_time"
@@ -61,11 +61,11 @@
         <receiver
             android:name=".PhysicalActivityTracking.ActivityReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
         <receiver
             android:name=".notifications.SendCompleteSurveyNotificationBroadcastReceiver"
             android:enabled="true"
-            android:process=":remote" />
+            android:process=":remote" /> <!-- References https://stackoverflow.com/a/12034402/13496270 , https://developer.android.com/guide/components/broadcast-exceptions -->
         <receiver
             android:name=".notifications.DeviceBootedBroadcastReceiver"
             android:enabled="true"
@@ -75,16 +75,18 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <service
+            android:name=".PhysicalActivityTracking.AddPhysicalActivityIntentService"
+            android:exported="false"/>
     </application>
-    <permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <permission android:name="android.permission.WAKE_LOCK" />
     <permission android:name="android.permission.INTERNET" />
-
     <permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 </manifest>

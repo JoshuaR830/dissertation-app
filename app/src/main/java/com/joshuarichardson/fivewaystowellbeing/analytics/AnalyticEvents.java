@@ -9,6 +9,7 @@ public class AnalyticEvents {
         public static final String CHECKED_WAY_TO_WELLBEING = "checked_way_to_wellbeing_checkbox";
         public static final String UNCHECKED_WAY_TO_WELLBEING = "unchecked_way_to_wellbeing_checkbox";
         public static final String ACTIVITY_WAY_TO_WELLBEING = "activity_way_to_wellbeing";
+        public static final String AUTOMATIC_WAY_TO_WELLBEING = "automatic_activity_way_to_wellbeing";
     }
 
     public static class Param {

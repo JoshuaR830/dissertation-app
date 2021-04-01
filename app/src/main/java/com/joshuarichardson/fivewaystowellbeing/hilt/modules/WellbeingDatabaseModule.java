@@ -144,16 +144,10 @@ public class WellbeingDatabaseModule {
             database.execSQL("CREATE TABLE physical_activity (" +
                 "activity_type TEXT NOT NULL PRIMARY KEY, " +
                 "start_time INTEGER NOT NULL, " +
-                "activity_id INTEGER NOT NULL " +
+                "end_time INTEGER NOT NULL, " +
+                "activity_id INTEGER NOT NULL, " +
+                "is_pending INTEGER NOT NULL " +
                 ")"
-            );
-
-            database.execSQL("INSERT INTO physical_activity " +
-                "(activity_type, start_time, activity_id) " +
-                "VALUES ('WALK', 0, 0), " +
-                "('RUN', 0, 0), " +
-                "('CYCLE', 0, 0), " +
-                "('VEHICLE', 0, 0)"
             );
         }
     };

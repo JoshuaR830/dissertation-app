@@ -103,5 +103,7 @@ public class WaysToWellbeingContract {
 
     public static final String PHYSICAL_ACTIVITY_TYPE = "activity_type";
     public static final String PHYSICAL_ACTIVITY_START_TIME = "start_time";
+    public static final String PHYSICAL_ACTIVITY_END_TIME = "end_time";
     public static final String PHYSICAL_ACTIVITY_ACTIVITY_ID = "activity_id";
+    public static final String PHYSICAL_ACTIVITY_IS_PENDING = "is_pending";
 }
