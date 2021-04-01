@@ -83,17 +83,9 @@ public class SuggestedActivityTests  extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Run"))));
 
-        onView(allOf(withId(R.id.activity_time_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
-            .perform(scrollTo())
-            .check(matches(allOf(isDisplayed(), withText("02:00 - 03:00"))));
-
         onView(allOf(withId(R.id.activity_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Cycle"))));
-
-        onView(allOf(withId(R.id.activity_time_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1))))
-            .perform(scrollTo())
-            .check(matches(allOf(isDisplayed(), withText("02:00 - 03:00"))));
     }
 
     @Test
