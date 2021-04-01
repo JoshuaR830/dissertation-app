@@ -98,8 +98,16 @@
     <string name="today_title">Today</string>
     <string name="today_description">Here is how your day is looking so far</string>
 
+    <!-- Settings -->
     <string name="settings_theme_title">Theme</string>
     <string name="settings_theme_description">Change the theme to dark, light or system default</string>
+    <string name="settings_category_theme">Theme</string>
+    <string name="settings_category_auto_tracking">Automatic Tracking</string>
+    <string name="settings_category_notifications">Survey notifications</string>
+    <string name="settings_category_auto_tracking_walk">Automatic walk activity</string>
+    <string name="settings_category_auto_tracking_run">Automatic run activity</string>
+    <string name="settings_category_auto_tracking_bike">Automatic cycle activity</string>
+    <string name="settings_category_auto_tracking_vehicle">Automatic vehicle activity</string>
 
     <string name="error_no_name_entered">Please enter a name</string>
     <string name="error_no_type_selected">Please choose a type</string>
