@@ -161,6 +161,13 @@ public class MainActivity extends AppCompatActivity {
         // ToDo - delete this and move it to a broadcast receiver
         ActivityTracking tracking = new ActivityTracking();
         tracking.sendActivityNotification(this);
+
+        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.WALK, true);
+            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.RUN, true);
+            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.CYCLE, true);
+            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.VEHICLE, true);
+        });
     }
 
     @Override

@@ -153,6 +153,10 @@ public class ProgressFragment extends Fragment {
 
                     ActivityRecord record = this.db.activityRecordDao().getActivityRecordById(item.getActivityId());
 
+                    if (record == null) {
+                        continue;
+                    }
+
                     requireActivity().runOnUiThread(() -> {
                         // Create a temporary record allowing users to select yes or no
                         LinearLayout passTimeContainer = requireActivity().findViewById(R.id.survey_item_container);
@@ -164,7 +168,13 @@ public class ProgressFragment extends Fragment {
 
                         title.setText(record.getActivityName());
                         long startTime = TimeHelper.getStartOfDay(new Date().getTime());
-                        timeText.setText(String.format(Locale.getDefault(), "%s - %s", TimeFormatter.formatTimeAsHourMinuteString(item.getStartTime() - startTime), TimeFormatter.formatTimeAsHourMinuteString(item.getEndTime() - startTime)));
+                        String textStartTime = TimeFormatter.formatTimeAsHourMinuteString(item.getStartTime() - startTime);
+                        String textEndTime = TimeFormatter.formatTimeAsHourMinuteString(item.getEndTime() - startTime);
+
+                        if(textStartTime != null && textEndTime != null) {
+                            timeText.setText(String.format(Locale.getDefault(), "%s - %s", textStartTime, textEndTime));
+                        }
+
                         WayToWellbeingImageColorizer.colorizeFrame(requireContext(), imageFrame, WaysToWellbeing.valueOf(record.getActivityWayToWellbeing()));
                         image.setImageResource(ActivityTypeImageHelper.getActivityImage(record.getActivityType()));
 
