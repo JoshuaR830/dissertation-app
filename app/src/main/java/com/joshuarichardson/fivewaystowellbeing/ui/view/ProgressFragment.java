@@ -16,10 +16,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.ChipGroup;
+import com.joshuarichardson.fivewaystowellbeing.ActivityTypeImageHelper;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
@@ -33,6 +36,8 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
@@ -42,11 +47,13 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
+import com.joshuarichardson.fivewaystowellbeing.ui.insights.WayToWellbeingImageColorizer;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -137,6 +144,63 @@ public class ProgressFragment extends Fragment {
 
                 SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
                 ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db, getParentFragmentManager(), analyticsHelper);
+
+                // Get all pending activities
+                List<PhysicalActivity> list = this.db.physicalActivityDao().getPending();
+
+                // Loop through each pending activity
+                for(PhysicalActivity item : list) {
+
+                    ActivityRecord record = this.db.activityRecordDao().getActivityRecordById(item.getActivityId());
+
+                    requireActivity().runOnUiThread(() -> {
+                        // Create a temporary record allowing users to select yes or no
+                        LinearLayout passTimeContainer = requireActivity().findViewById(R.id.survey_item_container);
+                        View tempActivity = LayoutInflater.from(requireActivity()).inflate(R.layout.pass_time_temporary_item, null, false);
+                        TextView title = tempActivity.findViewById(R.id.activity_text);
+                        TextView timeText = tempActivity.findViewById(R.id.activity_time_text);
+                        FrameLayout imageFrame = tempActivity.findViewById(R.id.activity_image_frame);
+                        ImageView image = tempActivity.findViewById(R.id.activity_image);
+
+                        title.setText(record.getActivityName());
+                        long startTime = TimeHelper.getStartOfDay(new Date().getTime());
+                        timeText.setText(String.format(Locale.getDefault(), "%s - %s", TimeFormatter.formatTimeAsHourMinuteString(item.getStartTime() - startTime), TimeFormatter.formatTimeAsHourMinuteString(item.getEndTime() - startTime)));
+                        WayToWellbeingImageColorizer.colorizeFrame(requireContext(), imageFrame, WaysToWellbeing.valueOf(record.getActivityWayToWellbeing()));
+                        image.setImageResource(ActivityTypeImageHelper.getActivityImage(record.getActivityType()));
+
+                        passTimeContainer.addView(tempActivity);
+
+                        // Yes and no buttons - hide the temporary thing
+                        Button yesButton = tempActivity.findViewById(R.id.yes_button);
+                        Button noButton = tempActivity.findViewById(R.id.no_button);
+
+                        yesButton.setOnClickListener((v) -> {
+                            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                                // Insert that activity into the table
+                                int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
+                                long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, item.getActivityId(), sequenceNumber, "", item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false));
+                                Passtime passtime = new Passtime(record.getActivityName(), "", record.getActivityType(), record.getActivityWayToWellbeing(), activitySurveyId, item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false);
+                                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, record.getActivityType(), passtime, new Date().getTime());
+                                this.db.physicalActivityDao().updateIsPendingStatus(item.getActivityType(), false);
+
+                                // Display the item on the screen to the user
+                                requireActivity().runOnUiThread(() -> {
+                                    // Time the scroll animation so that you never notice the item get deleted
+                                    ActivityViewHelper.createPasstimeItem(requireActivity(), passTimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper, true);
+                                    passTimeContainer.removeView(tempActivity);
+                                });
+                            });
+                        });
+
+                        noButton.setOnClickListener((v) -> {
+                            passTimeContainer.removeView(tempActivity);
+                            // We know the outcome - it should therefore no-longer be pending
+                            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                                this.db.physicalActivityDao().updateIsPendingStatus(item.getActivityType(), false);
+                            });
+                        });
+                    });
+                }
             });
         };
 

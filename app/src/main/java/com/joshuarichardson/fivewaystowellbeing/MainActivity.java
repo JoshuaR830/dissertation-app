@@ -1,5 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
+import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,7 +18,9 @@ import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.PhysicalActivityDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
@@ -40,6 +44,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase.DATABASE_VERSION_CODE;
 
 @AndroidEntryPoint
@@ -82,6 +87,17 @@ public class MainActivity extends AppCompatActivity {
                     WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(wellbeingValues);
                     db.wellbeingResultsDao().insert(new WellbeingResult(response.getSurveyResponseId(), response.getSurveyResponseTimestamp(), values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue()));
                 }
+            });
+        }
+
+        // Add the physical activities to the database
+        if (preferences.getInt("database_version", 0) < 7) {
+            PhysicalActivityDao physicalActivityDao = this.db.physicalActivityDao();
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                physicalActivityDao.insert(new PhysicalActivity("WALK", 0, 0, 0, false));
+                physicalActivityDao.insert(new PhysicalActivity("RUN", 0, 0, 0, false));
+                physicalActivityDao.insert(new PhysicalActivity("CYCLE", 0, 0, 0, false));
+                physicalActivityDao.insert(new PhysicalActivity("VEHICLE", 0, 0, 0, false));
             });
         }
 
@@ -134,6 +150,16 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityTracking activityTracker = new ActivityTracking();
         activityTracker.initialiseTracking(getApplicationContext());
+
+
+        // Cancel the notification
+        NotificationManager notification = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION);
+
+
+        // ToDo - delete this and move it to a broadcast receiver
+        ActivityTracking tracking = new ActivityTracking();
+        tracking.sendActivityNotification(this);
     }
 
     @Override

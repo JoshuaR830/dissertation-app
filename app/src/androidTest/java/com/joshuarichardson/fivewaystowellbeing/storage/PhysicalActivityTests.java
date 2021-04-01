@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.List;
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -28,16 +30,18 @@ public class PhysicalActivityTests {
         this.wellbeingDb = Room.inMemoryDatabaseBuilder(context, WellbeingDatabase.class).build();
         this.physicalActivityDao = this.wellbeingDb.physicalActivityDao();
 
-        this.physicalActivityDao.insert(new PhysicalActivity("CYCLE", 543789, 595448));
+        this.physicalActivityDao.insert(new PhysicalActivity("CYCLE", 543789, 6543212, 595448, false));
     }
 
     @Test
     public void whenActivityIsInserted_ItShouldBeRetrievableByType() {
-        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 3784283));
+        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, false));
         PhysicalActivity originalPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("RUN");
         assertThat(originalPhysicalActivity.getActivityType()).isEqualTo("RUN");
         assertThat(originalPhysicalActivity.getStartTime()).isEqualTo(321543);
+        assertThat(originalPhysicalActivity.getEndTime()).isEqualTo(4374857);
         assertThat(originalPhysicalActivity.getActivityId()).isEqualTo(3784283);
+        assertThat(originalPhysicalActivity.isPending()).isEqualTo(false);
     }
 
     @Test
@@ -46,16 +50,27 @@ public class PhysicalActivityTests {
         assertThat(originalPhysicalActivity.getActivityType()).isEqualTo("CYCLE");
         assertThat(originalPhysicalActivity.getStartTime()).isEqualTo(543789);
         assertThat(originalPhysicalActivity.getActivityId()).isEqualTo(595448);
+        assertThat(originalPhysicalActivity.isPending()).isEqualTo(false);
     }
 
     @Test
-    public void whenTimeUpdated_ThePhysicalActivityShouldReturnTheNewTime() {
+    public void whenStartTimeUpdated_ThePhysicalActivityShouldReturnTheNewTime() {
         PhysicalActivity originalPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
         assertThat(originalPhysicalActivity.getStartTime()).isEqualTo(543789);
 
-        this.physicalActivityDao.updateTime("CYCLE", 12345);
+        this.physicalActivityDao.updateStartTime("CYCLE", 12345);
         PhysicalActivity newPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
         assertThat(newPhysicalActivity.getStartTime()).isEqualTo(12345);
+    }
+
+    @Test
+    public void whenEndTimeUpdated_ThePhysicalActivityShouldReturnTheNewTime() {
+        PhysicalActivity originalPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
+        assertThat(originalPhysicalActivity.getEndTime()).isEqualTo(6543212);
+
+        this.physicalActivityDao.updateEndTime("CYCLE", 12345);
+        PhysicalActivity newPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
+        assertThat(newPhysicalActivity.getEndTime()).isEqualTo(12345);
     }
 
     @Test
@@ -66,6 +81,28 @@ public class PhysicalActivityTests {
         this.physicalActivityDao.updateActivityId("CYCLE", 784568);
         PhysicalActivity newPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
         assertThat(newPhysicalActivity.getActivityId()).isEqualTo(784568);
+    }
+
+    @Test
+    public void whenIsPendingUpdated_ThePhysicalActivityShouldReturnDifferentPendingStatus() {
+        PhysicalActivity originalPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
+        assertThat(originalPhysicalActivity.isPending()).isEqualTo(false);
+
+        this.physicalActivityDao.updateIsPendingStatus("CYCLE", true);
+        PhysicalActivity newPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
+        assertThat(newPhysicalActivity.isPending()).isEqualTo(true);
+    }
+
+    @Test
+    public void whenGetPending_CorrectNumberOfItemsShouldBeReturned() {
+        // This is a duplicate so only count as 1
+        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, true));
+        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, true));
+
+        this.physicalActivityDao.insert(new PhysicalActivity("WALK", 321543, 4374857, 3784283, true));
+
+        List<PhysicalActivity> activitiesList = this.physicalActivityDao.getPending();
+        assertThat(activitiesList.size()).isEqualTo(2);
     }
 
     @Test
