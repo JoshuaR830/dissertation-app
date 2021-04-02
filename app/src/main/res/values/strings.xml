@@ -133,6 +133,12 @@
     <string name="preference_switch_title">Enable</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
+    <string name="is_walk_complete">Did you complete a walk?</string>
+    <string name="is_run_complete">Did you complete a run?</string>
+    <string name="is_cycle_complete">Did you complete a cycle?</string>
+    <string name="is_drive_complete">Did you complete a drive?</string>
+    <string name="button_yes">Yes</string>
+    <string name="button_no">No</string>
 
     <string name="percentage_label">%</string>
     <string name="date_label">Date</string>

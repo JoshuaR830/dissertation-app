@@ -18,6 +18,7 @@ public class DeviceBootedBroadcastReceiver extends BroadcastReceiver {
         helper.scheduleNotification(context, "noon");
         helper.scheduleNotification(context, "night");
 
+        // ToDo - only start if the permissions allow it
         // This will start the tracking for the activities
         ActivityTracking activityTracker = new ActivityTracking();
         activityTracker.initialiseTracking(context);

@@ -87,12 +87,14 @@ public class ProgressFragment extends Fragment {
     private long surveyId;
     private Observer<SurveyCountItem> emotionUpdateObserver;
     private boolean isDeletable;
+    private boolean shouldUpdate;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, parentView, false);
 
         Button addActivityButton = view.findViewById(R.id.add_activity_button);
         addActivityButton.setOnClickListener(v -> {
+            this.shouldUpdate = false;
             Intent activityIntent = new Intent(requireActivity(), ViewPassTimesActivity.class);
             startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
 
@@ -117,7 +119,6 @@ public class ProgressFragment extends Fragment {
 
     // Whenever something needs to be updated - do this
     public void updateSurveyItems() {
-        super.onResume();
         SurveyResponseDao surveyDao = db.surveyResponseDao();
         this.surveyResponsesObserver = surveys -> {
             if (surveys.size() == 0) {
@@ -409,6 +410,12 @@ public class ProgressFragment extends Fragment {
             toggleDeletable();
         }
 
+        if(this.shouldUpdate) {
+            updateSurveyItems();
+        }
+
+        this.shouldUpdate = true;
+
         // This starts observing again so that after adding an activity the emotions still update
         if(this.emotionUpdateValues != null) {
             this.emotionUpdateValues.observe(requireActivity(), this.emotionUpdateObserver);
@@ -423,6 +430,11 @@ public class ProgressFragment extends Fragment {
             View child = layout.getChildAt(i);
             ImageButton expandButton = child.findViewById(R.id.expand_options_button);
             MaterialButton deleteButton = child.findViewById(R.id.delete_options_button);
+
+            if(expandButton == null || deleteButton == null) {
+                return;
+            }
+
             if (this.isDeletable) {
                 expandButton.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.VISIBLE);

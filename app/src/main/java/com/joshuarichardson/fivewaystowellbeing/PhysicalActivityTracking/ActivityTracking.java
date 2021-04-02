@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,10 +20,14 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 import java.util.Arrays;
 
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 public class ActivityTracking {
 
-    public static final int PHYSICAL_ACTIVITY_NOTIFICATION = 5;
+    public static final int PHYSICAL_ACTIVITY_NOTIFICATION_WALK = 5;
+    public static final int PHYSICAL_ACTIVITY_NOTIFICATION_RUN = 6;
+    public static final int PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE = 7;
+    public static final int PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE = 8;
 
     public void initialiseTracking(Context context) {
         ActivityTransitionRequest request = new ActivityTransitionRequest(Arrays.asList(
@@ -69,7 +74,7 @@ public class ActivityTracking {
         ));
 
         Intent intent = new Intent(context, ActivityReceiver.class);
-        PendingIntent pending = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent pending = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Task<Void> task = ActivityRecognition.getClient(context)
             .requestActivityTransitionUpdates(request, pending);
@@ -78,17 +83,17 @@ public class ActivityTracking {
         task.addOnFailureListener((exception) -> {});
     }
 
-    public void sendActivityNotification(Context context) {
+    public void sendActivityNotification(Context context, long activityId, long startTime, long endTime, String physicalActivityType) {
         Intent intent = new Intent(context, AddPhysicalActivityIntentService.class);
 
-        // ToDo - send a specific notification when activity selected
         Bundle bundle = new Bundle();
-        bundle.putLong("activity_id", 1);
-        bundle.putLong("start_time", 1617192504000L);
-        bundle.putLong("end_time", 1617203504000L);
+        bundle.putLong("activity_id", activityId);
+        bundle.putLong("start_time", startTime);
+        bundle.putLong("end_time", endTime);
+        bundle.putString("event_type", physicalActivityType);
         intent.putExtras(bundle);
 
-        PendingIntent confirmPendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        PendingIntent confirmPendingIntent = PendingIntent.getService(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // What notification should do on cancel press
         Intent cancelIntent = new Intent(context, AddPhysicalActivityIntentService.class);
@@ -96,7 +101,7 @@ public class ActivityTracking {
         cancelBundle.putLong("activity_id", -1);
         cancelIntent.putExtras(cancelBundle);
 
-        PendingIntent cancelPendingIntent = PendingIntent.getService(context, 1, cancelIntent, 0);
+        PendingIntent cancelPendingIntent = PendingIntent.getService(context, 2, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManager notification = (NotificationManager) context.getSystemService(Service.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -109,11 +114,43 @@ public class ActivityTracking {
 
         // ToDo: use string resources
         builder
-            .setSmallIcon(R.drawable.notification_icon_walk)
-            .addAction(R.drawable.ic_star_logo, "Yes", confirmPendingIntent)
-            .addAction(R.drawable.icon_delete, "No", cancelPendingIntent)
-            .setContentTitle("Did you complete a walk");
+            .addAction(R.drawable.ic_star_logo, context.getString(R.string.button_yes), confirmPendingIntent)
+            .addAction(R.drawable.icon_delete, context.getString(R.string.button_no), cancelPendingIntent)
+            .setColor(context.getColor(R.color.colorPrimary));
 
-        notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION, builder.build());
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+
+        switch(physicalActivityType) {
+            case PhysicalActivityTypes.WALK:
+                builder
+                    .setSmallIcon(R.drawable.notification_icon_walk)
+                    .setContentTitle(context.getString(R.string.is_walk_complete))
+                    .setContentText(preference.getString("notification_auto_tracking_list_walk", ""));
+                notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_WALK, builder.build());
+                break;
+            case PhysicalActivityTypes.RUN:
+                builder
+                    .setSmallIcon(R.drawable.notification_icon_run)
+                    .setContentTitle(context.getString(R.string.is_run_complete))
+                    .setContentText(preference.getString("notification_auto_tracking_list_run", ""));
+                notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_RUN, builder.build());
+                break;
+            case PhysicalActivityTypes.CYCLE:
+                builder
+                    .setSmallIcon(R.drawable.notification_icon_bike)
+                    .setContentTitle(context.getString(R.string.is_cycle_complete))
+                    .setContentText(preference.getString("notification_auto_tracking_list_cycle", ""));
+                notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE, builder.build());
+                break;
+            case PhysicalActivityTypes.VEHICLE:
+                builder
+                    .setSmallIcon(R.drawable.notification_icon_vehicle)
+                    .setContentTitle(context.getString(R.string.is_walk_complete))
+                    .setContentText(preference.getString("notification_auto_tracking_list_vehicle", ""));
+                notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE, builder.build());
+                break;
+            default:
+                break;
+        }
     }
 }

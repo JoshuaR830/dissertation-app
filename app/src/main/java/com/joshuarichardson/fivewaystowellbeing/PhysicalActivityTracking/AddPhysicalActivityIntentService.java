@@ -23,7 +23,10 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION;
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
 
 @AndroidEntryPoint
@@ -44,7 +47,10 @@ public class AddPhysicalActivityIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         // Cancel the notification
         NotificationManager notification = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION);
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_WALK);
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_RUN);
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE);
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE);
 
         if (intent.getExtras() == null || !intent.hasExtra("activity_id")) {
             return;
@@ -58,6 +64,7 @@ public class AddPhysicalActivityIntentService extends IntentService {
 
         long activityStartTime = intent.getExtras().getLong("start_time", 0);
         long activityEndTime = intent.getExtras().getLong("end_time", 0);
+        String eventType = intent.getExtras().getString("event_type", null);
 
         long currentTime = new Date().getTime();
         long startTime = TimeHelper.getStartOfDay(currentTime);
@@ -66,6 +73,10 @@ public class AddPhysicalActivityIntentService extends IntentService {
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
 
             ActivityRecord activityDetails = this.db.activityRecordDao().getActivityRecordById(activityId);
+
+            if(activityDetails == null) {
+                return;
+            }
 
             this.analyticsHelper.logWayToWellbeingAutomaticActivity(this, WaysToWellbeing.valueOf(activityDetails.getActivityWayToWellbeing()));
 
@@ -89,6 +100,7 @@ public class AddPhysicalActivityIntentService extends IntentService {
             long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", activityStartTime - startTime, activityEndTime - startTime, 0, false));
             Passtime passtime = new Passtime(activityDetails.getActivityName(), "", activityDetails.getActivityType(), activityDetails.getActivityWayToWellbeing(), activitySurveyId, activityStartTime - startTime, activityEndTime - startTime, 0, false);
             WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityDetails.getActivityType(), passtime, currentTime);
+            this.db.physicalActivityDao().updateIsPendingStatus(eventType, false);
         });
     }
 }

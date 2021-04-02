@@ -45,7 +45,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION;
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
+import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase.DATABASE_VERSION_CODE;
 
 @AndroidEntryPoint
@@ -149,25 +152,20 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNav, navController);
 
+        // ToDo - make this depend on setting the permission
         ActivityTracking activityTracker = new ActivityTracking();
         activityTracker.initialiseTracking(getApplicationContext());
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
         // Cancel the notification
         NotificationManager notification = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION);
-
-
-        // ToDo - delete this and move it to a broadcast receiver
-        ActivityTracking tracking = new ActivityTracking();
-        tracking.sendActivityNotification(this);
-
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.WALK, true);
-            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.RUN, true);
-            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.CYCLE, true);
-            this.db.physicalActivityDao().updateIsPendingStatus(PhysicalActivityTypes.VEHICLE, true);
-        });
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_WALK);
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_RUN);
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE);
+        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE);
     }
 
     @Override
