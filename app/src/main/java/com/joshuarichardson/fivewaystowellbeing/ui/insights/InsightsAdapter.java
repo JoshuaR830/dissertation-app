@@ -119,9 +119,9 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     // Reference https://material.io/components/date-pickers/android#timezones
-                    LocalDateTime localStart = LocalDateTime.now();
+                    LocalDateTime localStart = LocalDateTime.of(2021, 3, 1, 0, 0);
                     startTime = localStart.atZone(ZoneId.ofOffset("UTC", ZoneOffset.UTC)).toInstant().toEpochMilli();
-                    LocalDateTime localEnd = LocalDateTime.of(2021, 3, 1, 0, 0);
+                    LocalDateTime localEnd = LocalDateTime.now();
                     endTime = localEnd.atZone(ZoneId.ofOffset("UTC", ZoneOffset.UTC)).toInstant().toEpochMilli();
                 }
 

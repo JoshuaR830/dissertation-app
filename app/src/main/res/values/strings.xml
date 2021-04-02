@@ -89,6 +89,7 @@
     <string name="button_change">Change</string>
     <string name="button_missing_day">Add missed</string>
     <string name="automated_activity_text">This activity was automatically suggested based on your activity, do you want to add it?</string>
+    <string name="update_five_dialog">Well hello, you\'re just in time to see the latest update to the app, automated physical activity tracking. Why not head over to settings and select the activities you\'d like to track automatically.</string>
 
     <string name="minutes">mins</string>
     <string name="hours">hrs</string>
@@ -97,6 +98,10 @@
 
     <string name="today_title">Today</string>
     <string name="today_description">Here is how your day is looking so far</string>
+
+    <string name="tracking_dialog_title">Automatic activity tracking</string>
+    <string name="tracking_dialog_body">The app can automatically record walking, running, cycling and driving, you just need to enable the following permission.</string>
+    <string name="tracking_dialog_positive_button">Next</string>
 
     <!-- Settings -->
     <string name="settings_theme_title">Theme</string>

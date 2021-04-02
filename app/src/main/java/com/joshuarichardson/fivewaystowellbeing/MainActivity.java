@@ -1,9 +1,12 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking;
 import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.PhysicalActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
@@ -37,6 +41,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -54,6 +59,7 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
+    private static final int ACTIVITY_TRACKING_CODE = 1;
     @Inject
     WellbeingDatabase db;
 
@@ -78,6 +84,20 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Display a welcome screen for first time users of this version
+        if(preferences.getInt("app_version", 0) < 5) {
+            new MaterialAlertDialogBuilder(this)
+                .setView(R.layout.new_features_auto_tracking)
+                .setPositiveButton(getString(R.string.tracking_dialog_positive_button), (dialog, which) -> {
+                    setPermissions();
+                    preferenceEditor.putInt("app_version", 5);
+                    preferenceEditor.apply();
+                })
+                .show();
+        } else {
+            setPermissions();
+        }
 
         // The database version will only be updated after this so when migrating from 5 to 6 this will run
         if (preferences.getInt("database_version", 0) < 6) {
@@ -151,10 +171,39 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNav, navController);
+    }
 
-        // ToDo - make this depend on setting the permission
-        ActivityTracking activityTracker = new ActivityTracking();
-        activityTracker.initialiseTracking(getApplicationContext());
+    private void setPermissions() {
+        // Permission reference https://developer.android.com/training/permissions/requesting#allow-system-manage-request-code
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
+                ActivityTracking activityTracker = new ActivityTracking();
+                activityTracker.initialiseTracking(getApplicationContext());
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACTIVITY_RECOGNITION)) {
+                new MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.tracking_dialog_title))
+                    .setMessage(getString(R.string.tracking_dialog_body))
+                    .setIcon(R.drawable.notification_icon_walk)
+                    .setPositiveButton(getString(R.string.tracking_dialog_positive_button), (dialog, which) -> {
+                        requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, ACTIVITY_TRACKING_CODE);
+                    })
+                    .show();
+            } else {
+                requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, ACTIVITY_TRACKING_CODE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == ACTIVITY_TRACKING_CODE) {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ActivityTracking activityTracker = new ActivityTracking();
+                activityTracker.initialiseTracking(getApplicationContext());
+            }
+        }
     }
 
     @Override
