@@ -53,56 +53,31 @@ public class ActivityReceiver extends BroadcastReceiver {
             if(event.getActivityType() == DetectedActivity.WALKING && event.getTransitionType() == ACTIVITY_TRANSITION_ENTER) {
                 bundle.putString("event_type", PhysicalActivityTypes.WALK);
                 serviceIntent.setAction(START_ACTIVITY);
-                sendNotification(context, R.drawable.notification_icon_walk, R.string.start_walking, 13);
             } else if(event.getActivityType() == DetectedActivity.WALKING && event.getTransitionType() == ACTIVITY_TRANSITION_EXIT) {
                 bundle.putString("event_type", PhysicalActivityTypes.WALK);
                 serviceIntent.setAction(END_ACTIVITY);
-                sendNotification(context, R.drawable.notification_icon_walk, R.string.stop_walking, 23);
             } else if(event.getActivityType() == DetectedActivity.RUNNING && event.getTransitionType() == ACTIVITY_TRANSITION_ENTER) {
                 bundle.putString("event_type", PhysicalActivityTypes.RUN);
                 serviceIntent.setAction(START_ACTIVITY);
-                sendNotification(context, R.drawable.notification_icon_run, R.string.start_running, 14);
             } else if(event.getActivityType() == DetectedActivity.RUNNING && event.getTransitionType() == ACTIVITY_TRANSITION_EXIT) {
                 bundle.putString("event_type", PhysicalActivityTypes.RUN);
                 serviceIntent.setAction(END_ACTIVITY);
-                sendNotification(context, R.drawable.notification_icon_run, R.string.stop_running, 24);
             } else if(event.getActivityType() == DetectedActivity.ON_BICYCLE && event.getTransitionType() == ACTIVITY_TRANSITION_ENTER) {
                 bundle.putString("event_type", PhysicalActivityTypes.CYCLE);
                 serviceIntent.setAction(START_ACTIVITY);
-                sendNotification(context, R.drawable.notification_icon_bike, R.string.start_cycling, 15);
             } else if(event.getActivityType() == DetectedActivity.ON_BICYCLE && event.getTransitionType() == ACTIVITY_TRANSITION_EXIT) {
                 bundle.putString("event_type", PhysicalActivityTypes.CYCLE);
                 serviceIntent.setAction(END_ACTIVITY);
-                sendNotification(context, R.drawable.notification_icon_bike, R.string.stop_cycling, 25);
             } else if(event.getActivityType() == DetectedActivity.IN_VEHICLE && event.getTransitionType() == ACTIVITY_TRANSITION_ENTER) {
                 bundle.putString("event_type", PhysicalActivityTypes.VEHICLE);
                 serviceIntent.setAction(START_ACTIVITY);
-                sendNotification(context, R.drawable.notification_icon_vehicle, R.string.enter_vehicle, 16);
             } else if(event.getActivityType() == DetectedActivity.IN_VEHICLE && event.getTransitionType() == ACTIVITY_TRANSITION_EXIT) {
                 bundle.putString("event_type", PhysicalActivityTypes.VEHICLE);
                 serviceIntent.setAction(END_ACTIVITY);
-                sendNotification(context, R.drawable.notification_icon_vehicle, R.string.exit_vehicle, 26);
             }
 
             serviceIntent.putExtras(bundle);
             context.startService(serviceIntent);
         }
-    }
-
-    public void sendNotification(Context context, int iconResource, int textResource, int notificationId) {
-        NotificationManager notification = (NotificationManager) context.getSystemService(Service.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notification.createNotificationChannel(new NotificationChannel(CHANNEL_ID_AUTO_ACTIVITY, context.getString(R.string.activity_channel_name), NotificationManager.IMPORTANCE_DEFAULT));
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID_AUTO_ACTIVITY)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true);
-
-        builder
-            .setSmallIcon(iconResource)
-            .setContentTitle(context.getString(textResource));
-
-        notification.notify(notificationId, builder.build());
     }
 }
