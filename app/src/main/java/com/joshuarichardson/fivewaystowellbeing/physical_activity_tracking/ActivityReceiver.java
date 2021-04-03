@@ -25,9 +25,6 @@ public class ActivityReceiver extends BroadcastReceiver {
     // 10 minutes
     public static final long DURATION_THRESHOLD = 600000;
 
-    @Inject
-    WellbeingDatabase db;
-
     @Override
     public void onReceive(Context context, Intent intent) {
 

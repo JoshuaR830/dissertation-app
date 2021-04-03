@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setPermissions() {
         // Permission reference https://developer.android.com/training/permissions/requesting#allow-system-manage-request-code
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
                 ActivityTracking activityTracker = new ActivityTracking();
                 activityTracker.initialiseTracking(getApplicationContext());

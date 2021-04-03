@@ -112,7 +112,6 @@ public class ActivityTracking {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true);
 
-        // ToDo: use string resources
         builder
             .addAction(R.drawable.ic_star_logo, context.getString(R.string.button_yes), confirmPendingIntent)
             .addAction(R.drawable.icon_delete, context.getString(R.string.button_no), cancelPendingIntent)

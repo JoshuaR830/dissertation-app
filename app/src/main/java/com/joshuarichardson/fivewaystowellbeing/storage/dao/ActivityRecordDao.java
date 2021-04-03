@@ -25,6 +25,9 @@ public interface ActivityRecordDao {
     @Query("SELECT * FROM activity_records WHERE is_hidden = 0")
     LiveData<List<ActivityRecord>> getAllActivities();
 
+    @Query("SELECT * FROM activity_records WHERE is_hidden = 0")
+    List<ActivityRecord> getAllVisibleActivitiesNotLive();
+
     @Query("SELECT * FROM activity_records")
     List<ActivityRecord> getAllActivitiesNotLive();
 
