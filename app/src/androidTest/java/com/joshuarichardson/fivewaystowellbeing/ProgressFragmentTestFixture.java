@@ -134,5 +134,11 @@ public abstract class ProgressFragmentTestFixture {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            onView(withText("Allow")).perform(click());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
