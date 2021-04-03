@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking;
+package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -145,7 +145,7 @@ public class ActivityTracking {
             case PhysicalActivityTypes.VEHICLE:
                 builder
                     .setSmallIcon(R.drawable.notification_icon_vehicle)
-                    .setContentTitle(context.getString(R.string.is_walk_complete))
+                    .setContentTitle(context.getString(R.string.is_drive_complete))
                     .setContentText(preference.getString("notification_auto_tracking_list_vehicle", ""));
                 notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE, builder.build());
                 break;

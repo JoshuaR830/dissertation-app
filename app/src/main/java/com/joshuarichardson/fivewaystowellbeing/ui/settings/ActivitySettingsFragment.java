@@ -3,7 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.settings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.PhysicalActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.PhysicalActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;

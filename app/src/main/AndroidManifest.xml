@@ -59,7 +59,7 @@
             android:name="firebase_analytics_collection_deactivated"
             android:value="${analytics_deactivated}" />
         <receiver
-            android:name=".PhysicalActivityTracking.ActivityReceiver"
+            android:name=".physical_activity_tracking.ActivityReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver
@@ -76,10 +76,10 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".PhysicalActivityTracking.ActivityDurationIntentService"
+            android:name=".physical_activity_tracking.ActivityDurationIntentService"
             android:exported="false" />
         <service
-            android:name=".PhysicalActivityTracking.AddPhysicalActivityIntentService"
+            android:name=".physical_activity_tracking.AddPhysicalActivityIntentService"
             android:exported="false" />
     </application>
     <permission android:name="android.permission.ACCESS_NETWORK_STATE" />

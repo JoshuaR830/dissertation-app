@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking;
+package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityReceiver.DURATION_THRESHOLD;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityReceiver.DURATION_THRESHOLD;
 
 @AndroidEntryPoint
 public class ActivityDurationIntentService extends IntentService {
