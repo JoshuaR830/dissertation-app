@@ -15,10 +15,10 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking;
-import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.PhysicalActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
+import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking;
+import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.PhysicalActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
@@ -50,10 +50,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase.DATABASE_VERSION_CODE;
 
 @AndroidEntryPoint
@@ -191,6 +191,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, ACTIVITY_TRACKING_CODE);
             }
+        } else {
+            ActivityTracking activityTracker = new ActivityTracking();
+            activityTracker.initialiseTracking(getApplicationContext());
         }
     }
 

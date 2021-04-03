@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking;
+package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -23,10 +23,10 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
 
 @AndroidEntryPoint

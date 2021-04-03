@@ -1,29 +1,23 @@
-package com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking;
+package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.location.ActivityTransitionEvent;
 import com.google.android.gms.location.ActivityTransitionResult;
 import com.google.android.gms.location.DetectedActivity;
-import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 
 import javax.inject.Inject;
 
-import androidx.core.app.NotificationCompat;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.google.android.gms.location.ActivityTransition.ACTIVITY_TRANSITION_ENTER;
 import static com.google.android.gms.location.ActivityTransition.ACTIVITY_TRANSITION_EXIT;
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityDurationIntentService.END_ACTIVITY;
-import static com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityDurationIntentService.START_ACTIVITY;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityDurationIntentService.END_ACTIVITY;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityDurationIntentService.START_ACTIVITY;
 
 @AndroidEntryPoint
 public class ActivityReceiver extends BroadcastReceiver {
@@ -33,8 +27,6 @@ public class ActivityReceiver extends BroadcastReceiver {
 
     @Inject
     WellbeingDatabase db;
-
-    public static final String CHANNEL_ID_AUTO_ACTIVITY = "Automatic activity";
 
     @Override
     public void onReceive(Context context, Intent intent) {

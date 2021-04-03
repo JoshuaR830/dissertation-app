@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.ActivityTracking;
+import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking;
 
 // References:
 // https://stackoverflow.com/questions/12034357/does-alarm-manager-persist-even-after-reboot

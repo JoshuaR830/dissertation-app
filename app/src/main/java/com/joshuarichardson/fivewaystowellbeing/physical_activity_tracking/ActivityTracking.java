@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking;
+package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

@@ -7,12 +7,12 @@
 
     <FrameLayout
         android:id="@+id/frameLayout"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/frame_circle"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/way_to_wellbeing_connect"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -27,11 +27,11 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/frame_circle"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/way_to_wellbeing_take_notice"
         app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frameLayout">
@@ -48,13 +48,13 @@
 
     <FrameLayout
         android:id="@+id/frameLayout2"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/frame_circle"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/way_to_wellbeing_be_active"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
@@ -70,11 +70,11 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
         android:background="@drawable/frame_circle"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/way_to_wellbeing_give"
         app:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frameLayout2">
