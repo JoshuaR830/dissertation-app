@@ -126,10 +126,13 @@ public abstract class ProgressFragmentTestFixture {
     @Before
     public void setUp()  throws InterruptedException {
         // Reference set preferences https://medium.com/@SimonKaz/android-testing-setting-sharedprefs-before-launching-an-activity-558730506b7c
-        Context context = getInstrumentation().getTargetContext();
-        SharedPreferences.Editor preferenceEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        preferenceEditor.putInt("app_version", 5);
         hiltTest.inject();
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(7000, TimeUnit.MILLISECONDS);
+
+        try {
+            onView(withText("Next")).perform(click());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
