@@ -44,7 +44,7 @@ public class ActivitySettingsFragment extends PreferenceFragmentCompat {
         ArrayList<String> ids = new ArrayList<>();
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            List<ActivityRecord> activities = this.db.activityRecordDao().getAllActivitiesNotLive();
+            List<ActivityRecord> activities = this.db.activityRecordDao().getAllVisibleActivitiesNotLive();
 
             for(ActivityRecord activity : activities) {
                 names.add(activity.getActivityName());
