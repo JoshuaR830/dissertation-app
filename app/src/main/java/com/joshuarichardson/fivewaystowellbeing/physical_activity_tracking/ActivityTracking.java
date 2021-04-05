@@ -28,6 +28,7 @@ public class ActivityTracking {
     public static final int PHYSICAL_ACTIVITY_NOTIFICATION_RUN = 6;
     public static final int PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE = 7;
     public static final int PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE = 8;
+    private static final String CHANNEL_ID_AUTO_ACTIVITY = "CHANNEL_ID_AUTO_ACTIVITY";
 
     public void initialiseTracking(Context context) {
         ActivityTransitionRequest request = new ActivityTransitionRequest(Arrays.asList(
@@ -105,10 +106,10 @@ public class ActivityTracking {
 
         NotificationManager notification = (NotificationManager) context.getSystemService(Service.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notification.createNotificationChannel(new NotificationChannel("CHANNEL_ID_AUTO_ACTIVITY", context.getString(R.string.activity_channel_name), NotificationManager.IMPORTANCE_DEFAULT));
+            notification.createNotificationChannel(new NotificationChannel(CHANNEL_ID_AUTO_ACTIVITY, context.getString(R.string.activity_channel_name), NotificationManager.IMPORTANCE_DEFAULT));
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "CHANNEL_ID_AUTO_ACTIVITY")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID_AUTO_ACTIVITY)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true);
 

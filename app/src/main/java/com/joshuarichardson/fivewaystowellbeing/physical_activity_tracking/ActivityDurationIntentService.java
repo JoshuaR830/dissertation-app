@@ -50,7 +50,7 @@ public class ActivityDurationIntentService extends IntentService {
 
                     // Only update the start time if the time of the event starting is half the threshold to log the activity
                     // This means that you can have a small break and it still be logged as the same activity
-                    if (physicalActivity.getStartTime() <= 0 || eventTimeMillis - physicalActivity.getEndTime() > (DURATION_THRESHOLD/2)) {
+                    if (physicalActivity.getStartTime() <= 0 || (physicalActivity.isPending() && eventTimeMillis - physicalActivity.getEndTime() > (DURATION_THRESHOLD/2))) {
                         this.db.physicalActivityDao().updateStartTime(eventType, eventTimeMillis);
                         this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(eventType, false);
                     }

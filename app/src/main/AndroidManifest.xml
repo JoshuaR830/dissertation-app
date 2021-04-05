@@ -14,6 +14,7 @@
             android:name=".ui.view.AddMissedDayActivity"
             android:label="@string/missed_days_title"
             android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".LearnMoreAboutFiveWaysActivity"
             android:label="@string/learn_more_title"
@@ -58,14 +59,16 @@
         <meta-data
             android:name="firebase_analytics_collection_deactivated"
             android:value="${analytics_deactivated}" />
+
         <receiver
             android:name=".physical_activity_tracking.ActivityReceiver"
             android:enabled="true"
             android:exported="true" />
+
         <receiver
             android:name=".notifications.SendCompleteSurveyNotificationBroadcastReceiver"
             android:enabled="true"
-            android:process=":remote" /> <!-- References https://stackoverflow.com/a/12034402/13496270 , https://developer.android.com/guide/components/broadcast-exceptions -->
+            android:process=":remote" />
         <receiver
             android:name=".notifications.DeviceBootedBroadcastReceiver"
             android:enabled="true"
@@ -74,7 +77,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
+        </receiver> <!-- References https://stackoverflow.com/a/12034402/13496270 , https://developer.android.com/guide/components/broadcast-exceptions -->
+        <service
+            android:name=".app_usage_tracking.ActivityTrackingService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <service
             android:name=".physical_activity_tracking.ActivityDurationIntentService"
             android:exported="false" />
@@ -82,13 +90,17 @@
             android:name=".physical_activity_tracking.AddPhysicalActivityIntentService"
             android:exported="false" />
     </application>
-    <permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <permission android:name="android.permission.WAKE_LOCK" />
     <permission android:name="android.permission.INTERNET" />
     <permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
 </manifest>

@@ -27,5 +27,7 @@ public class DeviceBootedBroadcastReceiver extends BroadcastReceiver {
             ActivityTracking activityTracker = new ActivityTracking();
             activityTracker.initialiseTracking(context);
         }
+
+        // ToDo start the new service in here - needs permissions
     }
 }

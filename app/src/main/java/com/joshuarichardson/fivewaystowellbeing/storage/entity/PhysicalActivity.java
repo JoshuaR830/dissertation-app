@@ -65,7 +65,7 @@ public class PhysicalActivity {
         return this.isPending;
     }
 
-    public boolean getTimeStatus(int endTime) {
+    public boolean getTimeStatus(long endTime) {
         int tenMins = 600000;
         return endTime >= (startTime + tenMins);
     }

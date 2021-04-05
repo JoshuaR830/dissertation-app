@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.joshuarichardson.fivewaystowellbeing.app_usage_tracking.ActivityTrackingService;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
 import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking;
@@ -36,6 +38,7 @@ import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragm
 
 import java.util.Date;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 
 import javax.inject.Inject;
 
@@ -171,6 +174,13 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNav, navController);
+
+        // ToDo move the tracking to settings
+        // This launches to the app usage tracking section of the app
+        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+
+
+        startService(new Intent(this, ActivityTrackingService.class));
     }
 
     private void setPermissions() {

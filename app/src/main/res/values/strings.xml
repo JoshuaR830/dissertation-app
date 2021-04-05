@@ -125,6 +125,7 @@
     <string name="notification_night">Good evening, remember to log your activities</string>
     <string name="channel_name">Wellbeing log reminders</string>
     <string name="activity_channel_name">Automatic activity tracking</string>
+    <string name="app_usage_channel_name">App usage tracking</string>
     <string name="notification_time_title">Select notification time</string>
     <string name="morning_preference_time_title">When do you want your morning notification</string>
     <string name="noon_preference_time_title">When do you want your noon notification</string>
