@@ -160,6 +160,7 @@ public class WellbeingDatabaseModule {
                 "id INTEGER NOT NULL PRIMARY KEY, " +
                 "package_id TEXT NOT NULL, " +
                 "start_time INTEGER NOT NULL, " +
+                "end_time INTEGER NOT NULL, " +
                 "previous_usage INTEGER NOT NULL, " +
                 "is_pending INTEGER NOT NULL, " +
                 "current_usage INTEGER NOT NULL " +

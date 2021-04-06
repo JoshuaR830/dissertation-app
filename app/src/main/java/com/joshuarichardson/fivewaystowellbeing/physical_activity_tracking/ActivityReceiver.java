@@ -8,9 +8,6 @@ import android.os.Bundle;
 import com.google.android.gms.location.ActivityTransitionEvent;
 import com.google.android.gms.location.ActivityTransitionResult;
 import com.google.android.gms.location.DetectedActivity;
-import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -41,28 +38,28 @@ public class ActivityReceiver extends BroadcastReceiver {
             bundle.putLong("elapsed_time", event.getElapsedRealTimeNanos());
 
             if(event.getActivityType() == DetectedActivity.WALKING && event.getTransitionType() == ACTIVITY_TRANSITION_ENTER) {
-                bundle.putString("event_type", PhysicalActivityTypes.WALK);
+                bundle.putString("event_type", AutomaticActivityTypes.WALK);
                 serviceIntent.setAction(START_ACTIVITY);
             } else if(event.getActivityType() == DetectedActivity.WALKING && event.getTransitionType() == ACTIVITY_TRANSITION_EXIT) {
-                bundle.putString("event_type", PhysicalActivityTypes.WALK);
+                bundle.putString("event_type", AutomaticActivityTypes.WALK);
                 serviceIntent.setAction(END_ACTIVITY);
             } else if(event.getActivityType() == DetectedActivity.RUNNING && event.getTransitionType() == ACTIVITY_TRANSITION_ENTER) {
-                bundle.putString("event_type", PhysicalActivityTypes.RUN);
+                bundle.putString("event_type", AutomaticActivityTypes.RUN);
                 serviceIntent.setAction(START_ACTIVITY);
             } else if(event.getActivityType() == DetectedActivity.RUNNING && event.getTransitionType() == ACTIVITY_TRANSITION_EXIT) {
-                bundle.putString("event_type", PhysicalActivityTypes.RUN);
+                bundle.putString("event_type", AutomaticActivityTypes.RUN);
                 serviceIntent.setAction(END_ACTIVITY);
             } else if(event.getActivityType() == DetectedActivity.ON_BICYCLE && event.getTransitionType() == ACTIVITY_TRANSITION_ENTER) {
-                bundle.putString("event_type", PhysicalActivityTypes.CYCLE);
+                bundle.putString("event_type", AutomaticActivityTypes.CYCLE);
                 serviceIntent.setAction(START_ACTIVITY);
             } else if(event.getActivityType() == DetectedActivity.ON_BICYCLE && event.getTransitionType() == ACTIVITY_TRANSITION_EXIT) {
-                bundle.putString("event_type", PhysicalActivityTypes.CYCLE);
+                bundle.putString("event_type", AutomaticActivityTypes.CYCLE);
                 serviceIntent.setAction(END_ACTIVITY);
             } else if(event.getActivityType() == DetectedActivity.IN_VEHICLE && event.getTransitionType() == ACTIVITY_TRANSITION_ENTER) {
-                bundle.putString("event_type", PhysicalActivityTypes.VEHICLE);
+                bundle.putString("event_type", AutomaticActivityTypes.VEHICLE);
                 serviceIntent.setAction(START_ACTIVITY);
             } else if(event.getActivityType() == DetectedActivity.IN_VEHICLE && event.getTransitionType() == ACTIVITY_TRANSITION_EXIT) {
-                bundle.putString("event_type", PhysicalActivityTypes.VEHICLE);
+                bundle.putString("event_type", AutomaticActivityTypes.VEHICLE);
                 serviceIntent.setAction(END_ACTIVITY);
             }
 

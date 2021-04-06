@@ -65,7 +65,7 @@ public class ActivityDurationIntentService extends IntentService {
 
                     if(activityDuration > DURATION_THRESHOLD && !activity.isNotificationConfirmed()) {
                         this.db.physicalActivityDao().updateIsPendingStatus(eventType, true);
-                        this.tracking.sendActivityNotification(this, activity.getActivityId(), activity.getStartTime(), activity.getEndTime(), eventType);
+                        this.tracking.sendActivityNotification(this, activity.getActivityId(), activity.getStartTime(), activity.getEndTime(), eventType, null);
                     }
                 });
 

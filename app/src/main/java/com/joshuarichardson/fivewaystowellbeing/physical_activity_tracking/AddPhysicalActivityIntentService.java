@@ -23,10 +23,11 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_APP;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_RUN;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_WALK;
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
 
 @AndroidEntryPoint
@@ -55,25 +56,21 @@ public class AddPhysicalActivityIntentService extends IntentService {
         long activityId = intent.getExtras().getLong("activity_id", -1);
         String eventType = intent.getExtras().getString("event_type", null);
 
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(eventType, true);
-        });
-
         switch (eventType) {
-            case PhysicalActivityTypes.WALK:
-                notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_WALK);
+            case AutomaticActivityTypes.WALK:
+                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_WALK);
                 break;
-            case PhysicalActivityTypes.RUN:
-                notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_RUN);
+            case AutomaticActivityTypes.RUN:
+                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_RUN);
                 break;
-            case PhysicalActivityTypes.CYCLE:
-                notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE);
+            case AutomaticActivityTypes.CYCLE:
+                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE);
                 break;
-            case PhysicalActivityTypes.VEHICLE:
-                notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE);
+            case AutomaticActivityTypes.VEHICLE:
+                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE);
                 break;
             default:
-                break;
+                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_APP);
         }
 
         if (activityId == -1) {

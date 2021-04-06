@@ -20,7 +20,7 @@ import com.joshuarichardson.fivewaystowellbeing.app_usage_tracking.ActivityTrack
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
 import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking;
-import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.PhysicalActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.AutomaticActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
@@ -38,7 +38,6 @@ import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragm
 
 import java.util.Date;
 import java.util.List;
-import java.util.function.ToDoubleBiFunction;
 
 import javax.inject.Inject;
 
@@ -53,10 +52,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_RUN;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE;
+import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_WALK;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase.DATABASE_VERSION_CODE;
 
 @AndroidEntryPoint
@@ -121,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
         if (preferences.getInt("database_version", 0) < 7) {
             PhysicalActivityDao physicalActivityDao = this.db.physicalActivityDao();
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.WALK, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.RUN, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.CYCLE, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.VEHICLE, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.WALK, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.RUN, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.CYCLE, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.VEHICLE, 0, 0, 0, false, false));
             });
         }
 
@@ -224,10 +223,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // Cancel the notification
         NotificationManager notification = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_WALK);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_RUN);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE);
+        notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_WALK);
+        notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_RUN);
+        notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE);
+        notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE);
     }
 
     @Override

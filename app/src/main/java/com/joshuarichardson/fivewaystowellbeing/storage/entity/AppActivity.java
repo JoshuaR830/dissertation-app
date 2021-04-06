@@ -6,6 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_CURRENT_USAGE;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_END_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_IS_PENDING;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_PACKAGE_ID;
@@ -23,6 +24,9 @@ public class AppActivity {
     @ColumnInfo(name = APP_USAGE_START_TIME)
     private long startTime;
 
+    @ColumnInfo(name = APP_USAGE_END_TIME)
+    private long endTime;
+
     @ColumnInfo(name = APP_USAGE_PREVIOUS_USAGE)
     private long previousUsageTime;
 
@@ -36,12 +40,13 @@ public class AppActivity {
     @ColumnInfo(name = APP_USAGE_CURRENT_USAGE)
     private long currentUsage;
 
-    public AppActivity(String packageName, long startTime, long previousUsageTime, long currentUsage, boolean isPending) {
+    public AppActivity(String packageName, long startTime, long endTime, long previousUsageTime, long currentUsage, boolean isPending) {
         this.packageName = packageName;
         this.startTime = startTime;
         this.previousUsageTime = previousUsageTime;
         this.isPending = isPending;
         this.currentUsage = currentUsage;
+        this.endTime = endTime;
     }
 
     public void setId(@NonNull long id) {
@@ -72,5 +77,9 @@ public class AppActivity {
 
     public long getCurrentUsage() {
         return this.currentUsage;
+    }
+
+    public long getEndTime() {
+        return this.endTime;
     }
 }

@@ -19,15 +19,17 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 
 import java.util.Arrays;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
 public class ActivityTracking {
 
-    public static final int PHYSICAL_ACTIVITY_NOTIFICATION_WALK = 5;
-    public static final int PHYSICAL_ACTIVITY_NOTIFICATION_RUN = 6;
-    public static final int PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE = 7;
-    public static final int PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE = 8;
+    public static final int AUTOMATIC_ACTIVITY_NOTIFICATION_WALK = 5;
+    public static final int AUTOMATIC_ACTIVITY_NOTIFICATION_RUN = 6;
+    public static final int AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE = 7;
+    public static final int AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE = 8;
+    public static final int AUTOMATIC_ACTIVITY_NOTIFICATION_APP = 9;
     private static final String CHANNEL_ID_AUTO_ACTIVITY = "CHANNEL_ID_AUTO_ACTIVITY";
 
     public void initialiseTracking(Context context) {
@@ -84,7 +86,10 @@ public class ActivityTracking {
         task.addOnFailureListener((exception) -> {});
     }
 
-    public void sendActivityNotification(Context context, long activityId, long startTime, long endTime, String physicalActivityType) {
+    public void sendActivityNotification(Context context, long activityId, long startTime, long endTime, String physicalActivityType, @Nullable String appName) {
+        if (activityId == 0) {
+            return;
+        }
         Intent intent = new Intent(context, AddPhysicalActivityIntentService.class);
 
         Bundle bundle = new Bundle();
@@ -100,6 +105,7 @@ public class ActivityTracking {
         Intent cancelIntent = new Intent(context, AddPhysicalActivityIntentService.class);
         Bundle cancelBundle = new Bundle();
         cancelBundle.putLong("activity_id", -1);
+        cancelBundle.putString("event_type", physicalActivityType);
         cancelIntent.putExtras(cancelBundle);
 
         PendingIntent cancelPendingIntent = PendingIntent.getService(context, 2, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -121,35 +127,44 @@ public class ActivityTracking {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
 
         switch(physicalActivityType) {
-            case PhysicalActivityTypes.WALK:
+            case AutomaticActivityTypes.WALK:
                 builder
                     .setSmallIcon(R.drawable.notification_icon_walk)
                     .setContentTitle(context.getString(R.string.is_walk_complete))
                     .setContentText(preference.getString("notification_auto_tracking_list_walk", ""));
-                notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_WALK, builder.build());
+                notification.notify(AUTOMATIC_ACTIVITY_NOTIFICATION_WALK, builder.build());
                 break;
-            case PhysicalActivityTypes.RUN:
+            case AutomaticActivityTypes.RUN:
                 builder
                     .setSmallIcon(R.drawable.notification_icon_run)
                     .setContentTitle(context.getString(R.string.is_run_complete))
                     .setContentText(preference.getString("notification_auto_tracking_list_run", ""));
-                notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_RUN, builder.build());
+                notification.notify(AUTOMATIC_ACTIVITY_NOTIFICATION_RUN, builder.build());
                 break;
-            case PhysicalActivityTypes.CYCLE:
+            case AutomaticActivityTypes.CYCLE:
                 builder
                     .setSmallIcon(R.drawable.notification_icon_bike)
                     .setContentTitle(context.getString(R.string.is_cycle_complete))
                     .setContentText(preference.getString("notification_auto_tracking_list_cycle", ""));
-                notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE, builder.build());
+                notification.notify(AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE, builder.build());
                 break;
-            case PhysicalActivityTypes.VEHICLE:
+            case AutomaticActivityTypes.VEHICLE:
                 builder
                     .setSmallIcon(R.drawable.notification_icon_vehicle)
                     .setContentTitle(context.getString(R.string.is_drive_complete))
                     .setContentText(preference.getString("notification_auto_tracking_list_vehicle", ""));
-                notification.notify(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE, builder.build());
+                notification.notify(AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE, builder.build());
                 break;
             default:
+                if(appName == null) {
+                    appName = "app";
+                }
+
+                builder
+                    .setSmallIcon(R.drawable.notification_icon_phone)
+                    .setContentTitle(String.format("%s %s %s", context.getString(R.string.is_app_add), appName, context.getString(R.string.is_app_complete)))
+                    .setContentText(appName);
+                notification.notify(AUTOMATIC_ACTIVITY_NOTIFICATION_APP, builder.build());
                 break;
         }
     }

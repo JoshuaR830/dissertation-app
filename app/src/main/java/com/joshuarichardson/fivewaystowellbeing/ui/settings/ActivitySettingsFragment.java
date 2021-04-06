@@ -3,7 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.settings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.PhysicalActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.AutomaticActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
@@ -65,10 +65,10 @@ public class ActivitySettingsFragment extends PreferenceFragmentCompat {
             });
         });
 
-        setPreferenceListener(walkActivityList, preferences, PhysicalActivityTypes.WALK);
-        setPreferenceListener(runActivityList, preferences, PhysicalActivityTypes.RUN);
-        setPreferenceListener(cycleActivityList, preferences, PhysicalActivityTypes.CYCLE);
-        setPreferenceListener(vehicleActivityList, preferences, PhysicalActivityTypes.VEHICLE);
+        setPreferenceListener(walkActivityList, preferences, AutomaticActivityTypes.WALK);
+        setPreferenceListener(runActivityList, preferences, AutomaticActivityTypes.RUN);
+        setPreferenceListener(cycleActivityList, preferences, AutomaticActivityTypes.CYCLE);
+        setPreferenceListener(vehicleActivityList, preferences, AutomaticActivityTypes.VEHICLE);
     }
 
     private void setPreferenceListener(ListPreference listPreference, SharedPreferences preferences, String typeName) {
