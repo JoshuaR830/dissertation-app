@@ -35,11 +35,7 @@ public class ActivityReceiver extends BroadcastReceiver {
 
         ActivityTransitionResult result = ActivityTransitionResult.extractResult(intent);
 
-        // ToDo - activity transition result doesn't have confidence levels
-        // ToDo - Activity recognition result does have confidence
-
         for (ActivityTransitionEvent event : result.getTransitionEvents()){
-
             Intent serviceIntent = new Intent(context, ActivityDurationIntentService.class);
             Bundle bundle = new Bundle();
             bundle.putLong("elapsed_time", event.getElapsedRealTimeNanos());
