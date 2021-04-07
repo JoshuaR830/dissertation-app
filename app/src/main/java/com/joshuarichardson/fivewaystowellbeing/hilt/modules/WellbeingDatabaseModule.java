@@ -155,7 +155,7 @@ public class WellbeingDatabaseModule {
     static final Migration MIGRATION_7_8 = new Migration(7, 8) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            // Create the new wellbeing result table
+            // Create the new app_usage_table result table
             database.execSQL("CREATE TABLE app_usage_table (" +
                 "id INTEGER NOT NULL PRIMARY KEY, " +
                 "package_id TEXT NOT NULL, " +
@@ -168,6 +168,7 @@ public class WellbeingDatabaseModule {
             );
 
             database.execSQL("ALTER TABLE physical_activity ADD COLUMN is_notification_confirmed INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("ALTER TABLE physical_activity ADD COLUMN name TEXT");
         }
     };
 

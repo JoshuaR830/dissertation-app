@@ -45,7 +45,12 @@ public class ActivityDurationIntentService extends IntentService {
         switch(intent.getAction()) {
             case START_ACTIVITY:
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    PhysicalActivity physicalActivity = this.db.physicalActivityDao().getPhysicalActivityByType(eventType);
+                    PhysicalActivity physicalActivity = this.db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(eventType);
+
+                    if (physicalActivity == null) {
+                        return;
+                    }
+
                     long eventTimeMillis = calculateEventTimeMillis(nanoSeconds);
 
                     // Only update the start time if the time of the event starting is half the threshold to log the activity
@@ -60,7 +65,12 @@ public class ActivityDurationIntentService extends IntentService {
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                     // Still update the end time - even if it wasn't long enough
                     this.db.physicalActivityDao().updateEndTime(eventType, calculateEventTimeMillis(nanoSeconds));
-                    PhysicalActivity activity = this.db.physicalActivityDao().getPhysicalActivityByType(eventType);
+                    PhysicalActivity activity = this.db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(eventType);
+
+                    if (activity == null) {
+                        return;
+                    }
+
                     long activityDuration = activity.getEndTime() - activity.getStartTime();
 
                     if(activityDuration > DURATION_THRESHOLD && !activity.isNotificationConfirmed()) {

@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.view.AddMissedDayActivity"
+            android:name=".ui.history.AddMissedDayActivity"
             android:label="@string/missed_days_title"
             android:parentActivityName=".MainActivity" />
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.AddMissedDayActivity">
+    tools:context=".ui.history.AddMissedDayActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/missing_item_recycler_view"

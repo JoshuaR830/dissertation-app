@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.ui.view;
+package com.joshuarichardson.fivewaystowellbeing.ui.progress;
 
 import android.app.Activity;
 import android.app.NotificationManager;

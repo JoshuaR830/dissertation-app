@@ -104,7 +104,7 @@ public abstract class ProgressFragmentTestFixture {
         when(physicalActivityDao.getPending())
             .thenReturn(Collections.emptyList());
 
-        when(physicalActivityDao.getPhysicalActivityByType(anyString()))
+        when(physicalActivityDao.getPhysicalActivityByTypeWithAssociatedActivity(anyString()))
             .thenReturn(null);
 
         when(surveyResponseActivityDao.getEmotions(anyLong()))

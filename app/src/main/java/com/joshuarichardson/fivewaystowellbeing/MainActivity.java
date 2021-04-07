@@ -33,8 +33,8 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
-import com.joshuarichardson.fivewaystowellbeing.ui.view.ProgressFragment;
-import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragment;
+import com.joshuarichardson.fivewaystowellbeing.ui.progress.ProgressFragment;
+import com.joshuarichardson.fivewaystowellbeing.ui.history.ViewSurveyResponsesFragment;
 
 import java.util.Date;
 import java.util.List;
@@ -120,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
         if (preferences.getInt("database_version", 0) < 7) {
             PhysicalActivityDao physicalActivityDao = this.db.physicalActivityDao();
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.WALK, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.RUN, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.CYCLE, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.VEHICLE, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.WALK, null, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.RUN, null, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.CYCLE, null, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.VEHICLE, null, 0, 0, 0, false, false));
             });
         }
 

@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.ui.view;
+package com.joshuarichardson.fivewaystowellbeing.ui.history;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -44,8 +44,11 @@ public class ViewSurveyResponsesFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, ((tab, position) -> {
             if(position == 0) {
                 tab.setText(R.string.wellbeing_logs_title);
-            } else {
+            } else if(position == 1){
                 tab.setText(R.string.navigation_pass_times);
+            } else {
+                // ToDo change for string
+                tab.setText("Apps");
             }
         })).attach();
     }

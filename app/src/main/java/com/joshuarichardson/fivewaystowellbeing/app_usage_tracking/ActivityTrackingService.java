@@ -125,7 +125,7 @@ public class ActivityTrackingService extends Service {
 
                         // If longer than duration then need to update the physical activity details
                         if ((app.getEndTime() - app.getStartTime()) > DURATION_THRESHOLD) {
-                            PhysicalActivity activity = db.physicalActivityDao().getPhysicalActivityByType(app.getPackageName());
+                            PhysicalActivity activity = db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(app.getPackageName());
                             if(activity == null) {
                                 return;
                             }

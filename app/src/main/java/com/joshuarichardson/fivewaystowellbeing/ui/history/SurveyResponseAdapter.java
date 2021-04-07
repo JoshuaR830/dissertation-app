@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing;
+package com.joshuarichardson.fivewaystowellbeing.ui.history;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +13,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.joshuarichardson.fivewaystowellbeing.DisplayHelper;
+import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
+import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.WellbeingHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.IndividualSurveyActivity;
-import com.joshuarichardson.fivewaystowellbeing.ui.view.HistoryPageData;
 
 import java.util.List;
 
