@@ -77,6 +77,7 @@ public class InsightsTests extends ProgressFragmentTestFixture {
         when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("KEEP_LEARNING"))).thenReturn(Arrays.asList(new ActivityStats(2, 9), new ActivityStats(2, 4), new ActivityStats(2, 1)));
         when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("TAKE_NOTICE"))).thenReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 5), new ActivityStats(2, 2)));
         when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("GIVE"))).thenReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 4), new ActivityStats(3, 1)));
+        when(surveyDao.getNumDaysWithWaysToWellbeingByDate(anyLong(), anyLong())).thenReturn(3);
 
         when(resultsDao.getResultsByTimestampRange(anyLong(), anyLong())).thenReturn(Arrays.asList(
                 new WellbeingResult(1, 12345, 100, 100, 100, 10, 20),
@@ -141,5 +142,11 @@ public class InsightsTests extends ProgressFragmentTestFixture {
             .check(matches(atRecyclerPosition(8, hasDescendant(withText("Times achieved:")))))
             .check(matches(atRecyclerPosition(8, hasDescendant(withText("Give")))))
             .check(matches(atRecyclerPosition(8, hasDescendant(withText("0")))));
+
+        onView(withId(R.id.insights_recycler_view))
+            .perform(scrollToPosition(9))
+            .check(matches(atRecyclerPosition(9, hasDescendant(withText("Times achieved:")))))
+            .check(matches(atRecyclerPosition(9, hasDescendant(withText("Days active")))))
+            .check(matches(atRecyclerPosition(9, hasDescendant(withText("3")))));
     }
 }

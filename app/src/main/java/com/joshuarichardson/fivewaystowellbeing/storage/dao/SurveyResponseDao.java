@@ -38,6 +38,9 @@ public interface SurveyResponseDao {
     @Query("SELECT * FROM survey_response ORDER BY timestamp DESC")
     List<SurveyResponse> getHistoryPageData();
 
+    @Query("SELECT COUNT(*) FROM (SELECT DISTINCT survey_response.id FROM survey_response INNER JOIN survey_activity ON survey_response.id = survey_activity.survey_response_id WHERE timestamp BETWEEN :startTime AND :endTime)")
+    int getNumDaysWithWaysToWellbeingByDate(long startTime, long endTime);
+
     // Select only surveys that have data in them
     @Query("SELECT DISTINCT survey_response.id, survey_response.description, survey_response.timestamp, survey_response.title, survey_response.way_to_wellbeing " +
             "FROM survey_response " +
