@@ -87,7 +87,7 @@ public class ProgressFragment extends Fragment {
     private long surveyId;
     private Observer<SurveyCountItem> emotionUpdateObserver;
     private boolean isDeletable;
-    private boolean shouldUpdate;
+    private boolean shouldUpdate = true;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -415,6 +415,7 @@ public class ProgressFragment extends Fragment {
             updateSurveyItems();
         }
 
+        // Update this so that it updates next time - unless explicitly disabled
         this.shouldUpdate = true;
 
         // This starts observing again so that after adding an activity the emotions still update
