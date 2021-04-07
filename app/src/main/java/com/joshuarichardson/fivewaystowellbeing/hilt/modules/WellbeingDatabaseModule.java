@@ -140,7 +140,7 @@ public class WellbeingDatabaseModule {
     static final Migration MIGRATION_6_7 = new Migration(6, 7) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            // Create the new wellbeing result table
+            // Create the new physical activity result table
             database.execSQL("CREATE TABLE physical_activity (" +
                 "activity_type TEXT NOT NULL PRIMARY KEY, " +
                 "start_time INTEGER NOT NULL, " +
@@ -152,11 +152,19 @@ public class WellbeingDatabaseModule {
         }
     };
 
+    static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Add is notification confirmed column
+            database.execSQL("ALTER TABLE physical_activity ADD COLUMN is_notification_confirmed INTEGER DEFAULT 0 NOT NULL");
+        }
+    };
+
     @Provides
     @Singleton
     public static WellbeingDatabase getWellbeingDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
             .addCallback(new RoomDatabase.Callback() {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {

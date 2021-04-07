@@ -31,4 +31,7 @@ public interface PhysicalActivityDao {
 
     @Query("SELECT * FROM physical_activity WHERE is_pending = 1 ORDER BY start_time")
     List<PhysicalActivity> getPending();
+
+    @Query("UPDATE physical_activity SET is_notification_confirmed = :isConfirmed WHERE activity_type = :activityType")
+    void updateIsNotificationConfirmedStatus(String activityType, boolean isConfirmed);
 }

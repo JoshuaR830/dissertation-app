@@ -30,18 +30,19 @@ public class PhysicalActivityTests {
         this.wellbeingDb = Room.inMemoryDatabaseBuilder(context, WellbeingDatabase.class).build();
         this.physicalActivityDao = this.wellbeingDb.physicalActivityDao();
 
-        this.physicalActivityDao.insert(new PhysicalActivity("CYCLE", 543789, 6543212, 595448, false));
+        this.physicalActivityDao.insert(new PhysicalActivity("CYCLE", 543789, 6543212, 595448, false, false));
     }
 
     @Test
     public void whenActivityIsInserted_ItShouldBeRetrievableByType() {
-        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, false));
+        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, false, false));
         PhysicalActivity originalPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("RUN");
         assertThat(originalPhysicalActivity.getActivityType()).isEqualTo("RUN");
         assertThat(originalPhysicalActivity.getStartTime()).isEqualTo(321543);
         assertThat(originalPhysicalActivity.getEndTime()).isEqualTo(4374857);
         assertThat(originalPhysicalActivity.getActivityId()).isEqualTo(3784283);
         assertThat(originalPhysicalActivity.isPending()).isEqualTo(false);
+        assertThat(originalPhysicalActivity.isNotificationConfirmed()).isEqualTo(false);
     }
 
     @Test
@@ -51,6 +52,7 @@ public class PhysicalActivityTests {
         assertThat(originalPhysicalActivity.getStartTime()).isEqualTo(543789);
         assertThat(originalPhysicalActivity.getActivityId()).isEqualTo(595448);
         assertThat(originalPhysicalActivity.isPending()).isEqualTo(false);
+        assertThat(originalPhysicalActivity.isNotificationConfirmed()).isEqualTo(false);
     }
 
     @Test
@@ -94,12 +96,22 @@ public class PhysicalActivityTests {
     }
 
     @Test
+    public void whenIsNotificationConfirmedUpdated_ThePhysicalActivityShouldReturnDifferentConfirmedStatus() {
+        PhysicalActivity originalPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
+        assertThat(originalPhysicalActivity.isNotificationConfirmed()).isEqualTo(false);
+
+        this.physicalActivityDao.updateIsNotificationConfirmedStatus("CYCLE", true);
+        PhysicalActivity newPhysicalActivity = this.physicalActivityDao.getPhysicalActivityByType("CYCLE");
+        assertThat(newPhysicalActivity.isNotificationConfirmed()).isEqualTo(true);
+    }
+
+    @Test
     public void whenGetPending_CorrectNumberOfItemsShouldBeReturned() {
         // This is a duplicate so only count as 1
-        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, true));
-        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, true));
+        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, true, false));
+        this.physicalActivityDao.insert(new PhysicalActivity("RUN", 321543, 4374857, 3784283, true, false));
 
-        this.physicalActivityDao.insert(new PhysicalActivity("WALK", 321543, 4374857, 3784283, true));
+        this.physicalActivityDao.insert(new PhysicalActivity("WALK", 321543, 4374857, 3784283, true, false));
 
         List<PhysicalActivity> activitiesList = this.physicalActivityDao.getPending();
         assertThat(activitiesList.size()).isEqualTo(2);

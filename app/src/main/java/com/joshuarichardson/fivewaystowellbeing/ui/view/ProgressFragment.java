@@ -120,7 +120,10 @@ public class ProgressFragment extends Fragment {
     // Whenever something needs to be updated - do this
     public void updateSurveyItems() {
         SurveyResponseDao surveyDao = db.surveyResponseDao();
+        LinearLayout passTimeContainer = requireActivity().findViewById(R.id.survey_item_container);
+
         this.surveyResponsesObserver = surveys -> {
+            passTimeContainer.removeAllViews();
             if (surveys.size() == 0) {
                 long startTime = TimeHelper.getStartOfDay(new Date().getTime());
                 // Adding the new survey should trigger the live data to update
@@ -160,7 +163,6 @@ public class ProgressFragment extends Fragment {
 
                     requireActivity().runOnUiThread(() -> {
                         // Create a temporary record allowing users to select yes or no
-                        LinearLayout passTimeContainer = requireActivity().findViewById(R.id.survey_item_container);
                         View tempActivity = LayoutInflater.from(requireActivity()).inflate(R.layout.pass_time_temporary_item, null, false);
                         TextView title = tempActivity.findViewById(R.id.activity_text);
                         TextView timeText = tempActivity.findViewById(R.id.activity_time_text);
@@ -193,6 +195,7 @@ public class ProgressFragment extends Fragment {
                                 Passtime passtime = new Passtime(record.getActivityName(), "", record.getActivityType(), record.getActivityWayToWellbeing(), activitySurveyId, item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false);
                                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, record.getActivityType(), passtime, new Date().getTime());
                                 this.db.physicalActivityDao().updateIsPendingStatus(item.getActivityType(), false);
+                                this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(item.getActivityType(), true);
 
                                 // Display the item on the screen to the user
                                 requireActivity().runOnUiThread(() -> {
@@ -207,6 +210,7 @@ public class ProgressFragment extends Fragment {
                             passTimeContainer.removeView(tempActivity);
                             // We know the outcome - it should therefore no-longer be pending
                             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                                this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(item.getActivityType(), true);
                                 this.db.physicalActivityDao().updateIsPendingStatus(item.getActivityType(), false);
                             });
                         });
@@ -273,9 +277,6 @@ public class ProgressFragment extends Fragment {
                     this.db.wellbeingResultsDao().insert(new WellbeingResult(newSurveyId, morning, 0, 0, 0, 0, 0));
                 }
             } while(!doesExist && cal.getTimeInMillis() > 1613509560000L);
-
-            // Call this after creating the others to ensure that everything goes to plan
-            updateSurveyItems();
         });
 
 
