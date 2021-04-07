@@ -72,8 +72,8 @@ public class SuggestedActivityTests  extends ProgressFragmentTestFixture {
         );
 
         when(this.physicalActivityDao.getPending()).thenReturn(Arrays.asList(
-            new PhysicalActivity("RUN", 1617238800000L, 1617242400000L, 1, true),
-            new PhysicalActivity("CYCLE", 1617238800000L, 1617242400000L, 2, true)
+            new PhysicalActivity("RUN", 1617238800000L, 1617242400000L, 1, true, false),
+            new PhysicalActivity("CYCLE", 1617238800000L, 1617242400000L, 2, true, false)
         ));
     }
 

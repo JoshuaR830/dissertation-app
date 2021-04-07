@@ -47,16 +47,34 @@ public class AddPhysicalActivityIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         // Cancel the notification
         NotificationManager notification = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_WALK);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_RUN);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE);
 
         if (intent.getExtras() == null || !intent.hasExtra("activity_id")) {
             return;
         }
 
         long activityId = intent.getExtras().getLong("activity_id", -1);
+        String eventType = intent.getExtras().getString("event_type", null);
+
+        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(eventType, true);
+        });
+
+        switch (eventType) {
+            case PhysicalActivityTypes.WALK:
+                notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_WALK);
+                break;
+            case PhysicalActivityTypes.RUN:
+                notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_RUN);
+                break;
+            case PhysicalActivityTypes.CYCLE:
+                notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE);
+                break;
+            case PhysicalActivityTypes.VEHICLE:
+                notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE);
+                break;
+            default:
+                break;
+        }
 
         if (activityId == -1) {
             return;
@@ -64,7 +82,6 @@ public class AddPhysicalActivityIntentService extends IntentService {
 
         long activityStartTime = intent.getExtras().getLong("start_time", 0);
         long activityEndTime = intent.getExtras().getLong("end_time", 0);
-        String eventType = intent.getExtras().getString("event_type", null);
 
         long currentTime = new Date().getTime();
         long startTime = TimeHelper.getStartOfDay(currentTime);

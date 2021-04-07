@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_ACTIVITY_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_END_TIME;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_IS_CONFIRMED;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_IS_PENDING;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_START_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_TABLE;
@@ -32,12 +33,16 @@ public class PhysicalActivity {
     @ColumnInfo(name = PHYSICAL_ACTIVITY_IS_PENDING)
     private boolean isPending;
 
-    public PhysicalActivity(String activityType, long startTime, long endTime, long activityId, boolean isPending) {
+    @ColumnInfo(name = PHYSICAL_ACTIVITY_IS_CONFIRMED)
+    private boolean isNotificationConfirmed;
+
+    public PhysicalActivity(String activityType, long startTime, long endTime, long activityId, boolean isPending, boolean isNotificationConfirmed) {
         this.activityType = activityType;
         this.startTime = startTime;
         this.activityId = activityId;
         this.isPending = isPending;
         this.endTime = endTime;
+        this.isNotificationConfirmed = isNotificationConfirmed;
     }
 
     public long getActivityId() {
@@ -63,5 +68,9 @@ public class PhysicalActivity {
     public boolean getTimeStatus(int endTime) {
         int tenMins = 600000;
         return endTime >= (startTime + tenMins);
+    }
+
+    public boolean isNotificationConfirmed() {
+        return this.isNotificationConfirmed;
     }
 }

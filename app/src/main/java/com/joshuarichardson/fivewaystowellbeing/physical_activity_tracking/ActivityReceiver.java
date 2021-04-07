@@ -34,6 +34,7 @@ public class ActivityReceiver extends BroadcastReceiver {
         }
 
         ActivityTransitionResult result = ActivityTransitionResult.extractResult(intent);
+
         for (ActivityTransitionEvent event : result.getTransitionEvents()){
             Intent serviceIntent = new Intent(context, ActivityDurationIntentService.class);
             Bundle bundle = new Bundle();

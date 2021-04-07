@@ -118,10 +118,10 @@ public class MainActivity extends AppCompatActivity {
         if (preferences.getInt("database_version", 0) < 7) {
             PhysicalActivityDao physicalActivityDao = this.db.physicalActivityDao();
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.WALK, 0, 0, 0, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.RUN, 0, 0, 0, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.CYCLE, 0, 0, 0, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.VEHICLE, 0, 0, 0, false));
+                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.WALK, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.RUN, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.CYCLE, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.VEHICLE, 0, 0, 0, false, false));
             });
         }
 

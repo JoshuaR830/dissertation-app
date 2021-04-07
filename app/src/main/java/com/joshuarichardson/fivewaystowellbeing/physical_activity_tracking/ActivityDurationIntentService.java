@@ -52,6 +52,7 @@ public class ActivityDurationIntentService extends IntentService {
                     // This means that you can have a small break and it still be logged as the same activity
                     if (physicalActivity.getStartTime() <= 0 || eventTimeMillis - physicalActivity.getEndTime() > (DURATION_THRESHOLD/2)) {
                         this.db.physicalActivityDao().updateStartTime(eventType, eventTimeMillis);
+                        this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(eventType, false);
                     }
                 });
                 break;
@@ -62,7 +63,7 @@ public class ActivityDurationIntentService extends IntentService {
                     PhysicalActivity activity = this.db.physicalActivityDao().getPhysicalActivityByType(eventType);
                     long activityDuration = activity.getEndTime() - activity.getStartTime();
 
-                    if(activityDuration > DURATION_THRESHOLD) {
+                    if(activityDuration > DURATION_THRESHOLD && !activity.isNotificationConfirmed()) {
                         this.db.physicalActivityDao().updateIsPendingStatus(eventType, true);
                         this.tracking.sendActivityNotification(this, activity.getActivityId(), activity.getStartTime(), activity.getEndTime(), eventType);
                     }
