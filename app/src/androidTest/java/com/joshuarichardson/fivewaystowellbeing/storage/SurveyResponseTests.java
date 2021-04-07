@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
@@ -103,6 +104,36 @@ public class SurveyResponseTests {
 
         assertThat(surveyResponses).isNotNull();
         assertThat(surveyResponses.size()).isEqualTo(3);
+    }
+
+    @Test
+    public void insertingMultipleSurveys_ThenGettingNumberOfDaysActive_ShouldReturnCorrectNumberOfDays() {
+        Calendar cal = Calendar.getInstance();
+        long surveyTime1 = cal.getTimeInMillis();
+        cal.add(Calendar.DATE, 1);
+        long surveyTime2 = cal.getTimeInMillis();
+        cal.add(Calendar.DATE, 1);
+        long surveyTime3 = cal.getTimeInMillis();
+        long surveyId1 = this.surveyResponseDao.insert(new SurveyResponse(surveyTime1, WaysToWellbeing.KEEP_LEARNING, "title", "description"));
+        long surveyId2 = this.surveyResponseDao.insert(new SurveyResponse(surveyTime2, WaysToWellbeing.BE_ACTIVE, "title", "description"));
+        this.surveyResponseDao.insert(new SurveyResponse(surveyTime3, WaysToWellbeing.BE_ACTIVE, "title", "description"));
+
+        long activityRecord = this.wellbeingDb.activityRecordDao().insert(new ActivityRecord("Name", 325768, 54389798, ActivityType.CHORES, WaysToWellbeing.GIVE, false));
+
+        this.wellbeingDb.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId1, activityRecord, 1, "note", -1, -1, 1, false));
+        this.wellbeingDb.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId2, activityRecord, 1, "note", -1, -1, 1, false));
+
+        // Select both when over 2 days
+        int numDays = this.surveyResponseDao.getNumDaysWithWaysToWellbeingByDate(surveyTime1, surveyTime2);
+        assertThat(numDays).isEqualTo(2);
+
+        // Only return the selected day range
+        numDays = this.surveyResponseDao.getNumDaysWithWaysToWellbeingByDate(surveyTime1, surveyTime1);
+        assertThat(numDays).isEqualTo(1);
+
+        // Only return when there is an activity associated with a survey
+        numDays = this.surveyResponseDao.getNumDaysWithWaysToWellbeingByDate(surveyTime1, surveyTime3);
+        assertThat(numDays).isEqualTo(2);
     }
 
     @Test

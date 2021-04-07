@@ -69,6 +69,8 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 List<WellbeingResult> currentWellbeingResults = db.wellbeingResultsDao().getResultsByTimestampRange(finalStartTime, tonight);
                 List<WellbeingResult> previousWellbeingResults = db.wellbeingResultsDao().getResultsByTimestampRange(previousPeriodStartTime, previousPeriodEndTime);
+                int currentDaysActive = this.db.surveyResponseDao().getNumDaysWithWaysToWellbeingByDate(finalStartTime, tonight);
+                int previousDaysActive = this.db.surveyResponseDao().getNumDaysWithWaysToWellbeingByDate(previousPeriodStartTime, previousPeriodEndTime);
 
                 WellbeingValues currentValues = new WellbeingValues(currentWellbeingResults, finalStartTime, tonight);
                 WellbeingValues previousValues = new WellbeingValues(previousWellbeingResults, previousPeriodStartTime, previousPeriodEndTime);
@@ -121,7 +123,8 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
                     new InsightsItem(getString(R.string.wellbeing_be_active), WaysToWellbeing.BE_ACTIVE, currentValues.getAchievedBeActiveNumber(), previousValues.getAchievedBeActiveNumber(), InsightType.SINGLE_INSIGHT_CARD),
                     new InsightsItem(getString(R.string.wellbeing_keep_learning), WaysToWellbeing.KEEP_LEARNING, currentValues.getAchievedKeepLearningNumber(), previousValues.getAchievedKeepLearningNumber(), InsightType.SINGLE_INSIGHT_CARD),
                     new InsightsItem(getString(R.string.wellbeing_take_notice), WaysToWellbeing.TAKE_NOTICE, currentValues.getAchievedTakeNoticeNumber(), previousValues.getAchievedTakeNoticeNumber(), InsightType.SINGLE_INSIGHT_CARD),
-                    new InsightsItem(getString(R.string.wellbeing_give), WaysToWellbeing.GIVE, currentValues.getAchievedGiveNumber(), previousValues.getAchievedGiveNumber(), InsightType.SINGLE_INSIGHT_CARD)
+                    new InsightsItem(getString(R.string.wellbeing_give), WaysToWellbeing.GIVE, currentValues.getAchievedGiveNumber(), previousValues.getAchievedGiveNumber(), InsightType.SINGLE_INSIGHT_CARD),
+                    new InsightsItem(getString(R.string.days_active), WaysToWellbeing.UNASSIGNED, currentDaysActive, previousDaysActive, InsightType.SINGLE_INSIGHT_CARD)
                 );
 
                 getActivity().runOnUiThread(() -> {

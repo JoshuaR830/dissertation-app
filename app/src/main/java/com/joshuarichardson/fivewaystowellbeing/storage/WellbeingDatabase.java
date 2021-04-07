@@ -29,7 +29,7 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase
 @Database(entities = {ActivityRecord.class, SurveyResponse.class, SurveyResponseActivityRecord.class, SurveyResponseElement.class, QuestionsToAsk.class, SurveyQuestionSet.class, WellbeingQuestion.class, WellbeingRecord.class, WellbeingResult.class, PhysicalActivity.class}, exportSchema = false, version = DATABASE_VERSION_CODE)
 public abstract class WellbeingDatabase extends RoomDatabase {
 
-    public static final int DATABASE_VERSION_CODE = 7;
+    public static final int DATABASE_VERSION_CODE = 8;
 
     public abstract ActivityRecordDao activityRecordDao();
     public abstract SurveyResponseActivityRecordDao surveyResponseActivityRecordDao();

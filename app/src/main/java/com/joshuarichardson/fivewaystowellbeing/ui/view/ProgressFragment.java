@@ -106,7 +106,7 @@ public class ProgressFragment extends Fragment {
         this.emotionUpdateObserver = sentiment -> {
             SentimentItem emotionValues = sentiment.getResourcesForAverage();
             int color = requireContext().getColor(emotionValues.getColorResource());
-            ImageView image = requireActivity().findViewById(R.id.surveys_completed_image);
+            ImageView image = view.findViewById(R.id.surveys_completed_image);
             image.setImageResource(emotionValues.getImageResource());
             image.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         };
