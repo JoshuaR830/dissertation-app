@@ -26,19 +26,19 @@ public class ActivitySettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.auto_settings, rootKey);
+        setPreferencesFromResource(R.xml.physical_activity_settings, rootKey);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
-        ListPreference walkActivityList = (ListPreference) findPreference("notification_auto_tracking_list_walk");
-        ListPreference runActivityList = (ListPreference) findPreference("notification_auto_tracking_list_run");
-        ListPreference cycleActivityList = (ListPreference) findPreference("notification_auto_tracking_list_cycle");
-        ListPreference vehicleActivityList = (ListPreference) findPreference("notification_auto_tracking_list_vehicle");
+        ListPreference walkActivityList = findPreference("notification_auto_tracking_list_walk");
+        ListPreference runActivityList = findPreference("notification_auto_tracking_list_run");
+        ListPreference cycleActivityList = findPreference("notification_auto_tracking_list_cycle");
+        ListPreference vehicleActivityList = findPreference("notification_auto_tracking_list_vehicle");
 
-        walkActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_walk", ""));
-        runActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_run", ""));
-        cycleActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_cycle", ""));
-        vehicleActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_vehicle", ""));
+        walkActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_walk", getString(R.string.not_set)));
+        runActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_run", getString(R.string.not_set)));
+        cycleActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_cycle", getString(R.string.not_set)));
+        vehicleActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_vehicle", getString(R.string.not_set)));
 
         ArrayList<String> names = new ArrayList<>();
         ArrayList<String> ids = new ArrayList<>();

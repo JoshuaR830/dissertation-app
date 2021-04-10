@@ -24,7 +24,7 @@
             android:paddingTop="16dp">
 
             <FrameLayout
-                android:id="@+id/passtime_image_frame"
+                android:id="@+id/app_list_image_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
                 android:background="@drawable/frame_circle"
@@ -43,31 +43,31 @@
             </FrameLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayout"
+                android:id="@+id/app_list_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:orientation="vertical"
                 android:padding="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/passtime_image_frame"
+                app:layout_constraintEnd_toStartOf="@+id/app_list_image_frame"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/nameTextView"
+                    android:id="@+id/app_name_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
-                    android:id="@+id/typeTextView"
+                    android:id="@+id/associated_activity_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary" />
 
                 <TextView
-                    android:id="@+id/wayToWellbeingTextView"
+                    android:id="@+id/way_to_wellbeing_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBody2"
@@ -88,7 +88,7 @@
                 android:layout_height="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/app_list_layout" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/update_pass_time"

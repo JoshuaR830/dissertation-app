@@ -2,6 +2,7 @@ package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.SystemClock;
 
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
@@ -13,9 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
-
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityReceiver.DURATION_THRESHOLD;
 
 @AndroidEntryPoint
 public class ActivityDurationIntentService extends IntentService {
@@ -42,6 +42,41 @@ public class ActivityDurationIntentService extends IntentService {
             return;
         }
 
+        long activityTypeThreshold;
+        boolean activityTypeEnabled;
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        switch (eventType) {
+            case AutomaticActivityTypes.WALK:
+                activityTypeThreshold = preferences.getInt("notification_walk_duration", 10);
+                activityTypeEnabled = preferences.getBoolean("notification_walk_enabled", false);
+                break;
+            case AutomaticActivityTypes.RUN:
+                activityTypeThreshold = preferences.getInt("notification_run_duration", 10);
+                activityTypeEnabled = preferences.getBoolean("notification_run_enabled", false);
+                break;
+            case AutomaticActivityTypes.CYCLE:
+                activityTypeThreshold = preferences.getInt("notification_cycle_duration", 10);
+                activityTypeEnabled = preferences.getBoolean("notification_cycle_enabled", false);
+                break;
+            case AutomaticActivityTypes.VEHICLE:
+                activityTypeThreshold = preferences.getInt("notification_drive_duration", 10);
+                activityTypeEnabled = preferences.getBoolean("notification_drive_enabled", false);
+                break;
+            default:
+                activityTypeThreshold = preferences.getInt("notification_app_duration", 10);
+                activityTypeEnabled = preferences.getBoolean("notification_app_enabled", false);
+        }
+
+        if(!activityTypeEnabled) {
+            return;
+        }
+
+        // Convert minutes to ms
+        activityTypeThreshold *= 60000;
+        long finalActivityTypeThreshold = activityTypeThreshold;
+
         switch(intent.getAction()) {
             case START_ACTIVITY:
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
@@ -55,7 +90,7 @@ public class ActivityDurationIntentService extends IntentService {
 
                     // Only update the start time if the time of the event starting is half the threshold to log the activity
                     // This means that you can have a small break and it still be logged as the same activity
-                    if (physicalActivity.getStartTime() <= 0 || (physicalActivity.isPending() && eventTimeMillis - physicalActivity.getEndTime() > (DURATION_THRESHOLD/2))) {
+                    if (physicalActivity.getStartTime() <= 0 || (eventTimeMillis - physicalActivity.getEndTime()) > (finalActivityTypeThreshold /2)) {
                         this.db.physicalActivityDao().updateStartTime(eventType, eventTimeMillis);
                         this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(eventType, false);
                     }
@@ -72,10 +107,9 @@ public class ActivityDurationIntentService extends IntentService {
                     }
 
                     long activityDuration = activity.getEndTime() - activity.getStartTime();
-
-                    if(activityDuration > DURATION_THRESHOLD && !activity.isNotificationConfirmed()) {
+                    if(activityDuration > finalActivityTypeThreshold && !activity.isNotificationConfirmed()) {
                         this.db.physicalActivityDao().updateIsPendingStatus(eventType, true);
-                        this.tracking.sendActivityNotification(this, activity.getActivityId(), activity.getStartTime(), activity.getEndTime(), eventType, null);
+                        this.tracking.sendActivityNotification(this, activity.getActivityId(), activity.getStartTime(), activity.getEndTime(), eventType, null, null);
                     }
                 });
 

@@ -129,9 +129,9 @@ public class PassTimesAdapter extends RecyclerView.Adapter<PassTimesAdapter.Pass
         public PassTimeViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.nameTextView = itemView.findViewById(R.id.nameTextView);
-            this.wayToWellbeingTextView = itemView.findViewById(R.id.wayToWellbeingTextView);
-            this.typeTextView = itemView.findViewById(R.id.typeTextView);
+            this.nameTextView = itemView.findViewById(R.id.app_name_text_view);
+            this.wayToWellbeingTextView = itemView.findViewById(R.id.way_to_wellbeing_text_view);
+            this.typeTextView = itemView.findViewById(R.id.associated_activity_text_view);
             this.image = itemView.findViewById(R.id.list_item_image);
             this.editContainer = itemView.findViewById(R.id.update_pass_time);
             this.editButton = itemView.findViewById(R.id.edit_button);

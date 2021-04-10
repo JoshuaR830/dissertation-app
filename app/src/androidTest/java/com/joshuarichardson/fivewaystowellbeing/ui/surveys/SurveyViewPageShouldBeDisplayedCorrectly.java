@@ -86,7 +86,7 @@ public class SurveyViewPageShouldBeDisplayedCorrectly extends ProgressFragmentTe
         onView(withId(R.id.navigation_view_survey_responses)).perform(click());
 
         // Check that the image is displayed
-        onView(withId(R.id.surveyRecyclerView))
+        onView(withId(R.id.app_assignment_recycler))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_title), withText("29 Apr 1972"))))))
             .check(matches(atRecyclerPosition(0, hasDescendant(allOf(withId(R.id.survey_list_description), withText("A survey description"))))))
@@ -97,7 +97,7 @@ public class SurveyViewPageShouldBeDisplayedCorrectly extends ProgressFragmentTe
             // The image only exists if it has been created
 
         // Check that the graph is displayed and that the image is not
-        onView(withId(R.id.surveyRecyclerView))
+        onView(withId(R.id.app_assignment_recycler))
             .perform(scrollToPosition(1))
             .check(matches(atRecyclerPosition(1, hasDescendant(allOf(withId(R.id.survey_list_title), withText("29 Mar 1999"))))))
             .check(matches(atRecyclerPosition(1, hasDescendant(allOf(withId(R.id.survey_list_description), withText("Another survey description"))))))

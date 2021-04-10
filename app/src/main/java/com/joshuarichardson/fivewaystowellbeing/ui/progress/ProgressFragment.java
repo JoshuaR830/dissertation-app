@@ -21,13 +21,13 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.ChipGroup;
 import com.joshuarichardson.fivewaystowellbeing.ActivityTypeImageHelper;
+import com.joshuarichardson.fivewaystowellbeing.NotificationConfiguration;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
-import com.joshuarichardson.fivewaystowellbeing.notifications.SendCompleteSurveyNotificationBroadcastReceiver;
 import com.joshuarichardson.fivewaystowellbeing.storage.LimitedRawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.RawSurveyData;
 import com.joshuarichardson.fivewaystowellbeing.storage.SentimentItem;
@@ -100,7 +100,7 @@ public class ProgressFragment extends Fragment {
 
             // When activity button clicked, clear pending notifications
             NotificationManager notification = (NotificationManager) requireContext().getSystemService(Service.NOTIFICATION_SERVICE);
-            notification.cancel(SendCompleteSurveyNotificationBroadcastReceiver.SURVEY_REMINDER);
+            notification.cancel(NotificationConfiguration.NotificationsId.SURVEY_REMINDER);
         });
 
         this.emotionUpdateObserver = sentiment -> {
@@ -119,18 +119,16 @@ public class ProgressFragment extends Fragment {
 
     // Whenever something needs to be updated - do this
     public void updateSurveyItems() {
+        long startTime = TimeHelper.getStartOfDay(new Date().getTime());
         SurveyResponseDao surveyDao = db.surveyResponseDao();
         LinearLayout passTimeContainer = requireActivity().findViewById(R.id.survey_item_container);
 
         this.surveyResponsesObserver = surveys -> {
             passTimeContainer.removeAllViews();
             if (surveys.size() == 0) {
-                long startTime = TimeHelper.getStartOfDay(new Date().getTime());
                 // Adding the new survey should trigger the live data to update
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    long newSurveyId = this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", ""));
-                    this.db.wellbeingResultsDao().insert(new WellbeingResult(newSurveyId, startTime, 0, 0, 0, 0, 0));
-                });
+                WellbeingDatabaseModule.databaseWriteExecutor.execute(() ->
+                    this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", "")));
 
                 return;
             }
@@ -139,6 +137,8 @@ public class ProgressFragment extends Fragment {
             this.emotionUpdateValues = this.db.surveyResponseActivityRecordDao().getEmotions(this.surveyId);
             this.emotionUpdateValues.observe(requireActivity(), this.emotionUpdateObserver);
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                // It shouldn't be possible to have a survey without a result - but let's not take that risk
+                this.db.wellbeingResultsDao().insert(new WellbeingResult(surveyId, startTime, 0, 0, 0, 0, 0));
                 List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(this.surveyId);
                 if (rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
                     // This converts a limited response to an entire RawSurveyData response
@@ -170,7 +170,6 @@ public class ProgressFragment extends Fragment {
                         ImageView image = tempActivity.findViewById(R.id.activity_image);
 
                         title.setText(record.getActivityName());
-                        long startTime = TimeHelper.getStartOfDay(new Date().getTime());
                         String textStartTime = TimeFormatter.formatTimeAsHourMinuteString(item.getStartTime() - startTime);
                         String textEndTime = TimeFormatter.formatTimeAsHourMinuteString(item.getEndTime() - startTime);
 
@@ -247,9 +246,8 @@ public class ProgressFragment extends Fragment {
             // ToDo - get the values on fragment launch - save them - compare them to the new ones - is a new 100% - then you have achieved!
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                db.wellbeingResultsDao().updateWaysToWellbeing(this.surveyId, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue());
-            });
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() ->
+                db.wellbeingResultsDao().updateWaysToWellbeing(this.surveyId, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue()));
         };
 
         this.graphUpdateValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(thisMorning, tonight);

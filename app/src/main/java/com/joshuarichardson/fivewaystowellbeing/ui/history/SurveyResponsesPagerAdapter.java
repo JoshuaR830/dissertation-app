@@ -1,6 +1,5 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.history;
 
-import com.joshuarichardson.fivewaystowellbeing.ui.history.apps.AppAssignmentFragment;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesFragment;
 
 import androidx.annotation.NonNull;
@@ -26,9 +25,6 @@ public class SurveyResponsesPagerAdapter extends FragmentStateAdapter {
         } else if(position == 1) {
             fragment = new ViewPassTimesFragment();
             return fragment;
-        } else if(position == 2) {
-            fragment = new AppAssignmentFragment();
-            return fragment;
         }
 
         return null;
@@ -36,6 +32,6 @@ public class SurveyResponsesPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
 }

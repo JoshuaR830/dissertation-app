@@ -4,6 +4,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -25,6 +26,9 @@ public interface PhysicalActivityDao {
 
     @Query("SELECT * FROM physical_activity WHERE activity_id > 0 AND name IS NOT NULL ORDER BY name ASC")
     List<PhysicalActivity> getAllPhysicalActivitiesWithNamesAndAssociatedActivities();
+
+    @Query("SELECT * FROM physical_activity WHERE name IS NOT NULL ORDER BY name ASC")
+    List<PhysicalActivity> getAllPhysicalActivitiesWithNames();
 
     @Query("UPDATE physical_activity SET activity_id = :activityId WHERE activity_type = :activityType")
     void updateActivityId(String activityType, long activityId);

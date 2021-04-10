@@ -19,9 +19,6 @@ import static com.joshuarichardson.fivewaystowellbeing.physical_activity_trackin
 @AndroidEntryPoint
 public class ActivityReceiver extends BroadcastReceiver {
 
-    // 10 minutes
-    public static final long DURATION_THRESHOLD = 600000;
-
     @Override
     public void onReceive(Context context, Intent intent) {
 

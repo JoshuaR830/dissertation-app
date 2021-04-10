@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:icon="@drawable/notification_icon_phone"
+        android:title="@string/settings_category_auto_digital_tracking">
+
+        <SwitchPreference
+            android:title="@string/settings_switch_enable_app_tracking"
+            android:key="notification_app_enabled"/>
+
+        <SeekBarPreference
+            android:title="@string/settings_minimum_duration"
+            android:max="120"
+            app:min="1"
+            app:showSeekBarValue="true"
+            android:key="notification_app_duration" />
+        <Preference
+            android:title="@string/settings_configure_apps">
+            <intent
+                android:targetPackage="com.joshuarichardson2.fivewaystowellbeing"
+                android:targetClass="com.joshuarichardson.fivewaystowellbeing.ui.settings.apps.AppAssignmentActivity" />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

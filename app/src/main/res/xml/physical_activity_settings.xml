@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:icon="@drawable/notification_icon_walk"
+        android:title="@string/settings_category_track_walks">
+
+        <SwitchPreference
+            android:title="@string/settings_switch_enable_walk_tracking"
+            android:key="notification_walk_enabled"/>
+
+        <SeekBarPreference
+            android:title="@string/settings_minimum_duration"
+            android:max="120"
+            app:min="1"
+            app:showSeekBarValue="true"
+            android:key="notification_walk_duration" />
+
+        <ListPreference
+            android:key="notification_auto_tracking_list_walk"
+            android:title="@string/settings_category_auto_tracking_walk"
+            app:useSimpleSummaryProvider="true">
+        </ListPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:icon="@drawable/notification_icon_run"
+        android:title="@string/settings_category_track_runs">
+
+        <SwitchPreference
+            android:title="@string/settings_switch_enable_run_tracking"
+            android:key="notification_run_enabled" />
+
+        <SeekBarPreference
+            android:title="@string/settings_minimum_duration"
+            android:max="120"
+            app:min="1"
+            app:showSeekBarValue="true"
+            android:key="notification_run_duration" />
+
+        <ListPreference
+            android:key="notification_auto_tracking_list_run"
+            android:title="@string/settings_category_auto_tracking_run"
+            app:useSimpleSummaryProvider="true">
+        </ListPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:icon="@drawable/notification_icon_bike"
+        android:title="@string/settings_category_track_cycles">
+
+        <SwitchPreference
+            android:title="@string/settings_switch_enable_cycle_tracking"
+            android:key="notification_cycle_enabled" />
+
+        <SeekBarPreference
+            android:title="@string/settings_minimum_duration"
+            android:max="120"
+            app:min="1"
+            app:showSeekBarValue="true"
+            android:key="notification_cycle_duration" />
+
+        <ListPreference
+            android:key="notification_auto_tracking_list_cycle"
+            android:title="@string/settings_category_auto_tracking_bike"
+            app:useSimpleSummaryProvider="true">
+        </ListPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:icon="@drawable/notification_icon_vehicle"
+        android:title="@string/settings_category_track_drives">
+
+        <SwitchPreference
+            android:title="@string/settings_switch_enable_drive_tracking"
+            android:key="notification_drive_enabled" />
+
+        <SeekBarPreference
+            android:title="@string/settings_minimum_duration"
+            android:max="120"
+            app:min="1"
+            app:showSeekBarValue="true"
+            android:key="notification_drive_duration" />
+
+        <ListPreference
+            android:key="notification_auto_tracking_list_vehicle"
+            android:title="@string/settings_category_auto_tracking_vehicle"
+            app:useSimpleSummaryProvider="true">
+        </ListPreference>
+    </PreferenceCategory>
+</PreferenceScreen>

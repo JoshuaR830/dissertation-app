@@ -5,14 +5,18 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 
+import com.joshuarichardson.fivewaystowellbeing.NotificationConfiguration;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
+import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 
@@ -23,11 +27,6 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_APP;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_RUN;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.AUTOMATIC_ACTIVITY_NOTIFICATION_WALK;
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
 
 @AndroidEntryPoint
@@ -58,19 +57,19 @@ public class AddPhysicalActivityIntentService extends IntentService {
 
         switch (eventType) {
             case AutomaticActivityTypes.WALK:
-                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_WALK);
+                notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_WALK);
                 break;
             case AutomaticActivityTypes.RUN:
-                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_RUN);
+                notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_RUN);
                 break;
             case AutomaticActivityTypes.CYCLE:
-                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE);
+                notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE);
                 break;
             case AutomaticActivityTypes.VEHICLE:
-                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE);
+                notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE);
                 break;
             default:
-                notification.cancel(AUTOMATIC_ACTIVITY_NOTIFICATION_APP);
+                notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_APP);
         }
 
         if (activityId == -1) {
@@ -115,6 +114,15 @@ public class AddPhysicalActivityIntentService extends IntentService {
             Passtime passtime = new Passtime(activityDetails.getActivityName(), "", activityDetails.getActivityType(), activityDetails.getActivityWayToWellbeing(), activitySurveyId, activityStartTime - startTime, activityEndTime - startTime, 0, false);
             WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityDetails.getActivityType(), passtime, currentTime);
             this.db.physicalActivityDao().updateIsPendingStatus(eventType, false);
+            this.db.physicalActivityDao().updateStartTime(eventType, 0);
+
+            // If it already exists, it won't get recreated, but if it doesn't exist and a survey exists, it can create it
+            this.db.wellbeingResultsDao().insert(new WellbeingResult(surveyId, startTime, 0, 0, 0, 0, 0));
+
+            // Update the values for the ways to wellbeing so that it is up-to-date
+            List<WellbeingGraphItem> wayToWellbeingValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(startTime, endTime);
+            WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(wayToWellbeingValues);
+            this.db.wellbeingResultsDao().updateWaysToWellbeing(surveyId, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue());
         });
     }
 }

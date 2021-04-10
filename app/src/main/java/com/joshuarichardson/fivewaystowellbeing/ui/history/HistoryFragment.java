@@ -39,7 +39,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_history, container, false);
 
-        RecyclerView recycler = root.findViewById(R.id.surveyRecyclerView);
+        RecyclerView recycler = root.findViewById(R.id.app_assignment_recycler);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         SurveyResponseDao surveyResponseDao = this.db.surveyResponseDao();

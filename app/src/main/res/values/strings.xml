@@ -53,7 +53,7 @@
     <string name="wellbeing_take_notice">Take notice</string>
     <string name="wellbeing_keep_learning">Keep learning</string>
     <string name="wellbeing_give">Give</string>
-    <string name="days_active">Days active</string>
+    <string name="days_active">Days logged</string>
 
     <string name="wellbeing_connect_description">Connect is all about building relationships, in person or over video call it all counts, what really matters is that you spend time getting to know each other deeply, build a sense of trust, go deeper than the superficial, and most importantly make time to listen.</string>
     <string name="wellbeing_be_active_description">Be active is all about getting in some exercise, whether that be grabbing your yoga mat and taking on the downward dog, going for a short walk during your lunch break or training for your next marathon, make sure to keep it at a level you are comfortable with, if you don\'t feel better, change it up until you find something you love.</string>
@@ -108,12 +108,26 @@
     <string name="settings_theme_title">Theme</string>
     <string name="settings_theme_description">Change the theme to dark, light or system default</string>
     <string name="settings_category_theme">Theme</string>
-    <string name="settings_category_auto_tracking">Automatic Tracking</string>
+    <string name="settings_category_auto_tracking">Automatic Activity Recording</string>
+    <string name="settings_category_auto_physical_tracking">Physical Activity</string>
+    <string name="settings_category_auto_digital_tracking">Digital Activity</string>
     <string name="settings_category_notifications">Survey notifications</string>
     <string name="settings_category_auto_tracking_walk">Automatic walk activity</string>
     <string name="settings_category_auto_tracking_run">Automatic run activity</string>
     <string name="settings_category_auto_tracking_bike">Automatic cycle activity</string>
     <string name="settings_category_auto_tracking_vehicle">Automatic vehicle activity</string>
+    <string name="settings_category_track_walks">Walk tracking</string>
+    <string name="settings_switch_enable_walk_tracking">Track walks</string>
+    <string name="settings_category_track_runs">Run tracking</string>
+    <string name="settings_switch_enable_run_tracking">Track runs</string>
+    <string name="settings_category_track_cycles">Cycle tracking</string>
+    <string name="settings_switch_enable_cycle_tracking">Track cycles</string>
+    <string name="settings_category_track_drives">Drive tracking</string>
+    <string name="settings_switch_enable_drive_tracking">Track drives</string>
+    <string name="settings_configure_apps">Configure which apps to track</string>
+    <string name="settings_switch_enable_app_tracking">Track app usage</string>
+    <string name="settings_minimum_duration">Minimum duration mins</string>
+
 
     <string name="error_no_name_entered">Please enter a name</string>
     <string name="error_no_type_selected">Please choose a type</string>
@@ -144,8 +158,8 @@
     <string name="is_run_complete">Did you complete a run?</string>
     <string name="is_cycle_complete">Did you complete a cycle?</string>
     <string name="is_drive_complete">Did you complete a drive?</string>
-    <string name="is_app_add">Add</string>
-    <string name="is_app_complete">to your log?</string>
+    <string name="is_app_add">Did you use</string>
+    <string name="is_app_complete">recently?</string>
     <string name="button_yes">Yes</string>
     <string name="button_no">No</string>
 
@@ -182,4 +196,14 @@
     <string name="stop_cycling">Stopped cycling</string>
     <string name="enter_vehicle">Enter vehicle</string>
     <string name="exit_vehicle">Exit vehicle</string>
+
+    <!-- App tracking -->
+    <string name="no_selection">-- None --</string>
+    <string name="no_ways_to_wellbeing"/>
+    <string name="no_activity_assigned">No activity assigned</string>
+    <string name="auto_tracking_foreground_notification_title">Automatic activity logger</string>
+    <string name="auto_tracking_foreground_notification_body">Tap to configure apps to track</string>
+    <string name="logging_message">This will log</string>
+    <string name="app_placeholder">App</string>
+    <string name="activity_placeholder">Activity</string>
 </resources>
