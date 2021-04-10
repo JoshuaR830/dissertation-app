@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        if (preferences.getInt("database_version", 0) < 8) {
+        if (preferences.getInt("database_version", 0) < 9) {
 
             Calendar cal = Calendar.getInstance();
             long endTime = TimeHelper.getEndOfDay(cal.getTimeInMillis());

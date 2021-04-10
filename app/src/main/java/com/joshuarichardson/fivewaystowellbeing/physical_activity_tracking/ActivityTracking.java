@@ -99,7 +99,7 @@ public class ActivityTracking {
     }
 
     public void sendActivityNotification(Context context, long activityId, long startTime, long endTime, String physicalActivityType, @Nullable String appName, @Nullable String activityName) {
-        if (activityId == 0) {
+        if (activityId <= 0) {
             return;
         }
         Intent intent = new Intent(context, AddPhysicalActivityIntentService.class);
