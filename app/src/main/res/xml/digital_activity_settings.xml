@@ -18,7 +18,7 @@
         <Preference
             android:title="@string/settings_configure_apps">
             <intent
-                android:targetPackage="com.joshuarichardson2.fivewaystowellbeing"
+                android:targetPackage="com.joshuarichardson.fivewaystowellbeing"
                 android:targetClass="com.joshuarichardson.fivewaystowellbeing.ui.settings.apps.AppAssignmentActivity" />
         </Preference>
     </PreferenceCategory>

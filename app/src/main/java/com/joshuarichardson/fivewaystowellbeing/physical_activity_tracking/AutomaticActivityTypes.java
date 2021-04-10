@@ -5,5 +5,5 @@ public class AutomaticActivityTypes {
     public static final String WALK = "WALK";
     public static final String RUN = "RUN";
     public static final String VEHICLE = "VEHICLE";
-    public static final String APP = "app";
+    public static final String APP = "APP";
 }

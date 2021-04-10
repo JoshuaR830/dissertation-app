@@ -206,4 +206,8 @@
     <string name="logging_message">This will log</string>
     <string name="app_placeholder">App</string>
     <string name="activity_placeholder">Activity</string>
+    <string name="walk">walk</string>
+    <string name="run">run</string>
+    <string name="cycle">cycle</string>
+    <string name="vehicle">vehicle</string>
 </resources>

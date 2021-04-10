@@ -118,22 +118,22 @@ public class ActivityTracking {
             case AutomaticActivityTypes.WALK:
                 acceptRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_WALK_ACCEPT;
                 cancelRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_WALK_REJECT;
-                bundle.putString("app_name", "walk");
+                bundle.putString("app_name", context.getString(R.string.walk));
                 break;
             case AutomaticActivityTypes.RUN:
                 acceptRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_RUN_ACCEPT;
                 cancelRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_RUN_REJECT;
-                bundle.putString("app_name", "run");
+                bundle.putString("app_name", context.getString(R.string.run));
                 break;
             case AutomaticActivityTypes.CYCLE:
                 acceptRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_CYCLE_ACCEPT;
                 cancelRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_CYCLE_REJECT;
-                bundle.putString("app_name", "cycle");
+                bundle.putString("app_name", context.getString(R.string.cycle));
                 break;
             case AutomaticActivityTypes.VEHICLE:
                 acceptRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_VEHICLE_ACCEPT;
                 cancelRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_VEHICLE_REJECT;
-                bundle.putString("app_name", "vehicle");
+                bundle.putString("app_name", context.getString(R.string.vehicle));
                 break;
             default:
                 acceptRequestCode = NotificationConfiguration.RequestIds.REQUEST_CODE_APP_ACCEPT;

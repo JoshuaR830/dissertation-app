@@ -44,11 +44,8 @@ public class ViewSurveyResponsesFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, ((tab, position) -> {
             if(position == 0) {
                 tab.setText(R.string.wellbeing_logs_title);
-            } else if(position == 1){
+            } else if (position == 1){
                 tab.setText(R.string.navigation_pass_times);
-            } else {
-                // ToDo change for string
-                tab.setText("Apps");
             }
         })).attach();
     }
