@@ -12,7 +12,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/frame_circle"
-        android:backgroundTint="@color/way_to_wellbeing_connect"
+        android:backgroundTint="@color/way_to_wellbeing_keep_learning"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:padding="16dp"
-            android:src="@drawable/notification_icon_walk"
+            android:src="@drawable/notification_icon_phone"
             app:tint="@color/white" />
     </FrameLayout>
 
@@ -31,7 +31,7 @@
         android:layout_height="100dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/frame_circle"
-        android:backgroundTint="@color/way_to_wellbeing_take_notice"
+        android:backgroundTint="@color/way_to_wellbeing_be_active"
         app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frameLayout">
@@ -54,7 +54,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/frame_circle"
-        android:backgroundTint="@color/way_to_wellbeing_be_active"
+        android:backgroundTint="@color/way_to_wellbeing_connect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
@@ -65,7 +65,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:padding="16dp"
-            android:src="@drawable/notification_icon_run"
+            android:src="@drawable/notification_icon_walk"
             app:tint="@color/white" />
     </FrameLayout>
 
@@ -74,7 +74,7 @@
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
         android:background="@drawable/frame_circle"
-        android:backgroundTint="@color/way_to_wellbeing_give"
+        android:backgroundTint="@color/way_to_wellbeing_take_notice"
         app:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frameLayout2">
@@ -85,7 +85,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:padding="16dp"
-            android:src="@drawable/notification_icon_vehicle"
+            android:src="@drawable/icon_time"
             app:tint="@color/white" />
     </FrameLayout>
 

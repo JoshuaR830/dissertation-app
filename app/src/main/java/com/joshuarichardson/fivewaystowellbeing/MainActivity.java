@@ -84,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Display a welcome screen for first time users of this version
-        if(preferences.getInt("app_version", 0) < 5) {
+        if(preferences.getInt("app_version", 0) < 6) {
             new MaterialAlertDialogBuilder(this)
                 .setView(R.layout.new_features_auto_tracking)
                 .setPositiveButton(getString(R.string.tracking_dialog_positive_button), (dialog, which) -> {
                     setPermissions();
-                    preferenceEditor.putInt("app_version", 5);
+                    preferenceEditor.putInt("app_version", 6);
                     preferenceEditor.apply();
                 })
                 .show();
