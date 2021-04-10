@@ -146,7 +146,7 @@ public class InsightsTests extends ProgressFragmentTestFixture {
         onView(withId(R.id.insights_recycler_view))
             .perform(scrollToPosition(9))
             .check(matches(atRecyclerPosition(9, hasDescendant(withText("Times achieved:")))))
-            .check(matches(atRecyclerPosition(9, hasDescendant(withText("Days active")))))
+            .check(matches(atRecyclerPosition(9, hasDescendant(withText("Days logged")))))
             .check(matches(atRecyclerPosition(9, hasDescendant(withText("3")))));
     }
 }

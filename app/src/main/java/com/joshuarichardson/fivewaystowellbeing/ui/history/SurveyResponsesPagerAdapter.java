@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.ui.view;
+package com.joshuarichardson.fivewaystowellbeing.ui.history;
 
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesFragment;
 

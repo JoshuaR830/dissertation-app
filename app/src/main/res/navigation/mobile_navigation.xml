@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_progress"
         android:label="@string/navigation_home"
-        android:name="com.joshuarichardson.fivewaystowellbeing.ui.view.ProgressFragment"
+        android:name="com.joshuarichardson.fivewaystowellbeing.ui.progress.ProgressFragment"
         tools:layout="@layout/fragment_progress" />
 
     <fragment
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/navigation_view_survey_responses"
         android:label="@string/navigation_surveys"
-        android:name="com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragment"
+        android:name="com.joshuarichardson.fivewaystowellbeing.ui.history.ViewSurveyResponsesFragment"
         tools:layout="@layout/fragment_view_surveys" />
 
 </navigation>

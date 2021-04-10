@@ -21,6 +21,6 @@ public interface WellbeingResultsDao {
     @Query("SELECT * FROM wellbeing_result WHERE id = :surveyId")
     WellbeingResult getResultsBySurveyId(long surveyId);
 
-    @Query("Select * FROM wellbeing_result WHERE timestamp BETWEEN :startTime AND :endTime ORDER BY timestamp ASC")
+    @Query("SELECT * FROM wellbeing_result WHERE timestamp BETWEEN :startTime AND :endTime ORDER BY timestamp ASC")
     List<WellbeingResult> getResultsByTimestampRange(long startTime, long endTime);
 }

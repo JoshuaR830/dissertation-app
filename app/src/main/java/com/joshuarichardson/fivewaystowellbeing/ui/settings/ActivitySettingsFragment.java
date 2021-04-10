@@ -3,7 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.settings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.PhysicalActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.AutomaticActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
@@ -26,19 +26,19 @@ public class ActivitySettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.auto_settings, rootKey);
+        setPreferencesFromResource(R.xml.physical_activity_settings, rootKey);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
-        ListPreference walkActivityList = (ListPreference) findPreference("notification_auto_tracking_list_walk");
-        ListPreference runActivityList = (ListPreference) findPreference("notification_auto_tracking_list_run");
-        ListPreference cycleActivityList = (ListPreference) findPreference("notification_auto_tracking_list_cycle");
-        ListPreference vehicleActivityList = (ListPreference) findPreference("notification_auto_tracking_list_vehicle");
+        ListPreference walkActivityList = findPreference("notification_auto_tracking_list_walk");
+        ListPreference runActivityList = findPreference("notification_auto_tracking_list_run");
+        ListPreference cycleActivityList = findPreference("notification_auto_tracking_list_cycle");
+        ListPreference vehicleActivityList = findPreference("notification_auto_tracking_list_vehicle");
 
-        walkActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_walk", ""));
-        runActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_run", ""));
-        cycleActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_cycle", ""));
-        vehicleActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_vehicle", ""));
+        walkActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_walk", getString(R.string.not_set)));
+        runActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_run", getString(R.string.not_set)));
+        cycleActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_cycle", getString(R.string.not_set)));
+        vehicleActivityList.setSummaryProvider(preference -> preferences.getString("notification_auto_tracking_list_vehicle", getString(R.string.not_set)));
 
         ArrayList<String> names = new ArrayList<>();
         ArrayList<String> ids = new ArrayList<>();
@@ -65,10 +65,10 @@ public class ActivitySettingsFragment extends PreferenceFragmentCompat {
             });
         });
 
-        setPreferenceListener(walkActivityList, preferences, PhysicalActivityTypes.WALK);
-        setPreferenceListener(runActivityList, preferences, PhysicalActivityTypes.RUN);
-        setPreferenceListener(cycleActivityList, preferences, PhysicalActivityTypes.CYCLE);
-        setPreferenceListener(vehicleActivityList, preferences, PhysicalActivityTypes.VEHICLE);
+        setPreferenceListener(walkActivityList, preferences, AutomaticActivityTypes.WALK);
+        setPreferenceListener(runActivityList, preferences, AutomaticActivityTypes.RUN);
+        setPreferenceListener(cycleActivityList, preferences, AutomaticActivityTypes.CYCLE);
+        setPreferenceListener(vehicleActivityList, preferences, AutomaticActivityTypes.VEHICLE);
     }
 
     private void setPreferenceListener(ListPreference listPreference, SharedPreferences preferences, String typeName) {

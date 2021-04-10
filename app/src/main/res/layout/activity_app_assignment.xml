@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.history.AddMissedDayActivity">
+    android:background="?android:attr/colorBackground"
+    tools:context=".ui.settings.apps.AppAssignmentActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/missing_item_recycler_view"
+        android:id="@+id/app_assignment_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"

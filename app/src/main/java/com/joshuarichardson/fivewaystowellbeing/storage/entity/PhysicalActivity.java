@@ -1,6 +1,7 @@
 package com.joshuarichardson.fivewaystowellbeing.storage.entity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -9,6 +10,7 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_END_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_IS_CONFIRMED;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_IS_PENDING;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_NAME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_START_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_TABLE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.PHYSICAL_ACTIVITY_TYPE;
@@ -20,6 +22,9 @@ public class PhysicalActivity {
     @PrimaryKey
     @ColumnInfo(name = PHYSICAL_ACTIVITY_TYPE)
     private String activityType;
+
+    @ColumnInfo(name = PHYSICAL_ACTIVITY_NAME)
+    private String name;
 
     @ColumnInfo(name = PHYSICAL_ACTIVITY_START_TIME)
     private long startTime;
@@ -36,8 +41,9 @@ public class PhysicalActivity {
     @ColumnInfo(name = PHYSICAL_ACTIVITY_IS_CONFIRMED)
     private boolean isNotificationConfirmed;
 
-    public PhysicalActivity(String activityType, long startTime, long endTime, long activityId, boolean isPending, boolean isNotificationConfirmed) {
+    public PhysicalActivity(String activityType, @Nullable String name, long startTime, long endTime, long activityId, boolean isPending, boolean isNotificationConfirmed) {
         this.activityType = activityType;
+        this.name = name;
         this.startTime = startTime;
         this.activityId = activityId;
         this.isPending = isPending;
@@ -47,6 +53,10 @@ public class PhysicalActivity {
 
     public long getActivityId() {
         return this.activityId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public long getStartTime() {
@@ -65,7 +75,7 @@ public class PhysicalActivity {
         return this.isPending;
     }
 
-    public boolean getTimeStatus(int endTime) {
+    public boolean getTimeStatus(long endTime) {
         int tenMins = 600000;
         return endTime >= (startTime + tenMins);
     }

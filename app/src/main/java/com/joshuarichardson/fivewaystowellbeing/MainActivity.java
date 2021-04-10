@@ -15,10 +15,11 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.joshuarichardson.fivewaystowellbeing.app_usage_tracking.ActivityTrackingService;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
 import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking;
-import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.PhysicalActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.AutomaticActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
@@ -29,11 +30,12 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
+import com.joshuarichardson.fivewaystowellbeing.ui.history.ViewSurveyResponsesFragment;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
-import com.joshuarichardson.fivewaystowellbeing.ui.view.ProgressFragment;
-import com.joshuarichardson.fivewaystowellbeing.ui.view.ViewSurveyResponsesFragment;
+import com.joshuarichardson.fivewaystowellbeing.ui.progress.ProgressFragment;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -50,16 +52,12 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_RUN;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking.PHYSICAL_ACTIVITY_NOTIFICATION_WALK;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase.DATABASE_VERSION_CODE;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
-
     private static final int ACTIVITY_TRACKING_CODE = 1;
+
     @Inject
     WellbeingDatabase db;
 
@@ -86,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Display a welcome screen for first time users of this version
-        if(preferences.getInt("app_version", 0) < 5) {
+        if(preferences.getInt("app_version", 0) < 6) {
             new MaterialAlertDialogBuilder(this)
                 .setView(R.layout.new_features_auto_tracking)
                 .setPositiveButton(getString(R.string.tracking_dialog_positive_button), (dialog, which) -> {
                     setPermissions();
-                    preferenceEditor.putInt("app_version", 5);
+                    preferenceEditor.putInt("app_version", 6);
                     preferenceEditor.apply();
                 })
                 .show();
@@ -118,10 +116,40 @@ public class MainActivity extends AppCompatActivity {
         if (preferences.getInt("database_version", 0) < 7) {
             PhysicalActivityDao physicalActivityDao = this.db.physicalActivityDao();
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.WALK, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.RUN, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.CYCLE, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(PhysicalActivityTypes.VEHICLE, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.WALK, null, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.RUN, null, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.CYCLE, null, 0, 0, 0, false, false));
+                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.VEHICLE, null, 0, 0, 0, false, false));
+            });
+        }
+
+        if (preferences.getInt("database_version", 0) < 9) {
+
+            Calendar cal = Calendar.getInstance();
+            long endTime = TimeHelper.getEndOfDay(cal.getTimeInMillis());
+
+            // This gets midnight on 3rd April
+            cal.setTimeInMillis(1617404400000L);
+
+            // Get start and end time
+            long startTime = TimeHelper.getStartOfDay(cal.getTimeInMillis());
+
+            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                // This gets all of the surveys between then and now
+                List<SurveyResponse> surveyResponses = this.db.surveyResponseDao().getSurveyResponsesByTimestampRangeNotLive(startTime, endTime);
+
+                // Update the wellbeing results so that they are accounted for
+                for(SurveyResponse response : surveyResponses) {
+                    // Use the start time to get the start and end of the day
+                    long time = response.getSurveyResponseTimestamp();
+                    long wellbeingStartTime = TimeHelper.getStartOfDay(time);
+                    long wellbeingEndTime = TimeHelper.getEndOfDay(time);
+                    // Get the ways to wellbeing for that day
+                    List<WellbeingGraphItem> wayToWellbeingValues = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(wellbeingStartTime, wellbeingEndTime);
+                    WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(wayToWellbeingValues);
+                    // Create a new item if it doesn't already exist
+                    this.db.wellbeingResultsDao().insert(new WellbeingResult(response.getSurveyResponseId(), wellbeingStartTime, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue()));
+                }
             });
         }
 
@@ -144,6 +172,55 @@ public class MainActivity extends AppCompatActivity {
             preferenceEditor.putLong("notification_night_time", 73800000); // 20:30
             preferenceEditor.putBoolean("notification_night_switch", true);
             AlarmHelper.getInstance().scheduleNotification(getApplicationContext(), 20, 30, "night", true);
+        }
+
+        if (! preferences.contains("notification_walk_enabled")) {
+            preferenceEditor.putBoolean("notification_walk_enabled", true);
+        }
+
+        if (!preferences.contains("notification_walk_duration")) {
+            preferenceEditor.putInt("notification_walk_duration", 10);
+        }
+
+        if (! preferences.contains("notification_run_enabled")) {
+            preferenceEditor.putBoolean("notification_run_enabled", true);
+        }
+
+        if (!preferences.contains("notification_run_duration")) {
+            preferenceEditor.putInt("notification_run_duration", 10);
+        }
+
+        if (! preferences.contains("notification_cycle_enabled")) {
+            preferenceEditor.putBoolean("notification_cycle_enabled", true);
+        }
+
+        if (!preferences.contains("notification_cycle_duration")) {
+            preferenceEditor.putInt("notification_cycle_duration", 10);
+        }
+
+        if (! preferences.contains("notification_drive_enabled")) {
+            preferenceEditor.putBoolean("notification_drive_enabled", false);
+        }
+
+        if (!preferences.contains("notification_drive_duration")) {
+            preferenceEditor.putInt("notification_drive_duration", 30);
+        }
+
+        if (! preferences.contains("notification_app_enabled")) {
+            preferenceEditor.putBoolean("notification_app_enabled", false);
+        }
+
+        if (preferences.getBoolean("notification_app_enabled", false)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Reference startForegroundService https://stackoverflow.com/a/7690600/13496270
+                startForegroundService(new Intent(this, ActivityTrackingService.class));
+            } else {
+                startService(new Intent(this, ActivityTrackingService.class));
+            }
+        }
+
+        if (!preferences.contains("notification_app_duration")) {
+            preferenceEditor.putInt("notification_app_duration", 10);
         }
 
         preferenceEditor.apply();
@@ -214,10 +291,11 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // Cancel the notification
         NotificationManager notification = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_WALK);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_RUN);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_CYCLE);
-        notification.cancel(PHYSICAL_ACTIVITY_NOTIFICATION_VEHICLE);
+        notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_WALK);
+        notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_RUN);
+        notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_CYCLE);
+        notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_VEHICLE);
+        notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_APP);
     }
 
     @Override

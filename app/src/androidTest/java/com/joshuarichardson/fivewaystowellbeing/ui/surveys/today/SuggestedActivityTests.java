@@ -72,13 +72,13 @@ public class SuggestedActivityTests  extends ProgressFragmentTestFixture {
         );
 
         when(this.physicalActivityDao.getPending()).thenReturn(Arrays.asList(
-            new PhysicalActivity("RUN", 1617238800000L, 1617242400000L, 1, true, false),
-            new PhysicalActivity("CYCLE", 1617238800000L, 1617242400000L, 2, true, false)
+            new PhysicalActivity("RUN", null, 1617238800000L, 1617242400000L, 1, true, false),
+            new PhysicalActivity("CYCLE", null, 1617238800000L, 1617242400000L, 2, true, false)
         ));
     }
 
     @Test
-    public void testMe() {
+    public void pendingItemsShouldBeDisplayed() {
         onView(allOf(withId(R.id.activity_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Run"))));
@@ -89,7 +89,7 @@ public class SuggestedActivityTests  extends ProgressFragmentTestFixture {
     }
 
     @Test
-    public void testMe2() {
+    public void clickingOnItems_ShouldChangeWhatIsDisplayed() {
         onView(allOf(withId(R.id.yes_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
 

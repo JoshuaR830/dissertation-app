@@ -16,9 +16,17 @@
         <Preference
             android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.ActivitySettingsFragment"
             android:key="settings_category_auto_tracking"
-            android:title="@string/settings_category_auto_tracking"
+            android:title="@string/settings_category_auto_physical_tracking"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/notification_icon_walk">
+        </Preference>
+
+        <Preference
+            android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.DigitalActivitySettingsFragment"
+            android:key="settings_category_digital_auto_tracking"
+            android:title="@string/settings_category_auto_digital_tracking"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/notification_icon_phone">
         </Preference>
     </PreferenceCategory>
 
