@@ -7,7 +7,7 @@ import android.os.SystemClock;
 
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -80,9 +80,9 @@ public class ActivityDurationIntentService extends IntentService {
         switch(intent.getAction()) {
             case START_ACTIVITY:
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    PhysicalActivity physicalActivity = this.db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(eventType);
+                    AutomaticActivity automaticActivity = this.db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(eventType);
 
-                    if (physicalActivity == null) {
+                    if (automaticActivity == null) {
                         return;
                     }
 
@@ -90,7 +90,7 @@ public class ActivityDurationIntentService extends IntentService {
 
                     // Only update the start time if the time of the event starting is half the threshold to log the activity
                     // This means that you can have a small break and it still be logged as the same activity
-                    if (physicalActivity.getStartTime() <= 0 || (eventTimeMillis - physicalActivity.getEndTime()) > (finalActivityTypeThreshold /2)) {
+                    if (automaticActivity.getStartTime() <= 0 || (eventTimeMillis - automaticActivity.getEndTime()) > (finalActivityTypeThreshold /2)) {
                         this.db.physicalActivityDao().updateStartTime(eventType, eventTimeMillis);
                         this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(eventType, false);
                     }
@@ -100,7 +100,7 @@ public class ActivityDurationIntentService extends IntentService {
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                     // Still update the end time - even if it wasn't long enough
                     this.db.physicalActivityDao().updateEndTime(eventType, calculateEventTimeMillis(nanoSeconds));
-                    PhysicalActivity activity = this.db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(eventType);
+                    AutomaticActivity activity = this.db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(eventType);
 
                     if (activity == null) {
                         return;

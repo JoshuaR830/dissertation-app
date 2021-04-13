@@ -99,15 +99,15 @@ public class WaysToWellbeingContract {
     public static final String WELLBEING_QUESTIONS_INPUT_TYPE = "input_type";
 
     // Physical activities
-    public static final String PHYSICAL_ACTIVITY_TABLE = "physical_activity";
+    public static final String AUTOMATIC_ACTIVITY_TABLE = "automatic_activity";
 
-    public static final String PHYSICAL_ACTIVITY_TYPE = "activity_type";
-    public static final String PHYSICAL_ACTIVITY_NAME = "name";
-    public static final String PHYSICAL_ACTIVITY_START_TIME = "start_time";
-    public static final String PHYSICAL_ACTIVITY_END_TIME = "end_time";
-    public static final String PHYSICAL_ACTIVITY_ACTIVITY_ID = "activity_id";
-    public static final String PHYSICAL_ACTIVITY_IS_PENDING = "is_pending";
-    public static final String PHYSICAL_ACTIVITY_IS_CONFIRMED = "is_notification_confirmed";
+    public static final String AUTOMATIC_ACTIVITY_TYPE = "activity_type";
+    public static final String AUTOMATIC_ACTIVITY_NAME = "name";
+    public static final String AUTOMATIC_ACTIVITY_START_TIME = "start_time";
+    public static final String AUTOMATIC_ACTIVITY_END_TIME = "end_time";
+    public static final String AUTOMATIC_ACTIVITY_ACTIVITY_ID = "activity_id";
+    public static final String AUTOMATIC_ACTIVITY_IS_PENDING = "is_pending";
+    public static final String AUTOMATIC_ACTIVITY_IS_CONFIRMED = "is_notification_confirmed";
 
     // App usage activities
     public static final String APP_USAGE_TABLE_NAME = "app_usage_table";
@@ -116,7 +116,6 @@ public class WaysToWellbeingContract {
     public static final String APP_USAGE_PACKAGE_ID = "package_id";
     public static final String APP_USAGE_START_TIME = "start_time";
     public static final String APP_USAGE_END_TIME = "end_time";
-    public static final String APP_USAGE_PREVIOUS_USAGE = "previous_usage";
-    public static final String APP_USAGE_CURRENT_USAGE = "current_usage";
+    public static final String APP_USAGE_MOST_RECENT_RESUME = "most_recent_resume_time";
     public static final String APP_USAGE_IS_PENDING = "is_pending";
 }

@@ -9,7 +9,7 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Test;
@@ -71,9 +71,9 @@ public class SuggestedActivityTests  extends ProgressFragmentTestFixture {
             Collections.singletonList(new SurveyResponse(67864242, WaysToWellbeing.UNASSIGNED, "Survey", "")))
         );
 
-        when(this.physicalActivityDao.getPending()).thenReturn(Arrays.asList(
-            new PhysicalActivity("RUN", null, 1617238800000L, 1617242400000L, 1, true, false),
-            new PhysicalActivity("CYCLE", null, 1617238800000L, 1617242400000L, 2, true, false)
+        when(this.automaticActivityDao.getPending()).thenReturn(Arrays.asList(
+            new AutomaticActivity("RUN", null, 1617238800000L, 1617242400000L, 1, true, false),
+            new AutomaticActivity("CYCLE", null, 1617238800000L, 1617242400000L, 2, true, false)
         ));
     }
 

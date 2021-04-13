@@ -21,7 +21,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.AppActivityDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.AppActivity;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.settings.apps.AppAssignmentActivity;
 
 import java.util.Calendar;
@@ -111,7 +111,7 @@ public class ActivityTrackingService extends Service {
                     AppActivity appActivity = appUsageDao.getPhysicalActivityByType(event.getPackageName());
 
                     if (appActivity == null) {
-                        appActivity = new AppActivity(event.getPackageName(), 0, 0, 0, 0, false);
+                        appActivity = new AppActivity(event.getPackageName(), 0, 0, 0, false);
                         appUsageDao.insert(appActivity);
                     }
 
@@ -154,7 +154,7 @@ public class ActivityTrackingService extends Service {
 
                     // If longer than duration then need to update the physical activity details
                     if ((app.getEndTime() - app.getStartTime()) > duration) {
-                        PhysicalActivity activity = db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(app.getPackageName());
+                        AutomaticActivity activity = db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(app.getPackageName());
                         if(activity == null) {
                             db.appActivityDao().deleteWithPackageId(packageId);
                             continue;

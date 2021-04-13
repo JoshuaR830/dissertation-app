@@ -37,7 +37,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
@@ -150,10 +150,10 @@ public class ProgressFragment extends Fragment {
                 ActivityViewHelper.displaySurveyItems(requireActivity(), surveyData, this.db, getParentFragmentManager(), analyticsHelper);
 
                 // Get all pending activities
-                List<PhysicalActivity> list = this.db.physicalActivityDao().getPending();
+                List<AutomaticActivity> list = this.db.physicalActivityDao().getPending();
 
                 // Loop through each pending activity
-                for(PhysicalActivity item : list) {
+                for(AutomaticActivity item : list) {
 
                     ActivityRecord record = this.db.activityRecordDao().getActivityRecordById(item.getActivityId());
 

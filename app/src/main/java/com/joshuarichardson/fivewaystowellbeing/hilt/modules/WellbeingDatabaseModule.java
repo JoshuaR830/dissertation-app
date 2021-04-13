@@ -178,11 +178,85 @@ public class WellbeingDatabaseModule {
         }
     };
 
+    static final Migration MIGRATION_9_10 = new Migration(9, 10) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+
+            database.execSQL("ALTER TABLE physical_activity RENAME TO automatic_activity");
+
+            // Create a new table that will replace the survey_activity table - this is required because old table has the wrong primary key
+            // Reference: medium.com/@pekwerike/handling-roomdb-migration-create-a-new-primary-key-column-in-an-existing-entity-f15d10932f5b
+            database.execSQL("CREATE TABLE temp_app_usage_table (" +
+                "id INTEGER NOT NULL PRIMARY KEY, " +
+                "package_id TEXT NOT NULL, " +
+                "start_time INTEGER NOT NULL, " +
+                "end_time INTEGER NOT NULL, " +
+                "is_pending INTEGER NOT NULL, " +
+                "most_recent_resume_time INTEGER NOT NULL " +
+                ");"
+            );
+
+            // Insert the values from the old table
+            database.execSQL("INSERT INTO temp_app_usage_table(" +
+                "id, " +
+                "package_id, " +
+                "start_time, " +
+                "end_time, " +
+                "is_pending, " +
+                "most_recent_resume_time " +
+                ")" +
+                "SELECT id, package_id, start_time, end_time, is_pending, current_usage FROM app_usage_table"
+            );
+
+            // Delete the old table
+            database.execSQL("DROP TABLE app_usage_table");
+            database.execSQL("ALTER TABLE temp_app_usage_table RENAME TO app_usage_table");
+        }
+    };
+
+    static final Migration MIGRATION_10_11 = new Migration(10, 11) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+
+            // Create a new table that will replace the survey_activity table - this is required because old table has the wrong primary key
+            // Reference: medium.com/@pekwerike/handling-roomdb-migration-create-a-new-primary-key-column-in-an-existing-entity-f15d10932f5b
+            database.execSQL("CREATE TABLE temp_wellbeing_result (" +
+                "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "timestamp INTEGER NOT NULL, " +
+                "connect INTEGER NOT NULL, " +
+                "be_active INTEGER NOT NULL, " +
+                "keep_learning INTEGER NOT NULL, " +
+                "take_notice INTEGER NOT NULL, " +
+                "give INTEGER NOT NULL, " +
+                "FOREIGN KEY(id) REFERENCES survey_response(id) ON DELETE CASCADE " +
+                ");"
+            );
+
+            // Insert the values from the old table
+            database.execSQL("INSERT INTO temp_wellbeing_result(" +
+                "id, " +
+                "timestamp, " +
+                "connect, " +
+                "be_active, " +
+                "keep_learning, " +
+                "take_notice, " +
+                "give " +
+                ")" +
+                "SELECT id, timestamp, connect, be_active, keep_learning, take_notice, give FROM wellbeing_result"
+            );
+
+            // Delete the old table
+            database.execSQL("DROP TABLE wellbeing_result");
+            database.execSQL("ALTER TABLE temp_wellbeing_result RENAME TO wellbeing_result");
+        }
+    };
+
     @Provides
     @Singleton
     public static WellbeingDatabase getWellbeingDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, WellbeingDatabase.class, WELLBEING_DATABASE_NAME)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11)
             .addCallback(new RoomDatabase.Callback() {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {

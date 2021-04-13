@@ -24,9 +24,9 @@ import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.PhysicalActivityDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.AutomaticActivityDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
@@ -42,6 +42,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -57,6 +58,7 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_TRACKING_CODE = 1;
+    private AlertDialog dialog;
 
     @Inject
     WellbeingDatabase db;
@@ -85,14 +87,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Display a welcome screen for first time users of this version
         if(preferences.getInt("app_version", 0) < 6) {
-            new MaterialAlertDialogBuilder(this)
+            this.dialog = new MaterialAlertDialogBuilder(this)
                 .setView(R.layout.new_features_auto_tracking)
                 .setPositiveButton(getString(R.string.tracking_dialog_positive_button), (dialog, which) -> {
                     setPermissions();
                     preferenceEditor.putInt("app_version", 6);
                     preferenceEditor.apply();
-                })
-                .show();
+                }).show();
         } else {
             setPermissions();
         }
@@ -114,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Add the physical activities to the database
         if (preferences.getInt("database_version", 0) < 7) {
-            PhysicalActivityDao physicalActivityDao = this.db.physicalActivityDao();
+            AutomaticActivityDao automaticActivityDao = this.db.physicalActivityDao();
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.WALK, null, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.RUN, null, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.CYCLE, null, 0, 0, 0, false, false));
-                physicalActivityDao.insert(new PhysicalActivity(AutomaticActivityTypes.VEHICLE, null, 0, 0, 0, false, false));
+                automaticActivityDao.insert(new AutomaticActivity(AutomaticActivityTypes.WALK, null, 0, 0, 0, false, false));
+                automaticActivityDao.insert(new AutomaticActivity(AutomaticActivityTypes.RUN, null, 0, 0, 0, false, false));
+                automaticActivityDao.insert(new AutomaticActivity(AutomaticActivityTypes.CYCLE, null, 0, 0, 0, false, false));
+                automaticActivityDao.insert(new AutomaticActivity(AutomaticActivityTypes.VEHICLE, null, 0, 0, 0, false, false));
             });
         }
 
@@ -282,6 +283,17 @@ public class MainActivity extends AppCompatActivity {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 ActivityTracking activityTracker = new ActivityTracking();
                 activityTracker.initialiseTracking(getApplicationContext());
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(this.dialog != null) {
+            if(this.dialog.isShowing()) {
+                this.dialog.dismiss();
             }
         }
     }

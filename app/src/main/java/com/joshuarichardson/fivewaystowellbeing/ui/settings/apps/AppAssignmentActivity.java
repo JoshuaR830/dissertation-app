@@ -19,7 +19,7 @@ import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,7 +84,7 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
 
             // Add the item to the database when known that it exists
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                this.db.physicalActivityDao().insert(new PhysicalActivity(stat.getPackageName(), name, 0, 0, 0, false, false));
+                this.db.physicalActivityDao().insert(new AutomaticActivity(stat.getPackageName(), name, 0, 0, 0, false, false));
             });
         }
 
@@ -115,10 +115,10 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
         });
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-            List<PhysicalActivity> automaticActivities = this.db.physicalActivityDao().getAllPhysicalActivitiesWithNames();
+            List<AutomaticActivity> automaticActivities = this.db.physicalActivityDao().getAllPhysicalActivitiesWithNames();
             List<AppItem> appItems = new ArrayList<>();
 
-            for(PhysicalActivity activity : automaticActivities) {
+            for(AutomaticActivity activity : automaticActivities) {
                 ActivityRecord activityRecord = this.db.activityRecordDao().getActivityRecordById(activity.getActivityId());
 
                 if(activityRecord == null) {
