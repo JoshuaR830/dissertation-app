@@ -61,7 +61,7 @@
             android:value="${analytics_deactivated}" />
 
         <receiver
-            android:name=".physical_activity_tracking.ActivityReceiver"
+            android:name=".automated_activity_tracking.physical_activity_tracking.ActivityReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver
@@ -78,14 +78,14 @@
             </intent-filter>
         </receiver> <!-- References https://stackoverflow.com/a/12034402/13496270 , https://developer.android.com/guide/components/broadcast-exceptions -->
         <service
-            android:name=".app_usage_tracking.ActivityTrackingService"
+            android:name=".automated_activity_tracking.app_usage_tracking.ActivityTrackingService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".physical_activity_tracking.ActivityDurationIntentService"
+            android:name=".automated_activity_tracking.physical_activity_tracking.ActivityDurationIntentService"
             android:exported="false" />
         <service
-            android:name=".physical_activity_tracking.AddPhysicalActivityIntentService"
+            android:name=".automated_activity_tracking.AddAutomaticActivityIntentService"
             android:exported="false" />
     </application>
     <permission android:name="android.permission.WAKE_LOCK" />

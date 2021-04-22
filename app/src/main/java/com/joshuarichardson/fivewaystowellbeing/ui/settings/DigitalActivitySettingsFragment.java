@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.joshuarichardson.fivewaystowellbeing.R;
-import com.joshuarichardson.fivewaystowellbeing.app_usage_tracking.ActivityTrackingService;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.app_usage_tracking.ActivityTrackingService;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;

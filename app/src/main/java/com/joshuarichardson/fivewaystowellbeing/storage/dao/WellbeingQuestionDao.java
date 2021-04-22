@@ -30,6 +30,7 @@ public interface WellbeingQuestionDao {
 
     @Query("SELECT positive_message FROM wellbeing_questions WHERE wellbeing_questions.wellbeing_question_id == :id")
     String getPositiveResponseById(int id);
+
     @Query(
         "SELECT wayToWellbeing, SUM(num) AS value FROM ( " +
             "SELECT wellbeing_questions.way_to_wellbeing AS wayToWellbeing, SUM(wellbeing_questions.weighting) AS num FROM wellbeing_questions " +

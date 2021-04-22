@@ -8,8 +8,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
-import com.joshuarichardson.fivewaystowellbeing.app_usage_tracking.ActivityTrackingService;
-import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.app_usage_tracking.ActivityTrackingService;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.ActivityTracking;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;

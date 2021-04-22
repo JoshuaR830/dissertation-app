@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.app_usage_tracking;
+package com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.app_usage_tracking;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,7 +16,7 @@ import android.os.IBinder;
 import com.joshuarichardson.fivewaystowellbeing.NotificationConfiguration;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
-import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.ActivityTracking;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.AppActivityDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;

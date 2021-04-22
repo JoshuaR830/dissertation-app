@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
+package com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,8 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import static com.google.android.gms.location.ActivityTransition.ACTIVITY_TRANSITION_ENTER;
 import static com.google.android.gms.location.ActivityTransition.ACTIVITY_TRANSITION_EXIT;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityDurationIntentService.END_ACTIVITY;
-import static com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityDurationIntentService.START_ACTIVITY;
+import static com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.ActivityDurationIntentService.END_ACTIVITY;
+import static com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.ActivityDurationIntentService.START_ACTIVITY;
 
 @AndroidEntryPoint
 public class ActivityReceiver extends BroadcastReceiver {

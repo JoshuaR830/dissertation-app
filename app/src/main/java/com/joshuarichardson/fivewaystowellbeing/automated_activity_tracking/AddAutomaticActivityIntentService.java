@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
+package com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -9,6 +9,7 @@ import com.joshuarichardson.fivewaystowellbeing.NotificationConfiguration;
 import com.joshuarichardson.fivewaystowellbeing.TimeHelper;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.AutomaticActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
@@ -20,7 +21,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,7 +32,7 @@ import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNE
 
 @AndroidEntryPoint
 // ToDo - intent service is deprecated in new versions of Android - but it works for now
-public class AddPhysicalActivityIntentService extends IntentService {
+public class AddAutomaticActivityIntentService extends IntentService {
 
     @Inject
     WellbeingDatabase db;
@@ -39,7 +40,7 @@ public class AddPhysicalActivityIntentService extends IntentService {
     @Inject
     LogAnalyticEventHelper analyticsHelper;
 
-    public AddPhysicalActivityIntentService() {
+    public AddAutomaticActivityIntentService() {
         super("name");
     }
 
@@ -79,7 +80,7 @@ public class AddPhysicalActivityIntentService extends IntentService {
         long activityStartTime = intent.getExtras().getLong("start_time", 0);
         long activityEndTime = intent.getExtras().getLong("end_time", 0);
 
-        long currentTime = new Date().getTime();
+        long currentTime = Calendar.getInstance().getTimeInMillis();
         long startTime = TimeHelper.getStartOfDay(currentTime);
         long endTime = TimeHelper.getEndOfDay(currentTime);
 

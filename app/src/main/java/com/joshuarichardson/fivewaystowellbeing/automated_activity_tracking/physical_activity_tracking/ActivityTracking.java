@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
+package com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking;
 
 import android.Manifest;
 import android.app.NotificationChannel;
@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.joshuarichardson.fivewaystowellbeing.MainActivity;
 import com.joshuarichardson.fivewaystowellbeing.NotificationConfiguration;
 import com.joshuarichardson.fivewaystowellbeing.R;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.AddAutomaticActivityIntentService;
 
 import java.util.Arrays;
 
@@ -102,7 +103,7 @@ public class ActivityTracking {
         if (activityId <= 0) {
             return;
         }
-        Intent intent = new Intent(context, AddPhysicalActivityIntentService.class);
+        Intent intent = new Intent(context, AddAutomaticActivityIntentService.class);
 
         Bundle bundle = new Bundle();
         bundle.putLong("activity_id", activityId);
@@ -147,7 +148,7 @@ public class ActivityTracking {
         PendingIntent confirmPendingIntent = PendingIntent.getService(context, acceptRequestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // What notification should do on cancel press
-        Intent cancelIntent = new Intent(context, AddPhysicalActivityIntentService.class);
+        Intent cancelIntent = new Intent(context, AddAutomaticActivityIntentService.class);
         Bundle cancelBundle = new Bundle();
         cancelBundle.putLong("activity_id", -1);
         cancelBundle.putString("event_type", physicalActivityType);
