@@ -174,6 +174,12 @@ public class WellbeingValues {
     public WaysToWellbeing getLeastAchieved() {
         HashMap<WaysToWellbeing, Integer> wellbeingAchievedMap = getWellbeingAchievedMap();
         int min = Collections.min(wellbeingAchievedMap.values());
+        int max = Collections.max(wellbeingAchievedMap.values());
+
+        // To overcome a problem where if all are the same you will get suggested to do better at one that is as good as one you did badly at
+        if(min == max && min != 0) {
+            return WaysToWellbeing.UNASSIGNED;
+        }
 
         return getWayToWellbeingMatchingCondition(min, wellbeingAchievedMap);
     }

@@ -25,8 +25,6 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,7 +43,7 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
 
     public static final long MILLIS_PER_DAY = 86400000;
     MutableLiveData<Integer> daysLive = new MutableLiveData<>(7);
-    Date selectedTime = new Date();
+    long selectedTime = Calendar.getInstance().getTimeInMillis();
 
     @Inject
     WellbeingDatabase db;
@@ -54,8 +52,8 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
         View root = inflater.inflate(R.layout.fragment_insights, parentView, false);
 
         Observer<Integer> daysObserver = days -> {
-            long thisMorning = TimeHelper.getStartOfDay(this.selectedTime.getTime());
-            long tonight = TimeHelper.getEndOfDay(this.selectedTime.getTime());
+            long thisMorning = TimeHelper.getStartOfDay(this.selectedTime);
+            long tonight = TimeHelper.getEndOfDay(this.selectedTime);
 
             long finalStartTime = thisMorning - (MILLIS_PER_DAY * (days - 1));
 
@@ -67,6 +65,9 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
             String timeText = String.format(Locale.getDefault(), "%s - %s", TimeFormatter.formatTimeAsDayMonthString(finalStartTime), TimeFormatter.formatTimeAsDayMonthString(tonight));
 
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                boolean shouldShowBest = true;
+                boolean shouldShowWorst = true;
+
                 List<WellbeingResult> currentWellbeingResults = db.wellbeingResultsDao().getResultsByTimestampRange(finalStartTime, tonight);
                 List<WellbeingResult> previousWellbeingResults = db.wellbeingResultsDao().getResultsByTimestampRange(previousPeriodStartTime, previousPeriodEndTime);
                 int currentDaysActive = this.db.surveyResponseDao().getNumDaysWithWaysToWellbeingByDate(finalStartTime, tonight);
@@ -80,27 +81,30 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
 
                 WaysToWellbeing leastAchieved = currentValues.getLeastAchieved();
 
+                // If the values are the same or it is unassigned then it should not be displayed
+                if((mostAchieved == leastAchieved && shouldShowBest) || leastAchieved == WaysToWellbeing.UNASSIGNED) {
+                    shouldShowWorst = false;
+                }
+
                 // This looks to see what the least achieved activity of the least achieved way to wellbeing is from the last week - suggests you do it - but not regularly enough
                 List<ActivityStats> activityWorstStats = db.surveyResponseActivityRecordDao().getActivityFrequencyByWellbeingTypeBetweenTimes(finalStartTime, tonight, leastAchieved.toString());
 
+                // Get activities in forever if not available in the last week
                 if (activityWorstStats.size() == 0) {
                     activityWorstStats = db.surveyResponseActivityRecordDao().getActivityFrequencyByWellbeingTypeBetweenTimes(0, tonight, leastAchieved.toString());
                 }
 
-                Collections.reverse(activityWorstStats);
+                long activityBestId = InsightActivitySelectionHelper.selectMostAchieved(activityBestStats);
+                long activityWorstId = InsightActivitySelectionHelper.selectLeastAchieved(activityWorstStats, false);
 
-                ActivityRecord activityBest = null;
-                boolean shouldShow = true;
-                if (activityBestStats.size() > 0) {
-                    activityBest = db.activityRecordDao().getActivityRecordById(activityBestStats.get(0).getActivityId());
-                } else {
-                    shouldShow = false;
+                ActivityRecord activityBest = db.activityRecordDao().getActivityRecordById(activityBestId);
+                ActivityRecord activityWorst = db.activityRecordDao().getActivityRecordById(activityWorstId);
+
+                if(activityBest == null) {
+                    shouldShowBest = false;
                 }
 
-                ActivityRecord activityWorst;
-                if(activityWorstStats.size() > 0) {
-                    activityWorst = db.activityRecordDao().getActivityRecordById(activityWorstStats.get(0).getActivityId());
-                } else {
+                if(activityWorst == null) {
                     activityWorst = getPlaceholderActivity(leastAchieved);
                 }
 
@@ -117,8 +121,8 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
                 List<InsightsItem> insights = Arrays.asList(
                     new InsightsItem(timeText, "", 2, null, InsightType.DATE_PICKER_CARD, null),
                     new InsightsItem(getString(R.string.wellbeing_insights_graph), "", 2, null, InsightType.DOUBLE_GRAPH, currentValues),
-                    new InsightsItem(wellbeingBest, activityFavourite, positiveDescription, mostAchieved, shouldShow),
-                    new InsightsItem(wellbeingImprovement, activitySuggestion, improvementDescription, leastAchieved, true),
+                    new InsightsItem(wellbeingBest, activityFavourite, positiveDescription, mostAchieved, shouldShowBest),
+                    new InsightsItem(wellbeingImprovement, activitySuggestion, improvementDescription, leastAchieved, shouldShowWorst),
                     new InsightsItem(getString(R.string.wellbeing_connect), WaysToWellbeing.CONNECT, currentValues.getAchievedConnectNumber(), previousValues.getAchievedConnectNumber(), InsightType.SINGLE_INSIGHT_CARD),
                     new InsightsItem(getString(R.string.wellbeing_be_active), WaysToWellbeing.BE_ACTIVE, currentValues.getAchievedBeActiveNumber(), previousValues.getAchievedBeActiveNumber(), InsightType.SINGLE_INSIGHT_CARD),
                     new InsightsItem(getString(R.string.wellbeing_keep_learning), WaysToWellbeing.KEEP_LEARNING, currentValues.getAchievedKeepLearningNumber(), previousValues.getAchievedKeepLearningNumber(), InsightType.SINGLE_INSIGHT_CARD),
@@ -178,7 +182,7 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
         }
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(endTime);
-        this.selectedTime = cal.getTime();
+        this.selectedTime = cal.getTimeInMillis();
         this.daysLive.postValue(days);
     }
 
@@ -214,16 +218,19 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
             ActivityRecord bestActivityRecord = null;
             ActivityRecord worstActivityRecord = null;
 
-            if(wellbeingSpecificStats.size() > 0) {
-                bestActivityRecord = this.db.activityRecordDao().getActivityRecordById(wellbeingSpecificStats.get(0).getActivityId());
+            long mostAchievedId = InsightActivitySelectionHelper.selectMostAchieved(wellbeingSpecificStats);
+            long leastAchievedId = InsightActivitySelectionHelper.selectLeastAchieved(wellbeingSpecificStats, true);
+
+            // Only get the activity if one exists
+            if(mostAchievedId > 0) {
+                bestActivityRecord = this.db.activityRecordDao().getActivityRecordById(mostAchievedId);
             }
 
-            if(wellbeingSpecificStats.size() > 1) {
-                Collections.reverse(wellbeingSpecificStats);
-                worstActivityRecord = this.db.activityRecordDao().getActivityRecordById(wellbeingSpecificStats.get(0).getActivityId());
-            }
-
-            if (worstActivityRecord == null) {
+            // If the worst activity is set, then get it, otherwise, get the placeholder if there is only 1 item in the list
+            if(leastAchievedId > 0) {
+                worstActivityRecord = this.db.activityRecordDao().getActivityRecordById(leastAchievedId);
+            } else if(wellbeingSpecificStats.size() <= 1) {
+                // If the list length is less than 1 and worst activity is not set then there should be a default
                 worstActivityRecord = getPlaceholderActivity(wayToWellbeing);
             }
 
@@ -236,9 +243,11 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
                     populateInsightCard(finalBestActivityRecord, wayToWellbeing, helpContainer, getString(R.string.suggestions_best_activity), getString(R.string.suggestions_positive_description));
                 }
 
-                // Display the activity that could be improved
-                String description = getString(R.string.suggestions_improve_description) + " " + getString(WellbeingHelper.getWellbeingStringResource(wayToWellbeing));
-                populateInsightCard(finalWorstActivityRecord, wayToWellbeing, helpContainer, getString(R.string.suggestions_worst_activity), description);
+                if(finalWorstActivityRecord != null) {
+                    // Display the activity that could be improved
+                    String description = getString(R.string.suggestions_improve_description) + " " + getString(WellbeingHelper.getWellbeingStringResource(wayToWellbeing));
+                    populateInsightCard(finalWorstActivityRecord, wayToWellbeing, helpContainer, getString(R.string.suggestions_worst_activity), description);
+                }
             });
         });
     }

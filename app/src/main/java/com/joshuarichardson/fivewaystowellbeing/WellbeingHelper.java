@@ -138,6 +138,8 @@ public class WellbeingHelper {
                 return R.string.wellbeing_take_notice;
             case GIVE:
                 return R.string.wellbeing_give;
+            case UNASSIGNED:
+                return R.string.wellbeing_unassigned;
             default:
                 return 0;
         }

@@ -53,6 +53,7 @@
     <string name="wellbeing_take_notice">Take notice</string>
     <string name="wellbeing_keep_learning">Keep learning</string>
     <string name="wellbeing_give">Give</string>
+    <string name="wellbeing_unassigned">None</string>
     <string name="days_active">Days logged</string>
 
     <string name="wellbeing_connect_description">Connect is all about building relationships, in person or over video call it all counts, what really matters is that you spend time getting to know each other deeply, build a sense of trust, go deeper than the superficial, and most importantly make time to listen.</string>

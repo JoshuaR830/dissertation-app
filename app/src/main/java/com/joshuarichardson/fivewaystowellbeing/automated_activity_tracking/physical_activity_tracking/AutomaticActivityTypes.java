@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
+package com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking;
 
 public class AutomaticActivityTypes {
     public static final String CYCLE = "CYCLE";
