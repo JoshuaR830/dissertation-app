@@ -23,7 +23,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -150,8 +150,7 @@ public class CreateOrUpdatePassTimeActivity extends AppCompatActivity {
         int duration = Integer.parseInt(passTimeDuration.getText().toString());
         String type = passTimeType.getText().toString();
 
-        Date currentTime = new Date();
-        long unixTime = currentTime.getTime();
+        long unixTime = Calendar.getInstance().getTimeInMillis();
 
         String wayToWellbeing = wayToWellbeingInput.getText().toString();
 

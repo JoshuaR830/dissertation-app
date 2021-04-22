@@ -51,7 +51,6 @@ import com.joshuarichardson.fivewaystowellbeing.ui.insights.WayToWellbeingImageC
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -119,7 +118,7 @@ public class ProgressFragment extends Fragment {
 
     // Whenever something needs to be updated - do this
     public void updateSurveyItems() {
-        long startTime = TimeHelper.getStartOfDay(new Date().getTime());
+        long startTime = TimeHelper.getStartOfDay(Calendar.getInstance().getTimeInMillis());
         SurveyResponseDao surveyDao = db.surveyResponseDao();
         LinearLayout passTimeContainer = requireActivity().findViewById(R.id.survey_item_container);
 
@@ -192,7 +191,7 @@ public class ProgressFragment extends Fragment {
                                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, item.getActivityId(), sequenceNumber, "", item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false));
                                 Passtime passtime = new Passtime(record.getActivityName(), "", record.getActivityType(), record.getActivityWayToWellbeing(), activitySurveyId, item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false);
-                                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, record.getActivityType(), passtime, new Date().getTime());
+                                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, record.getActivityType(), passtime, Calendar.getInstance().getTimeInMillis());
                                 this.db.physicalActivityDao().updateIsPendingStatus(item.getActivityType(), false);
                                 this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(item.getActivityType(), true);
 
@@ -218,7 +217,7 @@ public class ProgressFragment extends Fragment {
             });
         };
 
-        long time = new Date().getTime();
+        long time = Calendar.getInstance().getTimeInMillis();
         long thisMorning = TimeHelper.getStartOfDay(time);
         long tonight = TimeHelper.getEndOfDay(time);
 
@@ -233,7 +232,7 @@ public class ProgressFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        long time = new Date().getTime();
+        long time = Calendar.getInstance().getTimeInMillis();
         long thisMorning = TimeHelper.getStartOfDay(time);
         long tonight = TimeHelper.getEndOfDay(time);
 
@@ -356,7 +355,7 @@ public class ProgressFragment extends Fragment {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
                 Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
-                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime, new Date().getTime());
+                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime, Calendar.getInstance().getTimeInMillis());
 
                 // If it has been edited, the page will reload everything
                 boolean isEdited = data.getExtras().getBoolean("is_edited", false);

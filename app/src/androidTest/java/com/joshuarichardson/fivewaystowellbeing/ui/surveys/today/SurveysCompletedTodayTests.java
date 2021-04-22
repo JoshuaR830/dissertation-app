@@ -14,7 +14,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.lifecycle.MutableLiveData;
@@ -67,7 +67,7 @@ public class SurveysCompletedTodayTests extends ProgressFragmentTestFixture {
     protected void defaultResponses() {
         super.defaultResponses();
 
-        long now = new Date().getTime();
+        long now = Calendar.getInstance().getTimeInMillis();
 
         List<SurveyResponse> list = Arrays.asList(
             new SurveyResponse(now, WaysToWellbeing.CONNECT.name(), "title 1", "description 1"),

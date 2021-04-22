@@ -17,7 +17,6 @@ import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -52,9 +51,9 @@ public class HistoryFragment extends Fragment {
 
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 for(SurveyResponse pageItem : historyPageData) {
-                    Date now = new Date(pageItem.getSurveyResponseTimestamp());
-                    long morning = TimeHelper.getStartOfDay(now.getTime());
-                    long night = TimeHelper.getEndOfDay(now.getTime());
+                    long time = pageItem.getSurveyResponseTimestamp();
+                    long morning = TimeHelper.getStartOfDay(time);
+                    long night = TimeHelper.getEndOfDay(time);
 
                     List<WellbeingGraphItem> graphItems = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(morning, night);
                     WellbeingGraphValueHelper wellbeingGraphValues = WellbeingGraphValueHelper.getWellbeingGraphValues(graphItems);

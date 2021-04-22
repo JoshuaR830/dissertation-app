@@ -42,7 +42,6 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -152,10 +151,8 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         });
 
         if(startTime > -1) {
-            long time = new Date(startTime).getTime();
-
-            long morning = TimeHelper.getStartOfDay(time);
-            long night = TimeHelper.getEndOfDay(time);
+            long morning = TimeHelper.getStartOfDay(startTime);
+            long night = TimeHelper.getEndOfDay(startTime);
             this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(morning, night).observe(this, wholeGraphUpdate);
         }
 
@@ -211,8 +208,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
                 Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
 
-                long time = new Date(startTime).getTime();
-                long night = TimeHelper.getEndOfDay(time);
+                long night = TimeHelper.getEndOfDay(startTime);
                 Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime, night);
 
                 // If it has been edited, the page will reload everything

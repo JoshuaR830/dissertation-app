@@ -7,7 +7,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.QuestionsToAsk;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyQuestionSet;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -262,8 +262,8 @@ public class WellbeingDatabaseModule {
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                     super.onCreate(db);
                     databaseWriteExecutor.execute(() -> {
-                        Date now = new Date();
-                        long setId = getWellbeingDatabase(context).surveyQuestionSetDao().insert(new SurveyQuestionSet(now.getTime(), 0));
+                        long now = Calendar.getInstance().getTimeInMillis();
+                        long setId = getWellbeingDatabase(context).surveyQuestionSetDao().insert(new SurveyQuestionSet(now, 0));
                         getWellbeingDatabase(context).questionsToAskDao().insert(new QuestionsToAsk("", "", setId, BASIC_SURVEY.toString(), 0, null));
                     });
                 }
@@ -272,8 +272,8 @@ public class WellbeingDatabaseModule {
                 public void onDestructiveMigration(@NonNull SupportSQLiteDatabase db) {
                     super.onDestructiveMigration(db);
                     databaseWriteExecutor.execute(() -> {
-                        Date now = new Date();
-                        long setId = getWellbeingDatabase(context).surveyQuestionSetDao().insert(new SurveyQuestionSet(now.getTime(), 0));
+                        long now = Calendar.getInstance().getTimeInMillis();
+                        long setId = getWellbeingDatabase(context).surveyQuestionSetDao().insert(new SurveyQuestionSet(now, 0));
                         getWellbeingDatabase(context).questionsToAskDao().insert(new QuestionsToAsk("", "", setId, BASIC_SURVEY.toString(), 0, null));
                     });
                 }

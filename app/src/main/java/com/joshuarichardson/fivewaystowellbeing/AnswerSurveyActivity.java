@@ -24,7 +24,7 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyBuilder;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -112,10 +112,10 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         });
     }
 
-    Date now = new Date();
+    long now = Calendar.getInstance().getTimeInMillis();
 
     // ToDo - what to do about this if there is no basic survey?
-    SurveyResponse surveyResponse = new SurveyResponse(now.getTime(), WaysToWellbeing.UNASSIGNED, "", "");
+    SurveyResponse surveyResponse = new SurveyResponse(now, WaysToWellbeing.UNASSIGNED, "", "");
 
     public void onSubmit(View v) {
         // Log the survey completion
@@ -204,7 +204,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         long finalActivityId = activityId;
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             long surveyId = this.surveyResponseDao.insert(surveyResponse);
-            this.db.wellbeingResultsDao().insert(new WellbeingResult(surveyId, now.getTime(), 0, 0, 0, 0, 0));
+            this.db.wellbeingResultsDao().insert(new WellbeingResult(surveyId, now, 0, 0, 0, 0, 0));
 
             for(int i = 0; i < questionAnswers.size(); i++) {
                 SurveyResponseElement surveyResponseElement = new SurveyResponseElement(surveyId, questionTitles.get(i), questionAnswers.get(i));

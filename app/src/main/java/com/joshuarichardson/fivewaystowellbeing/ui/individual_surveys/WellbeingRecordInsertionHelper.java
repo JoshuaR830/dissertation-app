@@ -7,7 +7,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 public class WellbeingRecordInsertionHelper {
@@ -15,7 +15,7 @@ public class WellbeingRecordInsertionHelper {
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<WellbeingQuestion> questions = db.wellbeingQuestionDao().getQuestionsByActivityType(activityType);
             int counter = 0;
-            long timeNow = new Date().getTime();
+            long timeNow = Calendar.getInstance().getTimeInMillis();
             for(WellbeingQuestion question : questions) {
                 db.wellbeingRecordDao().insert(new WellbeingRecord(false, timeNow, activitySurveyId, counter, question.getId()));
                 counter ++;

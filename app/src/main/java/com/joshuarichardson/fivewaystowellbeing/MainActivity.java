@@ -15,11 +15,11 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.joshuarichardson.fivewaystowellbeing.app_usage_tracking.ActivityTrackingService;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.app_usage_tracking.ActivityTrackingService;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
-import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.ActivityTracking;
-import com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking.AutomaticActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.ActivityTracking;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.AutomaticActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
@@ -36,7 +36,6 @@ import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimes
 import com.joshuarichardson.fivewaystowellbeing.ui.progress.ProgressFragment;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         if (preferences.getInt("database_version", 0) < 6) {
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 // Get all surveys since time of the update that made it work
-                List<SurveyResponse> surveyResponses = this.db.surveyResponseDao().getSurveyResponsesByTimestampRangeNotLive(1613509560000L, new Date().getTime());
+                List<SurveyResponse> surveyResponses = this.db.surveyResponseDao().getSurveyResponsesByTimestampRangeNotLive(1613509560000L, Calendar.getInstance().getTimeInMillis());
 
                 // For each survey update the database
                 for(SurveyResponse response : surveyResponses) {

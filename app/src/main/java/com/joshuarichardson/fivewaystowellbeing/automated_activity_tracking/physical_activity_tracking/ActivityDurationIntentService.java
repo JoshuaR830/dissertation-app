@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.physical_activity_tracking;
+package com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -124,6 +124,6 @@ public class ActivityDurationIntentService extends IntentService {
         long difference = actualNanos - eventNanos;
         // Reference https://stackoverflow.com/a/21600253/13496270
         long differenceMillis = TimeUnit.MILLISECONDS.convert(difference, TimeUnit.NANOSECONDS);
-        return new Date().getTime() - differenceMillis;
+        return Calendar.getInstance().getTimeInMillis() - differenceMillis;
     }
 }

@@ -39,8 +39,8 @@ import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
 import com.joshuarichardson.fivewaystowellbeing.ui.insights.WayToWellbeingImageColorizer;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import androidx.core.content.ContextCompat;
@@ -80,7 +80,7 @@ public class ActivityViewHelper {
             TextView surveyNote = todaySurveyContainer.findViewById(R.id.survey_list_description);
 
             long surveyTime = TimeHelper.getStartOfDay(surveyData.getTimestamp());
-            long currentTime = TimeHelper.getStartOfDay(new Date().getTime());
+            long currentTime = TimeHelper.getStartOfDay(Calendar.getInstance().getTimeInMillis());
 
             if (surveyTime != currentTime && surveyTime >= 0) {
                 TextView surveyTitle = todaySurveyContainer.findViewById(R.id.survey_list_title);
