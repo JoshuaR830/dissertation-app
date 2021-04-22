@@ -79,8 +79,10 @@ public class ActivitySelectionTests {
         long mostAchievedId = InsightActivitySelectionHelper.selectMostAchieved(activityStats);
         long leastAchievedId = InsightActivitySelectionHelper.selectLeastAchieved(activityStats, false);
 
+        // When equal and not compared to max, either can be most or least as they are the same - allows for displaying suggestions where only 1 suggestion is shown
+        // and required regardless of whether they are equal or not
         assertThat(mostAchievedId).isAnyOf(1L, 2L);
-        assertThat(leastAchievedId).isEqualTo(0L);
+        assertThat(leastAchievedId).isAnyOf(1L, 2L);
     }
 
     @Test
