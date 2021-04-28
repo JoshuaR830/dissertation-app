@@ -10,7 +10,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ViewActivitiesActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -54,7 +54,7 @@ import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class ViewPasstimesTests {
+public class ViewActivitiesTests {
     @Rule(order = 0)
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
@@ -62,7 +62,7 @@ public class ViewPasstimesTests {
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
 
     @Rule(order = 2)
-    public ActivityScenarioRule<ViewPassTimesActivity> viewPasstimesActivity = new ActivityScenarioRule<>(ViewPassTimesActivity.class);
+    public ActivityScenarioRule<ViewActivitiesActivity> viewActivitiesActivity = new ActivityScenarioRule<>(ViewActivitiesActivity.class);
 
     @Before
     public void setUp() throws InterruptedException {
@@ -97,16 +97,16 @@ public class ViewPasstimesTests {
     }
 
     @Test
-    public void onThePasstimeList_allPasstimesShouldBeDisplayed() {
-        onView(withId(R.id.passTimeRecyclerView))
+    public void onTheActivityList_allActivitiesShouldBeDisplayed() {
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(withText("Activity name 1")))));
 
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(1))
             .check(matches(atRecyclerPosition(1, hasDescendant(withText("Activity name 2")))));
 
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(2))
             .check(matches(atRecyclerPosition(2, hasDescendant(withText("Activity name 3")))));
 
@@ -115,20 +115,20 @@ public class ViewPasstimesTests {
     }
 
     @Test
-    public void onThePasstimeList_TheSearchBoxShouldBeShown() {
-        onView(withId(R.id.passtime_search_box_container))
+    public void onTheActivityList_TheSearchBoxShouldBeShown() {
+        onView(withId(R.id.activity_search_box_container))
             .check(matches(withMaterialHint("Search for activity")));
 
-        onView(withId(R.id.passtime_search_box))
+        onView(withId(R.id.activity_search_box))
             .check(matches(isDisplayed()));
     }
 
     @Test
-    public void onSearchForKnownPasstime_TheItemShouldBeDisplayedFirst() {
-        onView(withId(R.id.passtime_search_box))
+    public void onSearchForKnownActivity_TheItemShouldBeDisplayedFirst() {
+        onView(withId(R.id.activity_search_box))
             .perform(typeText("Activity name 3"), closeSoftKeyboard());
 
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(withText("Activity name 3")))));
 
@@ -137,11 +137,11 @@ public class ViewPasstimesTests {
     }
 
     @Test
-    public void onSearchForPartialKnownPasstime_TheItemShouldBeDisplayedFirst() {
-        onView(withId(R.id.passtime_search_box))
+    public void onSearchForPartialKnownActivity_TheItemShouldBeDisplayedFirst() {
+        onView(withId(R.id.activity_search_box))
             .perform(typeText("3"), closeSoftKeyboard());
 
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(withText("Activity name 3")))));
 
@@ -150,11 +150,11 @@ public class ViewPasstimesTests {
     }
 
     @Test
-    public void onSearchForMultiPartialKnownPasstime_TheItemShouldBeDisplayedFirst() {
-        onView(withId(R.id.passtime_search_box))
+    public void onSearchForMultiPartialKnownActivity_TheItemShouldBeDisplayedFirst() {
+        onView(withId(R.id.activity_search_box))
             .perform(typeText("name 3"), closeSoftKeyboard());
 
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(atRecyclerPosition(0, hasDescendant(withText("Activity name 3")))));
 
@@ -163,26 +163,26 @@ public class ViewPasstimesTests {
     }
 
     @Test
-    public void onSearchForUnknownPasstime_ACreateButtonShouldBeDisplayed() throws InterruptedException {
-        onView(withId(R.id.passtime_search_box))
+    public void onSearchForUnknownActivity_ACreateButtonShouldBeDisplayed() throws InterruptedException {
+        onView(withId(R.id.activity_search_box))
             .perform(typeText("New activity"));
 
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .check(matches(not(isDisplayed())));
 
         onView(withId(R.id.create_from_search_button))
             .check(matches(isDisplayed()))
             .perform(click());
 
-        onView(withId(R.id.pass_time_name_input))
+        onView(withId(R.id.activity_name_input))
             .check(matches(withText("New activity")));
 
-        onView(withId(R.id.pass_time_type_input)).perform(click());
+        onView(withId(R.id.activity_type_input)).perform(click());
         onData(instanceOf(String.class))
             .inRoot(RootMatchers.isPlatformPopup())
             .atPosition(0)
             .perform(click());
 
-        onView(withId(R.id.passtime_submit_button)).perform(click());
+        onView(withId(R.id.activity_submit_button)).perform(click());
     }
 }

@@ -14,7 +14,7 @@
 
     <PreferenceCategory android:title="@string/settings_category_auto_tracking">
         <Preference
-            android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.ActivitySettingsFragment"
+            android:fragment="com.joshuarichardson.fivewaystowellbeing.ui.settings.PhysicalActivitySettingsFragment"
             android:key="settings_category_auto_tracking"
             android:title="@string/settings_category_auto_physical_tracking"
             app:useSimpleSummaryProvider="true"

@@ -100,7 +100,7 @@ public class SurveysCompletedTodayTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Survey note"))));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 0)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 0)))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
 
@@ -108,7 +108,7 @@ public class SurveysCompletedTodayTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Activity name 1"))));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 0)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 0)))
             .perform(scrollTo())
             .check(matches(withTagValue(is((Object) "KEEP_LEARNING"))));
 
@@ -139,7 +139,7 @@ public class SurveysCompletedTodayTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.check_box_container), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .check(matches(not(isDisplayed())));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 1)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 1)))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
 
@@ -147,7 +147,7 @@ public class SurveysCompletedTodayTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Activity name 2"))));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 1)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 1)))
             .perform(scrollTo())
             .check(matches(withTagValue(is((Object) "KEEP_LEARNING"))));
 
@@ -171,18 +171,18 @@ public class SurveysCompletedTodayTests extends ProgressFragmentTestFixture {
         onView(allOf(withId(R.id.checkbox), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 1)), nthChildOf(withId(R.id.check_box_container), 1)))
             .check(doesNotExist());
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 2)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 2)))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 2)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 2)))
             .perform(scrollTo())
             .check(matches(withTagValue(is((Object) "KEEP_LEARNING"))));
 
         onView(allOf(withId(R.id.activity_note_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 2))))
             .check(matches(not(isDisplayed())));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 3)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 3)))
             .check(doesNotExist());
     }
 }

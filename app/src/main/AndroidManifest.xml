@@ -25,15 +25,15 @@
             android:label="@string/launch_view_surveys"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".ui.pass_times.edit.CreateOrUpdatePassTimeActivity"
+            android:name=".ui.activities.edit.CreateOrUpdateActivityActivity"
             android:label="@string/launch_create_activity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AnswerSurveyActivity"
             android:label="@string/launch_answer_survey" />
         <activity
-            android:name=".ui.pass_times.edit.ViewPassTimesActivity"
-            android:label="@string/launch_view_pass_time"
+            android:name=".ui.activities.edit.ViewActivitiesActivity"
+            android:label="@string/launch_view_activity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ui.wellbeing_support.WellbeingSupportWebViewActivity"

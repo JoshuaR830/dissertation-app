@@ -30,9 +30,9 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
-import com.joshuarichardson.fivewaystowellbeing.ui.history.ViewSurveyResponsesFragment;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.history.HistoryParentFragment;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.CreateOrUpdateActivityActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ViewActivitiesActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.progress.ProgressFragment;
 
 import java.util.Calendar;
@@ -342,8 +342,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
 
-            if(navHostFragment.getChildFragmentManager().getFragments().get(0).getClass() == ViewSurveyResponsesFragment.class) {
-                ViewSurveyResponsesFragment viewSurveyResponseFragment = (ViewSurveyResponsesFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+            if(navHostFragment.getChildFragmentManager().getFragments().get(0).getClass() == HistoryParentFragment.class) {
+                HistoryParentFragment viewSurveyResponseFragment = (HistoryParentFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
                 viewSurveyResponseFragment.instantiateEditable();
             }
             return true;
@@ -360,13 +360,13 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onCreatePassTimeButtonClicked(View v) {
-        Intent answerSurveyIntent = new Intent(MainActivity.this, CreateOrUpdatePassTimeActivity.class);
+    public void onCreateActivityButtonClicked(View v) {
+        Intent answerSurveyIntent = new Intent(MainActivity.this, CreateOrUpdateActivityActivity.class);
         startActivity(answerSurveyIntent);
     }
 
     public void onLaunchActivitiesActivity(View v) {
-        Intent activityViewIntent = new Intent(this, ViewPassTimesActivity.class);
+        Intent activityViewIntent = new Intent(this, ViewActivitiesActivity.class);
         startActivity(activityViewIntent);
     }
 

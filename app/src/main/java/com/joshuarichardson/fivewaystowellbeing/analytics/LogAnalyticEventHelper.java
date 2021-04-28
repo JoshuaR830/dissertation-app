@@ -19,10 +19,10 @@ public class LogAnalyticEventHelper {
     }
 
     // Call to log a specific event
-    public void logCreatePasstimeEvent(Object currentActivityObject) {
+    public void logCreateActivityEvent(Object currentActivityObject) {
         Bundle analyticsBundle = new Bundle();
         analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivityObject.getClass().getSimpleName());
-        this.firebaseAnalytics.logEvent(AnalyticEvents.Events.CREATE_PASSTIME, analyticsBundle);
+        this.firebaseAnalytics.logEvent(AnalyticEvents.Events.CREATE_ACTIVITY, analyticsBundle);
     }
 
     public void logCreateSurveyEvent(Object currentActivityObject) {

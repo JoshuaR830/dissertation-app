@@ -2,7 +2,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.activities;
 
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.CreateOrUpdateActivityActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,13 +28,13 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
 @HiltAndroidTest
-public class PassTimeErrorValidationTests {
+public class ActivityErrorValidationTests {
 
     @Rule
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
 
     @Rule
-    public ActivityScenarioRule<CreateOrUpdatePassTimeActivity> createPasstimeActivity = new ActivityScenarioRule<>(CreateOrUpdatePassTimeActivity.class);
+    public ActivityScenarioRule<CreateOrUpdateActivityActivity> createActivityActivity = new ActivityScenarioRule<>(CreateOrUpdateActivityActivity.class);
 
     @Before
     public void setUp() throws InterruptedException {
@@ -44,16 +44,16 @@ public class PassTimeErrorValidationTests {
 
     @Test
     public void whenNameIsEnteredButTypeIsEmpty_OnlyNameShouldHaveErrorText() {
-        onView(withId(R.id.pass_time_name_input)).perform(typeText("Activity name"), closeSoftKeyboard());
-        onView(withId(R.id.passtime_submit_button)).perform(click());
+        onView(withId(R.id.activity_name_input)).perform(typeText("Activity name"), closeSoftKeyboard());
+        onView(withId(R.id.activity_submit_button)).perform(click());
 
-        onView(withId(R.id.pass_time_name_input_container)).check(matches(not(withMaterialError("Please enter a name"))));
-        onView(withId(R.id.pass_time_type_input_container)).check(matches(withMaterialError("Please choose a type")));
+        onView(withId(R.id.activity_name_input_container)).check(matches(not(withMaterialError("Please enter a name"))));
+        onView(withId(R.id.activity_type_input_container)).check(matches(withMaterialError("Please choose a type")));
     }
 
     @Test
     public void whenTypeIsEnteredButNameIsEmpty_OnlyTypeShouldHaveErrorText() {
-        onView(withId(R.id.pass_time_type_input)).perform(click());
+        onView(withId(R.id.activity_type_input)).perform(click());
 
         DataInteraction popup = onData(instanceOf(String.class))
             .inRoot(RootMatchers.isPlatformPopup());
@@ -61,25 +61,25 @@ public class PassTimeErrorValidationTests {
         popup.atPosition(0)
             .perform(click());
 
-        onView(withId(R.id.passtime_submit_button))
+        onView(withId(R.id.activity_submit_button))
             .perform(click());
 
-        onView(withId(R.id.pass_time_name_input_container))
+        onView(withId(R.id.activity_name_input_container))
             .check(matches(withMaterialError("Please enter a name")));
 
-        onView(withId(R.id.pass_time_type_input_container))
+        onView(withId(R.id.activity_type_input_container))
             .check(matches(not(withMaterialError("Please choose a type"))));
     }
 
     @Test
     public void whenNeitherTypeOrNameAreEntered_BothShouldShowErrorText() {
-        onView(withId(R.id.passtime_submit_button))
+        onView(withId(R.id.activity_submit_button))
             .perform(click());
 
-        onView(withId(R.id.pass_time_name_input_container))
+        onView(withId(R.id.activity_name_input_container))
             .check(matches(withMaterialError("Please enter a name")));
 
-        onView(withId(R.id.pass_time_type_input_container))
+        onView(withId(R.id.activity_type_input_container))
             .check(matches(withMaterialError("Please choose a type")));
     }
 }

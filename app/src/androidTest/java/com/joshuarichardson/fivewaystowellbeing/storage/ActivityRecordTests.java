@@ -58,7 +58,7 @@ public class ActivityRecordTests {
     }
 
     @Test
-    public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() throws TimeoutException, InterruptedException {
+    public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() {
         ActivityRecord insertedActivity = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false);
         long activityRecordId = this.activityDao.insert(insertedActivity);
         insertedActivity.setActivityRecordId(activityRecordId);
@@ -96,7 +96,7 @@ public class ActivityRecordTests {
     }
 
     @Test
-    public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() throws TimeoutException, InterruptedException {
+    public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() {
         DatabaseInsertionHelper.insert(new ActivityRecord[]{
                 new ActivityRecord("Snapchat", 1201, 1608076799, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false), // Should not be included
                 new ActivityRecord("Google Photos", 1202, 1608076800, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false), // Should be included

@@ -1,15 +1,15 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.history;
 
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesFragment;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ActivityHistoryFragment;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 // Reference: https://developer.android.com/guide/navigation/navigation-swipe-view-2
-public class SurveyResponsesPagerAdapter extends FragmentStateAdapter {
+public class HistoryPagerAdapter extends FragmentStateAdapter {
 
-    public SurveyResponsesPagerAdapter(@NonNull Fragment fragment) {
+    public HistoryPagerAdapter(@NonNull Fragment fragment) {
         super(fragment);
     }
 
@@ -20,10 +20,10 @@ public class SurveyResponsesPagerAdapter extends FragmentStateAdapter {
 
         Fragment fragment;
         if(position == 0) {
-            fragment = new HistoryFragment();
+            fragment = new SurveyHistoryFragment();
             return fragment;
         } else if(position == 1) {
-            fragment = new ViewPassTimesFragment();
+            fragment = new ActivityHistoryFragment();
             return fragment;
         }
 

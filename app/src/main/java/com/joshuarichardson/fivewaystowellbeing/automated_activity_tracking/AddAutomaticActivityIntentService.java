@@ -18,7 +18,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
-import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
+import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 
 import java.util.Calendar;
@@ -31,7 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
 
 @AndroidEntryPoint
-// ToDo - intent service is deprecated in new versions of Android - but it works for now
 public class AddAutomaticActivityIntentService extends IntentService {
 
     @Inject
@@ -112,8 +111,8 @@ public class AddAutomaticActivityIntentService extends IntentService {
 
             int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
             long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", activityStartTime - startTime, activityEndTime - startTime, 0, false));
-            Passtime passtime = new Passtime(activityDetails.getActivityName(), "", activityDetails.getActivityType(), activityDetails.getActivityWayToWellbeing(), activitySurveyId, activityStartTime - startTime, activityEndTime - startTime, 0, false);
-            WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityDetails.getActivityType(), passtime, currentTime);
+            UserActivity userActivity = new UserActivity(activityDetails.getActivityName(), "", activityDetails.getActivityType(), activityDetails.getActivityWayToWellbeing(), activitySurveyId, activityStartTime - startTime, activityEndTime - startTime, 0, false);
+            WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityDetails.getActivityType(), userActivity, currentTime);
             this.db.physicalActivityDao().updateIsPendingStatus(eventType, false);
             this.db.physicalActivityDao().updateStartTime(eventType, 0);
 

@@ -36,11 +36,11 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
+import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ViewActivitiesActivity;
 
 import java.util.List;
 
@@ -146,7 +146,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         // ToDo - at some point make this visible and allow it to be edited
         Button addActivityButton = findViewById(R.id.add_activity_button);
         addActivityButton.setOnClickListener(v -> {
-            Intent activityIntent = new Intent(this, ViewPassTimesActivity.class);
+            Intent activityIntent = new Intent(this, ViewActivitiesActivity.class);
             startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
         });
 
@@ -201,22 +201,22 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             analyticsHelper.logWayToWellbeingActivity(this, WaysToWellbeing.valueOf(wayToWellbeing));
 
             // Sequence number based on number of children in the linear layout
-            LinearLayout passtimeContainer = this.findViewById(R.id.survey_item_container);
+            LinearLayout activityContainer = this.findViewById(R.id.survey_item_container);
 
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
-                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
+                UserActivity activity = new UserActivity(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
 
                 long night = TimeHelper.getEndOfDay(startTime);
-                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime, night);
+                UserActivity updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityType, activity, night);
 
                 // If it has been edited, the page will reload everything
                 boolean isEdited = data.getExtras().getBoolean("is_edited", false);
                 if(isEdited) {
                     updateSurveyItems();
                 } else {
-                    ActivityViewHelper.createPasstimeItem(this, passtimeContainer, updatedPasstime, this.db, getSupportFragmentManager(), analyticsHelper, true);
+                    ActivityViewHelper.createActivityItem(this, activityContainer, updatedActivity, this.db, getSupportFragmentManager(), analyticsHelper, true);
                 }
             });
         }

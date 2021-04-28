@@ -92,7 +92,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
     @Test
     public void verifyCorrectBehaviourForNoteInputBox() throws InterruptedException {
         WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 0)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 0)))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
 

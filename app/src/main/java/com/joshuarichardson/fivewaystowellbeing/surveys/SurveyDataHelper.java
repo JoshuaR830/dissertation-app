@@ -15,7 +15,7 @@ public class SurveyDataHelper {
         }
 
         ArrayList<Long> activityRecordIds = new ArrayList<>();
-        HashMap<Long, Passtime> list = new HashMap<>();
+        HashMap<Long, UserActivity> list = new HashMap<>();
 
         int counter = 0;
         for(RawSurveyData d : data) {
@@ -30,13 +30,13 @@ public class SurveyDataHelper {
 
             // If the activity doesn't exist in here already - add it
             if (!list.containsKey(activityId)) {
-                list.put(activityId, new Passtime(d.getActivityName(), d.getActivityNote(), d.getActivityType(), d.getWayToWellbeing(), d.getSurveyActivityId(), d.getStartTime(), d.getEndTime(), d.getEmotion(), d.getIsDone()));
+                list.put(activityId, new UserActivity(d.getActivityName(), d.getActivityNote(), d.getActivityType(), d.getWayToWellbeing(), d.getSurveyActivityId(), d.getStartTime(), d.getEndTime(), d.getEmotion(), d.getIsDone()));
                 activityRecordIds.add(activityId);
             }
 
-            Passtime passtime = list.get(activityId);
+            UserActivity userActivity = list.get(activityId);
 
-            if(passtime == null) {
+            if(userActivity == null) {
                 return null;
             }
 
@@ -44,7 +44,7 @@ public class SurveyDataHelper {
             if(d.getWellbeingRecordId() < 0 || d.getSurveyActivityId() < 0) {
                 continue;
             }
-            passtime.addQuestionToList(new Question(d.getQuestion(), d.getWellbeingRecordId(), d.getUserInput()));
+            userActivity.addQuestionToList(new Question(d.getQuestion(), d.getWellbeingRecordId(), d.getUserInput()));
         }
 
         return new SurveyDay(data.get(0).getDate(), data.get(0).getSurveyNote(), activityRecordIds, list);

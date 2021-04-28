@@ -101,12 +101,12 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
         // When a survey exists there should not be an insertion
         verify(this.surveyDao, Mockito.atLeast(1)).getSurveyResponsesByTimestampRange(anyLong(), anyLong());
 
-        // Start on main activity - this should launch the passtime view
+        // Start on main activity - this should launch the activity view
         onView(withId(R.id.add_activity_button))
             .perform(scrollTo(), click());
 
         // This should select an item from the activity
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(isDisplayed()))
             .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -115,7 +115,7 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(withText("Activity 1")));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 0)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 0)))
             .perform(scrollTo())
             .check(matches(withTagValue(is((Object) "BE_ACTIVE"))));
 
@@ -142,7 +142,7 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
             .perform(scrollTo(), click());
 
         // This should select an item from the activity
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(1))
             .check(matches(isDisplayed()))
             .perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
@@ -151,7 +151,7 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(withText("Activity 2")));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 1)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 1)))
             .perform(scrollTo())
             .check(matches(withTagValue(is((Object) "KEEP_LEARNING"))));
 

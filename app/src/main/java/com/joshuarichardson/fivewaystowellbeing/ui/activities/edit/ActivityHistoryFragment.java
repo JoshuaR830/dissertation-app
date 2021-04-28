@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit;
+package com.joshuarichardson.fivewaystowellbeing.ui.activities.edit;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,16 +38,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.PasstimeClickListener, PassTimesAdapter.ItemCountUpdateListener {
+public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapter.ActivityClickListener, ActivitiesAdapter.ItemCountUpdateListener {
 
-    private RecyclerView passTimeRecycler;
+    private RecyclerView activityRecycler;
 
     @Inject
     WellbeingDatabase db;
 
-    private LiveData<List<ActivityRecord>> passTimes;
-    private Observer<List<ActivityRecord>> passTimeObserver;
-    private PassTimesAdapter passtimeAdapter;
+    private LiveData<List<ActivityRecord>> activities;
+    private Observer<List<ActivityRecord>> activityObserver;
+    private ActivitiesAdapter activityAdapter;
     private View root;
     private boolean isEditable;
     private boolean isEdited;
@@ -55,7 +55,7 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.root = inflater.inflate(R.layout.fragment_view_pass_times, container, false);
+        this.root = inflater.inflate(R.layout.fragment_view_activities, container, false);
 
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<ActivityRecord> oldActivities = db.activityRecordDao().getActivitiesInTimeRange(0, 1613509560000L);
@@ -83,24 +83,24 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
             }
         });
 
-        ActivityRecordDao passTimeDao = this.db.activityRecordDao();
+        ActivityRecordDao activityDao = this.db.activityRecordDao();
 
-        passTimes = passTimeDao.getAllActivities();
+        activities = activityDao.getAllActivities();
 
-        this.passTimeRecycler = root.findViewById(R.id.passTimeRecyclerView);
-        this.passTimeRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        this.activityRecycler = root.findViewById(R.id.activity_recycler_view);
+        this.activityRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        this.passtimeAdapter = new PassTimesAdapter(getContext(), new ArrayList<>(), this, this);
-        this.passTimeRecycler.setAdapter(this.passtimeAdapter);
+        this.activityAdapter = new ActivitiesAdapter(getContext(), new ArrayList<>(), this, this);
+        this.activityRecycler.setAdapter(this.activityAdapter);
 
-        EditText searchTextView = root.findViewById(R.id.passtime_search_box);
+        EditText searchTextView = root.findViewById(R.id.activity_search_box);
 
-        passTimeObserver = passTimeData -> {
+        activityObserver = ActivityData -> {
             // This updates the recycler view and filters it by the search term for better navigation
-            this.passtimeAdapter.setValues(passTimeData, searchTextView.getText().toString());
+            this.activityAdapter.setValues(ActivityData, searchTextView.getText().toString());
         };
 
-        passTimes.observe(getActivity(), passTimeObserver);
+        activities.observe(getActivity(), activityObserver);
 
         searchTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -108,7 +108,7 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                ViewPassTimesFragment.this.passtimeAdapter.getFilter().filter(s);
+                ActivityHistoryFragment.this.activityAdapter.getFilter().filter(s);
             }
 
             @Override
@@ -132,9 +132,9 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
     }
 
     public void onCreateFromSearchButtonClicked(View v) {
-        EditText searchText = this.root.findViewById(R.id.passtime_search_box);
+        EditText searchText = this.root.findViewById(R.id.activity_search_box);
         String searchQuery = searchText.getText().toString();
-        Intent createActivityIntent = new Intent(getContext(), CreateOrUpdatePassTimeActivity.class);
+        Intent createActivityIntent = new Intent(getContext(), CreateOrUpdateActivityActivity.class);
 
         Bundle activityBundle = new Bundle();
         activityBundle.putString("new_activity_name", searchQuery);
@@ -146,7 +146,7 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
     @Override
     public void itemCount(int size) {
         Button button = this.root.findViewById(R.id.create_from_search_button);
-        View card = this.root.findViewById(R.id.passTimeRecyclerView);
+        View card = this.root.findViewById(R.id.activity_recycler_view);
         if(size > 0) {
             button.setVisibility(View.INVISIBLE);
             card.setVisibility(View.VISIBLE);
@@ -157,39 +157,39 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
     }
 
     @Override
-    public void onItemClick(View view, ActivityRecord passtime) {
-        // As this is used in 2 places but only one of them has clickable recycler items - only make clicks work on ViewPassTimesActivity
-        if(getActivity().getClass().getName().equals(ViewPassTimesActivity.class.getName())) {
-            Intent passtimeResult = new Intent();
-            Bundle passtimeBundle = new Bundle();
-            passtimeBundle.putLong("activity_id", passtime.getActivityRecordId());
-            passtimeBundle.putString("activity_type", passtime.getActivityType());
-            passtimeBundle.putString("activity_name", passtime.getActivityName());
-            passtimeBundle.putString("activity_way_to_wellbeing", passtime.getActivityWayToWellbeing());
-            passtimeBundle.putBoolean("is_edited", this.isEdited);
-            passtimeResult.putExtras(passtimeBundle);
-            getActivity().setResult(Activity.RESULT_OK, passtimeResult);
+    public void onItemClick(View view, ActivityRecord activity) {
+        // As this is used in 2 places but only one of them has clickable recycler items - only make clicks work on ViewActivitiesActivity
+        if(getActivity().getClass().getName().equals(ViewActivitiesActivity.class.getName())) {
+            Intent activityResult = new Intent();
+            Bundle activityBundle = new Bundle();
+            activityBundle.putLong("activity_id", activity.getActivityRecordId());
+            activityBundle.putString("activity_type", activity.getActivityType());
+            activityBundle.putString("activity_name", activity.getActivityName());
+            activityBundle.putString("activity_way_to_wellbeing", activity.getActivityWayToWellbeing());
+            activityBundle.putBoolean("is_edited", this.isEdited);
+            activityResult.putExtras(activityBundle);
+            getActivity().setResult(Activity.RESULT_OK, activityResult);
             getActivity().finish();
         }
     }
 
     @Override
-    public void onEditClick(View view, ActivityRecord passtime) {
+    public void onEditClick(View view, ActivityRecord activity) {
 
         this.isEdited = true;
-        // Launch activity to update a passtime
-        Intent editActivityIntent = new Intent(getActivity(), CreateOrUpdatePassTimeActivity.class);
+        // Launch activity to update a Activity
+        Intent editActivityIntent = new Intent(getActivity(), CreateOrUpdateActivityActivity.class);
         Bundle editBundle = new Bundle();
-        editBundle.putLong("activity_id", passtime.getActivityRecordId());
-        editBundle.putString("activity_name", passtime.getActivityName());
-        editBundle.putString("activity_type", passtime.getActivityType());
-        editBundle.putString("activity_way_to_wellbeing", passtime.getActivityWayToWellbeing());
+        editBundle.putLong("activity_id", activity.getActivityRecordId());
+        editBundle.putString("activity_name", activity.getActivityName());
+        editBundle.putString("activity_type", activity.getActivityType());
+        editBundle.putString("activity_way_to_wellbeing", activity.getActivityWayToWellbeing());
         editActivityIntent.putExtras(editBundle);
         startActivity(editActivityIntent);
     }
 
     @Override
-    public void onDeleteClick(View view, ActivityRecord passtime) {
+    public void onDeleteClick(View view, ActivityRecord activity) {
         new MaterialAlertDialogBuilder(requireActivity())
             .setTitle(R.string.title_delete_activity)
             .setMessage(R.string.body_delete_activity)
@@ -197,7 +197,7 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
             .setPositiveButton(R.string.button_delete, (dialog, which) -> {
                 // Set the pass time to hidden
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    this.db.activityRecordDao().flagHidden(passtime.getActivityRecordId(), true);
+                    this.db.activityRecordDao().flagHidden(activity.getActivityRecordId(), true);
                 });
             })
             .setNegativeButton(R.string.button_cancel, (dialog, which) -> {})
@@ -224,6 +224,6 @@ public class ViewPassTimesFragment extends Fragment implements PassTimesAdapter.
             this.isEditable = true;
         }
         // This updates the recycler view and filters it by the search term for better navigation
-        this.passtimeAdapter.editableList(this.isEditable);
+        this.activityAdapter.editableList(this.isEditable);
     }
 }

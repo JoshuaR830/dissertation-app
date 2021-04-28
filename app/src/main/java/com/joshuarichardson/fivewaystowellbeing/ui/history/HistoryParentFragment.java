@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesFragment;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ActivityHistoryFragment;
 
 import javax.inject.Inject;
 
@@ -20,7 +20,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ViewSurveyResponsesFragment extends Fragment {
+public class HistoryParentFragment extends Fragment {
     @Inject
     WellbeingDatabase db;
 
@@ -35,7 +35,7 @@ public class ViewSurveyResponsesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SurveyResponsesPagerAdapter adapter = new SurveyResponsesPagerAdapter(this);
+        HistoryPagerAdapter adapter = new HistoryPagerAdapter(this);
 
         ViewPager2 viewPager = view.findViewById(R.id.history_pager);
         viewPager.setAdapter(adapter);
@@ -45,7 +45,7 @@ public class ViewSurveyResponsesFragment extends Fragment {
             if(position == 0) {
                 tab.setText(R.string.wellbeing_logs_title);
             } else if (position == 1){
-                tab.setText(R.string.navigation_pass_times);
+                tab.setText(R.string.navigation_activities);
             }
         })).attach();
     }
@@ -60,12 +60,12 @@ public class ViewSurveyResponsesFragment extends Fragment {
                 return;
             }
 
-            if (activeFragment.getClass() != ViewPassTimesFragment.class) {
+            if (activeFragment.getClass() != ActivityHistoryFragment.class) {
                 return;
             }
 
-            ViewPassTimesFragment passtimeFragment = (ViewPassTimesFragment) activeFragment;
-            passtimeFragment.makeEditable();
+            ActivityHistoryFragment activityFragment = (ActivityHistoryFragment) activeFragment;
+            activityFragment.makeEditable();
         }
     }
 }

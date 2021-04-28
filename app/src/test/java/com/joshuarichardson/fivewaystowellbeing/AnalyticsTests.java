@@ -37,15 +37,15 @@ public class AnalyticsTests {
     }
 
     @Test
-    public void whenCreatePassTimeEventCalled_ThenFirebaseAnalyticsLogEventsShouldBeCalled() {
+    public void whenCreateActivityEventCalled_ThenFirebaseAnalyticsLogEventsShouldBeCalled() {
         LogAnalyticEventHelper analyticsHelper = new LogAnalyticEventHelper(this.mockFirebaseAnalytics);
-        analyticsHelper.logCreatePasstimeEvent(this);
+        analyticsHelper.logCreateActivityEvent(this);
 
         // How to capture variables https://howtodoinjava.com/mockito/verify-multiple-method-arguments/
         verify(mockFirebaseAnalytics, times(1)).logEvent(stringCaptor.capture(), any(Bundle.class));
 
         List<String> strings = stringCaptor.getAllValues();
-        assertThat(strings.get(0)).isEqualTo("create_passtime");
+        assertThat(strings.get(0)).isEqualTo("create_activity");
     }
 
     @Test

@@ -2,7 +2,7 @@
     <string name="app_name">Five ways to wellbeing</string>
 
     <string name="launch_view_surveys">Your wellbeing log</string>
-    <string name="launch_view_pass_time">View activities</string>
+    <string name="launch_view_activity">View activities</string>
     <string name="launch_create_activity">Record activity</string>
     <string name="launch_answer_survey">Complete log</string>
     <string name="wellbeing_logs_title">Wellbeing logs</string>
@@ -10,7 +10,7 @@
     <string name="view_more">View more</string>
     <string name="wellbeing_graph_title">Your ways to wellbeing</string>
     <string name="wellbeing_insights_graph">Daily ways to wellbeing</string>
-    <string name="passtime_search_hint">Search for activity</string>
+    <string name="activity_search_hint">Search for activity</string>
     <string name="create_non_existent_button">Create new</string>
 
     <string name="log_your_day_title">Keep track of your day</string>
@@ -23,10 +23,10 @@
     <string name="expand_button">Expand</string>
     <string name="add_activity_button">Activity</string>
 
-    <string name="passtime_title">Add activity details</string>
-    <string name="passtime_name">Activity name</string>
-    <string name="passtime_duration">Activity duration</string>
-    <string name="passtime_type">Activity type</string>
+    <string name="activity_title">Add activity details</string>
+    <string name="activity_name">Activity name</string>
+    <string name="activity_duration">Activity duration</string>
+    <string name="activity_type">Activity type</string>
 
     <string name="survey_details_title">Wellbeing information</string>
     <string name="survey_input_title">Enter a title</string>
@@ -38,7 +38,7 @@
     <string name="submit_button">Submit</string>
     <string name="navigation_home">Progress</string>
     <string name="navigation_surveys">History</string>
-    <string name="navigation_pass_times">Activities</string>
+    <string name="navigation_activities">Activities</string>
     <string name="navigation_insights">Insights</string>
 
     <string name="wellbeing_insight_prefix">Times achieved:</string>

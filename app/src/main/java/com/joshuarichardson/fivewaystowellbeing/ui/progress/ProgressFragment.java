@@ -41,14 +41,14 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
-import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
+import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.insights.WayToWellbeingImageColorizer;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ViewActivitiesActivity;
 
 import java.util.Calendar;
 import java.util.List;
@@ -94,7 +94,7 @@ public class ProgressFragment extends Fragment {
         Button addActivityButton = view.findViewById(R.id.add_activity_button);
         addActivityButton.setOnClickListener(v -> {
             this.shouldUpdate = false;
-            Intent activityIntent = new Intent(requireActivity(), ViewPassTimesActivity.class);
+            Intent activityIntent = new Intent(requireActivity(), ViewActivitiesActivity.class);
             startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
 
             // When activity button clicked, clear pending notifications
@@ -120,10 +120,10 @@ public class ProgressFragment extends Fragment {
     public void updateSurveyItems() {
         long startTime = TimeHelper.getStartOfDay(Calendar.getInstance().getTimeInMillis());
         SurveyResponseDao surveyDao = db.surveyResponseDao();
-        LinearLayout passTimeContainer = requireActivity().findViewById(R.id.survey_item_container);
+        LinearLayout activityContainer = requireActivity().findViewById(R.id.survey_item_container);
 
         this.surveyResponsesObserver = surveys -> {
-            passTimeContainer.removeAllViews();
+            activityContainer.removeAllViews();
             if (surveys.size() == 0) {
                 // Adding the new survey should trigger the live data to update
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() ->
@@ -162,7 +162,7 @@ public class ProgressFragment extends Fragment {
 
                     requireActivity().runOnUiThread(() -> {
                         // Create a temporary record allowing users to select yes or no
-                        View tempActivity = LayoutInflater.from(requireActivity()).inflate(R.layout.pass_time_temporary_item, null, false);
+                        View tempActivity = LayoutInflater.from(requireActivity()).inflate(R.layout.activity_temporary_item, null, false);
                         TextView title = tempActivity.findViewById(R.id.activity_text);
                         TextView timeText = tempActivity.findViewById(R.id.activity_time_text);
                         FrameLayout imageFrame = tempActivity.findViewById(R.id.activity_image_frame);
@@ -179,7 +179,7 @@ public class ProgressFragment extends Fragment {
                         WayToWellbeingImageColorizer.colorizeFrame(requireContext(), imageFrame, WaysToWellbeing.valueOf(record.getActivityWayToWellbeing()));
                         image.setImageResource(ActivityTypeImageHelper.getActivityImage(record.getActivityType()));
 
-                        passTimeContainer.addView(tempActivity);
+                        activityContainer.addView(tempActivity);
 
                         // Yes and no buttons - hide the temporary thing
                         Button yesButton = tempActivity.findViewById(R.id.yes_button);
@@ -190,22 +190,22 @@ public class ProgressFragment extends Fragment {
                                 // Insert that activity into the table
                                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, item.getActivityId(), sequenceNumber, "", item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false));
-                                Passtime passtime = new Passtime(record.getActivityName(), "", record.getActivityType(), record.getActivityWayToWellbeing(), activitySurveyId, item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false);
-                                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, record.getActivityType(), passtime, Calendar.getInstance().getTimeInMillis());
+                                UserActivity userActivity = new UserActivity(record.getActivityName(), "", record.getActivityType(), record.getActivityWayToWellbeing(), activitySurveyId, item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false);
+                                UserActivity updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, record.getActivityType(), userActivity, Calendar.getInstance().getTimeInMillis());
                                 this.db.physicalActivityDao().updateIsPendingStatus(item.getActivityType(), false);
                                 this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(item.getActivityType(), true);
 
                                 // Display the item on the screen to the user
                                 requireActivity().runOnUiThread(() -> {
                                     // Time the scroll animation so that you never notice the item get deleted
-                                    ActivityViewHelper.createPasstimeItem(requireActivity(), passTimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper, true);
-                                    passTimeContainer.removeView(tempActivity);
+                                    ActivityViewHelper.createActivityItem(requireActivity(), activityContainer, updatedActivity, this.db, getParentFragmentManager(), analyticsHelper, true);
+                                    activityContainer.removeView(tempActivity);
                                 });
                             });
                         });
 
                         noButton.setOnClickListener((v) -> {
-                            passTimeContainer.removeView(tempActivity);
+                            activityContainer.removeView(tempActivity);
                             // We know the outcome - it should therefore no-longer be pending
                             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                                 this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(item.getActivityType(), true);
@@ -349,20 +349,20 @@ public class ProgressFragment extends Fragment {
             analyticsHelper.logWayToWellbeingActivity(this, WaysToWellbeing.valueOf(wayToWellbeing));
 
             // Sequence number based on number of children in the linear layout
-            LinearLayout passtimeContainer = requireActivity().findViewById(R.id.survey_item_container);
+            LinearLayout activityContainer = requireActivity().findViewById(R.id.survey_item_container);
 
             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
-                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
-                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime, Calendar.getInstance().getTimeInMillis());
+                UserActivity userActivity = new UserActivity(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
+                UserActivity updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityType, userActivity, Calendar.getInstance().getTimeInMillis());
 
                 // If it has been edited, the page will reload everything
                 boolean isEdited = data.getExtras().getBoolean("is_edited", false);
                 if(isEdited) {
                     updateSurveyItems();
                 } else {
-                    ActivityViewHelper.createPasstimeItem(requireActivity(), passtimeContainer, updatedPasstime, this.db, getParentFragmentManager(), analyticsHelper, true);
+                    ActivityViewHelper.createActivityItem(requireActivity(), activityContainer, updatedActivity, this.db, getParentFragmentManager(), analyticsHelper, true);
                 }
             });
         }

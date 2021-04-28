@@ -42,7 +42,7 @@ import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class SuggestedActivityTests  extends ProgressFragmentTestFixture {
+public class SuggestedActivityTests extends ProgressFragmentTestFixture {
 
     @Module
     @InstallIn(ApplicationComponent.class)

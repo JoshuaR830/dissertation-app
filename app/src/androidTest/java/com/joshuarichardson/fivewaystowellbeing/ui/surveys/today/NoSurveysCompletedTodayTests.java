@@ -69,7 +69,7 @@ public class NoSurveysCompletedTodayTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Here is how your day is looking so far"))));
 
-        onView(allOf(withId(R.id.pass_time_item), isDescendantOfA(withId(R.id.survey_summary_item_container))))
+        onView(allOf(withId(R.id.activity_item), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .check(doesNotExist());
 
         onView(allOf(withId(R.id.add_activity_button), isDescendantOfA(withId(R.id.survey_summary_item_container))))

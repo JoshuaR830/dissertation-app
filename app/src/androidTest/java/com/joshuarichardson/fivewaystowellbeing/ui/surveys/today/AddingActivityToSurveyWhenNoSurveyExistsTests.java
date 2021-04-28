@@ -39,7 +39,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -85,12 +84,12 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests extends ProgressFragm
         verify(this.surveyDao, Mockito.atLeast(1)).getSurveyResponsesByTimestampRange(anyLong(), anyLong());
         verify(this.surveyDao, Mockito.atLeast(1)).insert(any(SurveyResponse.class));
 
-        // Start on main activity - this should launch the passtime view
+        // Start on main activity - this should launch the activity view
         onView(withId(R.id.add_activity_button))
             .perform(scrollTo(), click());
 
         // This should select an item from the activity
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(isDisplayed()))
             .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));

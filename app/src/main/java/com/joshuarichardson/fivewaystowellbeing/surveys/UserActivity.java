@@ -3,7 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.surveys;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Passtime {
+public class UserActivity {
 
     private final String name;
     private final String note;
@@ -17,7 +17,7 @@ public class Passtime {
 
     ArrayList<Question> questions;
 
-    public Passtime(String name, String note, String type, String wayToWellbeing, long activitySurveyId, long startTime, long endTime, int emotion, boolean isDone) {
+    public UserActivity(String name, String note, String type, String wayToWellbeing, long activitySurveyId, long startTime, long endTime, int emotion, boolean isDone) {
         this.questions = new ArrayList<>();
         this.name = name;
         this.note = note;

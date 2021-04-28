@@ -33,9 +33,9 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
-import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
+import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.insights.WayToWellbeingImageColorizer;
 
 import java.util.Arrays;
@@ -59,13 +59,13 @@ public class ActivityViewHelper {
         LinearLayout layout = activity.findViewById(R.id.survey_item_container);
         activity.runOnUiThread(layout::removeAllViews);
 
-        for(long key : surveyData.getPasstimeMap().keySet()) {
-            Passtime passtime = surveyData.getPasstimeMap().get(key);
-            if(passtime == null) {
+        for(long key : surveyData.getActivityMap().keySet()) {
+            UserActivity userActivity = surveyData.getActivityMap().get(key);
+            if(userActivity == null) {
                 continue;
             }
 
-            createPasstimeItem(activity, layout, passtime, db, fragmentManager, analyticsHelper, false);
+            createActivityItem(activity, layout, userActivity, db, fragmentManager, analyticsHelper, false);
         }
 
         // This only needs to run once, after everything else
@@ -93,9 +93,9 @@ public class ActivityViewHelper {
         });
     }
 
-    public static void createPasstimeItem(Activity activity, LinearLayout layout, Passtime passtime, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper, boolean isAddedIn) {
-        // Get the passtime template
-        View view = LayoutInflater.from(activity).inflate(R.layout.pass_time_item, layout, false);
+    public static void createActivityItem(Activity activity, LinearLayout layout, UserActivity userActivity, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper, boolean isAddedIn) {
+        // Get the Activity template
+        View view = LayoutInflater.from(activity).inflate(R.layout.activity_item, layout, false);
         TextView title = view.findViewById(R.id.activity_text);
         TextView note = view.findViewById(R.id.activity_note_text);
         ImageView image = view.findViewById(R.id.activity_image);
@@ -104,16 +104,16 @@ public class ActivityViewHelper {
         GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(activity, R.drawable.frame_circle);
         if (drawable != null) {
             drawable = (GradientDrawable) drawable.mutate();
-            drawable.setStroke(DisplayHelper.dpToPx(activity, 4), WellbeingHelper.getColor(activity, passtime.getWayToWellbeing()));
+            drawable.setStroke(DisplayHelper.dpToPx(activity, 4), WellbeingHelper.getColor(activity, userActivity.getWayToWellbeing()));
             imageFrame.setBackground(drawable);
         }
 
         View topLevelDetails = view.findViewById(R.id.activity_top_level_details);
         ImageButton expandButton = view.findViewById(R.id.expand_options_button);
         MaterialButton deleteButton = view.findViewById(R.id.delete_options_button);
-        View checkboxView = view.findViewById(R.id.pass_time_checkbox_container);
+        View checkboxView = view.findViewById(R.id.activity_checkbox_container);
 
-        view.setTag(passtime.getWayToWellbeing());
+        view.setTag(userActivity.getWayToWellbeing());
 
         MaterialButton addNoteButton = view.findViewById(R.id.add_note_button);
         TextInputLayout noteTextInputContainer = view.findViewById(R.id.note_input_container);
@@ -122,14 +122,14 @@ public class ActivityViewHelper {
         MaterialButton endTimeButton = view.findViewById(R.id.add_end_time);
 
         startTimeButton.setOnClickListener(v -> {
-            long myHours = passtime.getStartTime() / 3600000;
-            long myMinutes = (passtime.getStartTime() - (myHours * 3600000)) / 60000;
+            long myHours = userActivity.getStartTime() / 3600000;
+            long myMinutes = (userActivity.getStartTime() - (myHours * 3600000)) / 60000;
 
             MaterialTimePicker startTimePicker = new MaterialTimePicker.Builder()
                 .setTitleText(R.string.title_start_time)
                 .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setHour((int)(passtime.getStartTime() > 0 ? myHours : 12))
-                .setMinute((int)(passtime.getStartTime() > 0 ? myMinutes : 0))
+                .setHour((int)(userActivity.getStartTime() > 0 ? myHours : 12))
+                .setMinute((int)(userActivity.getStartTime() > 0 ? myMinutes : 0))
                 .build();
 
             startTimePicker.show(fragmentManager, "start");
@@ -140,27 +140,27 @@ public class ActivityViewHelper {
 
                 long startTimeMillis = (hour * 3600000) + (minute * 60000);
 
-                passtime.setStartTime(startTimeMillis);
+                userActivity.setStartTime(startTimeMillis);
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    db.surveyResponseActivityRecordDao().updateStartTime(passtime.getActivitySurveyId(), startTimeMillis);
+                    db.surveyResponseActivityRecordDao().updateStartTime(userActivity.getActivitySurveyId(), startTimeMillis);
                 });
                 activity.runOnUiThread(() -> {
                     TextView timeText = view.findViewById(R.id.activity_time_text);
-                    displayTimes(timeText, passtime.getStartTime(), passtime.getEndTime());
+                    displayTimes(timeText, userActivity.getStartTime(), userActivity.getEndTime());
                 });
             });
         });
 
         endTimeButton.setOnClickListener(v -> {
 
-            long myHours = passtime.getEndTime() / 3600000;
-            long myMinutes = (passtime.getEndTime() - (myHours * 3600000)) / 60000;
+            long myHours = userActivity.getEndTime() / 3600000;
+            long myMinutes = (userActivity.getEndTime() - (myHours * 3600000)) / 60000;
 
             MaterialTimePicker endTimePicker = new MaterialTimePicker.Builder()
                 .setTitleText(R.string.title_end_time)
                 .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setHour((int)(passtime.getEndTime() > 0 ? myHours : 12))
-                .setMinute((int)(passtime.getEndTime() > 0 ? myMinutes : 0))
+                .setHour((int)(userActivity.getEndTime() > 0 ? myHours : 12))
+                .setMinute((int)(userActivity.getEndTime() > 0 ? myMinutes : 0))
                 .build();
 
             endTimePicker.show(fragmentManager, "end");
@@ -169,13 +169,13 @@ public class ActivityViewHelper {
                 int hour = endTimePicker.getHour();
                 int minute = endTimePicker.getMinute();
                 long endTimeMillis = (hour * 3600000) + (minute * 60000);
-                passtime.setEndTime(endTimeMillis);
+                userActivity.setEndTime(endTimeMillis);
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    db.surveyResponseActivityRecordDao().updateEndTime(passtime.getActivitySurveyId(), endTimeMillis);
+                    db.surveyResponseActivityRecordDao().updateEndTime(userActivity.getActivitySurveyId(), endTimeMillis);
                 });
                 activity.runOnUiThread(() -> {
                     TextView timeText = view.findViewById(R.id.activity_time_text);
-                    displayTimes(timeText, passtime.getStartTime(), passtime.getEndTime());
+                    displayTimes(timeText, userActivity.getStartTime(), userActivity.getEndTime());
                 });
             });
         });
@@ -187,9 +187,9 @@ public class ActivityViewHelper {
         // Set all to transparent so it doesn't end up the colour of the last background
         removeSelection(view, activity);
 
-        if (passtime.getEmotion() != 0) {
+        if (userActivity.getEmotion() != 0) {
             // Remember to -1 because index is the value - 1
-            int index = passtime.getEmotion() - 1;
+            int index = userActivity.getEmotion() - 1;
             View sentimentItem = emotionsContainer.getChildAt(index);
             sentimentItem.getBackground().setTint(activity.getColor(colorList.get(index)));
         }
@@ -200,7 +200,7 @@ public class ActivityViewHelper {
             sentimentItem.setOnClickListener(v -> {
                 removeSelection(view, activity);
                 WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                    db.surveyResponseActivityRecordDao().updateEmotion(passtime.getActivitySurveyId(), index + 1);
+                    db.surveyResponseActivityRecordDao().updateEmotion(userActivity.getActivitySurveyId(), index + 1);
                 });
                 sentimentItem.getBackground().setTint(activity.getColor(colorList.get(index)));
             });
@@ -223,7 +223,7 @@ public class ActivityViewHelper {
                             noteTextInput.setText("");
                             note.setVisibility(View.GONE);
                             WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                                db.surveyResponseActivityRecordDao().updateNote(passtime.getActivitySurveyId(), "");
+                                db.surveyResponseActivityRecordDao().updateNote(userActivity.getActivitySurveyId(), "");
                                 noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
                             });
 
@@ -252,7 +252,7 @@ public class ActivityViewHelper {
         activity.runOnUiThread(() -> {
             LinearLayout checkboxContainer = checkboxView.findViewById(R.id.check_box_container);
 
-            for (Question question : passtime.getQuestions()) {
+            for (Question question : userActivity.getQuestions()) {
                 CheckBox checkBox = (CheckBox) LayoutInflater.from(activity).inflate(R.layout.item_check_box, checkboxContainer, false);
                 checkBox.setChecked(question.getUserResponse());
                 checkBox.setText(question.getQuestion());
@@ -278,14 +278,14 @@ public class ActivityViewHelper {
                         note.setVisibility(View.VISIBLE);
 
                         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                            db.surveyResponseActivityRecordDao().updateNote(passtime.getActivitySurveyId(), noteText);
+                            db.surveyResponseActivityRecordDao().updateNote(userActivity.getActivitySurveyId(), noteText);
                             noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
                         });
                     }
 
                     // Remember that the activity details have been filled in
                     WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                        db.surveyResponseActivityRecordDao().updateIsDone(passtime.getActivitySurveyId(), true);
+                        db.surveyResponseActivityRecordDao().updateIsDone(userActivity.getActivitySurveyId(), true);
                     });
 
                     checkboxView.setVisibility(View.GONE);
@@ -297,14 +297,14 @@ public class ActivityViewHelper {
             doneButton.setOnClickListener(expandClickListener);
 
             // Hide the checkboxes if they have been hidden before
-            if(passtime.getIsDone()) {
+            if(userActivity.getIsDone()) {
                 checkboxView.setVisibility(View.GONE);
                 expandButton.setImageResource(R.drawable.button_expand);
             } else {
                 expandButton.setImageResource(R.drawable.button_collapse);
             }
 
-            if (passtime.getQuestions().size() == 0) {
+            if (userActivity.getQuestions().size() == 0) {
                 expandButton.setVisibility(View.GONE);
             } else {
                 topLevelDetails.setOnClickListener(expandClickListener);
@@ -319,7 +319,7 @@ public class ActivityViewHelper {
                     .setPositiveButton(R.string.button_delete, (dialog, which) -> {
                         // Delete the pass time from the survey
                         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
-                            db.surveyResponseActivityRecordDao().deleteById(passtime.getActivitySurveyId());
+                            db.surveyResponseActivityRecordDao().deleteById(userActivity.getActivitySurveyId());
                         });
                         layout.removeView(view);
                     })
@@ -329,20 +329,20 @@ public class ActivityViewHelper {
             });
 
             // Display details
-            noteTextInput.setText(passtime.getNote());
+            noteTextInput.setText(userActivity.getNote());
             TextView timeText = view.findViewById(R.id.activity_time_text);
-            displayTimes(timeText, passtime.getStartTime(), passtime.getEndTime());
+            displayTimes(timeText, userActivity.getStartTime(), userActivity.getEndTime());
 
-            title.setText(passtime.getName());
+            title.setText(userActivity.getName());
 
-            if (passtime.getNote() == null || passtime.getNote().length() == 0) {
+            if (userActivity.getNote() == null || userActivity.getNote().length() == 0) {
                 note.setVisibility(View.GONE);
             } else {
-                note.setText(passtime.getNote());
+                note.setText(userActivity.getNote());
                 note.setVisibility(View.VISIBLE);
             }
 
-            image.setImageResource(ActivityTypeImageHelper.getActivityImage(passtime.getType()));
+            image.setImageResource(ActivityTypeImageHelper.getActivityImage(userActivity.getType()));
 
             layout.addView(view);
 

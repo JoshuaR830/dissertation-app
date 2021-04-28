@@ -4,14 +4,14 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
-import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
+import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
 
 import java.util.Calendar;
 import java.util.List;
 
 public class WellbeingRecordInsertionHelper {
-    public static void addPasstimeToSurvey(WellbeingDatabase db, long activitySurveyId, String activityType) {
+    public static void addActivityToSurvey(WellbeingDatabase db, long activitySurveyId, String activityType) {
         WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
             List<WellbeingQuestion> questions = db.wellbeingQuestionDao().getQuestionsByActivityType(activityType);
             int counter = 0;
@@ -24,15 +24,15 @@ public class WellbeingRecordInsertionHelper {
     }
 
     // Must be called from within a write executor
-    public static Passtime addPasstimeQuestions(WellbeingDatabase db, long activitySurveyId, String activityType, Passtime passtime, long time) {
+    public static UserActivity addActivityQuestions(WellbeingDatabase db, long activitySurveyId, String activityType, UserActivity userActivity, long time) {
         List<WellbeingQuestion> questions = db.wellbeingQuestionDao().getQuestionsByActivityType(activityType.toUpperCase());
         int counter = 0;
         for(WellbeingQuestion question : questions) {
             long wellbeingRecordId = db.wellbeingRecordDao().insert(new WellbeingRecord(false, time, activitySurveyId, counter, question.getId()));
-            passtime.addQuestionToList(new Question(question.getQuestion(), wellbeingRecordId, false));
+            userActivity.addQuestionToList(new Question(question.getQuestion(), wellbeingRecordId, false));
             counter ++;
         }
 
-        return passtime;
+        return userActivity;
     }
 }

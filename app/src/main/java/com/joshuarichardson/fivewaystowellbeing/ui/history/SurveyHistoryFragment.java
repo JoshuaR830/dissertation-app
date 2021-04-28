@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class HistoryFragment extends Fragment {
+public class SurveyHistoryFragment extends Fragment {
     @Inject
     WellbeingDatabase db;
 

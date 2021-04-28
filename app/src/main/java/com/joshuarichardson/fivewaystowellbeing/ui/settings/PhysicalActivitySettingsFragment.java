@@ -20,7 +20,7 @@ import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ActivitySettingsFragment extends PreferenceFragmentCompat {
+public class PhysicalActivitySettingsFragment extends PreferenceFragmentCompat {
     @Inject
     WellbeingDatabase db;
 

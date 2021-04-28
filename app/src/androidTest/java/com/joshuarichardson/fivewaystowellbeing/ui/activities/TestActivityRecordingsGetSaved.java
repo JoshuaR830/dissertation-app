@@ -8,7 +8,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingResultsDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.CreateOrUpdatePassTimeActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.CreateOrUpdateActivityActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -50,7 +50,7 @@ public class TestActivityRecordingsGetSaved {
     public HiltAndroidRule hiltTest = new HiltAndroidRule(this);
 
     @Rule
-    public ActivityScenarioRule<CreateOrUpdatePassTimeActivity> answerSurveyActivity = new ActivityScenarioRule<>(CreateOrUpdatePassTimeActivity.class);
+    public ActivityScenarioRule<CreateOrUpdateActivityActivity> answerSurveyActivity = new ActivityScenarioRule<>(CreateOrUpdateActivityActivity.class);
 
     @Before
     public void setUp() throws InterruptedException {
@@ -75,17 +75,17 @@ public class TestActivityRecordingsGetSaved {
     }
 
     @Test
-    public void passTimeSubmission_ShouldCallTheDatabase() {
-        onView(withId(R.id.pass_time_name_input)).perform(typeText("Activity Name"), closeSoftKeyboard());
+    public void activitySubmission_ShouldCallTheDatabase() {
+        onView(withId(R.id.activity_name_input)).perform(typeText("Activity Name"), closeSoftKeyboard());
 
         // Select the first option from the drop down menu
-        onView(withId(R.id.pass_time_type_input)).perform(click());
+        onView(withId(R.id.activity_type_input)).perform(click());
         onData(instanceOf(String.class))
                 .inRoot(RootMatchers.isPlatformPopup())
                 .atPosition(0)
                 .perform(click());
 
-        onView(withId(R.id.passtime_submit_button)).perform(click());
+        onView(withId(R.id.activity_submit_button)).perform(click());
 
         // Check that the insert method is called
         verify(this.activityDao, times(1)).insert(any(ActivityRecord.class));

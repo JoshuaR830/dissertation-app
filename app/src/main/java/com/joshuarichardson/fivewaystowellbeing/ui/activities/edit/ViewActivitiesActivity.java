@@ -1,4 +1,4 @@
-package com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit;
+package com.joshuarichardson.fivewaystowellbeing.ui.activities.edit;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,16 +16,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ViewPassTimesActivity  extends AppCompatActivity {
+public class ViewActivitiesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_pass_times);
+        setContentView(R.layout.activity_view_activities);
     }
 
-    public void onCreatePassTimeButtonClicked(View v) {
-        Intent answerSurveyIntent = new Intent(this, CreateOrUpdatePassTimeActivity.class);
+    public void onCreateActivityButtonClicked(View v) {
+        Intent answerSurveyIntent = new Intent(this, CreateOrUpdateActivityActivity.class);
         startActivity(answerSurveyIntent);
     }
 
@@ -39,8 +39,8 @@ public class ViewPassTimesActivity  extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_edit) {
-            if(getSupportFragmentManager().findFragmentById(R.id.activities_fragment).getClass() == ViewPassTimesFragment.class) {
-                ViewPassTimesFragment viewSurveyResponseFragment = (ViewPassTimesFragment) getSupportFragmentManager().findFragmentById(R.id.activities_fragment);
+            if(getSupportFragmentManager().findFragmentById(R.id.activities_fragment).getClass() == ActivityHistoryFragment.class) {
+                ActivityHistoryFragment viewSurveyResponseFragment = (ActivityHistoryFragment) getSupportFragmentManager().findFragmentById(R.id.activities_fragment);
                 if(viewSurveyResponseFragment == null) {
                     return false;
                 }
