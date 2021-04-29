@@ -39,6 +39,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -71,10 +72,14 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests extends ProgressFragm
                 new ActivityRecord("Activity 2", 3000, 437724, ActivityType.HOBBY, WaysToWellbeing.KEEP_LEARNING, false)
             )
         );
-        when(activityRecordDao.getAllActivities()).thenReturn(activityData);
 
-        when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyResponseActivityDao.insert(any(SurveyResponseActivityRecord.class)))
-            .thenReturn(1L);
+        doReturn(activityData)
+            .when(activityRecordDao)
+            .getAllActivities();
+
+        doReturn(1L)
+            .when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyResponseActivityDao)
+            .insert(any(SurveyResponseActivityRecord.class));
     }
 
     @Test

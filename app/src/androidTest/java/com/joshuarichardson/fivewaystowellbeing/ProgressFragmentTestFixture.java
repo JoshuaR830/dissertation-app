@@ -32,6 +32,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -59,68 +60,80 @@ public abstract class ProgressFragmentTestFixture {
 
     // What the mock database should return
     protected void mockDatabaseResponses() {
-        when(mockWellbeingDatabase.wellbeingResultsDao())
-            .thenReturn(resultsDao);
+        doReturn(resultsDao)
+            .when(mockWellbeingDatabase)
+            .wellbeingResultsDao();
 
-        when(mockWellbeingDatabase.surveyResponseDao())
-            .thenReturn(surveyDao);
+        doReturn(surveyDao)
+            .when(mockWellbeingDatabase)
+            .surveyResponseDao();
 
-        when(mockWellbeingDatabase.wellbeingRecordDao())
-            .thenReturn(wellbeingDao);
+        doReturn(wellbeingDao)
+            .when(mockWellbeingDatabase)
+            .wellbeingRecordDao();
 
-        when(mockWellbeingDatabase.wellbeingQuestionDao())
-            .thenReturn(questionDao);
+        doReturn(questionDao)
+            .when(mockWellbeingDatabase)
+            .wellbeingQuestionDao();
 
-        when(mockWellbeingDatabase.wellbeingQuestionDao())
-            .thenReturn(questionDao);
+        doReturn(surveyResponseActivityDao)
+            .when(mockWellbeingDatabase)
+            .surveyResponseActivityRecordDao();
 
-        when(mockWellbeingDatabase.surveyResponseActivityRecordDao())
-            .thenReturn(surveyResponseActivityDao);
+        doReturn(activityRecordDao)
+            .when(mockWellbeingDatabase)
+            .activityRecordDao();
 
-        when(mockWellbeingDatabase.activityRecordDao())
-            .thenReturn(activityRecordDao);
-
-        when(mockWellbeingDatabase.physicalActivityDao())
-            .thenReturn(automaticActivityDao);
+        doReturn(automaticActivityDao)
+            .when(mockWellbeingDatabase)
+            .physicalActivityDao();
     }
 
     // The default responses provided by various common methods used on the progress fragment page
     protected void defaultResponses() {
-        when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
-            .thenReturn(new MutableLiveData<>(Collections.emptyList()));
+        doReturn(new MutableLiveData<>(Collections.emptyList()))
+            .when(surveyDao)
+            .getSurveyResponsesByTimestampRange(anyLong(), anyLong());
 
-        when(questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong()))
-            .thenReturn(new MutableLiveData<>(Collections.emptyList()));
+        doReturn(new MutableLiveData<>(Collections.emptyList()))
+            .when(questionDao)
+            .getWaysToWellbeingBetweenTimes(anyLong(), anyLong());
 
-        when(surveyDao.getLiveInsights(anyString()))
-            .thenReturn(new MutableLiveData<>());
+        doReturn(Collections.emptyList())
+            .when(surveyDao)
+            .getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong());
 
-        when(surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong()))
-            .thenReturn(Collections.emptyList());
+        doReturn(Collections.emptyList())
+            .when(wellbeingDao)
+            .getDataBySurvey(anyLong());
 
-        when(wellbeingDao.getDataBySurvey(anyLong()))
-            .thenReturn(Collections.emptyList());
+        doReturn(Collections.emptyList())
+            .when(automaticActivityDao)
+            .getPending();
 
-        when(automaticActivityDao.getPending())
-            .thenReturn(Collections.emptyList());
+        doReturn(null)
+            .when(automaticActivityDao)
+            .getPhysicalActivityByTypeWithAssociatedActivity(anyString());
 
-        when(automaticActivityDao.getPhysicalActivityByTypeWithAssociatedActivity(anyString()))
-            .thenReturn(null);
+        doReturn(new MutableLiveData<>())
+            .when(surveyResponseActivityDao)
+            .getEmotions(anyLong());
 
-        when(surveyResponseActivityDao.getEmotions(anyLong()))
-            .thenReturn(new MutableLiveData<>());
+        doReturn(new MutableLiveData<>())
+            .when(activityRecordDao)
+            .getAllActivities();
 
-        when(activityRecordDao.getAllActivities())
-            .thenReturn(new MutableLiveData<>());
+        doReturn(Collections.emptyList())
+            .when(questionDao)
+            .getQuestionsByActivityType(any());
 
-        when(questionDao.getQuestionsByActivityType(any()))
-            .thenReturn(Collections.emptyList());
+        doReturn(new MutableLiveData<>())
+            .when(wellbeingDao)
+            .getTrueWellbeingRecordsByTimestampRangeAndWayToWellbeingType(anyLong(), anyLong(), anyString());
 
-        when(wellbeingDao.getTrueWellbeingRecordsByTimestampRange(anyLong(), anyLong(), anyString()))
-            .thenReturn(new MutableLiveData<>());
-
-        when(wellbeingDao.getFalseWellbeingRecordsByTimestampRange(anyLong(), anyLong(), anyString()))
-            .thenReturn(new MutableLiveData<>());
+        doReturn(new MutableLiveData<>())
+            .when(wellbeingDao)
+            .getFalseWellbeingRecordsByTimestampRangeAndWayToWellbeingType(anyLong(), anyLong(), anyString());
     }
 
     @Before

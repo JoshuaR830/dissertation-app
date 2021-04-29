@@ -20,6 +20,11 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_TABLE_NAME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ID;
 
+/**
+ * The entity representing the instance of an activity and the survey it is part of.
+ * The table is used to hold all the links between surveys, activities and the wider data.
+ * This table facilitates the main functionality of the app
+ */
 @Entity(
         tableName = SURVEY_RESPONSE_ACTIVITY_RECORD_TABLE_NAME,
         foreignKeys = {

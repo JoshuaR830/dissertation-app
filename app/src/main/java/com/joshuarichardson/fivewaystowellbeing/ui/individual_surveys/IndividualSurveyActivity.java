@@ -38,7 +38,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
-import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
+import com.joshuarichardson.fivewaystowellbeing.surveys.ActivityInstance;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ViewActivitiesActivity;
 
@@ -206,10 +206,10 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
-                UserActivity activity = new UserActivity(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
+                ActivityInstance activity = new ActivityInstance(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
 
                 long night = TimeHelper.getEndOfDay(startTime);
-                UserActivity updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityType, activity, night);
+                ActivityInstance updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityType, activity, night);
 
                 // If it has been edited, the page will reload everything
                 boolean isEdited = data.getExtras().getBoolean("is_edited", false);

@@ -15,6 +15,10 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.AUTOMATIC_ACTIVITY_TABLE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.AUTOMATIC_ACTIVITY_TYPE;
 
+/**
+ * The entity representing the activities that can be logged automatically
+ * The table is used to hold the real life activities that can be suggested based on phone usage
+ */
 @Entity(tableName = AUTOMATIC_ACTIVITY_TABLE)
 public class AutomaticActivity {
 

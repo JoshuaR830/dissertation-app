@@ -4,20 +4,19 @@ import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
+/**
+ * A representation of a survey with a note, title, timestamp and list of activities
+ */
 public class SurveyDay {
 
-    private String title;
-    private String note;
-    private ArrayList<Long> activitySurveyKeys;
-    private HashMap<Long, UserActivity> activityMap;
-    private long timestamp;
+    private final String title;
+    private final String note;
+    private final ArrayList<Long> activitySurveyKeys;
+    private final HashMap<Long, ActivityInstance> activityMap;
+    private final long timestamp;
 
-    // ToDo - get the data about the ways to wellbeing achieved for the day
-    private List<Integer> waysToWellbeingValues;
-
-    public SurveyDay(long time, String surveyNote, ArrayList<Long> activityRecordIds, HashMap<Long, UserActivity> list) {
+    public SurveyDay(long time, String surveyNote, ArrayList<Long> activityRecordIds, HashMap<Long, ActivityInstance> list) {
         this.title = TimeFormatter.formatTimeAsDayMonthYearString(time);
         this.timestamp = time;
         this.note = surveyNote;
@@ -37,7 +36,7 @@ public class SurveyDay {
         return this.activitySurveyKeys;
     }
 
-    public HashMap<Long, UserActivity> getActivityMap() {
+    public HashMap<Long, ActivityInstance> getActivityMap() {
         return this.activityMap;
     }
 

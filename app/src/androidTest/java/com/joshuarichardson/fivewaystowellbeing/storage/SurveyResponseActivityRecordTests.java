@@ -45,8 +45,8 @@ public class SurveyResponseActivityRecordTests {
         // Need to initialise an in memory room database
         Context context = ApplicationProvider.getApplicationContext();
         this.wellbeingDb = Room
-                .inMemoryDatabaseBuilder(context, WellbeingDatabase.class)
-                .build();
+            .inMemoryDatabaseBuilder(context, WellbeingDatabase.class)
+            .build();
 
         this.surveyActivityDao = this.wellbeingDb.surveyResponseActivityRecordDao();
         this.activityRecordDao = this.wellbeingDb.activityRecordDao();

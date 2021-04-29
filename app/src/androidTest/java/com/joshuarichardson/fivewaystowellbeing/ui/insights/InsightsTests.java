@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
@@ -37,6 +38,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.RecyclerViewTestUtil.atRecyclerPosition;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
@@ -63,27 +65,55 @@ public class InsightsTests extends ProgressFragmentTestFixture {
         super.defaultResponses();
 
         // Return the activities
-        when(activityRecordDao.getActivityRecordById(1)).thenReturn(new ActivityRecord("Talk", 453876587, 784687, "PEOPLE", "CONNECT", false));
-        when(activityRecordDao.getActivityRecordById(2)).thenReturn(new ActivityRecord("Place holder", 453876587, 784687, "SPORT", "BE_ACTIVE", false));
-        when(activityRecordDao.getActivityRecordById(3)).thenReturn(new ActivityRecord("Washing up", 453876587, 784687, "CHORES", "GIVE", false));
+        doReturn(new ActivityRecord("Talk", 453876587, 784687, "PEOPLE", "CONNECT", false))
+            .when(activityRecordDao)
+            .getActivityRecordById(1);
+
+        doReturn(new ActivityRecord("Place holder", 453876587, 784687, "SPORT", "BE_ACTIVE", false))
+            .when(activityRecordDao)
+            .getActivityRecordById(2);
+
+        doReturn(new ActivityRecord("Washing up", 453876587, 784687, "CHORES", "GIVE", false))
+            .when(activityRecordDao)
+            .getActivityRecordById(3);
 
         when(questionDao.getWaysToWellbeingBetweenTimesNotLive(anyLong(), anyLong())).thenReturn(Arrays.asList(new WellbeingGraphItem(WaysToWellbeing.CONNECT.toString(), 140), new WellbeingGraphItem(WaysToWellbeing.BE_ACTIVE.toString(), 90), new WellbeingGraphItem(WaysToWellbeing.KEEP_LEARNING.toString(), 120), new WellbeingGraphItem(WaysToWellbeing.TAKE_NOTICE.toString(), 100), new WellbeingGraphItem(WaysToWellbeing.GIVE.toString(), 20)));
 
         when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
 
         // Return activities by frequency
-        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("CONNECT"))).thenReturn(Arrays.asList(new ActivityStats(1, 3), new ActivityStats(2, 2), new ActivityStats(2, 1)));
-        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("BE_ACTIVE"))).thenReturn(Arrays.asList(new ActivityStats(2, 3), new ActivityStats(2, 2), new ActivityStats(2, 1)));
-        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("KEEP_LEARNING"))).thenReturn(Arrays.asList(new ActivityStats(2, 9), new ActivityStats(2, 4), new ActivityStats(2, 1)));
-        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("TAKE_NOTICE"))).thenReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 5), new ActivityStats(2, 2)));
-        when(surveyResponseActivityDao.getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("GIVE"))).thenReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 4), new ActivityStats(3, 1)));
-        when(surveyDao.getNumDaysWithWaysToWellbeingByDate(anyLong(), anyLong())).thenReturn(3);
+        doReturn(Arrays.asList(new ActivityStats(1, 3), new ActivityStats(2, 2), new ActivityStats(2, 1)))
+            .when(surveyResponseActivityDao)
+            .getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("CONNECT"));
 
-        when(resultsDao.getResultsByTimestampRange(anyLong(), anyLong())).thenReturn(Arrays.asList(
-                new WellbeingResult(1, 12345, 100, 100, 100, 10, 20),
-                new WellbeingResult(2, 23456, 100, 100, 30, 100, 20),
-                new WellbeingResult(3, 34567, 100, 20, 30, 10, 20)
-        ));
+        doReturn(Arrays.asList(new ActivityStats(2, 3), new ActivityStats(2, 2), new ActivityStats(2, 1)))
+            .when(surveyResponseActivityDao)
+            .getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("BE_ACTIVE"));
+
+        doReturn(Arrays.asList(new ActivityStats(2, 9), new ActivityStats(2, 4), new ActivityStats(2, 1)))
+            .when(surveyResponseActivityDao)
+            .getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("KEEP_LEARNING"));
+
+        doReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 5), new ActivityStats(2, 2)))
+            .when(surveyResponseActivityDao)
+            .getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("TAKE_NOTICE"));
+
+        doReturn(Arrays.asList(new ActivityStats(2, 7), new ActivityStats(2, 4), new ActivityStats(3, 1)))
+            .when(surveyResponseActivityDao)
+            .getActivityFrequencyByWellbeingTypeBetweenTimes(anyLong(), anyLong(), eq("GIVE"));
+
+        doReturn(3).when(surveyDao).getNumDaysWithWaysToWellbeingByDate(anyLong(), anyLong());
+
+        List<WellbeingResult> wellbeingResults = Arrays.asList(
+            new WellbeingResult(1, 12345, 100, 100, 100, 10, 20),
+            new WellbeingResult(2, 23456, 100, 100, 30, 100, 20),
+            new WellbeingResult(3, 34567, 100, 20, 30, 10, 20)
+        );
+
+        doReturn(wellbeingResults)
+            .when(resultsDao)
+            .getResultsByTimestampRange(anyLong(), anyLong());
+
     }
 
     @Test

@@ -41,6 +41,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
@@ -73,15 +74,19 @@ public class SurveysCompletedTodayTests extends ProgressFragmentTestFixture {
             new SurveyResponse(now, WaysToWellbeing.CONNECT.name(), "title 1", "description 1"),
             new SurveyResponse(now, WaysToWellbeing.BE_ACTIVE.name(), "title 2", "description 2"));
 
-        when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Arrays.asList(
+        List<RawSurveyData> surveyData = Arrays.asList(
             new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
             new RawSurveyData(now, "Survey note", "Activity note 1", "Activity name 1", 1, "Question 2", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
             new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false),
             new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)
-        ));
+        );
+        
+        doReturn(surveyData)
+            .when(wellbeingDao)
+            .getDataBySurvey(anyLong());
 
-        when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
-            .thenReturn(new MutableLiveData<>(list));
+
+        doReturn(new MutableLiveData<>(list)).when(surveyDao).getSurveyResponsesByTimestampRange(anyLong(), anyLong());
     }
 
     @Test

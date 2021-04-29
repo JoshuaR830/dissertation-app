@@ -38,14 +38,14 @@ public class SurveyDataTests {
         assertThat(day.getActivitySurveyKeys().size()).isEqualTo(2);
 
         assertThat(day.getActivityMap().size()).isEqualTo(2);
-        UserActivity userActivity1 = day.getActivityMap().get(1L);
+        ActivityInstance activityInstance1 = day.getActivityMap().get(1L);
 
-        assertThat(userActivity1).isNotNull();
+        assertThat(activityInstance1).isNotNull();
 
-        assertThat(userActivity1.getName()).isEqualTo("Activity name 1");
-        assertThat(userActivity1.getNote()).isEqualTo("Activity note 1");
+        assertThat(activityInstance1.getName()).isEqualTo("Activity name 1");
+        assertThat(activityInstance1.getNote()).isEqualTo("Activity note 1");
 
-        List<Question> questionList1 = userActivity1.getQuestions();
+        List<Question> questionList1 = activityInstance1.getQuestions();
 
         assertThat(questionList1).isNotNull();
         assertThat(questionList1.size()).isEqualTo(3);
@@ -69,14 +69,14 @@ public class SurveyDataTests {
         assertThat(question1_3.getUserResponse()).isEqualTo(false);
 
 
-        UserActivity userActivity2 = day.getActivityMap().get(2L);
+        ActivityInstance activityInstance2 = day.getActivityMap().get(2L);
 
-        assertThat(userActivity2).isNotNull();
+        assertThat(activityInstance2).isNotNull();
 
-        assertThat(userActivity2.getName()).isEqualTo("Activity name 2");
-        assertThat(userActivity2.getNote()).isEqualTo("Activity note 2");
+        assertThat(activityInstance2.getName()).isEqualTo("Activity name 2");
+        assertThat(activityInstance2.getNote()).isEqualTo("Activity note 2");
 
-        List<Question> questionList2 = userActivity2.getQuestions();
+        List<Question> questionList2 = activityInstance2.getQuestions();
         assertThat(questionList2).isNotNull();
         assertThat(questionList2.size()).isEqualTo(2);
         Question question2_1 = questionList2.get(0);

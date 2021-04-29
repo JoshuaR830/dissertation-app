@@ -12,7 +12,10 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_PACKAGE_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_START_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_TABLE_NAME;
-
+/**
+ * The entity representing the app activities
+ * The table is used to keep a reference to running apps and the start/end times for calcualting
+ */
 @Entity(tableName = APP_USAGE_TABLE_NAME)
 public class AppActivity {
     @NonNull

@@ -43,7 +43,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseAct
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
-import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
+import com.joshuarichardson.fivewaystowellbeing.surveys.ActivityInstance;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
@@ -190,8 +190,8 @@ public class ProgressFragment extends Fragment {
                                 // Insert that activity into the table
                                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, item.getActivityId(), sequenceNumber, "", item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false));
-                                UserActivity userActivity = new UserActivity(record.getActivityName(), "", record.getActivityType(), record.getActivityWayToWellbeing(), activitySurveyId, item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false);
-                                UserActivity updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, record.getActivityType(), userActivity, Calendar.getInstance().getTimeInMillis());
+                                ActivityInstance activityInstance = new ActivityInstance(record.getActivityName(), "", record.getActivityType(), record.getActivityWayToWellbeing(), activitySurveyId, item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false);
+                                ActivityInstance updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, record.getActivityType(), activityInstance, Calendar.getInstance().getTimeInMillis());
                                 this.db.physicalActivityDao().updateIsPendingStatus(item.getActivityType(), false);
                                 this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(item.getActivityType(), true);
 
@@ -354,8 +354,8 @@ public class ProgressFragment extends Fragment {
             WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
-                UserActivity userActivity = new UserActivity(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
-                UserActivity updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityType, userActivity, Calendar.getInstance().getTimeInMillis());
+                ActivityInstance activityInstance = new ActivityInstance(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
+                ActivityInstance updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityType, activityInstance, Calendar.getInstance().getTimeInMillis());
 
                 // If it has been edited, the page will reload everything
                 boolean isEdited = data.getExtras().getBoolean("is_edited", false);

@@ -136,15 +136,15 @@ public class AutomaticActivityTests {
     }
 
     @Test
-    public void whenRequestingAllActivitiesWithoutNames_ShouldReturnNonNullNames() {
+    public void whenRequestingAllAutomatedActivitiesWithInAppActivities_ShouldReturnNonNullNames() {
         this.automaticActivityDao.insert(new AutomaticActivity("com.even_less_fun", "C", 321543, 4374857, 453787, true, false));
         this.automaticActivityDao.insert(new AutomaticActivity("com.less_fun", "A", 321543, 4374857, 0, true, false));
         this.automaticActivityDao.insert(new AutomaticActivity("com.fun", "B", 321543, 4374857, 3784283, true, false));
-        this.automaticActivityDao.insert(new AutomaticActivity("com.no_fun", null, 321543, 4374857, 45873, true, false));
 
-        List<AutomaticActivity> activities = this.automaticActivityDao.getAllPhysicalActivitiesWithNamesAndAssociatedActivities();
-        assertThat(activities.size()).isEqualTo(2);
-        assertThat(activities.get(0).getName()).isEqualTo("B");
-        assertThat(activities.get(1).getName()).isEqualTo("C");
+        List<AutomaticActivity> activities = this.automaticActivityDao.getAllPhysicalActivitiesWithNames();
+        assertThat(activities.size()).isEqualTo(3);
+        assertThat(activities.get(0).getName()).isEqualTo("A");
+        assertThat(activities.get(1).getName()).isEqualTo("B");
+        assertThat(activities.get(2).getName()).isEqualTo("C");
     }
 }

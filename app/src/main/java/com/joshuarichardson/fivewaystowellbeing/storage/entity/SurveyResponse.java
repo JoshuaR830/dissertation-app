@@ -14,6 +14,10 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_TITLE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_WAY_TO_WELLBEING;
 
+/**
+ * The entity representing the survey response table
+ * The table is used to hold all the high level survey information
+ */
 @Entity(tableName = SURVEY_RESPONSE_TABLE_NAME)
 public class SurveyResponse {
     @NonNull

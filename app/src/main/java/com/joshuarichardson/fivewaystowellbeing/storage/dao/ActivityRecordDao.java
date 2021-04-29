@@ -10,6 +10,9 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+/**
+ * Provide methods for accessing activity_records table
+ */
 @Dao
 public interface ActivityRecordDao {
 
@@ -56,10 +59,6 @@ public interface ActivityRecordDao {
      */
     @Query("SELECT * FROM activity_records WHERE is_hidden = 0")
     List<ActivityRecord> getAllVisibleActivitiesNotLive();
-
-    // ToDo - delete this query when it is no longer used
-    @Query("SELECT * FROM activity_records")
-    List<ActivityRecord> getAllActivitiesNotLive();
 
     /**
      * Update all of the activity info

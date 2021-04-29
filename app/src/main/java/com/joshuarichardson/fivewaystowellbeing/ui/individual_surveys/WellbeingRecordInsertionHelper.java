@@ -4,7 +4,7 @@ import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseMo
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingRecord;
-import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
+import com.joshuarichardson.fivewaystowellbeing.surveys.ActivityInstance;
 import com.joshuarichardson.fivewaystowellbeing.surveys.Question;
 
 import java.util.Calendar;
@@ -24,15 +24,15 @@ public class WellbeingRecordInsertionHelper {
     }
 
     // Must be called from within a write executor
-    public static UserActivity addActivityQuestions(WellbeingDatabase db, long activitySurveyId, String activityType, UserActivity userActivity, long time) {
+    public static ActivityInstance addActivityQuestions(WellbeingDatabase db, long activitySurveyId, String activityType, ActivityInstance activityInstance, long time) {
         List<WellbeingQuestion> questions = db.wellbeingQuestionDao().getQuestionsByActivityType(activityType.toUpperCase());
         int counter = 0;
         for(WellbeingQuestion question : questions) {
             long wellbeingRecordId = db.wellbeingRecordDao().insert(new WellbeingRecord(false, time, activitySurveyId, counter, question.getId()));
-            userActivity.addQuestionToList(new Question(question.getQuestion(), wellbeingRecordId, false));
+            activityInstance.addQuestionToList(new Question(question.getQuestion(), wellbeingRecordId, false));
             counter ++;
         }
 
-        return userActivity;
+        return activityInstance;
     }
 }

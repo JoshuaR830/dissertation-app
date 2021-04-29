@@ -46,6 +46,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -80,19 +81,26 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
                 new ActivityRecord("Activity 3", 3000, 437724, ActivityType.LEARNING, WaysToWellbeing.KEEP_LEARNING, false)
             )
         );
-        when(activityRecordDao.getAllActivities()).thenReturn(activityData);
+
+        doReturn(activityData)
+            .when(activityRecordDao)
+            .getAllActivities();
 
         LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Collections.singletonList(new SurveyResponse(12345, WaysToWellbeing.UNASSIGNED, "Title", "Note")));
-        when(AddingActivityToSurveyTests.this.surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
-            .thenReturn(data);
 
-        when(AddingActivityToSurveyTests.this.questionDao.getQuestionsByActivityType(ActivityType.SPORT.toString())).thenReturn(
-            Arrays.asList(
-                new WellbeingQuestion(1, "Question 1", "Positive message 1", "Negative message 1", WaysToWellbeing.BE_ACTIVE.toString(), 1, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()),
-                new WellbeingQuestion(2, "Question 2", "Positive message 2", "Negative message 2", WaysToWellbeing.BE_ACTIVE.toString(), 4, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()),
-                new WellbeingQuestion(3, "Question 3", "Positive message 3", "Negative message 3", WaysToWellbeing.BE_ACTIVE.toString(), 3, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString())
-            )
+        doReturn(data)
+            .when(AddingActivityToSurveyTests.this.surveyDao)
+            .getSurveyResponsesByTimestampRange(anyLong(), anyLong());
+
+        List<WellbeingQuestion> questions = Arrays.asList(
+            new WellbeingQuestion(1, "Question 1", "Positive message 1", "Negative message 1", WaysToWellbeing.BE_ACTIVE.toString(), 1, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(2, "Question 2", "Positive message 2", "Negative message 2", WaysToWellbeing.BE_ACTIVE.toString(), 4, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(3, "Question 3", "Positive message 3", "Negative message 3", WaysToWellbeing.BE_ACTIVE.toString(), 3, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString())
         );
+
+        doReturn(questions)
+            .when(AddingActivityToSurveyTests.this.questionDao)
+            .getQuestionsByActivityType(ActivityType.SPORT.toString());
     }
 
     @Test

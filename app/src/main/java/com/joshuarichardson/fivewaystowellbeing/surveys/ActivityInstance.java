@@ -3,7 +3,10 @@ package com.joshuarichardson.fivewaystowellbeing.surveys;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserActivity {
+/**
+ * Represents an instance of an activity and the sub-activity questions it contains
+ */
+public class ActivityInstance {
 
     private final String name;
     private final String note;
@@ -17,7 +20,7 @@ public class UserActivity {
 
     ArrayList<Question> questions;
 
-    public UserActivity(String name, String note, String type, String wayToWellbeing, long activitySurveyId, long startTime, long endTime, int emotion, boolean isDone) {
+    public ActivityInstance(String name, String note, String type, String wayToWellbeing, long activitySurveyId, long startTime, long endTime, int emotion, boolean isDone) {
         this.questions = new ArrayList<>();
         this.name = name;
         this.note = note;

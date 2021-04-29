@@ -17,7 +17,7 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
-import com.joshuarichardson.fivewaystowellbeing.surveys.UserActivity;
+import com.joshuarichardson.fivewaystowellbeing.surveys.ActivityInstance;
 import com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.WellbeingRecordInsertionHelper;
 
 import java.util.Calendar;
@@ -99,8 +99,8 @@ public class AddAutomaticActivityIntentService extends IntentService {
             // Add the activity to the daily log
             int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
             long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", activityStartTime - startTime, activityEndTime - startTime, 0, false));
-            UserActivity userActivity = new UserActivity(activityDetails.getActivityName(), "", activityDetails.getActivityType(), activityDetails.getActivityWayToWellbeing(), activitySurveyId, activityStartTime - startTime, activityEndTime - startTime, 0, false);
-            WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityDetails.getActivityType(), userActivity, currentTime);
+            ActivityInstance activityInstance = new ActivityInstance(activityDetails.getActivityName(), "", activityDetails.getActivityType(), activityDetails.getActivityWayToWellbeing(), activitySurveyId, activityStartTime - startTime, activityEndTime - startTime, 0, false);
+            WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityDetails.getActivityType(), activityInstance, currentTime);
             this.db.physicalActivityDao().updateIsPendingStatus(eventType, false);
             this.db.physicalActivityDao().updateStartTime(eventType, 0);
 

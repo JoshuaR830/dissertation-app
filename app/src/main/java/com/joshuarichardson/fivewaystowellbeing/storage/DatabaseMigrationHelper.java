@@ -229,4 +229,13 @@ public class DatabaseMigrationHelper {
             database.execSQL("ALTER TABLE temp_wellbeing_result RENAME TO wellbeing_result");
         }
     };
+
+    public static final Migration MIGRATION_11_12 = new Migration(11, 12) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("DROP TABLE survey_question_set");
+            database.execSQL("DROP TABLE questions_to_ask");
+            database.execSQL("DROP TABLE survey_response_element");
+        }
+    };
 }

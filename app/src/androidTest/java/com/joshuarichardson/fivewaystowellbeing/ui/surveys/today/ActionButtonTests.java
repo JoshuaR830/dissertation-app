@@ -45,9 +45,9 @@ import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
@@ -78,15 +78,20 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
             new SurveyResponse(now, WaysToWellbeing.CONNECT.name(), "title 1", "description 1"),
             new SurveyResponse(now, WaysToWellbeing.BE_ACTIVE.name(), "title 2", "description 2"));
 
-        when(wellbeingDao.getDataBySurvey(anyLong())).thenReturn(Arrays.asList(
+        List<RawSurveyData> rawSurveyData = Arrays.asList(
             new RawSurveyData(now, "Survey note", "", "Activity name 1", 1, "Question 1", 1, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), -1, -1, 0, false),
             new RawSurveyData(now, "Survey note", "Activity note 2", "Activity name 2", 2, "Question 1", 2, false, ActivityType.HOBBY.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, -1, 0, false),
             new RawSurveyData(now, "Survey note", "", "Activity name 3", 3, "Question 1", 3, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), -1, 14460000, 0, false),
             new RawSurveyData(now, "Survey note", "", "Activity name 4", 4, "Question 1", 4, false, ActivityType.LEARNING.toString(), WaysToWellbeing.CONNECT.toString(), 10860000, 14460000, 0, false)
-        ));
+        );
 
-        when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
-            .thenReturn(new MutableLiveData<>(list));
+        doReturn(rawSurveyData)
+            .when(wellbeingDao)
+            .getDataBySurvey(anyLong());
+
+        doReturn(new MutableLiveData<>(list))
+            .when(surveyDao)
+            .getSurveyResponsesByTimestampRange(anyLong(), anyLong());
     }
 
     @Test

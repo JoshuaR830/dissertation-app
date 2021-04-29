@@ -48,7 +48,9 @@ android {
                         'src/main/res/layouts/progress',
                         'src/main/res/layouts/insights',
                         'src/main/res/layouts/surveys',
-                        'src/main/res/layouts/settings', 'src/main/res/layouts/surveys/questions', 'src/main/res/values-night'
+                        'src/main/res/layouts/settings',
+                        'src/main/res/layouts/surveys/questions',
+                        'src/main/res/values-night'
             }
         }
     }
