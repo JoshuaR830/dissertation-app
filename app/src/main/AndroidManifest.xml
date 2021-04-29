@@ -62,11 +62,11 @@
             android:value="${analytics_deactivated}" />
 
         <receiver
-            android:name=".automated_activity_tracking.physical_activity_tracking.ActivityReceiver"
+            android:name=".automated_activity_tracking.physical_activity_tracking.PhysicalActivityBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".notifications.SendCompleteSurveyNotificationBroadcastReceiver"
+            android:name=".notifications.SendSurveyReminderNotificationBroadcastReceiver"
             android:enabled="true"
             android:process=":remote" />
         <receiver
@@ -79,11 +79,11 @@
             </intent-filter>
         </receiver> <!-- References https://stackoverflow.com/a/12034402/13496270 , https://developer.android.com/guide/components/broadcast-exceptions -->
         <service
-            android:name=".automated_activity_tracking.app_usage_tracking.ActivityTrackingService"
+            android:name=".automated_activity_tracking.app_usage_tracking.AppUsageActivityTrackingService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".automated_activity_tracking.physical_activity_tracking.ActivityDurationIntentService"
+            android:name=".automated_activity_tracking.physical_activity_tracking.PhysicalActivityDurationIntentService"
             android:exported="false" />
         <service
             android:name=".automated_activity_tracking.AddAutomaticActivityIntentService"

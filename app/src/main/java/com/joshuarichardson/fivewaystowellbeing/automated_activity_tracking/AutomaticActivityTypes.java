@@ -1,5 +1,8 @@
-package com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking;
+package com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking;
 
+/**
+ * The types of automatic activities that are available
+ */
 public class AutomaticActivityTypes {
     public static final String CYCLE = "CYCLE";
     public static final String WALK = "WALK";

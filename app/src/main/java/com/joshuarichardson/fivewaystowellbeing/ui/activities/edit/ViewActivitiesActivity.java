@@ -49,7 +49,7 @@ public class ViewActivitiesActivity extends AppCompatActivity {
             return true;
         }
 
-        Intent intent = MenuItemHelper.handleMenuClick(this, item);
+        Intent intent = MenuItemHelper.handleOverflowMenuClick(this, item);
 
         if(intent == null) {
             return false;

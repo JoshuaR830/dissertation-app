@@ -187,7 +187,7 @@ public class CreateOrUpdateActivityActivity extends AppCompatActivity {
         }
 
         final String wayToWellbeingString = WellbeingHelper.getWayToWellbeingFromString(wayToWellbeing).toString();
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             if (this.activityId != 0 && this.isEditing) {
                 this.activityDao.update(this.activityId, name, type, wayToWellbeingString, unixTime);
             } else {

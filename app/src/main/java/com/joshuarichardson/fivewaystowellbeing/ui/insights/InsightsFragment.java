@@ -64,7 +64,7 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
 
             String timeText = String.format(Locale.getDefault(), "%s - %s", TimeFormatter.formatTimeAsDayMonthString(finalStartTime), TimeFormatter.formatTimeAsDayMonthString(tonight));
 
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 boolean shouldShowBest = true;
                 boolean shouldShowWorst = true;
 
@@ -210,7 +210,7 @@ public class InsightsFragment extends Fragment implements InsightsAdapter.DateCl
 
     // Get the info and display it when the user clicks on a chip
     public void displaySuggestionChip(View graphCard, long startTime, long endTime, WaysToWellbeing wayToWellbeing) {
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             LinearLayout helpContainer = graphCard.findViewById(R.id.way_to_wellbeing_help_container);
 
             List<ActivityStats> wellbeingSpecificStats = this.db.surveyResponseActivityRecordDao().getActivityFrequencyByWellbeingTypeBetweenTimes(startTime, endTime, wayToWellbeing.toString());

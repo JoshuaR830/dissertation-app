@@ -91,7 +91,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void verifyCorrectBehaviourForNoteInputBox() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 0)))
             .perform(scrollTo())
             .check(matches(isDisplayed()));
@@ -166,7 +166,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void timeText() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         onView(allOf(withId(R.id.activity_time_text), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo())
             .check(matches(withText("")));
@@ -186,7 +186,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void onStartTimeTextClicked_ShouldUpdateDatabase() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.add_start_time), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
             .perform(scrollTo(), click());
@@ -203,7 +203,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void onEndTimeTextClicked_ShouldUpdateDatabase() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.add_end_time), isDescendantOfA(allOf(withId(R.id.activity_content), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))))
             .perform(scrollTo(), click());
@@ -220,7 +220,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void onWorstEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.sentiment_worst), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
@@ -230,7 +230,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void onBadEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.sentiment_bad), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
@@ -240,7 +240,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void onNeutralEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.sentiment_neutral), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
@@ -250,7 +250,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void onGoodEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.sentiment_good), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
@@ -260,7 +260,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void onBestEmotionClicked_ShouldUpdateDatabase() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.sentiment_best), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());
@@ -270,7 +270,7 @@ public class ActionButtonTests extends ProgressFragmentTestFixture {
 
     @Test
     public void onIsDoneClicked_ShouldUpdateDatabase() throws InterruptedException {
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         onView(allOf(withId(R.id.done_button), isDescendantOfA(nthChildOf(withId(R.id.survey_item_container), 0))))
             .perform(scrollTo(), click());

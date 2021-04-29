@@ -67,7 +67,7 @@ public class ViewActivitiesTests {
     @Before
     public void setUp() throws InterruptedException {
         hiltTest.inject();
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Module

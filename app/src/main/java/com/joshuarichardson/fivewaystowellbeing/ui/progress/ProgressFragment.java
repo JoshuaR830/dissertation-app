@@ -126,7 +126,7 @@ public class ProgressFragment extends Fragment {
             activityContainer.removeAllViews();
             if (surveys.size() == 0) {
                 // Adding the new survey should trigger the live data to update
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() ->
+                WellbeingDatabaseModule.databaseExecutor.execute(() ->
                     this.db.surveyResponseDao().insert(new SurveyResponse(startTime, UNASSIGNED, "", "")));
 
                 return;
@@ -135,7 +135,7 @@ public class ProgressFragment extends Fragment {
             this.surveyId = surveys.get(0).getSurveyResponseId();
             this.emotionUpdateValues = this.db.surveyResponseActivityRecordDao().getEmotions(this.surveyId);
             this.emotionUpdateValues.observe(requireActivity(), this.emotionUpdateObserver);
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 // It shouldn't be possible to have a survey without a result - but let's not take that risk
                 this.db.wellbeingResultsDao().insert(new WellbeingResult(surveyId, startTime, 0, 0, 0, 0, 0));
                 List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(this.surveyId);
@@ -186,7 +186,7 @@ public class ProgressFragment extends Fragment {
                         Button noButton = tempActivity.findViewById(R.id.no_button);
 
                         yesButton.setOnClickListener((v) -> {
-                            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                                 // Insert that activity into the table
                                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, item.getActivityId(), sequenceNumber, "", item.getStartTime() - startTime, item.getEndTime() - startTime, 0, false));
@@ -207,7 +207,7 @@ public class ProgressFragment extends Fragment {
                         noButton.setOnClickListener((v) -> {
                             activityContainer.removeView(tempActivity);
                             // We know the outcome - it should therefore no-longer be pending
-                            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                                 this.db.physicalActivityDao().updateIsNotificationConfirmedStatus(item.getActivityType(), true);
                                 this.db.physicalActivityDao().updateIsPendingStatus(item.getActivityType(), false);
                             });
@@ -245,7 +245,7 @@ public class ProgressFragment extends Fragment {
             // ToDo - get the values on fragment launch - save them - compare them to the new ones - is a new 100% - then you have achieved!
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() ->
+            WellbeingDatabaseModule.databaseExecutor.execute(() ->
                 db.wellbeingResultsDao().updateWaysToWellbeing(this.surveyId, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue()));
         };
 
@@ -253,7 +253,7 @@ public class ProgressFragment extends Fragment {
         this.graphUpdateValues.observe(requireActivity(), this.wholeGraphUpdate);
         canvasContainer.addView(graphView);
 
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             Calendar cal = Calendar.getInstance();
             boolean doesExist;
 
@@ -351,7 +351,7 @@ public class ProgressFragment extends Fragment {
             // Sequence number based on number of children in the linear layout
             LinearLayout activityContainer = requireActivity().findViewById(R.id.survey_item_container);
 
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
                 UserActivity userActivity = new UserActivity(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);

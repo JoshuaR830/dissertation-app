@@ -72,4 +72,43 @@ public class AnalyticsTests {
         assertThat(strings.get(0)).isEqualTo("connect");
         assertThat(strings.get(1)).isEqualTo("achieved_way_to_wellbeing");
     }
+
+    @Test
+    public void whenWayToWellbeingCheckedEventCalled_ThenFirebaseAnalyticsLogEventsShouldBeCalled() {
+        LogAnalyticEventHelper analyticsHelper = new LogAnalyticEventHelper(this.mockFirebaseAnalytics);
+        analyticsHelper.logWayToWellbeingChecked(this, WaysToWellbeing.CONNECT, true);
+
+        // How to capture variables https://howtodoinjava.com/mockito/verify-multiple-method-arguments/
+        verify(mockFirebaseAnalytics, times(2)).logEvent(stringCaptor.capture(), any(Bundle.class));
+
+        List<String> strings = stringCaptor.getAllValues();
+        assertThat(strings.get(0)).isEqualTo("connect");
+        assertThat(strings.get(1)).isEqualTo("checked_way_to_wellbeing_checkbox");
+    }
+
+    @Test
+    public void whenWayToWellbeingActivityEventCalled_ThenFirebaseAnalyticsLogEventsShouldBeCalled() {
+        LogAnalyticEventHelper analyticsHelper = new LogAnalyticEventHelper(this.mockFirebaseAnalytics);
+        analyticsHelper.logWayToWellbeingActivity(this, WaysToWellbeing.CONNECT);
+
+        // How to capture variables https://howtodoinjava.com/mockito/verify-multiple-method-arguments/
+        verify(mockFirebaseAnalytics, times(2)).logEvent(stringCaptor.capture(), any(Bundle.class));
+
+        List<String> strings = stringCaptor.getAllValues();
+        assertThat(strings.get(0)).isEqualTo("connect");
+        assertThat(strings.get(1)).isEqualTo("activity_way_to_wellbeing");
+    }
+
+    @Test
+    public void whenWayToWellbeingAutomaticEventCalled_ThenFirebaseAnalyticsLogEventsShouldBeCalled() {
+        LogAnalyticEventHelper analyticsHelper = new LogAnalyticEventHelper(this.mockFirebaseAnalytics);
+        analyticsHelper.logWayToWellbeingAutomaticActivity(this, WaysToWellbeing.CONNECT);
+
+        // How to capture variables https://howtodoinjava.com/mockito/verify-multiple-method-arguments/
+        verify(mockFirebaseAnalytics, times(2)).logEvent(stringCaptor.capture(), any(Bundle.class));
+
+        List<String> strings = stringCaptor.getAllValues();
+        assertThat(strings.get(0)).isEqualTo("connect");
+        assertThat(strings.get(1)).isEqualTo("automatic_Activity_way_to_wellbeing");
+    }
 }

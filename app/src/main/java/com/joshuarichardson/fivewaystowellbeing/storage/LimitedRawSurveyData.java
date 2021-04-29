@@ -5,12 +5,15 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Facilitates display of old style activities from the first version of the app
+ */
 public class LimitedRawSurveyData {
 
-    private long date;
-    private String surveyNote;
-    private String activityName;
-    private String activityType;
+    private final long date;
+    private final String surveyNote;
+    private final String activityName;
+    private final String activityType;
 
     @Deprecated
     // This allows old activities to continue to be shown after updating
@@ -21,6 +24,12 @@ public class LimitedRawSurveyData {
         this.activityType = activityType;
     }
 
+    /**
+     * Create a list of items that are compatible with the current version of activities
+     *
+     * @param limitedList A list of data sourced from old activities
+     * @return A compatible list of activities
+     */
     public static List<RawSurveyData> convertToRawSurveyDataList(List<LimitedRawSurveyData> limitedList) {
         ArrayList<RawSurveyData> rawData = new ArrayList<>();
 

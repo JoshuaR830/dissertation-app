@@ -114,7 +114,7 @@ public class ComplexSurveyViewBuiltCorrectly {
             data.setValue(array);
 
             when(activityDao.getAllActivities()).thenReturn(data);
-            when(activityDao.getAllActivitiesNotLive()).thenReturn(array);
+            when(activityDao.getAllVisibleActivitiesNotLive()).thenReturn(array);
 
             when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
 
@@ -125,7 +125,7 @@ public class ComplexSurveyViewBuiltCorrectly {
     @Before
     public void setUp() throws InterruptedException {
         hiltTest.inject();
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

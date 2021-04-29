@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
+/**
+ * The number of times a specified activity has been achieved
+ */
 public class ActivityStats {
     private int count;
     long activityId;

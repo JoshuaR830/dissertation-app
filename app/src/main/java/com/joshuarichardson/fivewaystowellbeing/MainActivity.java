@@ -15,11 +15,11 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.app_usage_tracking.ActivityTrackingService;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.app_usage_tracking.AppUsageActivityTrackingService;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.PhysicalActivityTracking;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
-import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.ActivityTracking;
-import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.AutomaticActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.AutomaticActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.storage.DatabaseQuestionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
@@ -32,7 +32,6 @@ import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 import com.joshuarichardson.fivewaystowellbeing.ui.history.HistoryParentFragment;
 import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.CreateOrUpdateActivityActivity;
-import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ViewActivitiesActivity;
 import com.joshuarichardson.fivewaystowellbeing.ui.progress.ProgressFragment;
 
 import java.util.Calendar;
@@ -62,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     WellbeingDatabase db;
 
+    @Inject
+    PhysicalActivityTracking activityTracker;
+
+    @Inject
+    AlarmHelper alarmHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -89,17 +94,17 @@ public class MainActivity extends AppCompatActivity {
             this.dialog = new MaterialAlertDialogBuilder(this)
                 .setView(R.layout.new_features_auto_tracking)
                 .setPositiveButton(getString(R.string.tracking_dialog_positive_button), (dialog, which) -> {
-                    setPermissions();
+                    acceptPermissions();
                     preferenceEditor.putInt("app_version", 6);
                     preferenceEditor.apply();
                 }).show();
         } else {
-            setPermissions();
+            acceptPermissions();
         }
 
         // The database version will only be updated after this so when migrating from 5 to 6 this will run
         if (preferences.getInt("database_version", 0) < 6) {
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 // Get all surveys since time of the update that made it work
                 List<SurveyResponse> surveyResponses = this.db.surveyResponseDao().getSurveyResponsesByTimestampRangeNotLive(1613509560000L, Calendar.getInstance().getTimeInMillis());
 
@@ -115,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         // Add the physical activities to the database
         if (preferences.getInt("database_version", 0) < 7) {
             AutomaticActivityDao automaticActivityDao = this.db.physicalActivityDao();
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 automaticActivityDao.insert(new AutomaticActivity(AutomaticActivityTypes.WALK, null, 0, 0, 0, false, false));
                 automaticActivityDao.insert(new AutomaticActivity(AutomaticActivityTypes.RUN, null, 0, 0, 0, false, false));
                 automaticActivityDao.insert(new AutomaticActivity(AutomaticActivityTypes.CYCLE, null, 0, 0, 0, false, false));
@@ -134,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             // Get start and end time
             long startTime = TimeHelper.getStartOfDay(cal.getTimeInMillis());
 
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 // This gets all of the surveys between then and now
                 List<SurveyResponse> surveyResponses = this.db.surveyResponseDao().getSurveyResponsesByTimestampRangeNotLive(startTime, endTime);
 
@@ -159,19 +164,19 @@ public class MainActivity extends AppCompatActivity {
         if (!preferences.contains("notification_morning_time") || !preferences.contains("notification_morning_switch")) {
             preferenceEditor.putLong("notification_morning_time", 30600000); // 8:30
             preferenceEditor.putBoolean("notification_morning_switch", true);
-            AlarmHelper.getInstance().scheduleNotification(getApplicationContext(), 8, 30, "morning", true);
+            alarmHelper.scheduleNotification(getApplicationContext(), 8, 30, "morning", true);
         }
 
         if (!preferences.contains("notification_noon_time") || !preferences.contains("notification_noon_switch")) {
             preferenceEditor.putLong("notification_noon_time", 43200000); // 12:00
             preferenceEditor.putBoolean("notification_noon_switch", true);
-            AlarmHelper.getInstance().scheduleNotification(getApplicationContext(), 12, 0, "noon", true);
+            alarmHelper.scheduleNotification(getApplicationContext(), 12, 0, "noon", true);
         }
 
         if (!preferences.contains("notification_night_time") || !preferences.contains("notification_night_switch")) {
             preferenceEditor.putLong("notification_night_time", 73800000); // 20:30
             preferenceEditor.putBoolean("notification_night_switch", true);
-            AlarmHelper.getInstance().scheduleNotification(getApplicationContext(), 20, 30, "night", true);
+            alarmHelper.scheduleNotification(getApplicationContext(), 20, 30, "night", true);
         }
 
         if (! preferences.contains("notification_walk_enabled")) {
@@ -213,9 +218,9 @@ public class MainActivity extends AppCompatActivity {
         if (preferences.getBoolean("notification_app_enabled", false)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // Reference startForegroundService https://stackoverflow.com/a/7690600/13496270
-                startForegroundService(new Intent(this, ActivityTrackingService.class));
+                startForegroundService(new Intent(this, AppUsageActivityTrackingService.class));
             } else {
-                startService(new Intent(this, ActivityTrackingService.class));
+                startService(new Intent(this, AppUsageActivityTrackingService.class));
             }
         }
 
@@ -228,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         // Put the questions in the database whenever the questions are updated
         int hasAddedQuestions = preferences.getInt("added_question_version", 0);
         if (hasAddedQuestions != DatabaseQuestionHelper.VERSION_NUMBER) {
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 for (WellbeingQuestion question : DatabaseQuestionHelper.getQuestions()) {
                     WellbeingQuestionDao questionDao = this.db.wellbeingQuestionDao();
                     questionDao.insert(question);
@@ -250,12 +255,16 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNav, navController);
     }
 
-    private void setPermissions() {
+    /**
+     * Prompt user to accept permissions.
+     * To track physical activities on Android Q+ users must allow the permission
+     * If users don't allow it the first time, they will be shown a dialog that justifies why
+     */
+    private void acceptPermissions() {
         // Permission reference https://developer.android.com/training/permissions/requesting#allow-system-manage-request-code
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
-                ActivityTracking activityTracker = new ActivityTracking();
-                activityTracker.initialiseTracking(getApplicationContext());
+                this.activityTracker.initialiseTracking(getApplicationContext());
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.ACTIVITY_RECOGNITION)) {
                 new MaterialAlertDialogBuilder(this)
                     .setTitle(getString(R.string.tracking_dialog_title))
@@ -269,8 +278,7 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, ACTIVITY_TRACKING_CODE);
             }
         } else {
-            ActivityTracking activityTracker = new ActivityTracking();
-            activityTracker.initialiseTracking(getApplicationContext());
+            this.activityTracker.initialiseTracking(getApplicationContext());
         }
     }
 
@@ -280,8 +288,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(requestCode == ACTIVITY_TRACKING_CODE) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ActivityTracking activityTracker = new ActivityTracking();
-                activityTracker.initialiseTracking(getApplicationContext());
+                this.activityTracker.initialiseTracking(getApplicationContext());
             }
         }
     }
@@ -300,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Cancel the notification
+        // Cancel the notifications
         NotificationManager notification = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_WALK);
         notification.cancel(NotificationConfiguration.NotificationsId.AUTOMATIC_ACTIVITY_NOTIFICATION_RUN);
@@ -349,8 +356,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        Intent intent = MenuItemHelper.handleMenuClick(this, item);
+        Intent intent = MenuItemHelper.handleOverflowMenuClick(this, item);
 
+        // If there is no intent to launch, return
         if(intent == null) {
             return false;
         }
@@ -360,17 +368,19 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onCreateActivityButtonClicked(View v) {
+    /** Launch the activity to create a user activity on button click
+     * @param view The instance of the button clicked.
+     */
+    public void onCreateActivityButtonClicked(View view) {
         Intent answerSurveyIntent = new Intent(MainActivity.this, CreateOrUpdateActivityActivity.class);
         startActivity(answerSurveyIntent);
     }
 
-    public void onLaunchActivitiesActivity(View v) {
-        Intent activityViewIntent = new Intent(this, ViewActivitiesActivity.class);
-        startActivity(activityViewIntent);
-    }
 
-    public void onLearnMoreButtonClicked(View v) {
+    /** Launch the learn more activity on button click
+     * @param view The instance of the button clicked.
+     */
+    public void onLearnMoreButtonClicked(View view) {
         Intent learnMoreIntent = new Intent(this, LearnMoreAboutFiveWaysActivity.class);
         startActivity(learnMoreIntent);
     }

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class WellbeingRecordInsertionHelper {
     public static void addActivityToSurvey(WellbeingDatabase db, long activitySurveyId, String activityType) {
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<WellbeingQuestion> questions = db.wellbeingQuestionDao().getQuestionsByActivityType(activityType);
             int counter = 0;
             long timeNow = Calendar.getInstance().getTimeInMillis();

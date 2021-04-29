@@ -44,7 +44,7 @@ public class AddMissedDayActivity extends AppCompatActivity {
 
             ArrayList<HistoryPageData> historyList = new ArrayList<>();
 
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 for(SurveyResponse pageItem : historyPageData) {
                     long now = pageItem.getSurveyResponseTimestamp();
                     long morning = TimeHelper.getStartOfDay(now);

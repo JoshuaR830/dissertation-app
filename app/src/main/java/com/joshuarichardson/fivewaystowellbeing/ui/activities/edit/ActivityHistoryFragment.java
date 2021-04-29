@@ -57,7 +57,7 @@ public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapt
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.root = inflater.inflate(R.layout.fragment_view_activities, container, false);
 
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<ActivityRecord> oldActivities = db.activityRecordDao().getActivitiesInTimeRange(0, 1613509560000L);
 
             // Only show the button if there are old items
@@ -196,7 +196,7 @@ public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapt
             .setIcon(R.drawable.icon_close)
             .setPositiveButton(R.string.button_delete, (dialog, which) -> {
                 // Set the pass time to hidden
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                     this.db.activityRecordDao().flagHidden(activity.getActivityRecordId(), true);
                 });
             })

@@ -3,7 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.ui.settings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.physical_activity_tracking.AutomaticActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.AutomaticActivityTypes;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
@@ -43,7 +43,7 @@ public class PhysicalActivitySettingsFragment extends PreferenceFragmentCompat {
         ArrayList<String> names = new ArrayList<>();
         ArrayList<String> ids = new ArrayList<>();
 
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<ActivityRecord> activities = this.db.activityRecordDao().getAllVisibleActivitiesNotLive();
 
             for(ActivityRecord activity : activities) {
@@ -76,7 +76,7 @@ public class PhysicalActivitySettingsFragment extends PreferenceFragmentCompat {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putLong("notification_auto_tracking_list_" + typeName.toLowerCase() + "_id", Long.parseLong(String.valueOf(newValue)));
             editor.apply();
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 this.db.physicalActivityDao().updateActivityId(typeName, Long.parseLong(String.valueOf(newValue)));
 
                 ActivityRecord record = this.db.activityRecordDao().getActivityRecordById(Long.parseLong(String.valueOf(newValue)));

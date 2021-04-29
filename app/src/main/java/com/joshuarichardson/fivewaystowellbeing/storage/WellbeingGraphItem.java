@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
+/**
+ * The values to plot on the progress graph for a specific way to wellbeing
+ */
 public class WellbeingGraphItem {
     private final String wayToWellbeing;
     private final int value;

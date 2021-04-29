@@ -97,7 +97,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         Observer<List<WellbeingGraphItem>> wholeGraphUpdate  = graphValues -> {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 db.wellbeingResultsDao().updateWaysToWellbeing(this.surveyId, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue());
             });
         };
@@ -203,7 +203,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             // Sequence number based on number of children in the linear layout
             LinearLayout activityContainer = this.findViewById(R.id.survey_item_container);
 
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
                 UserActivity activity = new UserActivity(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
@@ -224,7 +224,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
     // Whenever something needs to be updated - do this
     public void updateSurveyItems() {
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(surveyId);
 
             if(rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
@@ -282,7 +282,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             return true;
         }
 
-        Intent intent = MenuItemHelper.handleMenuClick(this, item);
+        Intent intent = MenuItemHelper.handleOverflowMenuClick(this, item);
 
         if(intent == null) {
             return false;

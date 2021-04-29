@@ -5,6 +5,9 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
+/**
+ * A helper to get all the items that need to be inserted into the wellbeing question table
+ */
 public class DatabaseQuestionHelper {
 
     public static final int VERSION_NUMBER = 7;
@@ -15,6 +18,12 @@ public class DatabaseQuestionHelper {
     private static final int MEDIUM_VALUE = 10;
     private static final int LOW_VALUE = 5;
 
+    /**
+     * Create a list of sub-activity questions.
+     * These questions have suggested ways to improve and encouraging messages, along with a weighting for the sub-activity.
+     *
+     * @return A list of questions that facilitate sub-activities
+     */
     public static WellbeingQuestion[] getQuestions() {
         return new WellbeingQuestion[] {
 

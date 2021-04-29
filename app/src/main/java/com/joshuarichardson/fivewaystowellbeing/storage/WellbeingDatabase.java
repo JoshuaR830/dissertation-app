@@ -28,6 +28,9 @@ import androidx.room.RoomDatabase;
 
 import static com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase.DATABASE_VERSION_CODE;
 
+/**
+ * The room database that is injected whenever it is needed
+ */
 @Database(entities = {ActivityRecord.class, SurveyResponse.class, SurveyResponseActivityRecord.class, SurveyResponseElement.class, QuestionsToAsk.class, SurveyQuestionSet.class, WellbeingQuestion.class, WellbeingRecord.class, WellbeingResult.class, AutomaticActivity.class, AppActivity.class}, exportSchema = false, version = DATABASE_VERSION_CODE)
 public abstract class WellbeingDatabase extends RoomDatabase {
 

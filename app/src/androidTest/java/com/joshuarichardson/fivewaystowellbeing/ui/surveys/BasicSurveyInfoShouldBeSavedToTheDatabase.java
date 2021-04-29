@@ -99,7 +99,7 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
 
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
             activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false));
-            when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
+            when(activityDao.getAllVisibleActivitiesNotLive()).thenReturn(activityList);
 
             BasicSurveyInfoShouldBeSavedToTheDatabase.this.surveyDao = mock(SurveyResponseDao.class);
 
@@ -117,7 +117,7 @@ public class BasicSurveyInfoShouldBeSavedToTheDatabase {
     @Before
     public void setUp() throws InterruptedException {
         hiltTest.inject();
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

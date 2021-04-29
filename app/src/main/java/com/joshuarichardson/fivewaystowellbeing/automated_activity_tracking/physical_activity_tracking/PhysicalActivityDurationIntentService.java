@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
 
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.AutomaticActivityTypes;
+import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.AutomaticNotificationHelper;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
@@ -17,8 +19,12 @@ import javax.inject.Inject;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * An intent service for calculating activity duration and taking appropriate actions.
+ * Tables will be updated accordingly and notifications will be sent if necessary.
+ */
 @AndroidEntryPoint
-public class ActivityDurationIntentService extends IntentService {
+public class PhysicalActivityDurationIntentService extends IntentService {
 
     public static final String START_ACTIVITY = "com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.action.start";
     public static final String END_ACTIVITY = "com.joshuarichardson.fivewaystowellbeing.PhysicalActivityTracking.action.end";
@@ -26,9 +32,10 @@ public class ActivityDurationIntentService extends IntentService {
     @Inject
     WellbeingDatabase db;
 
-    ActivityTracking tracking = new ActivityTracking();
+    @Inject
+    AutomaticNotificationHelper automaticNotificationHelper;
 
-    public ActivityDurationIntentService() {
+    public PhysicalActivityDurationIntentService() {
         super("ActivityDurationIntentService");
     }
 
@@ -42,44 +49,16 @@ public class ActivityDurationIntentService extends IntentService {
             return;
         }
 
-        long activityTypeThreshold;
-        boolean activityTypeEnabled;
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        switch (eventType) {
-            case AutomaticActivityTypes.WALK:
-                activityTypeThreshold = preferences.getInt("notification_walk_duration", 10);
-                activityTypeEnabled = preferences.getBoolean("notification_walk_enabled", false);
-                break;
-            case AutomaticActivityTypes.RUN:
-                activityTypeThreshold = preferences.getInt("notification_run_duration", 10);
-                activityTypeEnabled = preferences.getBoolean("notification_run_enabled", false);
-                break;
-            case AutomaticActivityTypes.CYCLE:
-                activityTypeThreshold = preferences.getInt("notification_cycle_duration", 10);
-                activityTypeEnabled = preferences.getBoolean("notification_cycle_enabled", false);
-                break;
-            case AutomaticActivityTypes.VEHICLE:
-                activityTypeThreshold = preferences.getInt("notification_drive_duration", 10);
-                activityTypeEnabled = preferences.getBoolean("notification_drive_enabled", false);
-                break;
-            default:
-                activityTypeThreshold = preferences.getInt("notification_app_duration", 10);
-                activityTypeEnabled = preferences.getBoolean("notification_app_enabled", false);
-        }
-
-        if(!activityTypeEnabled) {
+        if(!isActivityTypeEnabled(eventType)) {
             return;
         }
 
         // Convert minutes to ms
-        activityTypeThreshold *= 60000;
-        long finalActivityTypeThreshold = activityTypeThreshold;
+        long finalActivityTypeThreshold = getMinimumActivityDuration(eventType) * 60000;
 
         switch(intent.getAction()) {
             case START_ACTIVITY:
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                     AutomaticActivity automaticActivity = this.db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(eventType);
 
                     if (automaticActivity == null) {
@@ -97,7 +76,7 @@ public class ActivityDurationIntentService extends IntentService {
                 });
                 break;
             case END_ACTIVITY:
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                     // Still update the end time - even if it wasn't long enough
                     this.db.physicalActivityDao().updateEndTime(eventType, calculateEventTimeMillis(nanoSeconds));
                     AutomaticActivity activity = this.db.physicalActivityDao().getPhysicalActivityByTypeWithAssociatedActivity(eventType);
@@ -109,7 +88,7 @@ public class ActivityDurationIntentService extends IntentService {
                     long activityDuration = activity.getEndTime() - activity.getStartTime();
                     if(activityDuration > finalActivityTypeThreshold && !activity.isNotificationConfirmed()) {
                         this.db.physicalActivityDao().updateIsPendingStatus(eventType, true);
-                        this.tracking.sendActivityNotification(this, activity.getActivityId(), activity.getStartTime(), activity.getEndTime(), eventType, null, null);
+                        this.automaticNotificationHelper.sendSuggestedActivityNotification(activity.getActivityId(), activity.getStartTime(), activity.getEndTime(), eventType, null, null);
                     }
                 });
 
@@ -119,6 +98,57 @@ public class ActivityDurationIntentService extends IntentService {
         }
     }
 
+    /**
+     * Get the minimum activity duration in minutes
+     *
+     * @param eventType The name of the event
+     * @return The minimum duration in minutes
+     */
+    private long getMinimumActivityDuration(String eventType) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        switch (eventType) {
+            case AutomaticActivityTypes.WALK:
+                return preferences.getInt("notification_walk_duration", 10);
+            case AutomaticActivityTypes.RUN:
+                return preferences.getInt("notification_run_duration", 10);
+            case AutomaticActivityTypes.CYCLE:
+                return preferences.getInt("notification_cycle_duration", 10);
+            case AutomaticActivityTypes.VEHICLE:
+                return preferences.getInt("notification_drive_duration", 10);
+            default:
+                return preferences.getInt("notification_app_duration", 10);
+        }
+    }
+
+    /**
+     * See if activity type is enabled for automatic notifications
+     * @param eventType The name of the event
+     * @return The enabled status
+     */
+    private boolean isActivityTypeEnabled(String eventType) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        switch (eventType) {
+            case AutomaticActivityTypes.WALK:
+                return preferences.getBoolean("notification_walk_enabled", false);
+            case AutomaticActivityTypes.RUN:
+                return preferences.getBoolean("notification_run_enabled", false);
+            case AutomaticActivityTypes.CYCLE:
+                return preferences.getBoolean("notification_cycle_enabled", false);
+            case AutomaticActivityTypes.VEHICLE:
+                return preferences.getBoolean("notification_drive_enabled", false);
+            default:
+                return preferences.getBoolean("notification_app_enabled", false);
+        }
+    }
+
+    /**
+     * Calculate the event timestamp in milliseconds
+     *
+     * @param eventNanos The nano-seconds for the event
+     * @return The time in milliseconds
+     */
     private long calculateEventTimeMillis(long eventNanos) {
         long actualNanos = SystemClock.elapsedRealtimeNanos();
         long difference = actualNanos - eventNanos;

@@ -141,7 +141,7 @@ public class ActivityViewHelper {
                 long startTimeMillis = (hour * 3600000) + (minute * 60000);
 
                 userActivity.setStartTime(startTimeMillis);
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                     db.surveyResponseActivityRecordDao().updateStartTime(userActivity.getActivitySurveyId(), startTimeMillis);
                 });
                 activity.runOnUiThread(() -> {
@@ -170,7 +170,7 @@ public class ActivityViewHelper {
                 int minute = endTimePicker.getMinute();
                 long endTimeMillis = (hour * 3600000) + (minute * 60000);
                 userActivity.setEndTime(endTimeMillis);
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                     db.surveyResponseActivityRecordDao().updateEndTime(userActivity.getActivitySurveyId(), endTimeMillis);
                 });
                 activity.runOnUiThread(() -> {
@@ -199,7 +199,7 @@ public class ActivityViewHelper {
             final int index = i;
             sentimentItem.setOnClickListener(v -> {
                 removeSelection(view, activity);
-                WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                     db.surveyResponseActivityRecordDao().updateEmotion(userActivity.getActivitySurveyId(), index + 1);
                 });
                 sentimentItem.getBackground().setTint(activity.getColor(colorList.get(index)));
@@ -222,7 +222,7 @@ public class ActivityViewHelper {
                             note.setText("");
                             noteTextInput.setText("");
                             note.setVisibility(View.GONE);
-                            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                                 db.surveyResponseActivityRecordDao().updateNote(userActivity.getActivitySurveyId(), "");
                                 noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
                             });
@@ -257,7 +257,7 @@ public class ActivityViewHelper {
                 checkBox.setChecked(question.getUserResponse());
                 checkBox.setText(question.getQuestion());
                 checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                    WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                         db.wellbeingRecordDao().checkItem(question.getWellbeingRecordId(), isChecked);
                         WellbeingRecord wellbeingRecord = db.wellbeingRecordDao().getWellbeingRecordById(question.getWellbeingRecordId());
                         WellbeingQuestion wellbeingQuestion = db.wellbeingQuestionDao().getQuestionById(wellbeingRecord.getQuestionId());
@@ -277,14 +277,14 @@ public class ActivityViewHelper {
                         note.setText(noteText);
                         note.setVisibility(View.VISIBLE);
 
-                        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                             db.surveyResponseActivityRecordDao().updateNote(userActivity.getActivitySurveyId(), noteText);
                             noteTextInputContainer.setHelperText(activity.getText(R.string.helper_saved_note));
                         });
                     }
 
                     // Remember that the activity details have been filled in
-                    WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                    WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                         db.surveyResponseActivityRecordDao().updateIsDone(userActivity.getActivitySurveyId(), true);
                     });
 
@@ -318,7 +318,7 @@ public class ActivityViewHelper {
                     .setIcon(R.drawable.icon_close)
                     .setPositiveButton(R.string.button_delete, (dialog, which) -> {
                         // Delete the pass time from the survey
-                        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+                        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                             db.surveyResponseActivityRecordDao().deleteById(userActivity.getActivitySurveyId());
                         });
                         layout.removeView(view);

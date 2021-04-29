@@ -95,7 +95,7 @@ public class WellbeingRecordInsertionTests extends ProgressFragmentTestFixture {
     @Test
     public void testInsertingWhereNoQuestionsOfType_ShouldInsertNoQuestions() throws InterruptedException {
         WellbeingRecordInsertionHelper.addActivityToSurvey(this.mockWellbeingDatabase, 1, ActivityType.SPORT.toString());
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         verify(this.questionDao, times(1)).getQuestionsByActivityType(ActivityType.SPORT.toString());
         verify(this.wellbeingDao, times(0)).insert(any(WellbeingRecord.class));
@@ -104,7 +104,7 @@ public class WellbeingRecordInsertionTests extends ProgressFragmentTestFixture {
     @Test
     public void testInsertingOneQuestionOfType_ShouldInsertOneQuestion() throws InterruptedException {
         WellbeingRecordInsertionHelper.addActivityToSurvey(this.mockWellbeingDatabase, 2, ActivityType.LEARNING.toString());
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         verify(this.questionDao, times(1)).getQuestionsByActivityType(ActivityType.LEARNING.toString());
         verify(this.wellbeingDao, times(1)).insert(any(WellbeingRecord.class));
     }
@@ -112,7 +112,7 @@ public class WellbeingRecordInsertionTests extends ProgressFragmentTestFixture {
     @Test
     public void testInsertingFourQuestionsOfType_ShouldInsertFourQuestions() throws InterruptedException {
         WellbeingRecordInsertionHelper.addActivityToSurvey(this.mockWellbeingDatabase, 3, ActivityType.HOBBY.toString());
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         verify(this.questionDao, times(1)).getQuestionsByActivityType(ActivityType.HOBBY.toString());
         verify(this.wellbeingDao, times(4)).insert(any(WellbeingRecord.class));
     }
@@ -120,7 +120,7 @@ public class WellbeingRecordInsertionTests extends ProgressFragmentTestFixture {
     @Test
     public void testInsertingWhereNoQuestionsOfType_ShouldInsertNoQuestionsAndActivityShouldHaveNoQuestions() throws InterruptedException {
         UserActivity userActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.mockWellbeingDatabase, 1, ActivityType.SPORT.toString(), new UserActivity("name", "note", "SPORT", WaysToWellbeing.BE_ACTIVE.toString(), 1, -1, -1, 0, false), 0);
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
         verify(this.questionDao, times(1)).getQuestionsByActivityType(ActivityType.SPORT.toString());
         verify(this.wellbeingDao, times(0)).insert(any(WellbeingRecord.class));
@@ -131,7 +131,7 @@ public class WellbeingRecordInsertionTests extends ProgressFragmentTestFixture {
     @Test
     public void testInsertingOneQuestionOfType_ShouldInsertOneQuestionAndActivityShouldHaveOneQuestion() throws InterruptedException {
         UserActivity userActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.mockWellbeingDatabase, 2, ActivityType.LEARNING.toString(), new UserActivity("name", "note", "LEARNING", WaysToWellbeing.KEEP_LEARNING.toString(), 1, -1, -1, 0, false), 0);
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         verify(this.questionDao, times(1)).getQuestionsByActivityType(ActivityType.LEARNING.toString());
         verify(this.wellbeingDao, times(1)).insert(any(WellbeingRecord.class));
 

@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
+/**
+ * Specifies the names for all of the tables and their fields
+ */
 public class WaysToWellbeingContract {
 
     public static final String WELLBEING_DATABASE_NAME = "wellbeing_database";

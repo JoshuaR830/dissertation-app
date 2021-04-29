@@ -57,7 +57,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         this.surveyResponseDao = this.db.surveyResponseDao();
         this.surveyResponseElementDao = this.db.surveyResponseElementDao();
 
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<ActivityRecord> activities = this.db.activityRecordDao().getAllActivitiesNotLive();
             List<SurveyQuestionSet> questionSets = this.db.surveyQuestionSetDao().getUnansweredSurveyQuestionSets();
 
@@ -202,7 +202,7 @@ public class AnswerSurveyActivity extends AppCompatActivity {
         }
 
         long finalActivityId = activityId;
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             long surveyId = this.surveyResponseDao.insert(surveyResponse);
             this.db.wellbeingResultsDao().insert(new WellbeingResult(surveyId, now, 0, 0, 0, 0, 0));
 

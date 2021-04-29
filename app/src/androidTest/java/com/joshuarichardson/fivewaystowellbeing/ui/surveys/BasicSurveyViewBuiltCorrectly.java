@@ -92,7 +92,7 @@ public class BasicSurveyViewBuiltCorrectly {
             // Set up the activities for the list
             ArrayList<ActivityRecord> activityList = new ArrayList<>();
             activityList.add(new ActivityRecord("Activity", 2000, 736284628, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false));
-            when(activityDao.getAllActivitiesNotLive()).thenReturn(activityList);
+            when(activityDao.getAllVisibleActivitiesNotLive()).thenReturn(activityList);
 
             MutableLiveData<List<ActivityRecord>> data = new MutableLiveData<>();
 
@@ -112,7 +112,7 @@ public class BasicSurveyViewBuiltCorrectly {
             data.setValue(array);
 
             when(activityDao.getAllActivities()).thenReturn(data);
-            when(activityDao.getAllActivitiesNotLive()).thenReturn(array);
+            when(activityDao.getAllVisibleActivitiesNotLive()).thenReturn(array);
 
             when(mockWellbeingDatabase.activityRecordDao()).thenReturn(activityDao);
 
@@ -123,7 +123,7 @@ public class BasicSurveyViewBuiltCorrectly {
     @Before
     public void setUp() throws InterruptedException {
         hiltTest.inject();
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test

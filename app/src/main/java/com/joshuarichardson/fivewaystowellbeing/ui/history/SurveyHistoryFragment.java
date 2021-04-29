@@ -49,7 +49,7 @@ public class SurveyHistoryFragment extends Fragment {
 
             ArrayList<HistoryPageData> historyList = new ArrayList<>();
 
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 for(SurveyResponse pageItem : historyPageData) {
                     long time = pageItem.getSurveyResponseTimestamp();
                     long morning = TimeHelper.getStartOfDay(time);

@@ -34,10 +34,10 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
     private long startTime;
     private UsageStatsManager usage;
     private PackageManager packageManager;
+    private boolean wasPaused = false;
 
     @Inject
     WellbeingDatabase db;
-    private boolean wasPaused = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
             String name = (String) packageManager.getApplicationLabel(info);
 
             // Add the item to the database when known that it exists
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 this.db.physicalActivityDao().insert(new AutomaticActivity(stat.getPackageName(), name, 0, 0, 0, false, false));
             });
         }
@@ -102,7 +102,7 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
         RecyclerView recycler = findViewById(R.id.app_assignment_recycler);
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<ActivityRecord> activities = db.activityRecordDao().getAllVisibleActivitiesNotLive();
 
             for(ActivityRecord activity : activities) {
@@ -114,7 +114,7 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
             adapter.setListValues(activityIds, activityNames, activityWaysToWellbeing);
         });
 
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<AutomaticActivity> automaticActivities = this.db.physicalActivityDao().getAllPhysicalActivitiesWithNames();
             List<AppItem> appItems = new ArrayList<>();
 
@@ -137,7 +137,7 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
 
     @Override
     public void onItemSelected(long activityId, String packageName) {
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             this.db.physicalActivityDao().updateActivityId(packageName, activityId);
         });
     }
