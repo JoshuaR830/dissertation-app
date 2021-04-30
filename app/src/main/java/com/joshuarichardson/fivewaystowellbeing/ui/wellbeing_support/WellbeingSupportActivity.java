@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Activity displaying wellbeing support to users.
+ * Links are provided which open in a webview
+ */
 public class WellbeingSupportActivity extends AppCompatActivity {
 
     @Override
@@ -18,7 +22,7 @@ public class WellbeingSupportActivity extends AppCompatActivity {
         // Add the wellbeing support items to the recycler view
         RecyclerView supportRecyclerView = findViewById(R.id.wellbeing_support_recycler_view);
         supportRecyclerView.setLayoutManager(new LinearLayoutManager(WellbeingSupportActivity.this));
-        WellbeingSupportAdapter supportAdapter = new WellbeingSupportAdapter(WellbeingSupportActivity.this, SupportListHelper.getList());
+        WellbeingSupportAdapter supportAdapter = new WellbeingSupportAdapter(WellbeingSupportActivity.this, SupportListHelper.getList(getApplicationContext()));
         supportRecyclerView.setAdapter(supportAdapter);
     }
 }

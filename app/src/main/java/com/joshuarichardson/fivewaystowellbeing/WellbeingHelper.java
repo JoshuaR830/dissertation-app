@@ -2,7 +2,16 @@ package com.joshuarichardson.fivewaystowellbeing;
 
 import android.content.Context;
 
+/**
+ * A helper class to facilitate displaying the correct content on the UI
+ */
 public class WellbeingHelper {
+    /**
+     * Gets the image associated with the way to wellbeing
+     *
+     * @param surveyResponseWayToWellbeing The way to wellbeing type
+     * @return The image resource
+     */
     public static int getImage(WaysToWellbeing surveyResponseWayToWellbeing) {
         switch(surveyResponseWayToWellbeing) {
             case CONNECT:
@@ -20,9 +29,15 @@ public class WellbeingHelper {
         }
     }
 
-    public static WaysToWellbeing getDefaultWayToWellbeingFromActivityType(String type) {
+    /**
+     * Get the way to wellbeing associated with the activity type
+     *
+     * @param activityType The activity type
+     * @return The associated way to wellbeing
+     */
+    public static WaysToWellbeing getDefaultWayToWellbeingFromActivityType(String activityType) {
         WaysToWellbeing wayToWellbeing;
-        switch (ActivityType.valueOf(type.toUpperCase())) {
+        switch (ActivityType.valueOf(activityType.toUpperCase())) {
             case HOBBY:
             case LEARNING:
             case WORK:
@@ -54,6 +69,12 @@ public class WellbeingHelper {
         return wayToWellbeing;
     }
 
+    /**
+     * Convert the way to wellbeing from a string to an enum
+     *
+     * @param wayToWellbeingInput The way to wellbeing in string form
+     * @return The associated way to wellbeing enum
+     */
     public static WaysToWellbeing getWayToWellbeingFromString(String wayToWellbeingInput) {
 
         WaysToWellbeing wayToWellbeing = WaysToWellbeing.UNASSIGNED;
@@ -80,6 +101,12 @@ public class WellbeingHelper {
         return wayToWellbeing;
     }
 
+    /**
+     * Convert the way to wellbeing enum to a string
+     *
+     * @param wayToWellbeingInput The way to wellbeing to convert
+     * @return The string associated with the way to wellbeing
+     */
     public static String getStringFromWayToWellbeing(WaysToWellbeing wayToWellbeingInput) {
 
         String wayToWellbeing = "None";
@@ -106,6 +133,13 @@ public class WellbeingHelper {
         return wayToWellbeing;
     }
 
+    /**
+     * Get the color associated with the way to wellbeing
+     *
+     * @param context The application context
+     * @param wayToWellbeing The way to wellbeing
+     * @return The associated color
+     */
     public static int getColor(Context context, String wayToWellbeing) {
         WaysToWellbeing wayToWellbeingType = getWayToWellbeingFromString(wayToWellbeing.replace('_', ' '));
 
@@ -126,6 +160,12 @@ public class WellbeingHelper {
         }
     }
 
+    /**
+     * Get the wellbeing string resource
+     *
+     * @param wayToWellbeing The way to wellbeing
+     * @return The string resource id
+     */
     public static int getWellbeingStringResource(WaysToWellbeing wayToWellbeing) {
         switch(wayToWellbeing) {
             case CONNECT:

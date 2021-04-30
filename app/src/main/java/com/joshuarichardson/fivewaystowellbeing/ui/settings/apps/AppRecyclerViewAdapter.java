@@ -22,6 +22,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * An adapter to display a recycler view for showing apps used.
+ * Provides a dropdown with callback so that an activity can be selected for each app.
+ */
 public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerViewAdapter.SurveyResponseViewHolder> {
 
     private final LayoutInflater inflater;
@@ -75,11 +79,11 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
 
         private String packageName;
 
-        private TextView appName;
-        private TextView activityId;
-        private TextView activityWayToWellbeing;
-        private Spinner dropDown;
-        private ImageView image;
+        private final TextView appName;
+        private final TextView activityId;
+        private final TextView activityWayToWellbeing;
+        private final Spinner dropDown;
+        private final ImageView image;
         private AppItem response;
 
         public SurveyResponseViewHolder(@NonNull View itemView) {
@@ -91,6 +95,11 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
             this.image = itemView.findViewById(R.id.list_item_image);
         }
 
+        /**
+         * Displays the information about an app item in the recycler view.
+         *
+         * @param response The app item to display information about
+         */
         public void onBind(AppItem response) {
             this.response = response;
             this.packageName = response.getPackageName();
@@ -129,6 +138,7 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
                 this.response.setActivityId(0);
                 this.activityId.setText(context.getString(R.string.no_activity_assigned));
                 this.activityWayToWellbeing.setText("");
+                // Trigger the callback when an item is selected
                 AppRecyclerViewAdapter.this.dropdownCallback.onItemSelected(0, this.packageName);
                 return;
             }
@@ -151,6 +161,9 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
         }
     }
 
+    /**
+     * A callback to allow the user to change the activity assigned to an app
+     */
     public interface OnDropdownClick {
         void onItemSelected(long activityId, String packageName);
     }

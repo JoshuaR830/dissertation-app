@@ -37,16 +37,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * Fragment showing a recycler view of items along with a search box to scrolling and improve the user experience
+ */
 @AndroidEntryPoint
 public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapter.ActivityClickListener, ActivitiesAdapter.ItemCountUpdateListener {
-
-    private RecyclerView activityRecycler;
 
     @Inject
     WellbeingDatabase db;
 
-    private LiveData<List<ActivityRecord>> activities;
-    private Observer<List<ActivityRecord>> activityObserver;
     private ActivitiesAdapter activityAdapter;
     private View root;
     private boolean isEditable;
@@ -75,9 +74,7 @@ public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapt
                     Snackbar snackbar = Snackbar.make(root, getText(R.string.old_activity_warning_snackbar), 10000)
                         .setAnchorView(root.findViewById(R.id.create_activity_button))
                         .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-                        .setAction(R.string.button_edit, v -> {
-                            makeEditable();
-                        });
+                        .setAction(R.string.button_edit, v -> makeActivitiesEditable());
                     snackbar.show();
                 });
             }
@@ -85,17 +82,18 @@ public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapt
 
         ActivityRecordDao activityDao = this.db.activityRecordDao();
 
-        activities = activityDao.getAllActivities();
+        LiveData<List<ActivityRecord>> activities = activityDao.getAllActivities();
 
-        this.activityRecycler = root.findViewById(R.id.activity_recycler_view);
-        this.activityRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView activityRecycler = root.findViewById(R.id.activity_recycler_view);
+        activityRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         this.activityAdapter = new ActivitiesAdapter(getContext(), new ArrayList<>(), this, this);
-        this.activityRecycler.setAdapter(this.activityAdapter);
+        activityRecycler.setAdapter(this.activityAdapter);
 
         EditText searchTextView = root.findViewById(R.id.activity_search_box);
 
-        activityObserver = ActivityData -> {
+        // This updates the recycler view and filters it by the search term for better navigation
+        Observer<List<ActivityRecord>> activityObserver = ActivityData -> {
             // This updates the recycler view and filters it by the search term for better navigation
             this.activityAdapter.setValues(ActivityData, searchTextView.getText().toString());
         };
@@ -116,9 +114,7 @@ public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapt
         });
 
         Button button = root.findViewById(R.id.create_from_search_button);
-        button.setOnClickListener(v -> {
-            onCreateFromSearchButtonClicked(v);
-        });
+        button.setOnClickListener(this::onCreateFromSearchButtonClicked);
 
         // Reference https://stackoverflow.com/a/47531110/13496270
         setHasOptionsMenu(true);
@@ -131,7 +127,14 @@ public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapt
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void onCreateFromSearchButtonClicked(View v) {
+    /**
+     * When the user searches for an item the doesn't exist and presses the ad activity button
+     * this makes sure that it is as smooth an experience as possible by sending the name of the activity
+     * with the intent
+     *
+     * @param view The instance of the button clicked.
+     */
+    public void onCreateFromSearchButtonClicked(View view) {
         EditText searchText = this.root.findViewById(R.id.activity_search_box);
         String searchQuery = searchText.getText().toString();
         Intent createActivityIntent = new Intent(getContext(), CreateOrUpdateActivityActivity.class);
@@ -196,9 +199,7 @@ public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapt
             .setIcon(R.drawable.icon_close)
             .setPositiveButton(R.string.button_delete, (dialog, which) -> {
                 // Set the pass time to hidden
-                WellbeingDatabaseModule.databaseExecutor.execute(() -> {
-                    this.db.activityRecordDao().flagHidden(activity.getActivityRecordId(), true);
-                });
+                WellbeingDatabaseModule.databaseExecutor.execute(() -> this.db.activityRecordDao().flagHidden(activity.getActivityRecordId(), true));
             })
             .setNegativeButton(R.string.button_cancel, (dialog, which) -> {})
             .create()
@@ -217,12 +218,12 @@ public class ActivityHistoryFragment extends Fragment implements ActivitiesAdapt
         menu.findItem(R.id.action_edit).setVisible(true);
     }
 
-    public void makeEditable() {
-        if (this.isEditable) {
-            this.isEditable = false;
-        } else {
-            this.isEditable = true;
-        }
+    /**
+     * Update the activities in the recycler to make enable/disable being able to edit them
+     */
+    public void makeActivitiesEditable() {
+        this.isEditable = !this.isEditable;
+
         // This updates the recycler view and filters it by the search term for better navigation
         this.activityAdapter.editableList(this.isEditable);
     }

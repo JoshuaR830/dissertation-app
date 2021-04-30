@@ -1,6 +1,15 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
+/**
+ * A helper class to get activity images
+ */
 public class ActivityTypeImageHelper {
+    /**
+     * Get the image resource associated with an activity type
+     *
+     * @param type The activity type
+     * @return the image resource id
+     */
     public static int getActivityImage(String type) {
         try {
             // Catch the exception if the user does not set a value

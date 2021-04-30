@@ -50,7 +50,20 @@ import androidx.lifecycle.Observer;
 
 import static java.lang.Math.min;
 
+/**
+ * A class that helps to display all of the content for surveys
+ * Takes survey data and uses it to populate all of the survey views.
+ */
 public class ActivityViewHelper {
+    /**
+     * Display the daily activity log to users
+     *
+     * @param activity The activity that contains the fragment
+     * @param surveyData The data that needs to be displayed
+     * @param db Access to the database
+     * @param fragmentManager The fragment manager
+     * @param analyticsHelper An instance of the analytics helper to be able to log events
+     */
     public static void displaySurveyItems(Activity activity, SurveyDay surveyData, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper) {
         if(surveyData == null) {
             return;
@@ -93,6 +106,17 @@ public class ActivityViewHelper {
         });
     }
 
+    /**
+     * Create the instance of the activity to populate the daily survey
+     *
+     * @param activity The page to display it on
+     * @param layout The layout to populate
+     * @param activityInstance The activity details to display
+     * @param db Access to the database
+     * @param fragmentManager The fragment manager
+     * @param analyticsHelper The analytics helper
+     * @param isAddedIn The indicator of whether the activity has just been added
+     */
     public static void createActivityItem(Activity activity, LinearLayout layout, ActivityInstance activityInstance, WellbeingDatabase db, FragmentManager fragmentManager, LogAnalyticEventHelper analyticsHelper, boolean isAddedIn) {
         // Get the Activity template
         View view = LayoutInflater.from(activity).inflate(R.layout.activity_item, layout, false);
@@ -121,6 +145,7 @@ public class ActivityViewHelper {
         MaterialButton startTimeButton = view.findViewById(R.id.add_start_time);
         MaterialButton endTimeButton = view.findViewById(R.id.add_end_time);
 
+        // Allow the user to select a start time
         startTimeButton.setOnClickListener(v -> {
             long myHours = activityInstance.getStartTime() / 3600000;
             long myMinutes = (activityInstance.getStartTime() - (myHours * 3600000)) / 60000;
@@ -151,6 +176,7 @@ public class ActivityViewHelper {
             });
         });
 
+        // Allow a user to select an end time
         endTimeButton.setOnClickListener(v -> {
 
             long myHours = activityInstance.getEndTime() / 3600000;
@@ -180,12 +206,14 @@ public class ActivityViewHelper {
             });
         });
 
+
+        // Add emotions
         List<Integer> colorList = Arrays.asList(R.color.translucent_sentiment_worst, R.color.translucent_sentiment_bad, R.color.translucent_sentiment_neutral, R.color.translucent_sentiment_good, R.color.translucent_sentiment_best);
 
         LinearLayout emotionsContainer = view.findViewById(R.id.emotions_container);
 
         // Set all to transparent so it doesn't end up the colour of the last background
-        removeSelection(view, activity);
+        removeEmotionSelection(view, activity);
 
         if (activityInstance.getEmotion() != 0) {
             // Remember to -1 because index is the value - 1
@@ -198,7 +226,7 @@ public class ActivityViewHelper {
             View sentimentItem = emotionsContainer.getChildAt(i);
             final int index = i;
             sentimentItem.setOnClickListener(v -> {
-                removeSelection(view, activity);
+                removeEmotionSelection(view, activity);
                 WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                     db.surveyResponseActivityRecordDao().updateEmotion(activityInstance.getActivitySurveyId(), index + 1);
                 });
@@ -206,14 +234,15 @@ public class ActivityViewHelper {
             });
         }
 
-        MaterialButton doneButton = view.findViewById(R.id.done_button);
         EditText noteTextInput = view.findViewById(R.id.note_input);
 
+        // Show note box and allow user to edit it or delete it if they press it again
         addNoteButton.setOnClickListener(v -> {
             if(noteTextInputContainer.getVisibility() == View.GONE) {
                 noteTextInputContainer.setVisibility(View.VISIBLE);
                 addNoteButton.setIconResource(R.drawable.icon_close);
             } else {
+                // Confirm that users are happy to delete the note
                 new MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.title_delete_note)
                         .setMessage(R.string.body_delete_note)
@@ -235,6 +264,7 @@ public class ActivityViewHelper {
             }
         });
 
+        // Respond to changes in note text to update the hint
         noteTextInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -292,6 +322,8 @@ public class ActivityViewHelper {
                     expandButton.setImageResource(R.drawable.button_expand);
                 }
             });
+
+            MaterialButton doneButton = view.findViewById(R.id.done_button);
 
             expandButton.setOnClickListener(expandClickListener);
             doneButton.setOnClickListener(expandClickListener);
@@ -356,6 +388,18 @@ public class ActivityViewHelper {
         });
     }
 
+    /**
+     * Create a progress insights card that displays the sub-activities that users are doing best at
+     * and sub-activities that users could improve
+     *
+     * @param helpContainer The container to display help in
+     * @param wayToWellbeing The way to wellbeing that is being displayed
+     * @param startTime The start time in milliseconds
+     * @param endTime The end time in milliseconds
+     * @param context The application context
+     * @param activity The lifecycle owner
+     * @param db A way to access the database
+     */
     public static void createInsightCards(LinearLayout helpContainer, WaysToWellbeing wayToWellbeing, long startTime, long endTime, Context context, LifecycleOwner activity, WellbeingDatabase db) {
 
         View goodInsights = LayoutInflater.from(context).inflate(R.layout.progress_insight_card, null);
@@ -379,6 +423,7 @@ public class ActivityViewHelper {
         Observer<List<WellbeingQuestion>> goodObserver = wellbeingQuestions -> {
             goodItems.removeAllViews();
 
+            // Ensure that they are displayed in a random order
             Collections.shuffle(wellbeingQuestions);
 
             boolean shouldDisplay = false;
@@ -406,6 +451,7 @@ public class ActivityViewHelper {
         Observer<List<WellbeingQuestion>> suggestionObserver = wellbeingQuestions -> {
             suggestionItems.removeAllViews();
 
+            // Ensure that they are displayed in a random order
             Collections.shuffle(wellbeingQuestions);
 
             boolean shouldDisplay = false;
@@ -437,7 +483,13 @@ public class ActivityViewHelper {
         helpContainer.addView(suggestionInsights);
     }
 
-    private static void removeSelection(View view, Context context) {
+    /**
+     * When changing the selected emotion, need to remove the background tint from all others
+     *
+     * @param view A view that contains the emotions
+     * @param context The application context
+     */
+    private static void removeEmotionSelection(View view, Context context) {
         FrameLayout layoutWorst = view.findViewById(R.id.sentiment_worst_frame);
         FrameLayout layoutBad = view.findViewById(R.id.sentiment_bad_frame);
         FrameLayout layoutNeutral = view.findViewById(R.id.sentiment_neutral_frame);
@@ -451,6 +503,13 @@ public class ActivityViewHelper {
         layoutBest.getBackground().setTint(context.getColor(android.R.color.transparent));
     }
 
+    /**
+     * Add the start and end times to the instance of the activity
+     *
+     * @param timeText The text view that should contain the time
+     * @param startTimeMillis The start time in milliseconds
+     * @param endTimeMillis The end time in milliseconds
+     */
     private static void displayTimes(TextView timeText, long startTimeMillis, long endTimeMillis) {
 
         String startTime = TimeFormatter.formatTimeAsHourMinuteString(startTimeMillis);

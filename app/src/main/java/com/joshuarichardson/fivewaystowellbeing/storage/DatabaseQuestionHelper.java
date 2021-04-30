@@ -1,7 +1,11 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
+import android.content.SharedPreferences;
+
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingQuestion;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyItemTypes;
 
@@ -118,5 +122,22 @@ public class DatabaseQuestionHelper {
             new WellbeingQuestion(64, "Did you have a faith-based experience or revelation?", "You took notice while practicing your faith through having a new experience - that's amazing!", "Spending time taking notice while practicing faith can lead to new experiences and it might change how you see things!", WaysToWellbeing.TAKE_NOTICE.toString(), HIGH_VALUE, ActivityType.FAITH.toString(), SurveyItemTypes.CHECKBOX.toString()),
             new WellbeingQuestion(65, "Were you led to do something for someone else as a result?", "Practicing your faith led you to give time or energy to serve someone else - nice one!", "Do you ever feel led to give your time to serve someone else as you practice your faith?", WaysToWellbeing.GIVE.toString(), LOW_VALUE, ActivityType.FAITH.toString(), SurveyItemTypes.CHECKBOX.toString()),
         };
+    }
+
+    public static void updateQuestions(SharedPreferences preferences, WellbeingQuestionDao questionDao) {
+        SharedPreferences.Editor preferenceEditor = preferences.edit();
+
+        // Put the questions in the database whenever the questions are updated
+        int appQuestionVersion = preferences.getInt("added_question_version", 0);
+            if (appQuestionVersion != DatabaseQuestionHelper.VERSION_NUMBER) {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
+                for (WellbeingQuestion question : DatabaseQuestionHelper.getQuestions()) {
+                    questionDao.insert(question);
+                    questionDao.updateQuestion(question.getId(), question.getQuestion(), question.getPositiveMessage(), question.getNegativeMessage());
+                }
+            });
+            preferenceEditor.putInt("added_question_version", DatabaseQuestionHelper.VERSION_NUMBER);
+            preferenceEditor.apply();
+        }
     }
 }

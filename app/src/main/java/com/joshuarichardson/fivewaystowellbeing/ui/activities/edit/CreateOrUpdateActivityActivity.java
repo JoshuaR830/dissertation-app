@@ -30,6 +30,9 @@ import javax.inject.Inject;
 import androidx.appcompat.app.AppCompatActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * An Android Activity for creating new activities or editing existing ones.
+ */
 @AndroidEntryPoint
 public class CreateOrUpdateActivityActivity extends AppCompatActivity {
     ActivityRecordDao activityDao;
@@ -53,6 +56,41 @@ public class CreateOrUpdateActivityActivity extends AppCompatActivity {
         ArrayAdapter<String> waysToWellbeingAdapter = new ArrayAdapter<>(CreateOrUpdateActivityActivity.this, R.layout.item_list_text, Arrays.asList("Connect", "Be active", "Keep learning", "Take notice", "Give", "None"));
         wayToWellbeingInput.setAdapter(waysToWellbeingAdapter);
 
+        updateWayToWellbeingBasedOnType(dropDownInput);
+        displayWellbeingHelpCard(wayToWellbeingInput);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(CreateOrUpdateActivityActivity.this, R.layout.item_list_text, DropDownHelper.getEnumStrings(ActivityType.values()));
+        dropDownInput.setAdapter(adapter);
+
+        this.activityDao = this.db.activityRecordDao();
+
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            // Set the name if the user entered one
+            if(getIntent().hasExtra("new_activity_name")) {
+                EditText textBox = findViewById(R.id.activity_name_input);
+                textBox.setText(getIntent().getExtras().getString("new_activity_name", ""));
+            }
+
+            // If there is an activity id already - it means the user is editing it
+            if (getIntent().hasExtra("activity_id")) {
+                this.isEditing = true;
+                EditText textBox = findViewById(R.id.activity_name_input);
+                this.activityId = getIntent().getExtras().getLong("activity_id");
+                textBox.setText(getIntent().getExtras().getString("activity_name", ""));
+                dropDownInput.setText(getIntent().getExtras().getString("activity_type", ""), false);
+                String wayToWellbeing = getIntent().getExtras().getString("activity_way_to_wellbeing", WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.UNASSIGNED));
+                wayToWellbeingInput.setText(WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.valueOf(wayToWellbeing)), false);
+            }
+        }
+    }
+
+    /**
+     * When an item is selected from the activity type input,
+     * update the way to wellbeing type so the user doesn't need to know it
+     *
+     * @param dropDownInput
+     */
+    private void updateWayToWellbeingBasedOnType(AutoCompleteTextView dropDownInput) {
         dropDownInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -69,7 +107,15 @@ public class CreateOrUpdateActivityActivity extends AppCompatActivity {
                 wayToWellbeingInput.setText(WellbeingHelper.getStringFromWayToWellbeing(wayToWellbeing), false);
             }
         });
+    }
 
+    /**
+     * Attach listener to the drop down menu of ways to wellbeing.
+     * When a way to wellbeing is selected, display the definiton of the way to wellbeing.
+     *
+     * @param wayToWellbeingInput The input box to listen to for changes
+     */
+    private void displayWellbeingHelpCard(AutoCompleteTextView wayToWellbeingInput) {
         LinearLayout helpContainer = findViewById(R.id.wellbeing_card_help_container);
 
         wayToWellbeingInput.addTextChangedListener(new TextWatcher() {
@@ -110,33 +156,18 @@ public class CreateOrUpdateActivityActivity extends AppCompatActivity {
                 }
             }
         });
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(CreateOrUpdateActivityActivity.this, R.layout.item_list_text, DropDownHelper.getEnumStrings(ActivityType.values()));
-        dropDownInput.setAdapter(adapter);
-
-        this.activityDao = this.db.activityRecordDao();
-
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            if(getIntent().hasExtra("new_activity_name")) {
-                EditText textBox = findViewById(R.id.activity_name_input);
-                textBox.setText(getIntent().getExtras().getString("new_activity_name", ""));
-            }
-
-            if (getIntent().hasExtra("activity_id")) {
-                this.isEditing = true;
-                EditText textBox = findViewById(R.id.activity_name_input);
-                AutoCompleteTextView activityType = findViewById(R.id.activity_type_input);
-                AutoCompleteTextView wellbeingType = findViewById(R.id.way_to_wellbeing_input);
-                this.activityId = getIntent().getExtras().getLong("activity_id");
-                textBox.setText(getIntent().getExtras().getString("activity_name", ""));
-                activityType.setText(getIntent().getExtras().getString("activity_type", ""), false);
-                String wayToWellbeing = getIntent().getExtras().getString("activity_way_to_wellbeing", WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.UNASSIGNED));
-                wellbeingType.setText(WellbeingHelper.getStringFromWayToWellbeing(WaysToWellbeing.valueOf(wayToWellbeing)), false);
-            }
-        }
     }
 
-    public void onSubmit(View v) {
+    /**
+     * When the user presses the submit button, this gets the form information.
+     * If the user made any mistakes, error messages will be displayed and the form won't be submitted
+     *
+     * If there are no errors and the activity is new, it will be updated in the table,
+     * if it is updating an existing activity, then that activity will be updated
+     *
+     * @param view The instance of the button clicked.
+     */
+    public void onSubmit(View view) {
         // Log the interaction
         this.analyticsHelper.logCreateActivityEvent(this);
 
@@ -182,10 +213,12 @@ public class CreateOrUpdateActivityActivity extends AppCompatActivity {
             wellbeingContainer.setError(null);
         }
 
+        // Don't submit if there are errors
         if(hasError) {
             return;
         }
 
+        // Add or update activity
         final String wayToWellbeingString = WellbeingHelper.getWayToWellbeingFromString(wayToWellbeing).toString();
         WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             if (this.activityId != 0 && this.isEditing) {

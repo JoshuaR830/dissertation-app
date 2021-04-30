@@ -67,16 +67,12 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.joshuarichardson.fivewaystowellbeing.DisplayHelper.getSmallestMaxDimension;
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
 import static com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper.createInsightCards;
-
+/**
+ * Fragment to display a the current ways to wellbeing achieved
+ */
 @AndroidEntryPoint
 public class ProgressFragment extends Fragment {
     private static final int ACTIVITY_REQUEST_CODE = 1;
-
-    @Inject
-    WellbeingDatabase db;
-
-    @Inject
-    public LogAnalyticEventHelper analyticsHelper;
 
     private Observer<List<SurveyResponse>> surveyResponsesObserver;
     private LiveData<List<SurveyResponse>> surveyResponseItems;
@@ -87,6 +83,12 @@ public class ProgressFragment extends Fragment {
     private Observer<SurveyCountItem> emotionUpdateObserver;
     private boolean isDeletable;
     private boolean shouldUpdate = true;
+
+    @Inject
+    WellbeingDatabase db;
+
+    @Inject
+    public LogAnalyticEventHelper analyticsHelper;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parentView, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, parentView, false);
@@ -116,7 +118,9 @@ public class ProgressFragment extends Fragment {
         return view;
     }
 
-    // Whenever something needs to be updated - do this
+    /**
+     * Whenever the page needs to be updated call this and it will update the survey data displayed
+     */
     public void updateSurveyItems() {
         long startTime = TimeHelper.getStartOfDay(Calendar.getInstance().getTimeInMillis());
         SurveyResponseDao surveyDao = db.surveyResponseDao();
@@ -242,7 +246,6 @@ public class ProgressFragment extends Fragment {
         WellbeingGraphView  graphView = new WellbeingGraphView(getActivity(), (int)(getSmallestMaxDimension(requireContext())/1.5), new WellbeingGraphValueHelper(0, 0,0 ,0, 0), true);
 
         this.wholeGraphUpdate = graphValues -> {
-            // ToDo - get the values on fragment launch - save them - compare them to the new ones - is a new 100% - then you have achieved!
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
             WellbeingDatabaseModule.databaseExecutor.execute(() ->
@@ -275,7 +278,6 @@ public class ProgressFragment extends Fragment {
                 }
             } while(!doesExist && cal.getTimeInMillis() > 1613509560000L);
         });
-
 
         ChipGroup group = view.findViewById(R.id.wellbeing_chip_group);
         LinearLayout helpContainer = view.findViewById(R.id.way_to_wellbeing_help_container);
@@ -421,6 +423,10 @@ public class ProgressFragment extends Fragment {
         }
     }
 
+    /**
+     * Toggle delete mode.
+     * Allows activities to be deleted from a survey
+     */
     public void toggleDeletable() {
         LinearLayout layout = requireActivity().findViewById(R.id.survey_item_container);
         int counter = layout.getChildCount();

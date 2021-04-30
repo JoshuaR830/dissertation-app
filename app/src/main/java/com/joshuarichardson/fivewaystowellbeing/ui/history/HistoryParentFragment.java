@@ -19,6 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * Fragment allowing for tabs to wellbeing logs and activities
+ */
 @AndroidEntryPoint
 public class HistoryParentFragment extends Fragment {
     @Inject
@@ -50,6 +53,9 @@ public class HistoryParentFragment extends Fragment {
         })).attach();
     }
 
+    /**
+     * Enable editing on the activities
+     */
     public void instantiateEditable() {
         TabLayout tabLayout = requireActivity().findViewById(R.id.history_tabs);
 
@@ -65,7 +71,7 @@ public class HistoryParentFragment extends Fragment {
             }
 
             ActivityHistoryFragment activityFragment = (ActivityHistoryFragment) activeFragment;
-            activityFragment.makeEditable();
+            activityFragment.makeActivitiesEditable();
         }
     }
 }

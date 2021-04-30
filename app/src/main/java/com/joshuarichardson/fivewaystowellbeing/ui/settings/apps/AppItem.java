@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.settings.apps;
 
+/**
+ * The data about an app including assigned activity
+ */
 public class AppItem {
     private long activityId;
     private String packageName;

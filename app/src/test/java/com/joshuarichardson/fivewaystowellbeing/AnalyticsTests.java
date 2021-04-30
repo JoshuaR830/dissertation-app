@@ -109,6 +109,6 @@ public class AnalyticsTests {
 
         List<String> strings = stringCaptor.getAllValues();
         assertThat(strings.get(0)).isEqualTo("connect");
-        assertThat(strings.get(1)).isEqualTo("automatic_Activity_way_to_wellbeing");
+        assertThat(strings.get(1)).isEqualTo("automatic_activity_way_to_wellbeing");
     }
 }

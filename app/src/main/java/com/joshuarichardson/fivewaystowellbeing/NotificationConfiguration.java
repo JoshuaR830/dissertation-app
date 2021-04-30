@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
+/**
+ * All of the notifications have unique identifiers which are listed below
+ */
 public class NotificationConfiguration {
     // Channels
     public static class ChannelsId {

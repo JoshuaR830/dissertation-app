@@ -14,6 +14,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+/**
+ * Fragment containing the first UI that users see in the settings pages
+ */
 public class WellbeingSettingsFragment extends PreferenceFragmentCompat {
 
     @Override
@@ -56,6 +59,11 @@ public class WellbeingSettingsFragment extends PreferenceFragmentCompat {
         setPageSummary("night");
     }
 
+    /**
+     * Set the summary on the preferences to show time and toggle status
+     *
+     * @param timeOfDay The time of day (morning, noon, night)
+     */
     private void setPageSummary(final String timeOfDay) {
         String notificationSwitchKey = "notification_" + timeOfDay + "_switch";
         String notificationPageKey = "notification_" + timeOfDay + "_page";

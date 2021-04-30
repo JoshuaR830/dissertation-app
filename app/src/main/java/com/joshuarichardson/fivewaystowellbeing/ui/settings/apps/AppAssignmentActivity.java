@@ -27,6 +27,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+/**
+ * Activity that displays a recycler view to access all of the apps that have been used recently
+ */
 @AndroidEntryPoint
 public class AppAssignmentActivity extends AppCompatActivity implements AppRecyclerViewAdapter.OnDropdownClick {
 
@@ -65,13 +68,21 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
         this.wasPaused = true;
     }
 
+    /**
+     * Get all of the apps that have been used in the last 24 hours.
+     * Display all of those activities to the user and allow them to select the activities to assign to them.
+     */
     private void displayStatsScreen() {
+        // Get the activities that have taken place in the last 24 hours
         this.usage = (UsageStatsManager) getSystemService(Service.USAGE_STATS_SERVICE);
         List<UsageStats> stats = this.usage.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, this.currentTime);
+
+        // End the activity if there are no items and the usage stats page was shown
         if (stats.size() == 0 && wasPaused) {
             finish();
         }
 
+        // Loop through the usage stats and add it to the table
         for(UsageStats stat : stats) {
             ApplicationInfo info;
             try {
@@ -97,6 +108,7 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
         activityNames.add(0, getString(R.string.no_selection));
         activityWaysToWellbeing.add(0, getString(R.string.no_ways_to_wellbeing));
 
+        // Create an adapter to display in a recycler view
         AppRecyclerViewAdapter adapter = new AppRecyclerViewAdapter(this, new ArrayList<>(), this);
         // Get the recycler view to populate
         RecyclerView recycler = findViewById(R.id.app_assignment_recycler);
@@ -111,10 +123,12 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
                 activityWaysToWellbeing.add(activity.getActivityWayToWellbeing());
             }
 
+            // Update the adapter once all the activities have been retrieved
             adapter.setListValues(activityIds, activityNames, activityWaysToWellbeing);
         });
 
         WellbeingDatabaseModule.databaseExecutor.execute(() -> {
+            // Get all of the automatic activities that are named (skips the physical activities)
             List<AutomaticActivity> automaticActivities = this.db.physicalActivityDao().getAllPhysicalActivitiesWithNames();
             List<AppItem> appItems = new ArrayList<>();
 
@@ -129,6 +143,7 @@ public class AppAssignmentActivity extends AppCompatActivity implements AppRecyc
                 appItems.add(new AppItem(activity.getActivityType(), activity.getName(), activityRecord.getActivityName(), activityRecord.getActivityWayToWellbeing(), activity.getActivityId()));
             }
 
+            // Update the adapter to contain all of the app items
             runOnUiThread(() -> {
                 adapter.setValues(appItems);
             });

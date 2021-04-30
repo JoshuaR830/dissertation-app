@@ -19,6 +19,10 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * Fragment for the physical activity settings
+ * Listen for changes in the activity selected and update the table to so that it gets suggested.
+ */
 @AndroidEntryPoint
 public class PhysicalActivitySettingsFragment extends PreferenceFragmentCompat {
     @Inject
@@ -65,12 +69,21 @@ public class PhysicalActivitySettingsFragment extends PreferenceFragmentCompat {
             });
         });
 
+        // Set a listener for all preference types
         setPreferenceListener(walkActivityList, preferences, AutomaticActivityTypes.WALK);
         setPreferenceListener(runActivityList, preferences, AutomaticActivityTypes.RUN);
         setPreferenceListener(cycleActivityList, preferences, AutomaticActivityTypes.CYCLE);
         setPreferenceListener(vehicleActivityList, preferences, AutomaticActivityTypes.VEHICLE);
     }
 
+    /**
+     * Listen for changes in the list preferences.
+     * When an activity is selected update the summary and the automated activity table.
+     *
+     * @param listPreference The instance of the list preference
+     * @param preferences Reference to the shared preferences
+     * @param typeName The activity type
+     */
     private void setPreferenceListener(ListPreference listPreference, SharedPreferences preferences, String typeName) {
         listPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             SharedPreferences.Editor editor = preferences.edit();

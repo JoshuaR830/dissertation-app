@@ -15,6 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * An activity that displays a list of activities by displaying the fragment
+ */
 @AndroidEntryPoint
 public class ViewActivitiesActivity extends AppCompatActivity {
 
@@ -44,7 +47,7 @@ public class ViewActivitiesActivity extends AppCompatActivity {
                 if(viewSurveyResponseFragment == null) {
                     return false;
                 }
-                viewSurveyResponseFragment.makeEditable();
+                viewSurveyResponseFragment.makeActivitiesEditable();
             }
             return true;
         }

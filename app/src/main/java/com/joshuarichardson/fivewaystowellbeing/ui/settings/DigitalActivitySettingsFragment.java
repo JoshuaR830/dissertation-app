@@ -9,6 +9,10 @@ import com.joshuarichardson.fivewaystowellbeing.automated_activity_tracking.app_
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+/**
+ * Display the settings
+ * Start a service when the app tracking is toggled
+ */
 public class DigitalActivitySettingsFragment extends PreferenceFragmentCompat {
 
     @Override

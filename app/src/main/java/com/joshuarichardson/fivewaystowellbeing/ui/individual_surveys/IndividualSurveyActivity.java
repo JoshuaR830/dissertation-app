@@ -56,18 +56,21 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.joshuarichardson.fivewaystowellbeing.DisplayHelper.getSmallestMaxDimension;
 import static com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper.createInsightCards;
 
+/**
+ * Activity to display a specific wellbeing log from a day in history
+ */
 @AndroidEntryPoint
 public class IndividualSurveyActivity extends AppCompatActivity {
     private static final int ACTIVITY_REQUEST_CODE = 1;
+    private long surveyId;
+    private boolean isDeletable;
+    private long startTime;
 
     @Inject
     public WellbeingDatabase db;
 
     @Inject
     public LogAnalyticEventHelper analyticsHelper;
-    private long surveyId;
-    private boolean isDeletable;
-    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         WellbeingGraphView graphView = new WellbeingGraphView(this, (int)(getSmallestMaxDimension(this)/1.5), new WellbeingGraphValueHelper(0, 0, 0, 0, 0), true);
         canvasContainer.addView(graphView);
 
+        // Observe changes to the graph and update the values
         Observer<List<WellbeingGraphItem>> wholeGraphUpdate  = graphValues -> {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
@@ -104,6 +108,8 @@ public class IndividualSurveyActivity extends AppCompatActivity {
 
         ChipGroup group = findViewById(R.id.wellbeing_chip_group);
         LinearLayout helpContainer = findViewById(R.id.way_to_wellbeing_help_container);
+
+        // Add chip listeners which can be selected to display insights and wellbeing descriptions
         group.setOnCheckedChangeListener((groupId, checkedId) -> {
             helpContainer.removeAllViews();
             switch (checkedId) {
@@ -143,7 +149,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             }
         });
 
-        // ToDo - at some point make this visible and allow it to be edited
+        // Allow activities to be added
         Button addActivityButton = findViewById(R.id.add_activity_button);
         addActivityButton.setOnClickListener(v -> {
             Intent activityIntent = new Intent(this, ViewActivitiesActivity.class);
@@ -175,6 +181,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // If the user goes back instead of adding a new item, they might have updated an activity instead so should reload for consistency
         if (resultCode != Activity.RESULT_OK) {
             updateSurveyItems();
             return;
@@ -222,7 +229,9 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         }
     }
 
-    // Whenever something needs to be updated - do this
+    /**
+     * Whenever the page needs to be updated call this and it will update the survey data displayed
+     */
     public void updateSurveyItems() {
         WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(surveyId);
@@ -234,12 +243,11 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             }
 
             SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
-
-
             ActivityViewHelper.displaySurveyItems(this, surveyData, this.db, getSupportFragmentManager(), analyticsHelper);
 
             SurveyResponse surveyResponse = this.db.surveyResponseDao().getSurveyResponseById(surveyId);
 
+            // Add the summary
             runOnUiThread(() -> {
 
                 TextView summaryTitle = findViewById(R.id.individual_survey_title);
@@ -277,6 +285,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        // When the user clicks delete toggle it
         if (item.getItemId() == R.id.action_delete) {
             toggleDeletable();
             return true;
@@ -294,7 +303,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
     }
 
     @Override
-    // ToDo - copied from progress fragment - should merge
     public void onResume() {
         super.onResume();
         if (this.isDeletable) {
@@ -302,7 +310,10 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         }
     }
 
-    // ToDo - copied from progress fragment - should merge
+    /**
+     * Toggle delete mode.
+     * Allows activities to be deleted from a survey
+     */
     public void toggleDeletable() {
         LinearLayout layout = this.findViewById(R.id.survey_item_container);
         int counter = layout.getChildCount();
@@ -321,7 +332,12 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         }
     }
 
-    public void onLearnMoreButtonClicked(View v) {
+    /**
+     * Take the use rto the view more page when clicking a button
+     *
+     * @param view The instance of the button clicked
+     */
+    public void onLearnMoreButtonClicked(View view) {
         Intent learnMoreIntent = new Intent(this, LearnMoreAboutFiveWaysActivity.class);
         startActivity(learnMoreIntent);
     }

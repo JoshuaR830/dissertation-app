@@ -29,6 +29,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * The history fragment that displays a list of al the surveys that users have filled in
+ * The menu will allow users to add missed days
+ */
 @AndroidEntryPoint
 public class SurveyHistoryFragment extends Fragment {
     @Inject
@@ -45,6 +49,7 @@ public class SurveyHistoryFragment extends Fragment {
         SurveyResponseAdapter adapter = new SurveyResponseAdapter(getActivity(), new ArrayList<>());
         recycler.setAdapter(adapter);
 
+        // Update in real time so that survey history that are changes is updated immediately
         Observer<List<SurveyResponse>> historyObserver = historyPageData -> {
 
             ArrayList<HistoryPageData> historyList = new ArrayList<>();
@@ -55,11 +60,13 @@ public class SurveyHistoryFragment extends Fragment {
                     long morning = TimeHelper.getStartOfDay(time);
                     long night = TimeHelper.getEndOfDay(time);
 
+                    // Get all of the values for on the graphs
                     List<WellbeingGraphItem> graphItems = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(morning, night);
                     WellbeingGraphValueHelper wellbeingGraphValues = WellbeingGraphValueHelper.getWellbeingGraphValues(graphItems);
                     historyList.add(new HistoryPageData(pageItem, wellbeingGraphValues));
                 }
 
+                // Update the recycler view to display the data
                 requireActivity().runOnUiThread(() -> {
                     adapter.setValues(historyList);
                 });

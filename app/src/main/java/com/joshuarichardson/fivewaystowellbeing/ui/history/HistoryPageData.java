@@ -4,6 +4,9 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
+/**
+ * The data to show on the survey history page
+ */
 public class HistoryPageData {
     private long surveyResponseId;
     private long surveyResponseTimestamp;

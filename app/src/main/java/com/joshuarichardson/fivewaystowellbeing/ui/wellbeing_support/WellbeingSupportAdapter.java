@@ -17,6 +17,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * An adapter for a recycler view that will allow users to access mental health resources
+ */
 public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSupportAdapter.WellbeingSupportViewHolder> {
 
     private final List<WellbeingSupportItem> supportItemList;
@@ -50,10 +53,10 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
 
     public class WellbeingSupportViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView title;
-        private TextView description;
-        private ImageView image;
-        private Button button;
+        private final TextView title;
+        private final TextView description;
+        private final ImageView image;
+        private final Button button;
 
         public WellbeingSupportViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,12 +67,18 @@ public class WellbeingSupportAdapter extends RecyclerView.Adapter<WellbeingSuppo
             this.button = itemView.findViewById(R.id.wellbeing_support_list_item_button);
         }
 
+        /**
+         * Display a wellbeing support item that allows users to access support in a webView
+         *
+         * @param supportItem The item information to display
+         */
         public void onBind(WellbeingSupportItem supportItem) {
             // Set the values for each of the views in the view holder
             this.title.setText(supportItem.getTitle());
             this.description.setText(supportItem.getDescription());
             this.image.setImageResource(supportItem.getImageResourceId());
 
+            // Start a webView activity
             this.button.setOnClickListener(v -> {
                 Intent webViewIntent = new Intent(WellbeingSupportAdapter.this.context, WellbeingSupportWebViewActivity.class);
                 Bundle webViewBundle = new Bundle();

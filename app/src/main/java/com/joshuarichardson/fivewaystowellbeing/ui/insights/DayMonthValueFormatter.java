@@ -6,6 +6,9 @@ import com.joshuarichardson.fivewaystowellbeing.TimeFormatter;
 
 import java.util.List;
 
+/**
+ * Formatter to display the correct date on the line graph
+ */
 public class DayMonthValueFormatter extends ValueFormatter {
 
     private final List<Long> times;

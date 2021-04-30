@@ -22,6 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * An activity that displays a recycler view of all the days that a user has missed logging
+ */
 @AndroidEntryPoint
 public class AddMissedDayActivity extends AppCompatActivity {
 
@@ -40,6 +43,7 @@ public class AddMissedDayActivity extends AppCompatActivity {
         SurveyResponseAdapter adapter = new SurveyResponseAdapter(this, new ArrayList<>());
         recycler.setAdapter(adapter);
 
+        // Observe changes to the history data so that it updates in real time
         Observer<List<SurveyResponse>> historyObserver = historyPageData -> {
 
             ArrayList<HistoryPageData> historyList = new ArrayList<>();
@@ -50,17 +54,20 @@ public class AddMissedDayActivity extends AppCompatActivity {
                     long morning = TimeHelper.getStartOfDay(now);
                     long night = TimeHelper.getEndOfDay(now);
 
+                    // Get the graph for each item in the list
                     List<WellbeingGraphItem> graphItems = this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimesNotLive(morning, night);
                     WellbeingGraphValueHelper wellbeingGraphValues = WellbeingGraphValueHelper.getWellbeingGraphValues(graphItems);
                     historyList.add(new HistoryPageData(pageItem, wellbeingGraphValues));
                 }
 
                 runOnUiThread(() -> {
+                    // Add items to the recycler view
                     adapter.setValues(historyList);
                 });
             });
         };
 
+        // Observe the empty values
         surveyResponseDao.getEmptyHistoryPageData().observe(this, historyObserver);
     }
 }

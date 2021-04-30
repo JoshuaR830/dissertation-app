@@ -26,7 +26,18 @@ import com.joshuarichardson.fivewaystowellbeing.ui.insights.InsightsItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Create the line graph for the five ways to wellbeing
+ */
 public class LineGraphHelper {
+    /**
+     * Create the line graph for the insights page
+     *
+     * @param context The application context
+     * @param graphCard The view that the graph will populate
+     * @param insightsItem The insights data that will be displayed
+     * @param callback The callback for when the chip is clicked
+     */
     public static void drawGraph(Context context, View graphCard, InsightsItem insightsItem, InsightsAdapter.ChipInfoCallback callback) {
         LineChart dailyAchieved = graphCard.findViewById(R.id.daily_wellbeing_line_chart);
 
@@ -55,12 +66,14 @@ public class LineGraphHelper {
         YAxis right = dailyAchieved.getAxisRight();
         right.setEnabled(false);
 
+        // Create the entries
         List<Entry> connectEntries = new ArrayList<>();
         List<Entry> beActiveEntries = new ArrayList<>();
         List<Entry> keepLearningEntries = new ArrayList<>();
         List<Entry> takeNoticeEntries = new ArrayList<>();
         List<Entry> giveEntries = new ArrayList<>();
 
+        // Create a list of values
         List<Integer> connectValues = insightsItem.getCurrentValues().getConnectValues();
         List<Integer> beActiveValues = insightsItem.getCurrentValues().getBeActiveValues();
         List<Integer> keepLearningValues = insightsItem.getCurrentValues().getKeepLearningValues();
@@ -68,6 +81,7 @@ public class LineGraphHelper {
         List<Integer> giveValues = insightsItem.getCurrentValues().getGiveValues();
         long startTime = insightsItem.getCurrentValues().getStartDay();
 
+        // Create entries for each day
         List<Long> dayMillisList = new ArrayList<>();
         for (int i = 0; i < connectValues.size(); i++) {
             connectEntries.add(new Entry(i, connectValues.get(i)));
@@ -89,6 +103,7 @@ public class LineGraphHelper {
 
         List<ILineDataSet> waysToWellbeingDataSets = new ArrayList<>();
 
+        // Create the data sets
         LineDataSet connectDataSet = new LineDataSet(connectEntries, context.getString(R.string.wellbeing_connect));
         connectDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         connectDataSet.setColor(context.getColor(R.color.way_to_wellbeing_connect));
@@ -114,6 +129,7 @@ public class LineGraphHelper {
         giveDataSet.setColor(context.getColor(R.color.way_to_wellbeing_give));
         waysToWellbeingDataSets.add(giveDataSet);
 
+        // Add the data sets for the lines
         LineData lineData = new LineData(waysToWellbeingDataSets);
         dailyAchieved.setData(lineData);
 

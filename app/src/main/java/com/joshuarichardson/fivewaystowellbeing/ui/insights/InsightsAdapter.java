@@ -28,6 +28,10 @@ import androidx.core.util.Pair;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * A recycler view adapter used to display the insights data
+ * Different sizes of cards can be displayed in the grid view
+ */
 public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.InsightsViewHolder> {
 
     private final List<InsightsItem> insightsList;
@@ -84,6 +88,11 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
 
         }
 
+        /**
+         * There are a few different types of cards which can be displayed in the recycler view.
+         * Each type of card can be 1x1 or 1x2 and can facilitate different content
+         * @param insightsItem The data for the particular insight that should be displayed
+         */
         public void onBind(InsightsItem insightsItem) {
 
             this.smallCard.setVisibility(View.GONE);
@@ -93,6 +102,7 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
             this.suggestionsCard.setVisibility(View.GONE);
 
             if(insightsItem.getType() == InsightType.SUGGESTION_CARD) {
+                // Add the suggestions
                 if(!insightsItem.isShouldShow()) {
                     return;
                 }
@@ -111,6 +121,7 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
                 this.suggestionsCard.setVisibility(View.VISIBLE);
 
             } else if(insightsItem.getType() == InsightType.DATE_PICKER_CARD) {
+                // Add date picker
                 this.titleType = this.datePickerCard.findViewById(R.id.time_chip);
                 Chip chip = this.datePickerCard.findViewById(R.id.time_chip);
 
@@ -150,21 +161,25 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
                 this.datePickerCard.setVisibility(View.VISIBLE);
 
             } else if(insightsItem.getType() == InsightType.DOUBLE_GRAPH) {
+                // Add double width graph
                 // Reference https://weeklycoding.com/mpandroidchart-documentation/getting-started/
                 this.titleType = this.graphCard.findViewById(R.id.insight_title_type);
                 LineGraphHelper.drawGraph(InsightsAdapter.this.context, this.graphCard, insightsItem, chipInfoCallback);
             } else if(insightsItem.getType() == InsightType.DOUBLE_INFO_CARD) {
+                // Add a double card with info
                 this.titleType = this.largeCard.findViewById(R.id.insight_title_type);
                 this.info = this.largeCard.findViewById(R.id.insight_description);
                 this.largeCard.setVisibility(View.VISIBLE);
                 this.info.setText(insightsItem.getInfo());
             } else {
+                // Add a 1x1 insight score card
                 this.titleType = this.smallCard.findViewById(R.id.insight_title_type);
                 this.info = this.smallCard.findViewById(R.id.insight_description);
                 this.smallCard.setVisibility(View.VISIBLE);
                 this.info.setText(String.format(Locale.getDefault(), "%d", insightsItem.getCurrentValue()));
                 int difference = insightsItem.getValueDifference();
 
+                // Set the trend data compared to previous time periods
                 TextView trendIndicator = this.smallCard.findViewById(R.id.trend_previous_period);
                 ImageView trendIndicatorImage = this.smallCard.findViewById(R.id.trend_indicator);
                 if (difference > 0) {
@@ -191,10 +206,16 @@ public class InsightsAdapter extends RecyclerView.Adapter<InsightsAdapter.Insigh
         }
     }
 
+    /**
+     * When the user clicks on the date, a dialog should be shown to prompt them to pick a new date
+     */
     public interface DateClickListener {
         void updateInsights(View itemView, long first, long second);
     }
 
+    /**
+     * When the user selects a chip on the graph, it needs to display cards
+     */
     public interface ChipInfoCallback {
         void displaySuggestionChip(View graphCard, long startTime, long endTime, WaysToWellbeing wayToWellbeing);
     }

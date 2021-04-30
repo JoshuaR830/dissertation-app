@@ -22,21 +22,23 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * This adapter is used to populate a recycler view.
+ * Historic activities are displayed to users allowing them to be logged
+ */
 public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.ActivityViewHolder> implements Filterable {
 
-    private final Context context;
     List<ActivityRecord> originalActivityItems = new ArrayList<>();
     List<ActivityRecord> activityItems = new ArrayList<>();
     LayoutInflater inflater;
-    private ActivityClickListener clickListener;
-    private ItemCountUpdateListener itemUpdateCallback;
+    private final ActivityClickListener clickListener;
+    private final ItemCountUpdateListener itemUpdateCallback;
     private boolean isEditable;
 
     public ActivitiesAdapter(Context context, List<ActivityRecord> activityItems, ActivityClickListener clickListener, ItemCountUpdateListener itemUpdateCallback) {
         this.inflater = LayoutInflater.from(context);
         this.originalActivityItems.addAll(activityItems);
         this.activityItems.addAll(activityItems);
-        this.context = context;
         this.clickListener = clickListener;
         this.itemUpdateCallback = itemUpdateCallback;
     }
@@ -65,6 +67,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Ac
         return this.searchActivityFilter;
     }
 
+    // Filter is used to allow the user to search for an item
     Filter searchActivityFilter = new Filter() {
 
         @Override
@@ -105,26 +108,37 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Ac
         }
     };
 
+    /**
+     * Replace the activity list with a new list and filter it
+     *
+     * @param activityData The activities to update the list
+     * @param searchTerm The search term entered
+     */
     public void setValues(List<ActivityRecord> activityData, String searchTerm) {
         this.originalActivityItems.clear();
         this.originalActivityItems.addAll(activityData);
         getFilter().filter(searchTerm);
     }
 
+    /**
+     * Toggle the items in the list so that they can be edited or deleted
+     *
+     * @param isEditable Toggle whether it can be edited or not
+     */
     public void editableList(boolean isEditable) {
         this.isEditable = isEditable;
         notifyDataSetChanged();
     }
 
     public class ActivityViewHolder extends RecyclerView.ViewHolder {
-        private MaterialButton deleteButton;
-        private MaterialButton editButton;
-        private TextView nameTextView;
-        private TextView wayToWellbeingTextView;
-        private TextView typeTextView;
-        private ImageView image;
-        private View editContainer;
-        private TextView errorMessage;
+        private final MaterialButton deleteButton;
+        private final MaterialButton editButton;
+        private final TextView nameTextView;
+        private final TextView wayToWellbeingTextView;
+        private final TextView typeTextView;
+        private final ImageView image;
+        private final View editContainer;
+        private final TextView errorMessage;
 
         public ActivityViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -139,6 +153,12 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Ac
             this.errorMessage = itemView.findViewById(R.id.error_message);
         }
 
+        /**
+         * Populate the item in the recycler as it scrolls
+         *
+         * @param activity The activity data to display on the card
+         * @param clickListener The click listener to be attached to the card
+         */
         public void onBind(ActivityRecord activity, ActivityClickListener clickListener) {
             this.nameTextView.setText(activity.getActivityName());
             this.typeTextView.setText(activity.getActivityType());
@@ -146,6 +166,8 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Ac
             this.errorMessage.setVisibility(View.GONE);
             if(activity.getActivityWayToWellbeing().equals("UNASSIGNED")) {
                 this.wayToWellbeingTextView.setVisibility(View.GONE);
+
+                // Show the error message if the activity was made before ways to wellbeing could be added to them
                 if (activity.getActivityTimestamp() < 1613509560000L) {
                     this.errorMessage.setVisibility(View.VISIBLE);
                 }
@@ -163,27 +185,28 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Ac
                 this.editContainer.setVisibility(View.GONE);
             }
 
-            this.editButton.setOnClickListener(v -> {
-                clickListener.onEditClick(v, activity);
-            });
-
-            this.deleteButton.setOnClickListener(v -> {
-                clickListener.onDeleteClick(v, activity);
-            });
+            // Edit and delete listeners
+            this.editButton.setOnClickListener(v -> clickListener.onEditClick(v, activity));
+            this.deleteButton.setOnClickListener(v -> clickListener.onDeleteClick(v, activity));
 
             // Reference https://medium.com/android-gate/recyclerview-item-click-listener-the-right-way-daecc838fbb9
-            itemView.setOnClickListener((v) -> {
-                clickListener.onItemClick(v, activity);
-            });
+            itemView.setOnClickListener((v) -> clickListener.onItemClick(v, activity));
         }
     }
 
+    /**
+     * Listeners to enable interactions with the items in the list
+     */
     public interface ActivityClickListener {
         void onItemClick(View view, ActivityRecord activity);
         void onEditClick(View view, ActivityRecord activity);
         void onDeleteClick(View view, ActivityRecord activity);
     }
 
+    /**
+     * A listener for the number of items in the filtered result
+     * Need to show an add more button if there are no items matching the search criteria
+     */
     public interface ItemCountUpdateListener {
         void itemCount(int size);
     }
