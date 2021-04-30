@@ -40,6 +40,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
@@ -66,8 +67,9 @@ public class GraphShouldBeDisplayed extends ProgressFragmentTestFixture {
     protected void defaultResponses() {
         super.defaultResponses();
 
-        when(this.wellbeingDao.getDataBySurvey(anyLong()))
-            .thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
+        doReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)))
+            .when(this.wellbeingDao)
+            .getDataBySurvey(anyLong());
 
         List<WellbeingQuestion> trueList = Arrays.asList(
             new WellbeingQuestion(1, "", "Positive message 1", "Negative message 1", WaysToWellbeing.CONNECT.toString(), 1, ActivityType.CHORES.toString(), SurveyItemTypes.CHECKBOX.toString()),
@@ -80,11 +82,13 @@ public class GraphShouldBeDisplayed extends ProgressFragmentTestFixture {
             new WellbeingQuestion(5, "", "Positive message 5", "Negative message 5", WaysToWellbeing.CONNECT.toString(), 1, ActivityType.CHORES.toString(), SurveyItemTypes.CHECKBOX.toString())
         );
 
-        when(this.wellbeingDao.getTrueWellbeingRecordsByTimestampRange(anyLong(), anyLong(), anyString()))
-            .thenReturn(new MutableLiveData<>(trueList));
+        doReturn(new MutableLiveData<>(trueList))
+            .when(this.wellbeingDao)
+            .getTrueWellbeingRecordsByTimestampRangeAndWayToWellbeingType(anyLong(), anyLong(), anyString());
 
-        when(this.wellbeingDao.getFalseWellbeingRecordsByTimestampRange(anyLong(), anyLong(), anyString()))
-            .thenReturn(new MutableLiveData<>(falseList));
+        doReturn(new MutableLiveData<>(falseList))
+            .when(this.wellbeingDao)
+            .getFalseWellbeingRecordsByTimestampRangeAndWayToWellbeingType(anyLong(), anyLong(), anyString());
     }
 
     @Test

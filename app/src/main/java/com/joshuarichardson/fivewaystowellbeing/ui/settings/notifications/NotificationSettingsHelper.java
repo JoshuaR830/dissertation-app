@@ -10,8 +10,19 @@ import java.util.Locale;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
-
+/**
+ * Helper for setting up the settings
+ */
 public class NotificationSettingsHelper {
+    /**
+     * Allow users to set the time for the notification.
+     * Update the summary.
+     *
+     * @param preferenceToSet The setting to change
+     * @param timeOfDay The time of day (morning, noon or night)
+     * @param fragmentManager Reference to the fragment manager
+     * @param preferences Reference to the shared preferences
+     */
     public static void setUpSettings(final Preference preferenceToSet, final String timeOfDay, final FragmentManager fragmentManager, final SharedPreferences preferences){
 
         final String notificationKey = "notification_" + timeOfDay;

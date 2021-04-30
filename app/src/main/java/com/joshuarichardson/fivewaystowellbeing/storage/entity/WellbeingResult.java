@@ -3,8 +3,12 @@ package com.joshuarichardson.fivewaystowellbeing.storage.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import static androidx.room.ForeignKey.CASCADE;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ACTIVITY_RECORD_SURVEY_RESPONSE_ID;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.SURVEY_RESPONSE_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RESULT_BE_ACTIVE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RESULT_CONNECT;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RESULT_GIVE;
@@ -14,7 +18,17 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RESULT_TAKE_NOTICE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RESULT_TIMESTAMP;
 
-@Entity(tableName = WELLBEING_RESULT_TABLE_NAME)
+/**
+ * The entity representing the wellbeing results table.
+ * The table is used to hold data for each daily wellbeing log.
+ * The data is timestamped so that it can be retrieved for a given time period.
+ * The five ways to wellbeing values are updated each time a change occurs, providing a quick way to access large amounts of ways to wellbeing results.
+ * No need to have multiple, resource intensive queries.
+ */
+@Entity(tableName = WELLBEING_RESULT_TABLE_NAME,
+    foreignKeys = {
+        @ForeignKey(entity = SurveyResponse.class, parentColumns = SURVEY_RESPONSE_ID, childColumns = WELLBEING_RESULT_ID, onDelete = CASCADE)
+    })
 public class WellbeingResult {
 
     @NonNull

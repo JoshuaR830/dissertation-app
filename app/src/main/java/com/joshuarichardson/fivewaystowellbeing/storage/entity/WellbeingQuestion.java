@@ -15,6 +15,10 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_QUESTIONS_WAY_TO_WELLBEING;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_QUESTIONS_WEIGHTING;
 
+/**
+ * The entity representing the question (sub-activity) data
+ * The table is used to hold all raw questions and suggestions available
+ */
 @Entity(tableName = WELLBEING_QUESTIONS_TABLE_NAME)
 public class WellbeingQuestion {
 

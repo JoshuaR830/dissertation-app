@@ -7,16 +7,19 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingValues;
 
 import androidx.annotation.Nullable;
 
+/**
+ * Create an insights item which can be used to populate a grid view with a range of card types
+ */
 public class InsightsItem {
-    private String title;
+    private final String title;
     private WaysToWellbeing wayToWellbeing;
     private int currentValue;
     private WellbeingValues currentValues;
     private int oldValue;
     private String info;
-    private View specialView;
-    private int columnWidth;
-    private InsightType insightType;
+    private final View specialView;
+    private final int columnWidth;
+    private final InsightType insightType;
     private String activityDescription;
     private boolean shouldShow;
 

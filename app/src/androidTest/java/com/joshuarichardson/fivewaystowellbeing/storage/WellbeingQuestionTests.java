@@ -102,20 +102,6 @@ public class WellbeingQuestionTests {
     }
 
     @Test
-    public void insertingWellbeingQuestions_ThenGettingWellbeingNegativeResponseById_ShouldReturnCorrectString() {
-        String response = this.wellbeingQuestionDao.getNegativeResponseById(345);
-        assertThat(response)
-            .isEqualTo("negative 2");
-    }
-
-    @Test
-    public void insertingWellbeingQuestions_ThenGettingWellbeingPositiveResponseById_ShouldReturnCorrectString() {
-        String response = this.wellbeingQuestionDao.getPositiveResponseById(345);
-        assertThat(response)
-            .isEqualTo("positive 2");
-    }
-
-    @Test
     public void insertingWellbeingQuestions_ThenGettingWellbeingResponseByNonExistentId_ShouldReturnNull() {
         WellbeingQuestion question = this.wellbeingQuestionDao.getQuestionById(123);
         assertThat(question)

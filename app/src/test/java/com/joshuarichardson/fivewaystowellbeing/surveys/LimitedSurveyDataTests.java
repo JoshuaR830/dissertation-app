@@ -37,46 +37,46 @@ public class LimitedSurveyDataTests {
         assertThat(day.getTitle()).isEqualTo("29 Mar 1999");
 
         // check that the right number of keys are returned
-        assertThat(day.getPasstimeSurveyKeys().size()).isEqualTo(5);
+        assertThat(day.getActivitySurveyKeys().size()).isEqualTo(5);
 
-        assertThat(day.getPasstimeMap().size()).isEqualTo(5);
-        Passtime passtime1 = day.getPasstimeMap().get(-1L);
-        assertThat(passtime1).isNotNull();
-        assertThat(passtime1.getName()).isEqualTo("Activity name 1");
+        assertThat(day.getActivityMap().size()).isEqualTo(5);
+        ActivityInstance activityInstance1 = day.getActivityMap().get(-1L);
+        assertThat(activityInstance1).isNotNull();
+        assertThat(activityInstance1.getName()).isEqualTo("Activity name 1");
 
-        List<Question> questionList1 = passtime1.getQuestions();
+        List<Question> questionList1 = activityInstance1.getQuestions();
         assertThat(questionList1).isNotNull();
         assertThat(questionList1.size()).isEqualTo(0);
 
-        Passtime passtime2 = day.getPasstimeMap().get(-2L);
-        assertThat(passtime2).isNotNull();
-        assertThat(passtime2.getName()).isEqualTo("Activity name 2");
+        ActivityInstance activityInstance2 = day.getActivityMap().get(-2L);
+        assertThat(activityInstance2).isNotNull();
+        assertThat(activityInstance2.getName()).isEqualTo("Activity name 2");
 
-        List<Question> questionList2 = passtime1.getQuestions();
+        List<Question> questionList2 = activityInstance1.getQuestions();
         assertThat(questionList2).isNotNull();
         assertThat(questionList2.size()).isEqualTo(0);
 
-        Passtime passtime3 = day.getPasstimeMap().get(-3L);
-        assertThat(passtime3).isNotNull();
-        assertThat(passtime3.getName()).isEqualTo("Activity name 3");
+        ActivityInstance activityInstance3 = day.getActivityMap().get(-3L);
+        assertThat(activityInstance3).isNotNull();
+        assertThat(activityInstance3.getName()).isEqualTo("Activity name 3");
 
-        List<Question> questionList3 = passtime1.getQuestions();
+        List<Question> questionList3 = activityInstance1.getQuestions();
         assertThat(questionList3).isNotNull();
         assertThat(questionList3.size()).isEqualTo(0);
 
-        Passtime passtime4 = day.getPasstimeMap().get(-4L);
-        assertThat(passtime4).isNotNull();
-        assertThat(passtime4.getName()).isEqualTo("Activity name 4");
+        ActivityInstance activityInstance4 = day.getActivityMap().get(-4L);
+        assertThat(activityInstance4).isNotNull();
+        assertThat(activityInstance4.getName()).isEqualTo("Activity name 4");
 
-        List<Question> questionList4 = passtime1.getQuestions();
+        List<Question> questionList4 = activityInstance1.getQuestions();
         assertThat(questionList4).isNotNull();
         assertThat(questionList4.size()).isEqualTo(0);
 
-        Passtime passtime5 = day.getPasstimeMap().get(-5L);
-        assertThat(passtime5).isNotNull();
-        assertThat(passtime5.getName()).isEqualTo("Activity name 5");
+        ActivityInstance activityInstance5 = day.getActivityMap().get(-5L);
+        assertThat(activityInstance5).isNotNull();
+        assertThat(activityInstance5.getName()).isEqualTo("Activity name 5");
 
-        List<Question> questionList5 = passtime1.getQuestions();
+        List<Question> questionList5 = activityInstance1.getQuestions();
         assertThat(questionList5).isNotNull();
         assertThat(questionList5.size()).isEqualTo(0);
     }

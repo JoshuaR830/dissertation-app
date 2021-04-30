@@ -9,6 +9,10 @@ import com.joshuarichardson.fivewaystowellbeing.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * A webView that displays the website selected
+ * Users can also navigate back in the web-view until last back then it will go back in the app
+ */
 public class WellbeingSupportWebViewActivity extends AppCompatActivity {
 
     private WebView webView;

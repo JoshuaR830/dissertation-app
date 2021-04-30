@@ -18,6 +18,12 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelpe
 
 import java.util.Locale;
 
+/**
+ * Create the polar pie chart.
+ * Allows for animation and for updating.
+ * Can display and hide a key.
+ * Can change the transparency to emphasise a particular segment.
+ */
 public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUpdateListener {
     private Bitmap bitmap;
     private Canvas canvas;
@@ -47,6 +53,14 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         setWellbeingGraphView(context, graphSize, wayToWellbeingValues, false);
     }
 
+    /**
+     * Set up the graph then animate it
+     *
+     * @param context The application context
+     * @param canvasSize The size of the canvas
+     * @param wayToWellbeingValues The values to show on the graph
+     * @param shouldShowNumbers Whether the labels should be displayed
+     */
     private void setWellbeingGraphView(Context context, int canvasSize, WellbeingGraphValueHelper wayToWellbeingValues, boolean shouldShowNumbers) {
         this.shouldShowNumbers = shouldShowNumbers;
         this.canvasSize = canvasSize;
@@ -87,8 +101,17 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         animator.start();
     }
 
-
-    // Reference: https://stackoverflow.com/a/24969713/13496270
+    /**
+     * Draw the label on the graph at the correct position
+     *
+     * @param canvas The canvas to draw on
+     * @param graph The values for the graph
+     * @param centerX The x coordinate centre of the circle centre
+     * @param centerY The y coordinate of the circle centre
+     * @param radius The radius of the circle
+     *
+     * Reference: https://stackoverflow.com/a/24969713/13496270
+     */
     public void drawTextCentered(Canvas canvas, WaysToWellbeingGraphValues graph, int centerX, int centerY, int radius) {
         String text = String.format(Locale.getDefault(), "%d%%", graph.getValue());
 
@@ -100,6 +123,7 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        // Add the numbered labels to the graph for each wellbeing type
         if (this.shouldShowNumbers) {
             int centerX = (int) (this.canvasSize/2f);
             int centerY = (int) (this.canvasSize/2f);
@@ -149,6 +173,11 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.invalidate();
     }
 
+    /**
+     * Update the segments to show updates
+     *
+     * @param updatedGraphValues The new graph values to show
+     */
     public void updateValues(WellbeingGraphValueHelper updatedGraphValues) {
         this.give.updateValue(updatedGraphValues.getGiveValue(), this.multiplier, this.height, this.width);
         this.connect.updateValue(updatedGraphValues.getConnectValue(), this.multiplier, this.height, this.width);
@@ -160,6 +189,11 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.invalidate();
     }
 
+    /**
+     * Highlight a selected way to wellbeing by reducing the brightness fo the other segments
+     *
+     * @param itemToHighlight The segment that should be made brighter
+     */
     public void highlightBar(WaysToWellbeing itemToHighlight) {
 
         this.connect.updateColor(getResources().getColor(R.color.translucent_way_to_wellbeing_connect, getContext().getTheme()));
@@ -191,6 +225,9 @@ public class WellbeingGraphView extends View implements ValueAnimator.AnimatorUp
         this.invalidate();
     }
 
+    /**
+     * Set the colours back to solid
+     */
     public void resetColors() {
         this.connect.updateColor(getResources().getColor(R.color.way_to_wellbeing_connect, getContext().getTheme()));
         this.beActive.updateColor(getResources().getColor(R.color.way_to_wellbeing_be_active, getContext().getTheme()));

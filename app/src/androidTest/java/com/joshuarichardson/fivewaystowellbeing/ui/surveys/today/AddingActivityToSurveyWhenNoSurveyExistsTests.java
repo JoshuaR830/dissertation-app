@@ -39,7 +39,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -72,25 +72,29 @@ public class AddingActivityToSurveyWhenNoSurveyExistsTests extends ProgressFragm
                 new ActivityRecord("Activity 2", 3000, 437724, ActivityType.HOBBY, WaysToWellbeing.KEEP_LEARNING, false)
             )
         );
-        when(activityRecordDao.getAllActivities()).thenReturn(activityData);
 
-        when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyResponseActivityDao.insert(any(SurveyResponseActivityRecord.class)))
-            .thenReturn(1L);
+        doReturn(activityData)
+            .when(activityRecordDao)
+            .getAllActivities();
+
+        doReturn(1L)
+            .when(AddingActivityToSurveyWhenNoSurveyExistsTests.this.surveyResponseActivityDao)
+            .insert(any(SurveyResponseActivityRecord.class));
     }
 
     @Test
     public void whenASurveyExists_ShouldNotInsertANewOneThenShouldBeAbleToAddAnActivityToIt() throws InterruptedException {
         // When no survey exists there should be an insertion
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(5000, TimeUnit.MILLISECONDS);
         verify(this.surveyDao, Mockito.atLeast(1)).getSurveyResponsesByTimestampRange(anyLong(), anyLong());
         verify(this.surveyDao, Mockito.atLeast(1)).insert(any(SurveyResponse.class));
 
-        // Start on main activity - this should launch the passtime view
+        // Start on main activity - this should launch the activity view
         onView(withId(R.id.add_activity_button))
             .perform(scrollTo(), click());
 
         // This should select an item from the activity
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(isDisplayed()))
             .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));

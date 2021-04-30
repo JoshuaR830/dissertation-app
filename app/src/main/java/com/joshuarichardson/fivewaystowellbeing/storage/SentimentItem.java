@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
+/**
+ * Instance of an emotion's colour and image.
+ */
 public class SentimentItem {
     private final int colorResource;
     private final int imageResource;

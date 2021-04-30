@@ -2,7 +2,15 @@ package com.joshuarichardson.fivewaystowellbeing;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+/**
+ * Set the application theme to the selected theme or default theme if not set by the user
+ */
 public class ThemeHelper {
+    /**
+     * Set the application colour theme
+     *
+     * @param theme The theme preference
+     */
     public static void setTheme(String theme) {
         // Set the theme of the app based on the chosen setting
         switch (theme) {

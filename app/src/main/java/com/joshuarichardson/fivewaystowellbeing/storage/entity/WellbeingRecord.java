@@ -16,6 +16,10 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.WELLBEING_RECORDS_USER_INPUT;
 
+/**
+ * The entity representing the wellbeing record
+ * The table is used to hold instances of the sub-activities associated wiwth each activity instance
+ */
 @Entity(
     tableName = WELLBEING_RECORDS_TABLE_NAME,
     foreignKeys = {

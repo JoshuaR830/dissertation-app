@@ -1,21 +1,24 @@
 package com.joshuarichardson.fivewaystowellbeing.storage;
 
+/**
+ * All of the data required to display a daily log containing one activity
+ */
 public class RawSurveyData {
 
-    private long wellbeingRecordId;
-    private long date;
-    private String surveyNote;
-    private String activityNote;
-    private String activityName;
-    private long surveyActivityId;
-    private String question;
-    private Boolean userInput;
-    private String activityType;
-    private long startTime;
-    private long endTime;
-    private String wayToWellbeing;
-    private int emotion;
-    private boolean isDone;
+    private final long wellbeingRecordId;
+    private final long date;
+    private final String surveyNote;
+    private final String activityNote;
+    private final String activityName;
+    private final long surveyActivityId;
+    private final String question;
+    private final Boolean userInput;
+    private final String activityType;
+    private final long startTime;
+    private final long endTime;
+    private final String wayToWellbeing;
+    private final int emotion;
+    private final boolean isDone;
 
     public RawSurveyData(long date, String surveyNote, String activityNote, String activityName, long surveyActivityId, String question, long wellbeingRecordId, Boolean userInput, String activityType, String wayToWellbeing, long startTime, long endTime, int emotion, boolean isDone) {
         this.date = date;

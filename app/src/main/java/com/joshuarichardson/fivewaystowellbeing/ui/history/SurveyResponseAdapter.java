@@ -28,7 +28,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing.UNASSIGNED;
-
+/**
+ * The recycler view adapter used to display the history items
+ */
 public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAdapter.SurveyResponseViewHolder> {
 
     private final LayoutInflater inflater;
@@ -69,10 +71,10 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
     public class SurveyResponseViewHolder extends RecyclerView.ViewHolder {
 
         private final WellbeingGraphView graphView;
-        private TextView surveyTitle;
-        private TextView surveyDescription;
-        private FrameLayout surveyItemFrame;
-        private Button viewMoreButton;
+        private final TextView surveyTitle;
+        private final TextView surveyDescription;
+        private final FrameLayout surveyItemFrame;
+        private final Button viewMoreButton;
         private ImageView image;
 
         public SurveyResponseViewHolder(@NonNull View itemView) {
@@ -86,11 +88,16 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
             this.surveyItemFrame.addView(this.graphView);
         }
 
+        /**
+         *  Add the history view including a graph and title
+         *
+         * @param response The history page data that the view should show
+         */
         public void onBind(HistoryPageData response) {
             this.surveyTitle.setText(TimeFormatter.formatTimeAsDayMonthYearString(response.getSurveyResponseTimestamp()));
             this.surveyDescription.setText(response.getDescription());
 
-            // ToDo - an incompatibility with the old version of the app caused issues here
+            // Fixed an issue with compatibility with old activities
             try {
                 WaysToWellbeing.valueOf(response.getSurveyResponseWayToWellbeing());
             } catch (Exception e) {
@@ -99,6 +106,7 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
                 Log.d("Survey Response", "Handled it");
             }
 
+            // Ensure compatibility with old and new activity types
             if(response.getSurveyResponseWayToWellbeing() != null && WaysToWellbeing.valueOf(response.getSurveyResponseWayToWellbeing()) != UNASSIGNED) {
                 this.image = new ImageView(SurveyResponseAdapter.this.context);
                 image.setImageResource(WellbeingHelper.getImage(WaysToWellbeing.valueOf(response.getSurveyResponseWayToWellbeing())));
@@ -115,9 +123,8 @@ public class SurveyResponseAdapter extends RecyclerView.Adapter<SurveyResponseAd
                 }
             }
 
+            // Add a click listener to allow users to view more
             this.viewMoreButton.setOnClickListener(v -> {
-
-                // ToDo - this would probably be better as a callback
                 Intent surveyIntent = new Intent(SurveyResponseAdapter.this.context, IndividualSurveyActivity.class);
                 Bundle surveyBundle = new Bundle();
                 surveyBundle.putLong("survey_id", response.getSurveyResponseId());

@@ -7,34 +7,50 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 
 import javax.inject.Inject;
 
+/**
+ * Class containing helper functions to log analytics events
+ */
 public class LogAnalyticEventHelper {
 
     private final FirebaseAnalytics firebaseAnalytics;
 
-    // Injecting this into an activity will allow it to be used to track stuff
+    // Injecting this into an activity will allow it to be used to track events
     // Injecting the firebase module allows access to log things in Firebase
     @Inject
     public LogAnalyticEventHelper(FirebaseAnalytics firebaseAnalytics) {
         this.firebaseAnalytics = firebaseAnalytics;
     }
 
-    // Call to log a specific event
-    public void logCreatePasstimeEvent(Object currentActivityObject) {
+    /**
+     * Log activity creation event to Firebase
+     * @param currentActivity The calling class
+     */
+    public void logCreateActivityEvent(Object currentActivity) {
         Bundle analyticsBundle = new Bundle();
-        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivityObject.getClass().getSimpleName());
-        this.firebaseAnalytics.logEvent(AnalyticEvents.Events.CREATE_PASSTIME, analyticsBundle);
+        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivity.getClass().getSimpleName());
+        this.firebaseAnalytics.logEvent(AnalyticEvents.Events.CREATE_ACTIVITY, analyticsBundle);
     }
 
-    public void logCreateSurveyEvent(Object currentActivityObject) {
+    /**
+     * Log survey creation events in Firebase
+     * @param currentActivity The calling class
+     */
+    public void logCreateSurveyEvent(Object currentActivity) {
         Bundle analyticsBundle = new Bundle();
-        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivityObject.getClass().getSimpleName());
+        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivity.getClass().getSimpleName());
         analyticsBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, AnalyticEvents.Param.SURVEY);
         this.firebaseAnalytics.logEvent(AnalyticEvents.Events.CREATE_SURVEY, analyticsBundle);
     }
 
-    public void logWayToWellbeingEvent(Object currentActivityObject, WaysToWellbeing waysToWellbeing) {
+    /**
+     * Log ways to wellbeing events in firebase
+     *
+     * @param currentActivity The calling class
+     * @param waysToWellbeing The way to wellbeing associated with the event
+     */
+    public void logWayToWellbeingEvent(Object currentActivity, WaysToWellbeing waysToWellbeing) {
         Bundle analyticsBundle = new Bundle();
-        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivityObject.getClass().getSimpleName());
+        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivity.getClass().getSimpleName());
         analyticsBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, AnalyticEvents.Param.WAY_TO_WELLBEING);
 
         // Log a specific way to wellbeing event
@@ -45,9 +61,16 @@ public class LogAnalyticEventHelper {
         this.firebaseAnalytics.logEvent(AnalyticEvents.Events.ACHIEVED_WAY_TO_WELLBEING, analyticsBundle);
     }
 
-    public void logWayToWellbeingChecked(Object currentActivityObject, WaysToWellbeing waysToWellbeing, boolean isChecked) {
+    /**
+     * Log when a sub-activity is checked in Firebase
+     *
+     * @param currentActivity The calling class
+     * @param waysToWellbeing The way to wellbeing that the event involves
+     * @param isChecked The status of the checkbox for logging checked/unchecked
+     */
+    public void logWayToWellbeingChecked(Object currentActivity, WaysToWellbeing waysToWellbeing, boolean isChecked) {
         Bundle analyticsBundle = new Bundle();
-        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivityObject.getClass().getSimpleName());
+        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivity.getClass().getSimpleName());
         analyticsBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, AnalyticEvents.Param.WAY_TO_WELLBEING);
 
         // Log a specific way to wellbeing event
@@ -63,9 +86,15 @@ public class LogAnalyticEventHelper {
         }
     }
 
-    public void logWayToWellbeingActivity(Object currentActivityObject, WaysToWellbeing waysToWellbeing) {
+    /**
+     * Log when an activity is logged in Firebase
+     *
+     * @param currentActivity The calling class
+     * @param waysToWellbeing The way to wellbeing that the event involves
+     */
+    public void logWayToWellbeingActivity(Object currentActivity, WaysToWellbeing waysToWellbeing) {
         Bundle analyticsBundle = new Bundle();
-        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivityObject.getClass().getSimpleName());
+        analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivity.getClass().getSimpleName());
         analyticsBundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, AnalyticEvents.Param.WAY_TO_WELLBEING);
 
         // Log a specific way to wellbeing event
@@ -76,6 +105,12 @@ public class LogAnalyticEventHelper {
         this.firebaseAnalytics.logEvent(AnalyticEvents.Events.ACTIVITY_WAY_TO_WELLBEING, analyticsBundle);
     }
 
+    /**
+     * Log automatic activity logging events in Firebase
+     *
+     * @param currentActivityObject The calling class
+     * @param waysToWellbeing The way to wellbeing that the event involves
+     */
     public void logWayToWellbeingAutomaticActivity(Object currentActivityObject, WaysToWellbeing waysToWellbeing) {
         Bundle analyticsBundle = new Bundle();
         analyticsBundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, currentActivityObject.getClass().getSimpleName());

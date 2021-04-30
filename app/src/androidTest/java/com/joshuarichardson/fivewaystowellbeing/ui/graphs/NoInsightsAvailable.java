@@ -33,6 +33,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
@@ -59,8 +60,9 @@ public class NoInsightsAvailable extends ProgressFragmentTestFixture {
     protected void defaultResponses() {
         super.defaultResponses();
 
-        when(this.wellbeingDao.getDataBySurvey(anyLong()))
-            .thenReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)));
+        doReturn(Collections.singletonList(new RawSurveyData(357457, "Survey note", "Activity note", "Activity name", 1, "Question", 1, true, ActivityType.HOBBY.toString(), WaysToWellbeing.KEEP_LEARNING.toString(), -1, -1, 0, false)))
+            .when(this.wellbeingDao)
+            .getDataBySurvey(anyLong());
     }
 
     @Test

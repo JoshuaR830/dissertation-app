@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.insights;
 
+/**
+ * The available types of insight that can be displayed
+ */
 public enum InsightType {
     DOUBLE_GRAPH,
     DOUBLE_INFO_CARD,

@@ -1,5 +1,8 @@
 package com.joshuarichardson.fivewaystowellbeing;
 
+/**
+ * All of the available ways to wellbeing
+ */
 public enum WaysToWellbeing {
     CONNECT,
     BE_ACTIVE,

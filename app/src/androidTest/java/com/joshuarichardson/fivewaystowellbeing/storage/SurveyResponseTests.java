@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;

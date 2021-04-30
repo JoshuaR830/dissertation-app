@@ -9,7 +9,7 @@ import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.storage.entity.PhysicalActivity;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.AutomaticActivity;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 
 import org.junit.Test;
@@ -38,11 +38,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.joshuarichardson.fivewaystowellbeing.utilities.LinearLayoutTestUtil.nthChildOf;
 import static org.hamcrest.Matchers.allOf;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @HiltAndroidTest
 @UninstallModules(WellbeingDatabaseModule.class)
-public class SuggestedActivityTests  extends ProgressFragmentTestFixture {
+public class SuggestedActivityTests extends ProgressFragmentTestFixture {
 
     @Module
     @InstallIn(ApplicationComponent.class)
@@ -64,17 +65,26 @@ public class SuggestedActivityTests  extends ProgressFragmentTestFixture {
     protected void defaultResponses() {
         super.defaultResponses();
 
-        when(this.activityRecordDao.getActivityRecordById(1)).thenReturn(new ActivityRecord("Run", 2000, 36776324, ActivityType.EXERCISE, WaysToWellbeing.BE_ACTIVE, false));
-        when(this.activityRecordDao.getActivityRecordById(2)).thenReturn(new ActivityRecord("Cycle", 2000, 36776324, ActivityType.EXERCISE, WaysToWellbeing.BE_ACTIVE, false));
+        doReturn(new ActivityRecord("Run", 2000, 36776324, ActivityType.EXERCISE, WaysToWellbeing.BE_ACTIVE, false))
+            .when(this.activityRecordDao)
+            .getActivityRecordById(1);
 
-        when(this.surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong())).thenReturn(new MutableLiveData<>(
+        doReturn(new ActivityRecord("Cycle", 2000, 36776324, ActivityType.EXERCISE, WaysToWellbeing.BE_ACTIVE, false))
+            .when(this.activityRecordDao)
+            .getActivityRecordById(2);
+
+        doReturn(new MutableLiveData<>(
             Collections.singletonList(new SurveyResponse(67864242, WaysToWellbeing.UNASSIGNED, "Survey", "")))
-        );
+        )
+            .when(this.surveyDao)
+            .getSurveyResponsesByTimestampRange(anyLong(), anyLong());
 
-        when(this.physicalActivityDao.getPending()).thenReturn(Arrays.asList(
-            new PhysicalActivity("RUN", null, 1617238800000L, 1617242400000L, 1, true, false),
-            new PhysicalActivity("CYCLE", null, 1617238800000L, 1617242400000L, 2, true, false)
-        ));
+       doReturn(Arrays.asList(
+            new AutomaticActivity("RUN", null, 1617238800000L, 1617242400000L, 1, true, false),
+            new AutomaticActivity("CYCLE", null, 1617238800000L, 1617242400000L, 2, true, false)
+        ))
+           .when(this.automaticActivityDao)
+           .getPending();
     }
 
     @Test

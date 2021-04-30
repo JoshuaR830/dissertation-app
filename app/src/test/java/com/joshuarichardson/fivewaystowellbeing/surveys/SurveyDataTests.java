@@ -35,17 +35,17 @@ public class SurveyDataTests {
         assertThat(day.getTitle()).isEqualTo("29 Mar 1999");
 
         // check that the right number of keys are returned
-        assertThat(day.getPasstimeSurveyKeys().size()).isEqualTo(2);
+        assertThat(day.getActivitySurveyKeys().size()).isEqualTo(2);
 
-        assertThat(day.getPasstimeMap().size()).isEqualTo(2);
-        Passtime passtime1 = day.getPasstimeMap().get(1L);
+        assertThat(day.getActivityMap().size()).isEqualTo(2);
+        ActivityInstance activityInstance1 = day.getActivityMap().get(1L);
 
-        assertThat(passtime1).isNotNull();
+        assertThat(activityInstance1).isNotNull();
 
-        assertThat(passtime1.getName()).isEqualTo("Activity name 1");
-        assertThat(passtime1.getNote()).isEqualTo("Activity note 1");
+        assertThat(activityInstance1.getName()).isEqualTo("Activity name 1");
+        assertThat(activityInstance1.getNote()).isEqualTo("Activity note 1");
 
-        List<Question> questionList1 = passtime1.getQuestions();
+        List<Question> questionList1 = activityInstance1.getQuestions();
 
         assertThat(questionList1).isNotNull();
         assertThat(questionList1.size()).isEqualTo(3);
@@ -69,14 +69,14 @@ public class SurveyDataTests {
         assertThat(question1_3.getUserResponse()).isEqualTo(false);
 
 
-        Passtime passtime2 = day.getPasstimeMap().get(2L);
+        ActivityInstance activityInstance2 = day.getActivityMap().get(2L);
 
-        assertThat(passtime2).isNotNull();
+        assertThat(activityInstance2).isNotNull();
 
-        assertThat(passtime2.getName()).isEqualTo("Activity name 2");
-        assertThat(passtime2.getNote()).isEqualTo("Activity note 2");
+        assertThat(activityInstance2.getName()).isEqualTo("Activity name 2");
+        assertThat(activityInstance2.getNote()).isEqualTo("Activity note 2");
 
-        List<Question> questionList2 = passtime2.getQuestions();
+        List<Question> questionList2 = activityInstance2.getQuestions();
         assertThat(questionList2).isNotNull();
         assertThat(questionList2.size()).isEqualTo(2);
         Question question2_1 = questionList2.get(0);

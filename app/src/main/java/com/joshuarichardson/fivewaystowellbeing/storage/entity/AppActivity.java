@@ -5,15 +5,17 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_CURRENT_USAGE;
+import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_MOST_RECENT_RESUME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_END_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_ID;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_IS_PENDING;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_PACKAGE_ID;
-import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_PREVIOUS_USAGE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_START_TIME;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.APP_USAGE_TABLE_NAME;
-
+/**
+ * The entity representing the app activities
+ * The table is used to keep a reference to running apps and the start/end times for calcualting
+ */
 @Entity(tableName = APP_USAGE_TABLE_NAME)
 public class AppActivity {
     @NonNull
@@ -27,9 +29,6 @@ public class AppActivity {
     @ColumnInfo(name = APP_USAGE_END_TIME)
     private long endTime;
 
-    @ColumnInfo(name = APP_USAGE_PREVIOUS_USAGE)
-    private long previousUsageTime;
-
     @NonNull
     @ColumnInfo(name = APP_USAGE_PACKAGE_ID)
     private String packageName;
@@ -37,15 +36,14 @@ public class AppActivity {
     @ColumnInfo(name = APP_USAGE_IS_PENDING)
     private boolean isPending;
 
-    @ColumnInfo(name = APP_USAGE_CURRENT_USAGE)
-    private long currentUsage;
+    @ColumnInfo(name = APP_USAGE_MOST_RECENT_RESUME)
+    private long mostRecentResumeTime;
 
-    public AppActivity(String packageName, long startTime, long endTime, long previousUsageTime, long currentUsage, boolean isPending) {
+    public AppActivity(String packageName, long startTime, long endTime, long mostRecentResumeTime, boolean isPending) {
         this.packageName = packageName;
         this.startTime = startTime;
-        this.previousUsageTime = previousUsageTime;
         this.isPending = isPending;
-        this.currentUsage = currentUsage;
+        this.mostRecentResumeTime = mostRecentResumeTime;
         this.endTime = endTime;
     }
 
@@ -62,10 +60,6 @@ public class AppActivity {
         return this.startTime;
     }
 
-    public long getPreviousUsageTime() {
-        return this.previousUsageTime;
-    }
-
     public boolean getIsPending() {
         return this.isPending;
     }
@@ -75,8 +69,8 @@ public class AppActivity {
         return this.packageName;
     }
 
-    public long getCurrentUsage() {
-        return this.currentUsage;
+    public long getMostRecentResumeTime() {
+        return this.mostRecentResumeTime;
     }
 
     public long getEndTime() {

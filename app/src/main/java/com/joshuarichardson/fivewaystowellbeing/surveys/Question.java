@@ -1,9 +1,12 @@
 package com.joshuarichardson.fivewaystowellbeing.surveys;
 
+/**
+ * Represents one of the checkbox question sub-activities
+ */
 public class Question {
-    private String question;
-    private long wellbeingRecordId;
-    private Boolean userResponse;
+    private final String question;
+    private final long wellbeingRecordId;
+    private final Boolean userResponse;
 
     public Question(String question, long wellbeingRecordId, Boolean userResponse) {
         this.question = question;

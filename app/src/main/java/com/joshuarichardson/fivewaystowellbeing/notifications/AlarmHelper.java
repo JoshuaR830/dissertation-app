@@ -9,30 +9,31 @@ import android.os.Bundle;
 
 import java.util.Calendar;
 
+import javax.inject.Inject;
+
 import androidx.preference.PreferenceManager;
 
+/**
+ * A class of helper functions for scheduling alarms to trigger notifications
+ */
 public class AlarmHelper {
-    public static AlarmHelper INSTANCE;
 
-    private AlarmHelper() {}
+    @Inject
+    public AlarmHelper() {}
 
-    // Using a singleton
-    public static AlarmHelper getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new AlarmHelper();
-        }
-
-        return INSTANCE;
-    }
-
-    // Calculate the times for scheduling
+    /**
+     * Calculate the times and then schedule the notification
+     *
+     * @param context The application context
+     * @param timeOfDay The name of the time of day to schedule the notification
+     */
     public void scheduleNotification(Context context, String timeOfDay) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         int hours = 0;
         int minutes = 0;
 
-        // Get the time and enablement
+        // Get the time and whether it is enabled
         boolean isEnabled = sharedPreferences.getBoolean("notification_" + timeOfDay + "_switch", true);
         long time = sharedPreferences.getLong("notification_" + timeOfDay + "_time", -1);
 
@@ -49,11 +50,19 @@ public class AlarmHelper {
         scheduleNotification(context, hours, minutes, timeOfDay, isEnabled);
     }
 
-    // Use alarm manager to schedule the alarm
+    /**
+     * Use alarm manager to schedule a notification using a pending intent
+     *
+     * @param context The application context
+     * @param hour The hour to schedule the notification for
+     * @param minutes The minute to schedule the notification for
+     * @param timeOfDay The notification identifier
+     * @param isEnabled The enabled state of the notification
+     */
     public void scheduleNotification(Context context, int hour, int minutes, String timeOfDay, boolean isEnabled) {
         // Define which broadcast receiver to trigger
         long timeToSchedule = getTimeToSchedule(hour, minutes);
-        Intent notificationIntent = new Intent(context, SendCompleteSurveyNotificationBroadcastReceiver.class);
+        Intent notificationIntent = new Intent(context, SendSurveyReminderNotificationBroadcastReceiver.class);
 
         Bundle bundle = new Bundle();
         bundle.putString("time", timeOfDay);
@@ -83,7 +92,13 @@ public class AlarmHelper {
         }
     }
 
-    // Schedule a time based on hours and minutes
+    /**
+     * Schedule a time based on hours and minutes
+     *
+     * @param hour The hour of day
+     * @param minute The minute of day
+     * @return The millisecond timestamp to schedule the notification
+     */
     public static long getTimeToSchedule(int hour, int minute) {
 
         Calendar calendar = Calendar.getInstance();

@@ -2,6 +2,9 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 
 import com.joshuarichardson.fivewaystowellbeing.R;
 
+/**
+ * For keeping track of number of emotions and the total emotion value
+ */
 public class SurveyCountItem {
     int emotionCount;
     int totalValue;
@@ -11,6 +14,11 @@ public class SurveyCountItem {
         this.totalValue = totalValue;
     }
 
+    /**
+     * Get the average emotion value
+     *
+     * @return The average based on number of non-zero emotions
+     */
     private int calculateAverage() {
         if(totalValue == 0 || emotionCount == 0) {
             return 0;
@@ -19,6 +27,11 @@ public class SurveyCountItem {
         return Math.round((float)totalValue/(float)emotionCount);
     }
 
+    /**
+     * Get the correct emotion for the average emotions
+     *
+     * @return The icon resource and colour to display
+     */
     public SentimentItem getResourcesForAverage() {
         // Get the image and colour resource for the most appropriate emotion
         switch(calculateAverage()) {

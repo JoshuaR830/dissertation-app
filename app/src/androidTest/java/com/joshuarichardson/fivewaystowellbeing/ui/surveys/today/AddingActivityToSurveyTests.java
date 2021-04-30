@@ -46,6 +46,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -80,19 +81,26 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
                 new ActivityRecord("Activity 3", 3000, 437724, ActivityType.LEARNING, WaysToWellbeing.KEEP_LEARNING, false)
             )
         );
-        when(activityRecordDao.getAllActivities()).thenReturn(activityData);
+
+        doReturn(activityData)
+            .when(activityRecordDao)
+            .getAllActivities();
 
         LiveData<List<SurveyResponse>> data = new MutableLiveData<>(Collections.singletonList(new SurveyResponse(12345, WaysToWellbeing.UNASSIGNED, "Title", "Note")));
-        when(AddingActivityToSurveyTests.this.surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
-            .thenReturn(data);
 
-        when(AddingActivityToSurveyTests.this.questionDao.getQuestionsByActivityType(ActivityType.SPORT.toString())).thenReturn(
-            Arrays.asList(
-                new WellbeingQuestion(1, "Question 1", "Positive message 1", "Negative message 1", WaysToWellbeing.BE_ACTIVE.toString(), 1, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()),
-                new WellbeingQuestion(2, "Question 2", "Positive message 2", "Negative message 2", WaysToWellbeing.BE_ACTIVE.toString(), 4, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()),
-                new WellbeingQuestion(3, "Question 3", "Positive message 3", "Negative message 3", WaysToWellbeing.BE_ACTIVE.toString(), 3, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString())
-            )
+        doReturn(data)
+            .when(AddingActivityToSurveyTests.this.surveyDao)
+            .getSurveyResponsesByTimestampRange(anyLong(), anyLong());
+
+        List<WellbeingQuestion> questions = Arrays.asList(
+            new WellbeingQuestion(1, "Question 1", "Positive message 1", "Negative message 1", WaysToWellbeing.BE_ACTIVE.toString(), 1, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(2, "Question 2", "Positive message 2", "Negative message 2", WaysToWellbeing.BE_ACTIVE.toString(), 4, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString()),
+            new WellbeingQuestion(3, "Question 3", "Positive message 3", "Negative message 3", WaysToWellbeing.BE_ACTIVE.toString(), 3, ActivityType.SPORT.toString(), SurveyItemTypes.CHECKBOX.toString())
         );
+
+        doReturn(questions)
+            .when(AddingActivityToSurveyTests.this.questionDao)
+            .getQuestionsByActivityType(ActivityType.SPORT.toString());
     }
 
     @Test
@@ -101,12 +109,12 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
         // When a survey exists there should not be an insertion
         verify(this.surveyDao, Mockito.atLeast(1)).getSurveyResponsesByTimestampRange(anyLong(), anyLong());
 
-        // Start on main activity - this should launch the passtime view
+        // Start on main activity - this should launch the activity view
         onView(withId(R.id.add_activity_button))
             .perform(scrollTo(), click());
 
         // This should select an item from the activity
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(0))
             .check(matches(isDisplayed()))
             .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
@@ -115,7 +123,7 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(withText("Activity 1")));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 0)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 0)))
             .perform(scrollTo())
             .check(matches(withTagValue(is((Object) "BE_ACTIVE"))));
 
@@ -142,7 +150,7 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
             .perform(scrollTo(), click());
 
         // This should select an item from the activity
-        onView(withId(R.id.passTimeRecyclerView))
+        onView(withId(R.id.activity_recycler_view))
             .perform(scrollToPosition(1))
             .check(matches(isDisplayed()))
             .perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
@@ -151,7 +159,7 @@ public class AddingActivityToSurveyTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(withText("Activity 2")));
 
-        onView(allOf(withId(R.id.pass_time_item), nthChildOf(withId(R.id.survey_item_container), 1)))
+        onView(allOf(withId(R.id.activity_item), nthChildOf(withId(R.id.survey_item_container), 1)))
             .perform(scrollTo())
             .check(matches(withTagValue(is((Object) "KEEP_LEARNING"))));
 

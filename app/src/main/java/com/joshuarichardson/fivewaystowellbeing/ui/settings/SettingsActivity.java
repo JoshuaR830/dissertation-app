@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.joshuarichardson.fivewaystowellbeing.R;
 import com.joshuarichardson.fivewaystowellbeing.notifications.AlarmHelper;
 
+import javax.inject.Inject;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
@@ -13,9 +15,16 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
+/**
+ * Activity for changing the settings.
+ * Listener for shared preferences ensures that changes are acted upon.
+ */
 @AndroidEntryPoint
 public class SettingsActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     private SharedPreferences preferences;
+
+    @Inject
+    AlarmHelper alarmHelper;
 
     SharedPreferences.OnSharedPreferenceChangeListener listener = (sharedPreferences, key) -> {
         int hours;
@@ -60,7 +69,8 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
             minutes = (int) (time / 60 / 1000) - (hours * 60);
         }
 
-        AlarmHelper.getInstance().scheduleNotification(getApplicationContext(), hours, minutes, timeOfDay, isEnabled);
+        // When the preference changes, schedule an alarm
+        this.alarmHelper.scheduleNotification(getApplicationContext(), hours, minutes, timeOfDay, isEnabled);
     };
 
     @Override

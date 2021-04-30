@@ -5,7 +5,6 @@ import android.content.Context;
 import com.joshuarichardson.fivewaystowellbeing.ActivityType;
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.DatabaseInsertionHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.ActivityRecord;
@@ -58,7 +57,7 @@ public class ActivityRecordTests {
     }
 
     @Test
-    public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() throws TimeoutException, InterruptedException {
+    public void insertActivity_ThenGetById_ShouldReturnTheCorrectActivity() {
         ActivityRecord insertedActivity = new ActivityRecord("Running", 1200, 1607960240, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false);
         long activityRecordId = this.activityDao.insert(insertedActivity);
         insertedActivity.setActivityRecordId(activityRecordId);
@@ -96,7 +95,7 @@ public class ActivityRecordTests {
     }
 
     @Test
-    public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() throws TimeoutException, InterruptedException {
+    public void GetActivitiesInTimestampRange_ShouldOnlyReturnActivitiesBetweenSpecifiedTimestamps() {
         DatabaseInsertionHelper.insert(new ActivityRecord[]{
                 new ActivityRecord("Snapchat", 1201, 1608076799, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false), // Should not be included
                 new ActivityRecord("Google Photos", 1202, 1608076800, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false), // Should be included
@@ -112,43 +111,6 @@ public class ActivityRecordTests {
 
         assertThat(activities).isNotNull();
         assertThat(activities.size()).isEqualTo(4);
-    }
-
-    @Test
-    public void GetActivitiesMatchingF_ShouldOnlyReturnActivitiesStartingWithF() {
-        DatabaseInsertionHelper.insert(new ActivityRecord[]{
-                new ActivityRecord("Snapchat", 1201, 1608076799, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("Google FI", 1202, 1608076800, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("Phone", 1203, 1608076801, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("Facebook", 1204, 1608163199, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("forest", 1204, 1608163200, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("fishing", 1205, 1608163201, ActivityType.SPORT, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("Forest", 1204, 0, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("Play Store", 1204, 2147483647, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false)
-        }, this.activityDao);
-
-        List<ActivityRecord> activities = this.activityDao.getActivitiesMatchingSearch("F");
-
-        // ToDo - at some point this should probably return alphabetical
-        // ToDo - at some point this should probably return live data - though I don't know exactly how that works when the query is changed - do I need to remove the observer - do I just sort the list??
-        assertThat(activities).isNotNull();
-        assertThat(activities.size()).isEqualTo(4);
-    }
-
-    @Test
-    public void GetActivitiesByExactMatch_ShouldOnlyReturnActivitiesThatMatchesExactly() {
-        DatabaseInsertionHelper.insert(new ActivityRecord[]{
-                new ActivityRecord("Activity 1", 1201, 1608076799, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("Activity 2", 1202, 1608076800, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("Activity 3", 1203, 1608076801, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-                new ActivityRecord("Activity 4", 1204, 1608163199, ActivityType.APP, WaysToWellbeing.UNASSIGNED, false),
-        }, this.activityDao);
-
-        List<ActivityRecord> activities = this.activityDao.getActivitiesMatchingSearch("Activity 3");
-
-        assertThat(activities).isNotNull();
-        assertThat(activities.size()).isEqualTo(1);
-        assertThat(activities.get(0).getActivityName()).isEqualTo("Activity 3");
     }
 
     @Test

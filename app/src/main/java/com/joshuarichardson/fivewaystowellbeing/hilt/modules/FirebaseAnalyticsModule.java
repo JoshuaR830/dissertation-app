@@ -12,6 +12,9 @@ import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
+/**
+ * Make FirebaseAnalytics injectable into the tracking helper {@link com.joshuarichardson.fivewaystowellbeing.analytics.LogAnalyticEventHelper}
+ */
 @Module
 @InstallIn(ApplicationComponent.class)
 public class FirebaseAnalyticsModule {

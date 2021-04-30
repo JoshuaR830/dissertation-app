@@ -17,6 +17,10 @@ import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingCo
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_TYPE;
 import static com.joshuarichardson.fivewaystowellbeing.storage.WaysToWellbeingContract.ACTIVITY_RECORD_WAY_TO_WELLBEING;
 
+/**
+ * The entity representing the activity record table
+ * The table is used to hold all of the activities
+ */
 @Entity(tableName = ACTIVITY_RECORD_TABLE_NAME)
 public class ActivityRecord {
     @NonNull

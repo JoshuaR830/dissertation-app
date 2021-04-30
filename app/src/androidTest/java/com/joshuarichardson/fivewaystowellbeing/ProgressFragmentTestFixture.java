@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import com.joshuarichardson.fivewaystowellbeing.hilt.modules.WellbeingDatabaseModule;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingDatabase;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.ActivityRecordDao;
-import com.joshuarichardson.fivewaystowellbeing.storage.dao.PhysicalActivityDao;
+import com.joshuarichardson.fivewaystowellbeing.storage.dao.AutomaticActivityDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseActivityRecordDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.SurveyResponseDao;
 import com.joshuarichardson.fivewaystowellbeing.storage.dao.WellbeingQuestionDao;
@@ -32,6 +32,7 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -55,79 +56,91 @@ public abstract class ProgressFragmentTestFixture {
     public WellbeingResultsDao resultsDao = mock(WellbeingResultsDao.class);
     public SurveyResponseActivityRecordDao surveyResponseActivityDao = mock (SurveyResponseActivityRecordDao.class);
     public ActivityRecordDao activityRecordDao = mock(ActivityRecordDao.class);
-    public PhysicalActivityDao physicalActivityDao = mock(PhysicalActivityDao.class);
+    public AutomaticActivityDao automaticActivityDao = mock(AutomaticActivityDao.class);
 
     // What the mock database should return
     protected void mockDatabaseResponses() {
-        when(mockWellbeingDatabase.wellbeingResultsDao())
-            .thenReturn(resultsDao);
+        doReturn(resultsDao)
+            .when(mockWellbeingDatabase)
+            .wellbeingResultsDao();
 
-        when(mockWellbeingDatabase.surveyResponseDao())
-            .thenReturn(surveyDao);
+        doReturn(surveyDao)
+            .when(mockWellbeingDatabase)
+            .surveyResponseDao();
 
-        when(mockWellbeingDatabase.wellbeingRecordDao())
-            .thenReturn(wellbeingDao);
+        doReturn(wellbeingDao)
+            .when(mockWellbeingDatabase)
+            .wellbeingRecordDao();
 
-        when(mockWellbeingDatabase.wellbeingQuestionDao())
-            .thenReturn(questionDao);
+        doReturn(questionDao)
+            .when(mockWellbeingDatabase)
+            .wellbeingQuestionDao();
 
-        when(mockWellbeingDatabase.wellbeingQuestionDao())
-            .thenReturn(questionDao);
+        doReturn(surveyResponseActivityDao)
+            .when(mockWellbeingDatabase)
+            .surveyResponseActivityRecordDao();
 
-        when(mockWellbeingDatabase.surveyResponseActivityRecordDao())
-            .thenReturn(surveyResponseActivityDao);
+        doReturn(activityRecordDao)
+            .when(mockWellbeingDatabase)
+            .activityRecordDao();
 
-        when(mockWellbeingDatabase.activityRecordDao())
-            .thenReturn(activityRecordDao);
-
-        when(mockWellbeingDatabase.physicalActivityDao())
-            .thenReturn(physicalActivityDao);
+        doReturn(automaticActivityDao)
+            .when(mockWellbeingDatabase)
+            .physicalActivityDao();
     }
 
     // The default responses provided by various common methods used on the progress fragment page
     protected void defaultResponses() {
-        when(surveyDao.getSurveyResponsesByTimestampRange(anyLong(), anyLong()))
-            .thenReturn(new MutableLiveData<>(Collections.emptyList()));
+        doReturn(new MutableLiveData<>(Collections.emptyList()))
+            .when(surveyDao)
+            .getSurveyResponsesByTimestampRange(anyLong(), anyLong());
 
-        when(questionDao.getWaysToWellbeingBetweenTimes(anyLong(), anyLong()))
-            .thenReturn(new MutableLiveData<>(Collections.emptyList()));
+        doReturn(new MutableLiveData<>(Collections.emptyList()))
+            .when(questionDao)
+            .getWaysToWellbeingBetweenTimes(anyLong(), anyLong());
 
-        when(surveyDao.getLiveInsights(anyString()))
-            .thenReturn(new MutableLiveData<>());
+        doReturn(Collections.emptyList())
+            .when(surveyDao)
+            .getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong());
 
-        when(surveyDao.getSurveyResponsesByTimestampRangeNotLive(anyLong(), anyLong()))
-            .thenReturn(Collections.emptyList());
+        doReturn(Collections.emptyList())
+            .when(wellbeingDao)
+            .getDataBySurvey(anyLong());
 
-        when(wellbeingDao.getDataBySurvey(anyLong()))
-            .thenReturn(Collections.emptyList());
+        doReturn(Collections.emptyList())
+            .when(automaticActivityDao)
+            .getPending();
 
-        when(physicalActivityDao.getPending())
-            .thenReturn(Collections.emptyList());
+        doReturn(null)
+            .when(automaticActivityDao)
+            .getPhysicalActivityByTypeWithAssociatedActivity(anyString());
 
-        when(physicalActivityDao.getPhysicalActivityByTypeWithAssociatedActivity(anyString()))
-            .thenReturn(null);
+        doReturn(new MutableLiveData<>())
+            .when(surveyResponseActivityDao)
+            .getEmotions(anyLong());
 
-        when(surveyResponseActivityDao.getEmotions(anyLong()))
-            .thenReturn(new MutableLiveData<>());
+        doReturn(new MutableLiveData<>())
+            .when(activityRecordDao)
+            .getAllActivities();
 
-        when(activityRecordDao.getAllActivities())
-            .thenReturn(new MutableLiveData<>());
+        doReturn(Collections.emptyList())
+            .when(questionDao)
+            .getQuestionsByActivityType(any());
 
-        when(questionDao.getQuestionsByActivityType(any()))
-            .thenReturn(Collections.emptyList());
+        doReturn(new MutableLiveData<>())
+            .when(wellbeingDao)
+            .getTrueWellbeingRecordsByTimestampRangeAndWayToWellbeingType(anyLong(), anyLong(), anyString());
 
-        when(wellbeingDao.getTrueWellbeingRecordsByTimestampRange(anyLong(), anyLong(), anyString()))
-            .thenReturn(new MutableLiveData<>());
-
-        when(wellbeingDao.getFalseWellbeingRecordsByTimestampRange(anyLong(), anyLong(), anyString()))
-            .thenReturn(new MutableLiveData<>());
+        doReturn(new MutableLiveData<>())
+            .when(wellbeingDao)
+            .getFalseWellbeingRecordsByTimestampRangeAndWayToWellbeingType(anyLong(), anyLong(), anyString());
     }
 
     @Before
     public void setUp()  throws InterruptedException {
         // Reference set preferences https://medium.com/@SimonKaz/android-testing-setting-sharedprefs-before-launching-an-activity-558730506b7c
         hiltTest.inject();
-        WellbeingDatabaseModule.databaseWriteExecutor.awaitTermination(7000, TimeUnit.MILLISECONDS);
+        WellbeingDatabaseModule.databaseExecutor.awaitTermination(7000, TimeUnit.MILLISECONDS);
         Context context = getInstrumentation().getTargetContext();
         SharedPreferences.Editor preferenceEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         preferenceEditor.putInt("app_version", 5);

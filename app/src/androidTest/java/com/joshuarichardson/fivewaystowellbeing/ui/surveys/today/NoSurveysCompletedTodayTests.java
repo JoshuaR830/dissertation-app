@@ -48,18 +48,6 @@ public class NoSurveysCompletedTodayTests extends ProgressFragmentTestFixture {
     }
 
     @Test
-    public void WhenNoSurveysCompletedToday_ThenNoSurveysShouldBeDisplayed() {
-        onView(withId(R.id.today_survey_item_title))
-            .check(doesNotExist());
-
-        onView(withId(R.id.today_survey_item_description))
-            .check(doesNotExist());
-
-        onView(withId(R.id.today_survey_item_image_button))
-            .check(doesNotExist());
-    }
-
-    @Test
     public void WhenNoActivitiesAddedToSurvey_ThenTheCardShouldDisplayAddActivityButton() {
         onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .perform(scrollTo())
@@ -69,7 +57,7 @@ public class NoSurveysCompletedTodayTests extends ProgressFragmentTestFixture {
             .perform(scrollTo())
             .check(matches(allOf(isDisplayed(), withText("Here is how your day is looking so far"))));
 
-        onView(allOf(withId(R.id.pass_time_item), isDescendantOfA(withId(R.id.survey_summary_item_container))))
+        onView(allOf(withId(R.id.activity_item), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .check(doesNotExist());
 
         onView(allOf(withId(R.id.add_activity_button), isDescendantOfA(withId(R.id.survey_summary_item_container))))

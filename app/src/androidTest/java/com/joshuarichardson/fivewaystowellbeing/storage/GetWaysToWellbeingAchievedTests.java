@@ -3,6 +3,7 @@ package com.joshuarichardson.fivewaystowellbeing.storage;
 import android.content.Context;
 
 import com.joshuarichardson.fivewaystowellbeing.WaysToWellbeing;
+import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.WellbeingResult;
 
 import org.junit.Before;
@@ -20,6 +21,10 @@ import static com.google.common.truth.Truth.assertThat;
 
 public class GetWaysToWellbeingAchievedTests {
     private WellbeingDatabase wellbeingDatabase;
+    private long surveyResponseId1;
+    private long surveyResponseId2;
+    private long surveyResponseId3;
+    private long surveyResponseId4;
 
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
@@ -30,12 +35,16 @@ public class GetWaysToWellbeingAchievedTests {
         Context context = ApplicationProvider.getApplicationContext();
         this.wellbeingDatabase = Room.inMemoryDatabaseBuilder(context, WellbeingDatabase.class).build();
 
-        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(1, 2345678, 5, 10, 25, 80, 110));
+        this.surveyResponseId1 = this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(589769841, WaysToWellbeing.UNASSIGNED, "title", "description"));
+        this.surveyResponseId2 = this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(589769842, WaysToWellbeing.UNASSIGNED, "title", "description"));
+        this.surveyResponseId3 = this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(589769843, WaysToWellbeing.UNASSIGNED, "title", "description"));
+        this.surveyResponseId4 = this.wellbeingDatabase.surveyResponseDao().insert(new SurveyResponse(589769844, WaysToWellbeing.UNASSIGNED, "title", "description"));
+        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(this.surveyResponseId1, 2345678, 5, 10, 25, 80, 110));
     }
 
     @Test
     public void updatingWaysToWellbeing_ShouldUpdateSurveyResponse() {
-        long surveyId = this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(2, 1234567, 45, 50, 85, 30, 40));
+        long surveyId = this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(this.surveyResponseId2, 1234567, 45, 50, 85, 30, 40));
         WellbeingResult originalResponse = this.wellbeingDatabase.wellbeingResultsDao().getResultsBySurveyId(surveyId);
 
         assertThat(originalResponse.getConnectValue()).isEqualTo(45);
@@ -56,9 +65,9 @@ public class GetWaysToWellbeingAchievedTests {
 
     @Test
     public void whenGettingByTimes_ShouldReturnAListOfTheCorrectWaysToWellbeingInOrder() {
-        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(2, 4389598, 35, 40, 50, 20, 10));
-        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(3, 1234567, 20, 25, 80, 40, 20));
-        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(4, 2437654, 10, 10, 70, 60, 30));
+        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(this.surveyResponseId2, 4389598, 35, 40, 50, 20, 10));
+        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(this.surveyResponseId3, 1234567, 20, 25, 80, 40, 20));
+        this.wellbeingDatabase.wellbeingResultsDao().insert(new WellbeingResult(this.surveyResponseId4, 2437654, 10, 10, 70, 60, 30));
 
         List<WellbeingResult> values = this.wellbeingDatabase.wellbeingResultsDao().getResultsByTimestampRange(1234567, 4389598);
 

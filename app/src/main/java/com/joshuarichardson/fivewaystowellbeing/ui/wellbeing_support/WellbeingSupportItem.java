@@ -1,11 +1,14 @@
 package com.joshuarichardson.fivewaystowellbeing.ui.wellbeing_support;
 
+/**
+ * This is used for details about wellbeing support
+ */
 public class WellbeingSupportItem {
 
-    private String title;
-    private String description;
-    private int imageResourceId;
-    private String websiteUrl;
+    private final String title;
+    private final String description;
+    private final int imageResourceId;
+    private final String websiteUrl;
 
     // This is used for details about wellbeing support
     public  WellbeingSupportItem(String title, String description, int imageResourceId, String websiteUrl) {

@@ -36,13 +36,12 @@ import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphItem;
 import com.joshuarichardson.fivewaystowellbeing.storage.WellbeingGraphValueHelper;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponse;
 import com.joshuarichardson.fivewaystowellbeing.storage.entity.SurveyResponseActivityRecord;
-import com.joshuarichardson.fivewaystowellbeing.surveys.Passtime;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDataHelper;
 import com.joshuarichardson.fivewaystowellbeing.surveys.SurveyDay;
+import com.joshuarichardson.fivewaystowellbeing.surveys.ActivityInstance;
 import com.joshuarichardson.fivewaystowellbeing.ui.graphs.WellbeingGraphView;
-import com.joshuarichardson.fivewaystowellbeing.ui.pass_times.edit.ViewPassTimesActivity;
+import com.joshuarichardson.fivewaystowellbeing.ui.activities.edit.ViewActivitiesActivity;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,18 +56,21 @@ import dagger.hilt.android.AndroidEntryPoint;
 import static com.joshuarichardson.fivewaystowellbeing.DisplayHelper.getSmallestMaxDimension;
 import static com.joshuarichardson.fivewaystowellbeing.ui.individual_surveys.ActivityViewHelper.createInsightCards;
 
+/**
+ * Activity to display a specific wellbeing log from a day in history
+ */
 @AndroidEntryPoint
 public class IndividualSurveyActivity extends AppCompatActivity {
     private static final int ACTIVITY_REQUEST_CODE = 1;
+    private long surveyId;
+    private boolean isDeletable;
+    private long startTime;
 
     @Inject
     public WellbeingDatabase db;
 
     @Inject
     public LogAnalyticEventHelper analyticsHelper;
-    private long surveyId;
-    private boolean isDeletable;
-    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,16 +97,19 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         WellbeingGraphView graphView = new WellbeingGraphView(this, (int)(getSmallestMaxDimension(this)/1.5), new WellbeingGraphValueHelper(0, 0, 0, 0, 0), true);
         canvasContainer.addView(graphView);
 
+        // Observe changes to the graph and update the values
         Observer<List<WellbeingGraphItem>> wholeGraphUpdate  = graphValues -> {
             WellbeingGraphValueHelper values = WellbeingGraphValueHelper.getWellbeingGraphValues(graphValues);
             graphView.updateValues(values);
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 db.wellbeingResultsDao().updateWaysToWellbeing(this.surveyId, values.getConnectValue(), values.getBeActiveValue(), values.getKeepLearningValue(), values.getTakeNoticeValue(), values.getGiveValue());
             });
         };
 
         ChipGroup group = findViewById(R.id.wellbeing_chip_group);
         LinearLayout helpContainer = findViewById(R.id.way_to_wellbeing_help_container);
+
+        // Add chip listeners which can be selected to display insights and wellbeing descriptions
         group.setOnCheckedChangeListener((groupId, checkedId) -> {
             helpContainer.removeAllViews();
             switch (checkedId) {
@@ -144,18 +149,16 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             }
         });
 
-        // ToDo - at some point make this visible and allow it to be edited
+        // Allow activities to be added
         Button addActivityButton = findViewById(R.id.add_activity_button);
         addActivityButton.setOnClickListener(v -> {
-            Intent activityIntent = new Intent(this, ViewPassTimesActivity.class);
+            Intent activityIntent = new Intent(this, ViewActivitiesActivity.class);
             startActivityForResult(activityIntent, ACTIVITY_REQUEST_CODE);
         });
 
         if(startTime > -1) {
-            long time = new Date(startTime).getTime();
-
-            long morning = TimeHelper.getStartOfDay(time);
-            long night = TimeHelper.getEndOfDay(time);
+            long morning = TimeHelper.getStartOfDay(startTime);
+            long night = TimeHelper.getEndOfDay(startTime);
             this.db.wellbeingQuestionDao().getWaysToWellbeingBetweenTimes(morning, night).observe(this, wholeGraphUpdate);
         }
 
@@ -178,6 +181,7 @@ public class IndividualSurveyActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // If the user goes back instead of adding a new item, they might have updated an activity instead so should reload for consistency
         if (resultCode != Activity.RESULT_OK) {
             updateSurveyItems();
             return;
@@ -204,31 +208,32 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             analyticsHelper.logWayToWellbeingActivity(this, WaysToWellbeing.valueOf(wayToWellbeing));
 
             // Sequence number based on number of children in the linear layout
-            LinearLayout passtimeContainer = this.findViewById(R.id.survey_item_container);
+            LinearLayout activityContainer = this.findViewById(R.id.survey_item_container);
 
-            WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+            WellbeingDatabaseModule.databaseExecutor.execute(() -> {
                 int sequenceNumber = this.db.surveyResponseActivityRecordDao().getItemCount(surveyId) + 1;
                 long activitySurveyId = this.db.surveyResponseActivityRecordDao().insert(new SurveyResponseActivityRecord(surveyId, activityId, sequenceNumber, "", -1, -1, 0, false));
-                Passtime passtime = new Passtime(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
+                ActivityInstance activity = new ActivityInstance(activityName, "", activityType, wayToWellbeing, activitySurveyId, -1, -1, 0, false);
 
-                long time = new Date(startTime).getTime();
-                long night = TimeHelper.getEndOfDay(time);
-                Passtime updatedPasstime = WellbeingRecordInsertionHelper.addPasstimeQuestions(this.db, activitySurveyId, activityType, passtime, night);
+                long night = TimeHelper.getEndOfDay(startTime);
+                ActivityInstance updatedActivity = WellbeingRecordInsertionHelper.addActivityQuestions(this.db, activitySurveyId, activityType, activity, night);
 
                 // If it has been edited, the page will reload everything
                 boolean isEdited = data.getExtras().getBoolean("is_edited", false);
                 if(isEdited) {
                     updateSurveyItems();
                 } else {
-                    ActivityViewHelper.createPasstimeItem(this, passtimeContainer, updatedPasstime, this.db, getSupportFragmentManager(), analyticsHelper, true);
+                    ActivityViewHelper.createActivityItem(this, activityContainer, updatedActivity, this.db, getSupportFragmentManager(), analyticsHelper, true);
                 }
             });
         }
     }
 
-    // Whenever something needs to be updated - do this
+    /**
+     * Whenever the page needs to be updated call this and it will update the survey data displayed
+     */
     public void updateSurveyItems() {
-        WellbeingDatabaseModule.databaseWriteExecutor.execute(() -> {
+        WellbeingDatabaseModule.databaseExecutor.execute(() -> {
             List<RawSurveyData> rawSurveyDataList = this.db.wellbeingRecordDao().getDataBySurvey(surveyId);
 
             if(rawSurveyDataList == null || rawSurveyDataList.size() == 0) {
@@ -238,12 +243,11 @@ public class IndividualSurveyActivity extends AppCompatActivity {
             }
 
             SurveyDay surveyData = SurveyDataHelper.transform(rawSurveyDataList);
-
-
             ActivityViewHelper.displaySurveyItems(this, surveyData, this.db, getSupportFragmentManager(), analyticsHelper);
 
             SurveyResponse surveyResponse = this.db.surveyResponseDao().getSurveyResponseById(surveyId);
 
+            // Add the summary
             runOnUiThread(() -> {
 
                 TextView summaryTitle = findViewById(R.id.individual_survey_title);
@@ -281,12 +285,13 @@ public class IndividualSurveyActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        // When the user clicks delete toggle it
         if (item.getItemId() == R.id.action_delete) {
             toggleDeletable();
             return true;
         }
 
-        Intent intent = MenuItemHelper.handleMenuClick(this, item);
+        Intent intent = MenuItemHelper.handleOverflowMenuClick(this, item);
 
         if(intent == null) {
             return false;
@@ -298,7 +303,6 @@ public class IndividualSurveyActivity extends AppCompatActivity {
     }
 
     @Override
-    // ToDo - copied from progress fragment - should merge
     public void onResume() {
         super.onResume();
         if (this.isDeletable) {
@@ -306,7 +310,10 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         }
     }
 
-    // ToDo - copied from progress fragment - should merge
+    /**
+     * Toggle delete mode.
+     * Allows activities to be deleted from a survey
+     */
     public void toggleDeletable() {
         LinearLayout layout = this.findViewById(R.id.survey_item_container);
         int counter = layout.getChildCount();
@@ -325,7 +332,12 @@ public class IndividualSurveyActivity extends AppCompatActivity {
         }
     }
 
-    public void onLearnMoreButtonClicked(View v) {
+    /**
+     * Take the use rto the view more page when clicking a button
+     *
+     * @param view The instance of the button clicked
+     */
+    public void onLearnMoreButtonClicked(View view) {
         Intent learnMoreIntent = new Intent(this, LearnMoreAboutFiveWaysActivity.class);
         startActivity(learnMoreIntent);
     }
