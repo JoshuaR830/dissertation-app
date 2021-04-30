@@ -48,18 +48,6 @@ public class NoSurveysCompletedTodayTests extends ProgressFragmentTestFixture {
     }
 
     @Test
-    public void WhenNoSurveysCompletedToday_ThenNoSurveysShouldBeDisplayed() {
-        onView(withId(R.id.today_survey_item_title))
-            .check(doesNotExist());
-
-        onView(withId(R.id.today_survey_item_description))
-            .check(doesNotExist());
-
-        onView(withId(R.id.today_survey_item_image_button))
-            .check(doesNotExist());
-    }
-
-    @Test
     public void WhenNoActivitiesAddedToSurvey_ThenTheCardShouldDisplayAddActivityButton() {
         onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .perform(scrollTo())

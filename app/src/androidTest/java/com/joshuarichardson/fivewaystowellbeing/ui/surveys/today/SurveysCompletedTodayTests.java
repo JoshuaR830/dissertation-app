@@ -90,12 +90,6 @@ public class SurveysCompletedTodayTests extends ProgressFragmentTestFixture {
     }
 
     @Test
-    public void OldTodayView_ShouldNotBeDisplayed() {
-        onView(allOf(withId(R.id.today_survey_item_title), isDescendantOfA(withId(0))))
-            .check(doesNotExist());
-    }
-
-    @Test
     public void WhenMultipleActivitiesAreAddedToASurvey_ThenAllActivitiesShouldBeDisplayed() {
         onView(allOf(withId(R.id.survey_list_title), isDescendantOfA(withId(R.id.survey_summary_item_container))))
             .perform(scrollTo())

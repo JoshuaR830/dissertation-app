@@ -15,7 +15,6 @@ public class LimitedRawSurveyData {
     private final String activityName;
     private final String activityType;
 
-    @Deprecated
     // This allows old activities to continue to be shown after updating
     public LimitedRawSurveyData(long date, String surveyNote, String activityName, String activityType) {
         this.date = date;
